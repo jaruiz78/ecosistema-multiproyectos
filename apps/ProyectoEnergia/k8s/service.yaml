@@ -1,0 +1,12 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: proyecto-energia
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/proyecto/energia:latest
+          resources:
+            limits:
+              memory: 512Mi

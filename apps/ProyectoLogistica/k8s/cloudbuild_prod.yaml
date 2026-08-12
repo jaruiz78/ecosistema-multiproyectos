@@ -1,0 +1,35 @@
+steps:
+  # 1. Build and push image
+  - name: 'gcr.io/k8s-skaffold/pack'
+    args:
+      - 'build'
+      - 'eu.gcr.io/$PROJECT_ID/logistica-backend:$COMMIT_SHA'
+      - '--builder=gcr.io/buildpacks/builder:v1'
+      - '--path=.'
+      - '--publish'
+
+  # 2. Generate SLSA Provenance and Sign with Cosign
+  - name: 'gcr.io/projectsigstore/cosign'
+    args:
+      - 'sign'
+      - '--key=env://COSIGN_PRIVATE_KEY'
+      - 'eu.gcr.io/$PROJECT_ID/logistica-backend:$COMMIT_SHA'
+      - '--tlog-upload=false'
+    secretEnv: ['COSIGN_PRIVATE_KEY']
+
+  # 3. Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'logistica-backend'
+      - '--image'
+      - 'eu.gcr.io/$PROJECT_ID/logistica-backend:$COMMIT_SHA'
+      - '--region'
+      - 'europe-southwest1'
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/cosign-key/versions/latest
+    env: 'COSIGN_PRIVATE_KEY'

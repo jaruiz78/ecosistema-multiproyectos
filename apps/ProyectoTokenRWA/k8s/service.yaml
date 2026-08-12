@@ -1,0 +1,12 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: proyecto-tokenrwa
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/proyecto/tokenrwa:latest
+          resources:
+            limits:
+              memory: 512Mi

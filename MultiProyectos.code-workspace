@@ -1,0 +1,47 @@
+{
+	"folders": [
+		{
+			"path": "AppViajes"
+		},
+		{
+			"path": "PCT"
+		},
+		{
+			"path": "SaaSRegantes"
+		},
+		{
+			"path": "corp-spring-boot-starter"
+		},
+		{
+			"path": "apps"
+		},
+		{
+			"path": "core"
+		},
+		{
+			"path": "scripts"
+		},
+		{
+			"path": "data"
+		},
+		{
+			"path": "docs"
+		},
+		{
+			"path": "pctMultiMicroservices"
+		}
+	],
+	"settings": {
+		"java.project.importOnFirstTimeStartup": "automatic",
+		"maven.view": "hierarchical",
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			"**/__pycache__": true
+		}
+	}
+}

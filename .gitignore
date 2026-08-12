@@ -5,16 +5,21 @@ __pycache__/
 venv/
 .venv/
 
-# Build & Logs
+# Build, IDE binaries & Logs
 *.log
 *.db
 target/
 .idea/
 .vscode/
 
-# Ignore nested submodules from root git index
+Antigravity/
+Antigravity IDE/
+Google Antigravity 2.0/
+
+# Ignore standalone submodules with their own git repos
 AppViajes/
 pctMultiMicroservices/
 PCT/
 SaaSRegantes/
 corp-spring-boot-starter/
+apps/JobsSearch/

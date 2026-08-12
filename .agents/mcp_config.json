@@ -1,0 +1,19 @@
+{
+    "mcpServers": {
+        "google-cloud-monitoring": {
+            "disabled": false
+        },
+        "docker-mcp-server": {
+            "disabled": false
+        },
+        "sqlite-mcp-server": {
+            "disabled": false
+        },
+        "bigquery": {
+            "disabled": false
+        },
+        "codebase-memory-mcp": {
+            "disabled": false
+        }
+    }
+}

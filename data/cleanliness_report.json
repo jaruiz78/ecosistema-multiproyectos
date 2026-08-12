@@ -1,0 +1,49 @@
+{
+    "AppViajes": {
+        "gitignore_issues": [],
+        "code_metrics": {
+            "large_files": 22,
+            "todos": 11,
+            "prints_in_python": 2270,
+            "empty_blocks": 47
+        }
+    },
+    "pctMultiMicroservices": {
+        "gitignore_issues": [
+            "Missing venv/ in gitignore",
+            "Missing *.class in gitignore"
+        ],
+        "code_metrics": {
+            "large_files": 357,
+            "todos": 328,
+            "prints_in_python": 2643,
+            "empty_blocks": 400
+        }
+    },
+    "SaaSRegantes": {
+        "gitignore_issues": [
+            "Missing __pycache__/ in gitignore",
+            "Missing *.pyc in gitignore",
+            ".gitignore file is ignoring itself (.gitignore found in rules)"
+        ],
+        "code_metrics": {
+            "large_files": 0,
+            "todos": 6,
+            "prints_in_python": 413,
+            "empty_blocks": 12
+        }
+    },
+    "corp-spring-boot-starter": {
+        "gitignore_issues": [
+            "Missing __pycache__/ in gitignore",
+            "Missing *.pyc in gitignore",
+            "Missing venv/ in gitignore"
+        ],
+        "code_metrics": {
+            "large_files": 0,
+            "todos": 0,
+            "prints_in_python": 22,
+            "empty_blocks": 2
+        }
+    }
+}

@@ -1,0 +1,1 @@
+FROM eclipse-temurin:25-jre\nCMD ["echo", "core-kalman-twin started"]

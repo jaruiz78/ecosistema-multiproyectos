@@ -1,0 +1,423 @@
+{
+    "hardware_decision_matrix": [
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 350.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 512.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 30.0,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 350.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 512.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 34.0,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 350.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 512.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.0,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": false,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 350.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 512.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 37.9,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "edgeLiteRtGemma2b",
+            "actual_tier": "edgeLiteRtGemma2b",
+            "throttled": false,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 350.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 512.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 38.0,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 350.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 512.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 39.5,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 200.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 300.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 349.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": true,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 350.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 512.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        },
+        {
+            "soc_temperature_c": 42.0,
+            "free_ram_mb": 1024.0,
+            "expected_tier": "cloudVertexAiFallback",
+            "actual_tier": "cloudVertexAiFallback",
+            "throttled": true,
+            "ram_insufficient": false,
+            "pass": true
+        }
+    ],
+    "sse_latency_benchmark": [
+        {
+            "injected_delay_ms": 0.0,
+            "measured_p50_ms": 1.15,
+            "measured_p95_ms": 6.68,
+            "stream_integrity": true
+        },
+        {
+            "injected_delay_ms": 20.0,
+            "measured_p50_ms": 21.38,
+            "measured_p95_ms": 24.18,
+            "stream_integrity": true
+        },
+        {
+            "injected_delay_ms": 50.0,
+            "measured_p50_ms": 51.41,
+            "measured_p95_ms": 53.37,
+            "stream_integrity": true
+        },
+        {
+            "injected_delay_ms": 100.0,
+            "measured_p50_ms": 101.99,
+            "measured_p95_ms": 111.53,
+            "stream_integrity": true
+        },
+        {
+            "injected_delay_ms": 300.0,
+            "measured_p50_ms": 301.3,
+            "measured_p95_ms": 302.46,
+            "stream_integrity": true
+        }
+    ],
+    "resiliency_fallback_tests": [
+        {
+            "scenario": "HTTP 503 Cloud Vertex Overloaded",
+            "expected_code": 503,
+            "actual_code": 503,
+            "error_message": "{\"error\": \"Service Unavailable - Vertex AI Overloaded\"}",
+            "pass": true
+        }
+    ]
+}

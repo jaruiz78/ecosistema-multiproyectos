@@ -1,0 +1,77 @@
+# ==============================================================================
+# .antigravityignore - OPTIMIZACIÓN DE CONTEXTO PARA SAAS REGANTES
+# ==============================================================================
+
+# 1. Compilación de Java y Artefactos (Multi-module)
+**/target/
+**/build/
+**/bin/
+**/out/
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+.gradle/
+.mvn/
+
+# 2. Configuración y Metadatos de IDEs
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+.metadata/
+
+# 3. Dependencias de Frontend y Entornos
+**/node_modules/
+**/bower_components/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+**/venv/
+**/.venv/
+**/env/
+**/simulation_venv/
+**/__pycache__/
+*.pyc
+
+# 4. Logs, Reportes y Cobertura
+**/*.log
+logs/
+**/simulation_output.log
+**/frontend.log
+**/simulation_results_stats_history.csv
+**/*.csv
+**/*.tmp
+**/*.temp
+target/site/jacoco/
+target/surefire-reports/
+build/reports/
+
+# 5. Binarios y Multimedia
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.svg
+**/*.ico
+**/*.pdf
+**/*.zip
+**/*.tar.gz
+**/*.tgz
+**/*.mp4
+**/*.wasm
+
+# 6. Documentación Externa Extensa
+docs/
+site/
+doc/
+_simulation/
+
+# 7. Empaquetados para Auditoría de Modelos
+**/codebase_packaged.txt
+

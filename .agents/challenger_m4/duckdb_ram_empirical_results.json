@@ -1,0 +1,110 @@
+{
+    "file_size_mb": 9.6,
+    "total_rows": 500000,
+    "row_groups_count": 19,
+    "tests": [
+        {
+            "max_memory_setting": "20MB",
+            "full_query": {
+                "status": "SUCCESS",
+                "latency_ms": 6.71,
+                "peak_ram_delta_mb": 5.32,
+                "rows_retrieved": 25
+            },
+            "point_query": {
+                "status": "SUCCESS",
+                "latency_ms": 2.17,
+                "peak_ram_delta_mb": 6.36
+            },
+            "benchmark_50_iters": {
+                "p50_ms": 0.78,
+                "p95_ms": 1.12,
+                "p99_ms": 1.21
+            }
+        },
+        {
+            "max_memory_setting": "15MB",
+            "full_query": {
+                "status": "SUCCESS",
+                "latency_ms": 5.39,
+                "peak_ram_delta_mb": 2.57,
+                "rows_retrieved": 25
+            },
+            "point_query": {
+                "status": "SUCCESS",
+                "latency_ms": 1.68,
+                "peak_ram_delta_mb": 3.96
+            },
+            "benchmark_50_iters": {
+                "p50_ms": 0.56,
+                "p95_ms": 0.7,
+                "p99_ms": 0.88
+            }
+        },
+        {
+            "max_memory_setting": "10MB",
+            "full_query": {
+                "status": "SUCCESS",
+                "latency_ms": 5.71,
+                "peak_ram_delta_mb": 3.64,
+                "rows_retrieved": 25
+            },
+            "point_query": {
+                "status": "SUCCESS",
+                "latency_ms": 2.02,
+                "peak_ram_delta_mb": 4.38
+            },
+            "benchmark_50_iters": {
+                "p50_ms": 0.87,
+                "p95_ms": 1.07,
+                "p99_ms": 1.1
+            }
+        },
+        {
+            "max_memory_setting": "5MB",
+            "full_query": {
+                "status": "SUCCESS",
+                "latency_ms": 7.6,
+                "peak_ram_delta_mb": 2.27,
+                "rows_retrieved": 25
+            },
+            "point_query": {
+                "status": "SUCCESS",
+                "latency_ms": 2.38,
+                "peak_ram_delta_mb": 2.99
+            },
+            "benchmark_50_iters": {
+                "p50_ms": 0.78,
+                "p95_ms": 1.32,
+                "p99_ms": 1.49
+            }
+        },
+        {
+            "max_memory_setting": "2MB",
+            "full_query": {
+                "status": "SUCCESS",
+                "latency_ms": 6.4,
+                "peak_ram_delta_mb": 3.52,
+                "rows_retrieved": 25
+            },
+            "point_query": {
+                "status": "SUCCESS",
+                "latency_ms": 1.98,
+                "peak_ram_delta_mb": 4.03
+            },
+            "benchmark_50_iters": {
+                "p50_ms": 0.98,
+                "p95_ms": 1.47,
+                "p99_ms": 1.58
+            }
+        }
+    ],
+    "concurrent_stress_test": {
+        "total_queries": 200,
+        "threads": 10,
+        "total_duration_ms": 237.68,
+        "p50_ms": 7.57,
+        "p95_ms": 32.46,
+        "p99_ms": 45.14
+    }
+}

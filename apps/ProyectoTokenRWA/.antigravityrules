@@ -1,0 +1,42 @@
+# Reglas de Ingeniería y Arquitectura para Antigravity 2.0 (SaaSRegantes)
+# Ubicación: /home/jaruiz/Desarrollo/SaaSRegantes/.antigravityrules
+
+## 1. Stack Tecnológico
+- **Backend Java**: Java 25 (LTS), Spring Boot 4.0, Hibernate Spatial, PostgreSQL/PostGIS.
+- **Simulación (ABM)**: Python 3, programación vectorizada acelerada por hardware (NumPy/CuPy).
+- **Cloud/Infraestructura**: Google Cloud Run, Cloud SQL (PostgreSQL HA), Cloud Spanner.
+
+## 2. Patrón de Diseño y Arquitectura Modular Multi-Tenancy
+- **Aislamiento Multi-Tenant**: Respetar el esquema de discriminación multi-tenant en todas las capas.
+- **Zero-Mockito**: En los tests de módulos de integración o servicios, priorizar el uso de Testcontainers en lugar de Mockito para emular entornos de base de datos reales (Postgres).
+
+## 3. Directrices de Simulación, SRE y FinOps
+- **Warmup de Leyden**: Configurar compilación en modo AOT/CDS para mitigar cold-starts en Cloud Run.
+- **Data Tiering de Telemetría**: Archivar lecturas históricas de telemetría IoT desde Spanner (caliente) a BigQuery/GCS Archive para optimizar costes de almacenamiento.
+- **Bypass de IA en PRO**: Forzar que las llamadas de IA vayan directamente a la nube (Vertex AI) en entornos productivos para evitar bloqueos por conexión local a Ollama.
+
+## 4. Bucle de Validación Local y Guardarraíles
+- **Commit Guard**: Todo commit está interceptado por un Git pre-commit hook local.
+- **Script Obligatorio**: Ejecutar `./scripts/start-cycle.sh` localmente para validar compilación, tests JUnit, compilación Spring AOT en `module-boot` y escaneo SAST.
+
+## 5. Control de Secretos (SAST)
+- **Prohibido Secretos**: Prohibido hardcodear credenciales, API keys privadas de Stripe o proveedores.
+- **Exención Explicita**: Utilizar el comentario `sast-ignore` al final de la línea únicamente para falsos positivos probados (ej. configuraciones Firebase públicas).
+
+# Directivas de Revisión Automatizada (Multi-Agente)
+
+1. **Prohibición de Secretos:** Queda estrictamente prohibido guardar tokens, contraseñas o URLs de entornos locales en el código fuente. Usa variables de entorno.
+2. **Cobertura Mínima:** Ninguna función nueva puede carecer de su correspondiente test unitario.
+3. **Rigor de Diseño:** El reviewer_agent evaluará la intención semántica, la adherencia a la arquitectura hexagonal y la cohesión de clases. La formato y el formateo de código ya son cubiertos por el Gatekeeper determinista.
+
+# Directivas de División de Trabajo Híbrida (Gemini vs. Gemma 4)
+
+1. **Diseño Global y Análisis (Delegado a Gemini 3.5 Pro/Flash en Cloud)**:
+   - Utilizar Gemini para planificar la arquitectura de nuevas funcionalidades completas, diseñar la topología de carpetas, esquemas de bases de datos y firma de puertos de dominio.
+   - Utilizar Gemini para revisiones cruzadas de diseño conceptual en auditorías de pull requests completas.
+
+2. **Desarrollo Quirúrgico y Pruebas Unitarias (Delegado a Gemma 4 en GPU Local)**:
+   - Utilizar agentes específicos de Gemma 4 para la escritura física del código de clases y métodos concretos.
+   - Delegar a Gemma 4 la generación de los archivos de prueba JUnit 5 y unitarios de Go aplicando de manera estricta la directiva Zero-Mockito.
+   - Utilizar el agente `saas-router-agent:latest` o `saas-agronomy-agent:latest` para auditar la coherencia técnica de manuales de desarrollo y especificaciones OpenAPI locales.
+

@@ -1,0 +1,94 @@
+version: "2.0"
+workflow: code_and_audit_loop
+max_iterations: 3
+
+agents:
+  - id: coder_agent
+    model: saas-agronomy-agent:latest # Agente local especializado en agronomía y backend para SaaSRegantes
+    temperature: 0.1
+    role: "Desarrollador de Software Orientado a Tests"
+    system_instruction: |
+      Tu único objetivo es escribir código limpio y pasar los tests unitarios. 
+      Sigue estrictamente las reglas de `.antigravityrules`. 
+      Si recibes feedback de errores, corrige el código inmediatamente sin discutir el diseño.
+    tools:
+      - type: file_editor
+
+  - id: fuzzer_agent
+    model: saas-router-agent:latest # Agente local de simulación e IoT para SaaSRegantes
+    temperature: 0.7
+    role: "Agente de Fuzzing Diferencial y Pruebas de Estrés"
+    system_instruction: |
+      Analiza el código modificado y diseña/ejecuta 5 casos extremos de entrada (valores nulos, strings gigantes, desbordamientos de datos).
+      Lanza el script ./scripts/bin/run-fuzz.sh para estresar y validar el determinismo del sistema.
+      Si no hay excepciones no controladas ni fallos del motor, responde únicamente con: [FUZZ_PASSED].
+      Si el sistema falla, reporta la excepción detallada y los parámetros inyectados.
+    tools:
+      - type: terminal_executor
+        allowed_commands: ["./scripts/bin/run-fuzz.sh"]
+
+  - id: reviewer_agent
+    model: claude-3-5-sonnet # gemini-3.5-pro when available
+    temperature: 0.0 # Rigor determinista y consistencia
+    role: "Auditor Principal de Arquitectura y Seguridad"
+    system_instruction: |
+      Actúa como un Tech Lead implacable. Tu trabajo es auditar las modificaciones semánticas, lógica de negocio y arquitectura del `coder_agent`.
+      NO verifiques formato ni complejidad sintáctica elemental (eso ya fue filtrado por el Gatekeeper determinista).
+      Debes evaluar:
+      1. Adherencia a los principios de Arquitectura Hexagonal y DDD puros (capa de dominio libre de infraestructura y librerías externas).
+      2. Inyección de dependencias adecuada y patrones de acoplamiento.
+      3. Ausencia de Carrier Thread Pinning (Virtual Threads) y control óptimo del heap.
+      Si el código es excelente, responde ÚNICAMENTE con: [APPROVED].
+      Si hay fallos semánticos o de diseño, detalla los problemas en una lista numerada de cambios requeridos.
+    tools:
+      - type: file_reader
+      - type: git_diff_analyzer
+
+  - id: doc_reviewer_agent
+    model: saas-doc-reviewer:latest # Agente local especializado en revisión de documentación técnica
+    temperature: 0.1
+    role: "Revisor y Auditor de Documentación Técnica"
+    system_instruction: |
+      Audita los manuales Markdown y especificaciones de APIs modificadas.
+      Garantiza que coincidan con la arquitectura y comandos de Ollama reales.
+      Si todo es correcto, responde únicamente: [DOC_APPROVED].
+    tools:
+      - type: file_reader
+
+pipeline:
+  sequence:
+    - step: generate_code
+      actor: coder_agent
+    - step: deterministic_gate
+      tools:
+        - type: terminal_executor
+          commands:
+            - "./scripts/bin/start-cycle.sh" # Validador determinista: Compila, corre linter, tests JUnit/BFF Go, Spring AOT y SAST
+    - step: stress_fuzzing
+      actor: fuzzer_agent
+      condition:
+        if_not_fuzz_passed:
+          loop_back_to: generate_code
+        if_fuzz_passed:
+          proceed_to: audit_documentation
+    - step: audit_documentation
+      actor: doc_reviewer_agent
+      condition:
+        if_not_approved:
+          loop_back_to: generate_code
+        if_approved:
+          proceed_to: audit_code
+    - step: audit_code
+      actor: reviewer_agent
+      condition:
+        if_not_approved:
+          loop_back_to: generate_code
+        if_approved:
+          proceed_to: log_telemetry
+    - step: log_telemetry
+      tools:
+        - type: terminal_executor
+          commands:
+            - "python3 scripts/meta_telemetry.py SUCCESS" # Registra los resultados del bucle en simulations_telemetry.db
+      proceed_to: git_commit
+
