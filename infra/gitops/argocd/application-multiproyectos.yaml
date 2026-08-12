@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: antigravity-multiproyectos
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/jaruiz/Antigravity-Ecosystem'
+    path: infra/k8s/overlays/production
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: antigravity-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

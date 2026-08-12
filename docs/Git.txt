@@ -1,0 +1,18 @@
+CON ESTE LUEGO PODEMOS LANZAR LOS SIGUIENTES COMANDOS SIN EL USUAIRO/CLAVE
+git remote set-url origin https://jaruiz78:ATCTT3xFfGN0Ez0ekQAlG4v9D3mvpQB6jPxE6ZuD-O-T4yev68QTnebpsAyV82GKJZyvY0BMeP2_jLB2FnLaSq6TLPWbT82itT-EH9NWGsd0WR4FnSxEVL-_LX1Z_sVbjS07CVe_tQP0aNNggn_Zfg-PSSAzcB3KkcCfgeOGDTE3jXohA1RapOI\=16705B05@bitbucket.org/jaruiz78/pct.git
+
+
+git add .
+
+
+git commit -m "Adecuacion de aplicativo a google tasks y se pulen y optimiza el procesamiento de informacion para cubrir todas las casuisticas"
+
+
+git push https://x-token-auth:ATCTT3xFfGN0Ez0ekQAlG4v9D3mvpQB6jPxE6ZuD-O-T4yev68QTnebpsAyV82GKJZyvY0BMeP2_jLB2FnLaSq6TLPWbT82itT-EH9NWGsd0WR4FnSxEVL-_LX1Z_sVbjS07CVe_tQP0aNNggn_Zfg-PSSAzcB3KkcCfgeOGDTE3jXohA1RapOI\=16705B05@bitbucket.org/jaruiz78/pct.git
+
+
+PARA CAMBIAR DE RAMA:
+1.- el add
+2.- el commit
+3.- git checkout -b pctMultitenan202602 (con el nombre de la nueva rama que queramos)
+4.- git push https.... (empujamos la rama al servidor)

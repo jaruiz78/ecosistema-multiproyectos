@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.corp.ecosystem</groupId>
+    <artifactId>multiproyectos-aggregator</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>MultiProyectos Aggregator</name>
+    <description>Aggregator POM para el ecosistema global de Google Antigravity</description>
+
+    <modules>
+        <!-- Librerías Core y Starter -->
+        <module>corp-spring-boot-starter</module>
+        
+        <!-- Proyectos Legacy / SaaS -->
+        <module>SaaSRegantes</module>
+        
+        <!-- Primitivas Core -->
+        <module>core/core-geogrid-h3</module>
+        <module>core/core-govtech-ledger</module>
+
+        <!-- Nuevos Verticales Apps -->
+        <module>apps/JobsSearch</module>
+        <module>apps/ProyectoB2G</module>
+        <module>apps/ProyectoCircular</module>
+        <module>apps/ProyectoDefensa</module>
+        <module>apps/ProyectoEnergia</module>
+        <module>apps/ProyectoLogistica</module>
+        <module>apps/ProyectoTokenRWA</module>
+        <module>apps/ProyectoVPP</module>
+    </modules>
+
+</project>

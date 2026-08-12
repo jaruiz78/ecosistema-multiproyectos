@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: presync-slsa-l3-verifier
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: slsa-verifier
+        image: python:3.14-slim
+        command: ["python3", "/home/jaruiz/Desarrollo/scripts/security/slsa_provenance_verifier.py"]
+      restartPolicy: Never

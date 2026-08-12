@@ -1,0 +1,20 @@
+# Python / Venv
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+
+# Build & Logs
+*.log
+*.db
+target/
+.idea/
+.vscode/
+
+# Ignore nested submodules from root git index
+AppViajes/
+pctMultiMicroservices/
+PCT/
+SaaSRegantes/
+corp-spring-boot-starter/
