@@ -12,6 +12,7 @@
         <groupId>com.corp.tenant</groupId>
         <artifactId>corp-spring-boot-starter-parent</artifactId>
         <version>1.0.0</version>
+        <relativePath>../../corp-spring-boot-starter/pom.xml</relativePath>
     </parent>
     
     <properties>

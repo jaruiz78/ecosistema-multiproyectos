@@ -1,1 +1,2 @@
-FROM eclipse-temurin:25-jre\nCMD ["echo", "ProyectoVPP started"]
+FROM eclipse-temurin:25-jre
+CMD ["echo", "ProyectoVPP started"]

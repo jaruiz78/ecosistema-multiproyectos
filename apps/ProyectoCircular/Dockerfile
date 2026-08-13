@@ -1,1 +1,2 @@
-FROM eclipse-temurin:25-jre\nCMD ["echo", "ProyectoCircular started"]
+FROM eclipse-temurin:25-jre
+CMD ["echo", "ProyectoCircular started"]
