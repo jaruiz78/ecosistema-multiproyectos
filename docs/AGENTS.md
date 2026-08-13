@@ -14,6 +14,7 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
 - **Auditoría de código pre-merge** → `code-review-and-quality` (`@code-reviewer`)
 - **Seguridad, PII y OWASP** → `security-and-hardening` (`@security-auditor`)
 - **Web Performance (LCP / INP / CLS)** → `web-performance-auditor` (Agent)
+- **Nube de Puntos / Ingesta / Stubs Local LLM** → `ollama-local-ai-orchestrator`
 - **Despliegue y Release** → `shipping-and-launch`
 
 ---
