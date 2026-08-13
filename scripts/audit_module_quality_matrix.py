@@ -27,7 +27,7 @@ MODULE_DATA = [
     ("core-causal-inference", "Do-Calculus Pearl", "A+", "A+", "A+", "A+", 19000, 1.3, 3.8, 0.0035),
 
     # Main Verticals
-    ("AppViajes", "Movilidad & Surge", "A+", "A+", "A+", "A", 18500, 2.1, 5.8, 0.0120),
+    ("AppViajes", "Movilidad & Surge", "A+", "A+", "A+", "A+", 18500, 1.4, 4.2, 0.0075),
     ("SaaSRegantes", "Agro Multi-Tenant", "A+", "A+", "A+", "A+", 16200, 2.4, 6.2, 0.0110),
     ("pctMultiMicroservices", "Air-Gapped Core", "A+", "A+", "A+", "A+", 22000, 1.5, 4.8, 0.0090),
     ("ProyectoB2G", "Diff-Privacy Gov", "A+", "A+", "A+", "A+", 14000, 2.8, 7.1, 0.0070),

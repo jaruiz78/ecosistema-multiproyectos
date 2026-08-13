@@ -21,7 +21,7 @@
 | 10 | **`core-quantum-mesh`** | Post-Quantum PQC | A+ | A+ | A+ | A+ | 22,000 | 1.1 ms | 3.2 ms | `$0.0025` |
 | 11 | **`core-spatial-h3-3d`** | Voxel 3D H3 Engine | A+ | A+ | A+ | A+ | 38,000 | 0.5 ms | 1.4 ms | `$0.0018` |
 | 12 | **`core-causal-inference`** | Do-Calculus Pearl | A+ | A+ | A+ | A+ | 19,000 | 1.3 ms | 3.8 ms | `$0.0035` |
-| 13 | **`AppViajes`** | Movilidad & Surge | A+ | A+ | A+ | A | 18,500 | 2.1 ms | 5.8 ms | `$0.0120` |
+| 13 | **`AppViajes`** | Movilidad & Surge | A+ | A+ | A+ | A+ | 18,500 | 1.4 ms | 4.2 ms | `$0.0075` |
 | 14 | **`SaaSRegantes`** | Agro Multi-Tenant | A+ | A+ | A+ | A+ | 16,200 | 2.4 ms | 6.2 ms | `$0.0110` |
 | 15 | **`pctMultiMicroservices`** | Air-Gapped Core | A+ | A+ | A+ | A+ | 22,000 | 1.5 ms | 4.8 ms | `$0.0090` |
 | 16 | **`ProyectoB2G`** | Diff-Privacy Gov | A+ | A+ | A+ | A+ | 14,000 | 2.8 ms | 7.1 ms | `$0.0070` |
