@@ -8,6 +8,11 @@ import java.util.Objects;
  * Motor Híbrido de Búsqueda Vectorial + Grafo Semántico para core-ai-rag-engine.
  * Combina índices HNSW in-memory con trazabilidad del grafo de conocimiento, reduciendo la
  * latencia de recuperación de 3.2ms a <0.9ms con cero alucinaciones (NPS Agentes IA +91).
+  *
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR de Referencia</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_0_software_engineering/01_arquitectura_hexagonal_ddd_puro.md">Documentación y Módulo Formativo</a>
+ * @reference Martin (2017) Clean Architecture & DDD Pure Domain Standard
+ 
  */
 public final class HybridGraphVectorSearchEngine {
 

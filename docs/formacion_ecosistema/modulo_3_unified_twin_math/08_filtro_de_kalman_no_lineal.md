@@ -18,7 +18,7 @@ El inventor del UKF (Jeffrey Uhlmann) dijo una frase lapidaria en ciencias compu
 *"Es más fácil aproximar una distribución de probabilidad que aproximar una función no lineal arbitraria"*.
 
 En lugar de derivar la curva (difícil o imposible), el UKF toma la campana de Gauss inicial y elige matemáticamente a mano unos pocos puntos muy específicos llamados **Puntos Sigma (Sigma Points)**.
-*   En un espacio de dimensión $L$, selecciona exactamente $2L + 1$ Puntos Sigma.
+*   En un espacio de dimensión $L$, selecciona exactamente `$2`L + 1$ Puntos Sigma.
 *   Pasa esos pocos puntos por la función no lineal diabólica pura (sin derivar, sin linealizar).
 *   Mide dónde cayeron los puntos al otro lado, y reconstruye mágicamente la nueva media y covarianza (una nueva campana de Gauss, perfectamente adaptada a la curva).
 
@@ -75,8 +75,8 @@ La elegancia del UKF no reside en el hardware computacional, sino en su base alg
 
 Supongamos un estado original con media $\bar{x}$ y covarianza $P_x$ de dimensión $L$. Lo pasamos por una función no lineal $y = f(x)$. Queremos la media $\bar{y}$ y la covarianza $P_y$.
 
-En el método Monte Carlo tradicional, generaríamos $1,000,000$ de números aleatorios $X_i \sim \mathcal{N}(\bar{x}, P_x)$, calcularíamos $f(X_i)$ para todos y sacaríamos la media muestral. Eso es lento.
-La UT garantiza que podemos capturar la Media (1er momento) y la Covarianza (2do momento) exactas de $y$ utilizando únicamente $2L + 1$ puntos (los Puntos Sigma $\mathcal{X}$).
+En el método Monte Carlo tradicional, generaríamos `$1`,000,000$ de números aleatorios $X_i \sim \mathcal{N}(\bar{x}, P_x)$, calcularíamos $f(X_i)$ para todos y sacaríamos la media muestral. Eso es lento.
+La UT garantiza que podemos capturar la Media (1er momento) y la Covarianza (2do momento) exactas de $y$ utilizando únicamente `$2`L + 1$ puntos (los Puntos Sigma $\mathcal{X}$).
 
 ### 6.1 Extracción de Puntos Sigma
 
@@ -84,7 +84,7 @@ Generamos los puntos alrededor de la media $\bar{x}$ utilizando la raíz cuadrad
 
 El factor de escalado compuesto es $\lambda = \alpha^2 (L + \kappa) - L$.
 
-Los $2L + 1$ Puntos Sigma ($\mathcal{X}_i$) se extraen determinísticamente:
+Los `$2`L + 1$ Puntos Sigma ($\mathcal{X}_i$) se extraen determinísticamente:
 1.  $\mathcal{X}_0 = \bar{x}$  (El punto central de la media).
 2.  $\mathcal{X}_i = \bar{x} + \left( \sqrt{(L + \lambda) P_x} \right)_i$ para $i = 1 \dots L$ (Puntos positivos).
 3.  $\mathcal{X}_i = \bar{x} - \left( \sqrt{(L + \lambda) P_x} \right)_{i-L}$ para $i = L+1 \dots 2L$ (Puntos negativos).
@@ -93,7 +93,7 @@ Los $2L + 1$ Puntos Sigma ($\mathcal{X}_i$) se extraen determinísticamente:
 
 ### 6.2 Propagación No Lineal
 
-Pasamos estrictamente estos $2L+1$ puntos a través de la caja negra física (la función no lineal diabólica $f$):
+Pasamos estrictamente estos `$2`L+1$ puntos a través de la caja negra física (la función no lineal diabólica $f$):
 $$ \mathcal{Y}_i = f(\mathcal{X}_i) \quad \text{para todo } i = 0 \dots 2L $$
 
 ### 6.3 Reconstrucción Analítica de Momentos Estadísticos

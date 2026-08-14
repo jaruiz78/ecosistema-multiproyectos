@@ -18,7 +18,7 @@ El Gemelo Digital Unificado se modela formalmente como un **Proceso de Decisión
 El Estado Latente Verdadero del mundo $\mathcal{X}$ es inobservable (solo los dioses lo saben). Nosotros solo tenemos acceso a las Observaciones $Z$ (Telemetría IoT, bases de datos de BigQuery).
 
 El núcleo matemático (`tensor_gnn_core.py`) se basa en un bucle principal de integración que combina cuatro dominios físicos en cada ciclo ($t$):
-1.  **Motor Dinámico (SDEs / LBM)**: $\mathcal{X}_{t|t-1} = \mathcal{F}(\mathcal{X}_{t-1}) + dW_t$. Avanza la física del mundo un segundo.
+1.  **Motor Dinámico (SDEs / LBM)**: \(\mathcal{X}_{t|t-1} = \mathcal{F}(\mathcal{X}_{t-1}) + dW_t\). Avanza la física del mundo un segundo.
 2.  **Motor de Interacción (GNNs)**: Resuelve las colisiones espaciales (Tráfico / Red Eléctrica) aplicando la Matriz Laplaciana $L$.
 3.  **Motor de Mercado (Optimización / Juegos)**: Encuentra el Equilibrio de Nash o el Óptimo de KKT para asignar recursos (Taxis, MW de energía).
 4.  **Motor de Asimilación (EnKF)**: Corrige los motores anteriores inyectando la pura realidad (Datos Cloud) para que el modelo nunca descarrile (Filtro de Kalman).

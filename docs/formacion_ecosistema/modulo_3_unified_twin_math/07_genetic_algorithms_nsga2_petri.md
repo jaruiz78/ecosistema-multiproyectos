@@ -62,8 +62,8 @@ if __name__ == "__main__":
 
 | Componente Algorítmico | Complejidad Big-O Original | Complejidad NSGA-II Optimizado |
 | :--- | :--- | :--- |
-| **Non-dominated Sorting** | $O(M \cdot N^3)$ | **$O(M \cdot N^2)$** |
-| **Crowding Distance Assignment** | $O(M \cdot N \log N)$ | **$O(M \cdot N \log N)$** |
+| **Non-dominated Sorting** | \(O(M \cdot N^3)\) | **\(O(M \cdot N^2)\)** |
+| **Crowding Distance Assignment** | \(O(M \cdot N \log N)\) | **\(O(M \cdot N \log N)\)** |
 
 ---
 

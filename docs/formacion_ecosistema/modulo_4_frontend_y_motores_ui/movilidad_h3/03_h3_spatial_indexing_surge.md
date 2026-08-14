@@ -84,10 +84,10 @@ def calculate_h3_surge_multiplier(
 
 | Resolución H3 | Área Promedio de Celda | Distancia de Centroides | Número Total de Celdas en la Tierra |
 | :--- | :--- | :--- | :--- |
-| **Res 0** | $4,357,449.42 \text{ km}^2$ | 1,107 km | 122 celdas |
-| **Res 7** | $5.16 \text{ km}^2$ | 2.8 km | 98,970,742 celdas |
-| **Res 8** | **$0.73 \text{ km}^2$** | **1.0 km** | **692,795,212 celdas (AppViajes)** |
-| **Res 15** | $0.0000009 \text{ km}^2$ ($0.9 \text{ m}^2$) | 0.5 m | 569,707,781,918,622 celdas |
+| **Res 0** | \(4,357,449.42 \text{ km}^2\) | 1,107 km | 122 celdas |
+| **Res 7** | \(5.16 \text{ km}^2\) | 2.8 km | 98,970,742 celdas |
+| **Res 8** | **\(0.73 \text{ km}^2\)** | **1.0 km** | **692,795,212 celdas (AppViajes)** |
+| **Res 15** | \(0.0000009 \text{ km}^2\) (\(0.9 \text{ m}^2\)) | 0.5 m | 569,707,781,918,622 celdas |
 
 ---
 

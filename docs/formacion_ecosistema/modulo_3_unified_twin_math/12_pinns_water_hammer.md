@@ -10,7 +10,7 @@ En las redes de suministro de agua (ej. infraestructuras hídricas de *SaaSRegan
 ## 3. Implementación en el Gemelo Digital
 La telemetría de presión simulada se inyecta como un vector ruidoso continuo.
 1. En cada *tick*, las operaciones vectorizadas (CuPy/NumPy) calculan la derivada primera y el valor absoluto máximo en la red.
-2. Si $\frac{dP}{dx} > \text{umbral crítico}$ ($0.3$ en el modelo), la red neuronal determina que el perfil de onda es precursor de una rotura estructural.
+2. Si $\frac{dP}{dx} > \text{umbral crítico}$ (`$0`.3$ en el modelo), la red neuronal determina que el perfil de onda es precursor de una rotura estructural.
 3. Se activa un booleano de `valve_shutoff_preventative`.
 4. El sistema envía un choque atenuador multiplicativo a los tensores locales y dispara una alerta asíncrona por UDP al sistema Cloud.
 

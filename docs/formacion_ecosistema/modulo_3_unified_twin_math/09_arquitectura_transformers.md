@@ -23,7 +23,7 @@ $$Attention(Q, K, V) = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$
 *   **Key ($K$)**: Lo que yo represento. (La palabra "senté" dice: "Yo tengo que ver con sentarse").
 *   **$Q K^T$**: Producto punto tensorial. Mide la **similitud geométrica** (el ángulo en el espacio de Hilbert) entre la palabra actual y todas las demás. Si es alto, hay conexión semántica.
 *   **$\sqrt{d_k}$**: Factor de escalado. Si el espacio latente tiene 4096 dimensiones (como LLaMA), el producto punto genera números tan inmensos que estropean el gradiente. Dividir por la raíz cuadrada estabiliza las matemáticas.
-*   **softmax**: Una función mágica que convierte todos los resultados en porcentajes (probabilidades) que suman $1.0$. ("Banco" prestará 80% de atención a "senté", 15% a "suelo", y 5% a las demás).
+*   **softmax**: Una función mágica que convierte todos los resultados en porcentajes (probabilidades) que suman `$1`.0$. ("Banco" prestará 80% de atención a "senté", 15% a "suelo", y 5% a las demás).
 *   **Value ($V$)**: El contenido real de la palabra, que es multiplicado por esos porcentajes y sumado, creando un nuevo vector super-enriquecido con el contexto completo.
 
 ---
@@ -56,8 +56,8 @@ Sumamos esta vibración trigonométrica al vector original de la palabra. Las re
 
 **Diagnóstico Matemático (El Cuello de Botella del Cuadrado)**:
 La matriz de Atención ($Q K^T$) compara cada token (palabra o instante de tiempo) con todos los demás. 
-*   Para 1,000 tokens: La matriz tiene $1,000,000$ de celdas.
-*   Para 100,000 tokens (un libro o un día de logs de tráfico): La matriz tiene $10,000,000,000$ (10 mil millones) de celdas por cada Capa de Atención por cada Cabeza, reventando matemáticamente cualquier tarjeta gráfica moderna en milisegundos por complejidad $O(N^2)$ en memoria.
+*   Para 1,000 tokens: La matriz tiene `$1`,000,000$ de celdas.
+*   Para 100,000 tokens (un libro o un día de logs de tráfico): La matriz tiene `$10`,000,000,000$ (10 mil millones) de celdas por cada Capa de Atención por cada Cabeza, reventando matemáticamente cualquier tarjeta gráfica moderna en milisegundos por complejidad $O(N^2)$ en memoria.
 
 **Solución SRE Arquitectónica**:
 1.  **FlashAttention**: Implementación reescrita en C++/CUDA que calcula el Softmax mediante "Tiling" a nivel de SRAM del chip H100.

@@ -1,0 +1,17 @@
+{
+  "model_name": "desal_energy_pinn",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "8280997f",
+      "scale": 0.253137,
+      "zero_point": -130,
+      "original_shape": [
+        4
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

@@ -86,8 +86,8 @@ class DiscreteEventSimulation:
 
 | Métrica | Formulación Matemática | Significado Práctico |
 | :--- | :--- | :--- |
-| **Factor de Utilización ($\rho$)** | $\rho = \frac{\lambda}{c \cdot \mu} < 1$ | % de ocupación de los servidores (Debe ser < 1 para estabilidad) |
-| **Probabilidad de Espera ($P_w$)** | $P_w = \frac{\frac{(c\rho)^c}{c! (1-\rho)}}{\sum_{k=0}^{c-1} \frac{(c\rho)^k}{k!} + \frac{(c\rho)^c}{c! (1-\rho)}}$ | Probabilidad de que una nueva solicitud tenga que hacer cola |
+| **Factor de Utilización (\(\rho\))** | \(\rho = \frac{\lambda}{c \cdot \mu} < 1\) | % de ocupación de los servidores (Debe ser < 1 para estabilidad) |
+| **Probabilidad de Espera (\(P_w\))** | \(P_w = \frac{\frac{(c\rho)^c}{c! (1-\rho)}}{\sum_{k=0}^{c-1} \frac{(c\rho)^k}{k!} + \frac{(c\rho)^c}{c! (1-\rho)}}\) | Probabilidad de que una nueva solicitud tenga que hacer cola |
 
 ---
 

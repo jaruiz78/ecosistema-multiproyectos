@@ -1,0 +1,25 @@
+# Auto-generated .ignore / .geminiignore for high-performance indexing
+# Exclude heavy simulation outputs, binary embeddings, and massive logs
+
+**/simulation/logs/**
+**/simulation/data/osrm/**
+**/simulation/data/*.sqlite
+**/simulation/data/*.db
+**/simulation/results/*.json
+**/simulation/results/*.jsonl
+**/*_simulation/ollama_data/**
+**/*_simulation/execution/logs/**
+**/docs/.archive/**
+**/.archive/**
+**/node_modules/**
+**/target/**
+**/build/**
+**/.dart_tool/**
+**/.pytest_cache/**
+**/__pycache__/**
+**/.venv/**
+**/venv/**
+**/*.log
+**/*.log.*
+**/dist_build/**
+**/.next/dev/cache/**

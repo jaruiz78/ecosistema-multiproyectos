@@ -151,9 +151,9 @@ public class OrderJpaAdapter implements OrderRepositoryPort {
 
 | Capa / Operación | Complejidad Big-O | Latencia Típica | Carga de CPU / Memoria |
 | :--- | :--- | :--- | :--- |
-| **Instanciación de Dominio (Records)** | $O(1)$ | < 1 ns | Prácticamente 0 (Stack Allocation) |
-| **Mapeo Adapter Entity-to-Domain** | $O(1)$ | < 100 ns | Mínima (Asignación corta de heap) |
-| **Consulta JPA en Adaptador DB** | $O(\log N)$ con índice | 1 - 5 ms | Depende del pool I/O de la DB |
+| **Instanciación de Dominio (Records)** | \(O(1)\) | < 1 ns | Prácticamente 0 (Stack Allocation) |
+| **Mapeo Adapter Entity-to-Domain** | \(O(1)\) | < 100 ns | Mínima (Asignación corta de heap) |
+| **Consulta JPA en Adaptador DB** | \(O(\log N)\) con índice | 1 - 5 ms | Depende del pool I/O de la DB |
 
 ### Reglas de Diseño AOT (GraalVM / Leyden)
 * **Zero Reflection en Dominio**: Nunca utilices `Class.forName()` ni `getDeclaredFields()` en el paquete `domain/`.

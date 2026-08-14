@@ -89,7 +89,7 @@ public class NotificationHandler {
 | Característica | Detalle Técnico | Beneficio de Rendimiento |
 | :--- | :--- | :--- |
 | **Record Scalar Replacement** | El compilador JIT C2 descompone los records en variables escalares locales | Eliminación completa de asignación en Heap (Zero GC Impact) |
-| **Sealed Switch Dispatch** | El compilador compila los `switch` sellados como tablas de salto fijas | Invocación en $O(1)$ sin evaluar cadenas `if-else` |
+| **Sealed Switch Dispatch** | El compilador compila los `switch` sellados como tablas de salto fijas | Invocación en \(O(1)\) sin evaluar cadenas `if-else` |
 
 ---
 

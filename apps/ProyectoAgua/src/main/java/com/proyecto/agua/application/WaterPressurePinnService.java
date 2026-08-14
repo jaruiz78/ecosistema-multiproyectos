@@ -7,6 +7,11 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Servicio de aplicación para predicción de presión hidráulica y detección de transitorios de golpe de ariete.
  * Utiliza concurrencia anti-pinning con ReentrantLock para Java 25 Virtual Threads.
+  *
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-004-firestore-rls-bigquery-finops.md">ADR de Referencia</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/apps/VERTICALS_ARCHITECTURE_SPEC.md">Documentación y Módulo Formativo</a>
+ * @reference Evans (2003) Domain-Driven Design (Tackling Complexity in Software)
+ 
  */
 public class WaterPressurePinnService {
 

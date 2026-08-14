@@ -4,12 +4,21 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.HexFormat;
 
 /**
  * Servicio centralizado de registro inmutable (Audit-Trail Ledger) Zero-Trust.
  * Utilizado por ProyectoB2G, ProyectoTokenRWA y ProyectoCircular.
+ * Optimizado con HexFormat nativo de Java 25.
+  *
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-004-firestore-rls-bigquery-finops.md">ADR de Referencia</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_0_sistemas_distribuidos/01_modelos_de_sistemas_distribuidos.md">Documentación y Módulo Formativo</a>
+ * @reference Lamport (1978) Time, Clocks, and the Ordering of Events in a Distributed System
+ 
  */
 public final class AuditLedgerService {
+
+    private static final HexFormat HEX_FORMAT = HexFormat.of();
 
     private AuditLedgerService() {}
 
@@ -31,19 +40,13 @@ public final class AuditLedgerService {
         return new AuditRecord(entityId, eventType, hash, previousHash, now);
     }
 
-    private static String computeSha256(String input) {
+    public static String computeSha256(String input) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-            return hexString.toString();
+            return HEX_FORMAT.formatHex(hashBytes);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("SHA-256 no disponible", e);
+            throw new IllegalStateException("SHA-256 no disponible en el runtime JVM", e);
         }
     }
 }

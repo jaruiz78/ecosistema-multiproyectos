@@ -75,4 +75,4 @@ $$W \approx W_k = U_k \cdot \Sigma_k \cdot V_k^T, \quad \text{Compresión: } \fr
 
 1. **Truncar un rango $k$ demasiado agresivo ($k < 5$) en capas de salida críticas**:
    * *Síntoma*: Caída drástica de la precisión del modelo en más de un 15%.
-   * *Solución*: Mide siempre el error relativo $\|W - W_k\|_F / \|W\|_F$ y mantén una pérdida $< 1\%$.
+   * *Solución*: Mide siempre el error relativo \(\|W - W_k\|_F / \|W\|_F\) y mantén una pérdida \(< 1\%\).

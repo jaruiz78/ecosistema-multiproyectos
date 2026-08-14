@@ -67,10 +67,10 @@ class TensorGNNCore:
 
 ### Complejidad de Contracción Tensorial PEPS
 
-| Red Tensorial | Complejidad de Contracción | Bond Dimension ($\chi$) Típica | Ámbito de Uso |
+| Red Tensorial | Complejidad de Contracción | Bond Dimension (\(\chi\)) Típica | Ámbito de Uso |
 | :--- | :--- | :--- | :--- |
-| **MPS (Matrix Product States 1D)** | $O(N \cdot \chi^3)$ | $\chi \approx 16 - 64$ | Cadena 1D / Series temporales |
-| **PEPS (Projected Entangled 2D)** | $O(N \cdot \chi^5)$ aproximado | $\chi \approx 4 - 8$ | Grafos espaciales 2D (Redes de transporte/riego) |
+| **MPS (Matrix Product States 1D)** | \(O(N \cdot \chi^3)\) | \(\chi \approx 16 - 64\) | Cadena 1D / Series temporales |
+| **PEPS (Projected Entangled 2D)** | \(O(N \cdot \chi^5)\) aproximado | \(\chi \approx 4 - 8\) | Grafos espaciales 2D (Redes de transporte/riego) |
 
 ---
 

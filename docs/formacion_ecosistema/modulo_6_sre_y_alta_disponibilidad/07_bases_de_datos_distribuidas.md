@@ -14,8 +14,8 @@ En sistemas distribuidos planetarios, **los relojes de cuarzo de los servidores 
 
 Antes del tiempo, modelamos el espacio. Una base de datos planetaria particiona matemáticamente los datos (Sharding / Splits).
 
-*   **Modulo Hashing (El Anti-Patrón)**: Servidor asignado $= K \pmod N$. Si $N$ (número de servidores) cambia de 3 a 4, el $75\%$ de las claves cambiarán de servidor, provocando una avalancha de reubicación de Terabytes de datos que destruirá la red del clúster.
-*   **Consistent Hashing (Karger, 1997)**: Mapea nodos y claves a una circunferencia matemática (Anillo Hash de $[0, 2^{128}-1]$). Para encontrar el nodo de una clave, caminas en el sentido de las agujas del reloj. Al añadir un nuevo nodo (escalado), solo $1/N$ de las claves sufren reubicación, garantizando un escalado elástico asintóticamente óptimo con impacto mínimo de red.
+*   **Modulo Hashing (El Anti-Patrón)**: Servidor asignado $= K \pmod N$. Si $N$ (número de servidores) cambia de 3 a 4, el `$7`5\%$ de las claves cambiarán de servidor, provocando una avalancha de reubicación de Terabytes de datos que destruirá la red del clúster.
+*   **Consistent Hashing (Karger, 1997)**: Mapea nodos y claves a una circunferencia matemática (Anillo Hash de $[0, 2^{128}-1]$). Para encontrar el nodo de una clave, caminas en el sentido de las agujas del reloj. Al añadir un nuevo nodo (escalado), solo `$1`/N$ de las claves sufren reubicación, garantizando un escalado elástico asintóticamente óptimo con impacto mínimo de red.
 
 ---
 
@@ -37,7 +37,7 @@ Spanner utiliza un **Two-Phase Commit (2PC)** entrelazado con **Multi-Paxos**:
 Spanner introdujo la API **TrueTime**, respaldada físicamente por Receptores GPS y Relojes Atómicos (Rubidio) redundantes instalados en las paredes de cada Datacenter.
 TrueTime no devuelve un Timestamp escalar ($T$), devuelve un intervalo matemático de incertidumbre $\epsilon$:
 $$ \text{TT.now()} = [T_{\text{earliest}}, T_{\text{latest}}] $$
-Spanner garantiza que el tiempo absoluto del universo $T_{abs}$ siempre cumple: $T_{\text{earliest}} \le T_{abs} \le T_{\text{latest}}$. Típicamente el radio de incertidumbre $\epsilon$ es menor a $1ms$.
+Spanner garantiza que el tiempo absoluto del universo $T_{abs}$ siempre cumple: $T_{\text{earliest}} \le T_{abs} \le T_{\text{latest}}$. Típicamente el radio de incertidumbre $\epsilon$ es menor a `$1`ms$.
 
 **Regla de Commit Wait (El Milagro Spanner)**:
 Para asegurar que una Transacción $T_1$ es matemáticamente observada antes que $T_2$, el Líder asigna a $T_1$ el timestamp $S_1 = \text{TT.now().latest}$.
@@ -48,12 +48,12 @@ Esto garantiza que ninguna transacción posterior $T_2$ en el universo entero po
 
 ## 5. ⚠️ Runbook SRE: Anti-Patrones Topológicos (Hotspots)
 
-**Incidente SRE**: Spanner, con un clúster masivo, sufre timeouts de 5000ms. La telemetría OTEL muestra que un solo nodo de 1000 tiene la CPU al $100\%$, mientras que el resto está al $1\%$.
+**Incidente SRE**: Spanner, con un clúster masivo, sufre timeouts de 5000ms. La telemetría OTEL muestra que un solo nodo de 1000 tiene la CPU al `$10`0\%$, mientras que el resto está al $1\%$.
 
 **Diagnóstico Arquitectónico (Monotonically Increasing PK)**:
 En arquitecturas legacy (PostgreSQL), la Clave Primaria (PK) óptima es un `AUTO_INCREMENT` o un Timestamp secuencial.
 Spanner segmenta los datos en rangos geográficos (Splits) basándose en el **Orden Lexicográfico de la Primary Key**.
-Si todos los Inserts nuevos del mundo tienen IDs secuenciales (Ej. `1001, 1002, 1003`), todos caerán matemáticamente al final del árbol lexicográfico, mapeando la carga entera del planeta **al disco físico de un único nodo perimetral** (Hotspot tail-end), desperdiciando el $99.9\%$ del clúster Spanner (Tail-end Anti-Pattern).
+Si todos los Inserts nuevos del mundo tienen IDs secuenciales (Ej. `1001, 1002, 1003`), todos caerán matemáticamente al final del árbol lexicográfico, mapeando la carga entera del planeta **al disco físico de un único nodo perimetral** (Hotspot tail-end), desperdiciando el `$99`.9\%$ del clúster Spanner (Tail-end Anti-Pattern).
 
 **Solución SRE Rigurosa**:
 Redistribución Topológica Obligatoria.

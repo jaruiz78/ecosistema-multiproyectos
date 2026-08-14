@@ -16,15 +16,15 @@ El algoritmo tiene dos pasos que se repiten en un bucle infinito (Tick):
 
 ### 1. El Paso de Predicción (Adivinando el futuro)
 Empujamos el estado actual hacia el futuro usando la física $F$.
-*   **Estado Predicho ($\hat{x}_{k|k-1}$)**: $F \cdot \hat{x}_{k-1|k-1}$ 
-*   **Covarianza de Error Predicha ($P_{k|k-1}$)**: $F \cdot P \cdot F^T + Q$. (La incertidumbre crece, $Q$ es ruido).
+*   **Estado Predicho (\(\hat{x}_{k|k-1}\))**: \(F \cdot \hat{x}_{k-1|k-1}\) 
+*   **Covarianza de Error Predicha (\(P_{k|k-1}\))**: \(F \cdot P \cdot F^T + Q\). (La incertidumbre crece, \(Q\) es ruido).
 
 ### 2. El Paso de Actualización (La bofetada de realidad)
 Llega la medida real del sensor.
-*   **Ganancia de Kalman ($K$)**: $P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}$
+*   **Ganancia de Kalman (\(K\))**: \(P_{k|k-1} H^T (H P_{k|k-1} H^T + R)^{-1}\)
     *   *Filosofía de $K$*: Si $R$ (ruido del sensor) es enorme, $K \to 0$ (confiamos en la simulación). Si $P$ (incertidumbre teórica) es enorme, $K \to 1$ (confiamos en el sensor).
-*   **Nuevo Estado**: $\hat{x}_{k|k-1} + K (z_k - H \hat{x}_{k|k-1})$
-*   **Nueva Incertidumbre**: $(I - K \cdot H) P_{k|k-1}$
+*   **Nuevo Estado**: \(\hat{x}_{k|k-1} + K (z_k - H \hat{x}_{k|k-1})\)
+*   **Nueva Incertidumbre**: \((I - K \cdot H) P_{k|k-1}\)
 
 ---
 

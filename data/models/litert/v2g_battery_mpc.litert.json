@@ -1,0 +1,17 @@
+{
+  "model_name": "v2g_battery_mpc",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "807fc58080",
+      "scale": 147.057843,
+      "zero_point": -128,
+      "original_shape": [
+        5
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

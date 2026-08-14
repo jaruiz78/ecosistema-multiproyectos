@@ -42,4 +42,4 @@ Para cerrar el ciclo de vida del software (SDLC) con despliegues invisibles.
 
 ---
 
-> **Objetivo de Competencia:** Al completar esta matriz de recursos, el Cloud Engineer podrá orquestar clústeres y topologías sin servidor que escalen dinámicamente de $0 \to 10,000$ peticiones concurrentes, inyectando infraestructura inmutable que cumpla con los estándares europeos soberanos (Compliance GDPR y Cloud Sovereignty).
+> **Objetivo de Competencia:** Al completar esta matriz de recursos, el Cloud Engineer podrá orquestar clústeres y topologías sin servidor que escalen dinámicamente de `$0` \to 10,000$ peticiones concurrentes, inyectando infraestructura inmutable que cumpla con los estándares europeos soberanos (Compliance GDPR y Cloud Sovereignty).

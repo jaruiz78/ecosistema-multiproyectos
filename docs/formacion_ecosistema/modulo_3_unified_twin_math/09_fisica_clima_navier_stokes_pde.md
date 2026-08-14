@@ -151,4 +151,4 @@ Si $C > 1.0$, la simulación sufrirá **instabilidad numérica** y los valores d
 
 1. **Elegir un $\Delta t$ demasiado grande que viole la condición CFL**:
    * *Síntoma*: En pocos pasos de simulación, la matriz `T` o `u` pasa a tener valores `nan` o `inf`.
-   * *Solución*: Calcula dinámicamente $\Delta t \le \frac{0.5 \cdot \Delta x}{\max(|u|, |v|)}$.
+   * *Solución*: Calcula dinámicamente \(\Delta t \le \frac{0.5 \cdot \Delta x}{\max(|u|, |v|)}\).

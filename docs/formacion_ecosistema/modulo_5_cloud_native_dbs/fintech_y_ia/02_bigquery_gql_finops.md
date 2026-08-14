@@ -1,6 +1,6 @@
 # Módulo 5 - Lección 2: BigQuery SQL, Property Graphs (GQL) & Optimización FinOps
 
-## 1. FinOps y Control de Costes por Consulta (< $0.015 USD/MAU)
+## 1. FinOps y Control de Costes por Consulta (< `$0.015 USD`/MAU)
 
 BigQuery cobra por terabytes de datos escaneados. Ejecutar consultas no optimizadas (`SELECT *`) sobre tablas con miles de millones de registros puede agotar el presupuesto de infraestructura.
 

@@ -1,16 +1,16 @@
 """
 auto_rag_reindex.py
 -------------------------------------------------------------------------
-Re-indexador RAG de Documentación Técnica mediante Ollama GPU (nomic-embed-text).
-Vectoriza automáticamente archivos Markdown de docs/ y docs/formacion_ecosistema.
+Re-indexador RAG de Documentación Técnica mediante Arquitectura Dual-Engine AI.
+Vectoriza automáticamente archivos Markdown de docs/ y docs/formacion_ecosistema
+desactivando el consumo de VRAM en GPU al rutearlo a Lemonade NPU (o fallback GPU).
 -------------------------------------------------------------------------
 """
 import glob
-import requests
-
-OLLAMA_HOST = "http://localhost:11434"
+from ollama_local_bridge import OllamaLocalBridge
 
 def reindex_documentation_docs() -> dict:
+    bridge = OllamaLocalBridge()
     md_files = glob.glob("/home/jaruiz/Desarrollo/docs/**/*.md", recursive=True)
     indexed_count = 0
     total_embeddings = 0
@@ -22,11 +22,8 @@ def reindex_documentation_docs() -> dict:
                 
             if content.strip():
                 snippet = content[:500]
-                r = requests.post(f"{OLLAMA_HOST}/api/embeddings", json={
-                    "model": "nomic-embed-text:latest",
-                    "prompt": snippet
-                }, timeout=5.0)
-                if r.status_code == 200:
+                embed = bridge.get_embedding(snippet, model="nomic-embed-text:latest")
+                if len(embed) > 0:
                     indexed_count += 1
                     total_embeddings += 1
         except Exception:
@@ -39,8 +36,8 @@ def reindex_documentation_docs() -> dict:
     }
 
 if __name__ == "__main__":
-    print("📚 Iniciando Re-indexación RAG Local de Documentación Técnica...")
+    print("📚 Iniciando Re-indexación RAG Local de Documentación Técnica (Dual-Engine)...")
     res = reindex_documentation_docs()
     print(f"  -> Archivos Markdown Escaneados : {res['files_scanned']}")
     print(f"  -> Archivos Vectorizados RAG    : {res['files_indexed']}")
-    print(f"  ✓ Re-indexación RAG en Ollama GPU completada exitosamente.")
+    print(f"  ✓ Re-indexación RAG completada exitosamente.")

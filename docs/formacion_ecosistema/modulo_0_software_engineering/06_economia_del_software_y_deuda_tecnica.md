@@ -6,7 +6,7 @@
 
 Un desarrollador Junior suele decir: *"Este código está feo, voy a reescribirlo entero usando la nueva arquitectura"*. 
 No pide permiso, simplemente lo hace. Tarda 2 semanas. El código es más bonito, pero no hay ninguna funcionalidad nueva.
-En el mundo real, el desarrollo de software es un ejercicio de **Economía**. El tiempo de un ingeniero senior cuesta dinero (a menudo >$150/hora). Reescribir algo que "ya funcionaba" sin una justificación matemática de retorno de inversión (ROI) es una negligencia corporativa.
+En el mundo real, el desarrollo de software es un ejercicio de **Economía**. El tiempo de un ingeniero senior cuesta dinero (a menudo >`$150`/hora). Reescribir algo que "ya funcionaba" sin una justificación matemática de retorno de inversión (ROI) es una negligencia corporativa.
 La Universidad del Sur de California (USC), bajo el liderazgo de Barry Boehm, sentó las bases de la **Ingeniería de Software Basada en Valor (Value-Based Software Engineering)**.
 
 ---

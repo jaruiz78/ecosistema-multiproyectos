@@ -52,8 +52,8 @@ print("Forma del tensor resultante:", result.shape) # Output: (10, 50, 8)
 
 | Operación | Complejidad Big-O | Uso de SIMD / BLAS | Notas de Memoria |
 | :--- | :--- | :--- | :--- |
-| `np.dot(A, B)` | $O(N^3)$ o $O(N^{2.81})$ | Sí (OpenBLAS / MKL) | Asignación contigua C-Order |
-| `np.einsum('ijk,kl->ijl', A, B)` | $O(I \cdot J \cdot K \cdot L)$ | Sí | Evita copias intermedias temporales |
+| `np.dot(A, B)` | \(O(N^3)\) o \(O(N^{2.81})\) | Sí (OpenBLAS / MKL) | Asignación contigua C-Order |
+| `np.einsum('ijk,kl->ijl', A, B)` | \(O(I \cdot J \cdot K \cdot L)\) | Sí | Evita copias intermedias temporales |
 
 ---
 

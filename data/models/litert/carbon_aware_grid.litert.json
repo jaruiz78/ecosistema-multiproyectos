@@ -1,0 +1,17 @@
+{
+  "model_name": "carbon_aware_grid",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "807f",
+      "scale": 23.927486,
+      "zero_point": -131,
+      "original_shape": [
+        2
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

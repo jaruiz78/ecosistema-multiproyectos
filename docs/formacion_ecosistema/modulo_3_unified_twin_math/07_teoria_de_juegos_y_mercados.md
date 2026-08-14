@@ -95,8 +95,8 @@ Al forzar $E[U_2(C)] = E[U_2(D)]$, obtenemos una ecuación lineal que nos permit
 *El resultado contraintuitivo de Nash*: ¡El Jugador 1 debe elegir su propia probabilidad $p$ basándose únicamente en los pagos del Jugador 2, no en los suyos propios! Su objetivo matemático es paralizar estratégicamente al oponente haciéndole dudar.
 
 ### Ejemplo: El Juego de la Inspección Fiscal
-*   Fisco (Auditar con prob $p$, No auditar con prob $1-p$)
-*   Ciudadano (Evadir con prob $q$, Pagar con prob $1-q$)
+*   Fisco (Auditar con prob $p$, No auditar con prob `$1`-p$)
+*   Ciudadano (Evadir con prob $q$, Pagar con prob `$1`-q$)
 Si el ciudadano evade y es auditado, paga una multa altísima. Si el fisco audita a un ciudadano honesto, pierde el coste de la auditoría.
 Resolviendo la ecuación de indiferencia, descubrimos que si aumentamos drásticamente la multa, ¡la probabilidad de que el fisco audite $p$ baja, pero la probabilidad de que el ciudadano evada $q$ se mantiene igual! Modificar los pagos de un jugador cambia el comportamiento (la probabilidad mixta) del *otro* jugador en el equilibrio.
 

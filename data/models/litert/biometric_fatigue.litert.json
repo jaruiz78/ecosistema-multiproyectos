@@ -1,0 +1,17 @@
+{
+  "model_name": "biometric_fatigue",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "7f80",
+      "scale": 2e-05,
+      "zero_point": -50567,
+      "original_shape": [
+        2
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

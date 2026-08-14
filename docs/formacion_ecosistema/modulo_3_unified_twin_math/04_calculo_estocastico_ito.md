@@ -57,7 +57,7 @@ En el cálculo determinista, el error disminuye con $\Delta t$. En el estocásti
 
 **Remediación Estricta**:
 1. **Reducción de $\Delta t$ (Costo Computacional)**: Disminuir el Time-Step, aumentando los ciclos de CPU.
-2. **Esquema de Milstein**: Si el ruido es multiplicativo (la volatilidad $\sigma$ depende de $X$), abandonar Euler-Maruyama (precisión de orden $0.5$) por el esquema de **Milstein** (orden $1.0$). Milstein inyecta un término corrector $\frac{1}{2} \sigma(X_t) \sigma'(X_t) ((\Delta W_t)^2 - \Delta t)$ que estabiliza las vibraciones estocásticas amortiguando los saltos al vacío.
+2. **Esquema de Milstein**: Si el ruido es multiplicativo (la volatilidad $\sigma$ depende de $X$), abandonar Euler-Maruyama (precisión de orden `$0`.5$) por el esquema de **Milstein** (orden `$1`.0$). Milstein inyecta un término corrector $\frac{1}{2} \sigma(X_t) \sigma'(X_t) ((\Delta W_t)^2 - \Delta t)$ que estabiliza las vibraciones estocásticas amortiguando los saltos al vacío.
 3. **Absorbing Boundaries**: Definir barreras matemáticas ($X = \max(X, 0)$) en el motor de simulación.
 
 ---

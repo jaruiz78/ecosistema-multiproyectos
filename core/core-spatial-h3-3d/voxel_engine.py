@@ -1,4 +1,12 @@
 """
+Arquitectura y especificación formal para voxel_engine.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-002-uber-h3-spatial-indexing.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_4_frontend_y_motores_ui/movilidad_h3/01_h3_spatial_indexing_surge.md
+- Referencia Académica: Brodsky (2018) H3: Hexagonal Hierarchical Spatial Index (Uber Engineering)
+"""
+"""
 voxel_engine.py
 -------------------------------------------------------------------------
 core-spatial-h3-3d: Motor de Vóxeles H3 Tridimensionales

@@ -1,1 +1,0 @@
-FROM eclipse-temurin:25-jre\nCMD ["echo", "core-geogrid-h3 started"]

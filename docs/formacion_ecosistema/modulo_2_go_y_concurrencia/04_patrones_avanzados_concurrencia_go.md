@@ -100,7 +100,7 @@ func (c *AtomicCounter) Next() uint64 {
 ```
 
 **Análisis Ensamblador (x86_64)**:
-El método `Add()` de `atomic.Uint64` no llama a una función del runtime de Go, sino que el compilador lo reemplaza *inline* (Intrinsic Compiler Substitution) por una instrucción nativa de CPU `LOCK XADDQ`. Esta instrucción congela la línea de caché (Cache Line) del núcleo L1 local durante $\sim 5$ nanosegundos (en lugar de los $50-100$ ns de un mutex de canal).
+El método `Add()` de `atomic.Uint64` no llama a una función del runtime de Go, sino que el compilador lo reemplaza *inline* (Intrinsic Compiler Substitution) por una instrucción nativa de CPU `LOCK XADDQ`. Esta instrucción congela la línea de caché (Cache Line) del núcleo L1 local durante $\sim 5$ nanosegundos (en lugar de los `$50`-100$ ns de un mutex de canal).
 
 ## 7. Lock-Free Queues en Go (El Algoritmo de Michael-Scott)
 

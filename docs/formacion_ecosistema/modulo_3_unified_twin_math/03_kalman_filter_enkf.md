@@ -85,8 +85,8 @@ class EnsembleKalmanFilter:
 
 | Fase EnKF | Ecuación Principal | Complejidad Big-O |
 | :--- | :--- | :--- |
-| **Pronóstico** | $x_i^f = f(x_i^a) + w_i$ | $O(N_e \cdot \text{Coste}(f))$ |
-| **Ganancia de Kalman ($K$)** | $K = P^f H^T (H P^f H^T + R)^{-1}$ | $O(m^3 + m \cdot n \cdot N_e)$ (Inversión de matriz $m \times m$) |
+| **Pronóstico** | \(x_i^f = f(x_i^a) + w_i\) | \(O(N_e \cdot \text{Coste}(f))\) |
+| **Ganancia de Kalman (\(K\))** | \(K = P^f H^T (H P^f H^T + R)^{-1}\) | \(O(m^3 + m \cdot n \cdot N_e)\) (Inversión de matriz \(m \times m\)) |
 
 ---
 

@@ -20,7 +20,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.corp</groupId>
+            <groupId>com.corp.tenant</groupId>
             <artifactId>corp-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -1,0 +1,17 @@
+{
+  "model_name": "online_continual_learning_enkf",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "7f8180",
+      "scale": 0.062594,
+      "zero_point": -129,
+      "original_shape": [
+        3
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

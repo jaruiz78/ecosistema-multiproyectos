@@ -27,11 +27,11 @@ Hemos convertido 1,000 actualizaciones lentas del DOM en 1 sola actualización u
 
 ## 3. 🚀 El Algoritmo de Reconciliación (De $O(N^3)$ a $O(N)$)
 
-El problema matemático de comparar dos árboles genéricos para encontrar la diferencia mínima tiene una complejidad de $O(N^3)$ basado en el algoritmo de árboles genéricos. Si tu web tiene 1,000 elementos HTML, comparar tardaría $1,000,000,000$ de operaciones (la web moriría igual).
+El problema matemático de comparar dos árboles genéricos para encontrar la diferencia mínima tiene una complejidad de $O(N^3)$ basado en el algoritmo de árboles genéricos. Si tu web tiene 1,000 elementos HTML, comparar tardaría `$1`,000,000,000$ de operaciones (la web moriría igual).
 React introdujo el **Algoritmo de Reconciliación Heurístico**, reduciendo el problema a **$O(N)$** usando dos reglas heurísticas principales que se asumen válidas en el desarrollo web.
 
 ### Demostración Matemática $O(N)$ (Big-O Proof):
-Sea $T_1$ el árbol anterior y $T_2$ el árbol actual. El algoritmo genérico de edición de árboles calcula la distancia mínima de Levenshtein para árboles en $\mathcal{O}(|T_1| \times |T_2| \times \max(\text{depth}(T_1), \text{depth}(T_2)))$. Para árboles del mismo tamaño $N$, es $O(N^3)$.
+Sea \(T_1\) el árbol anterior y \(T_2\) el árbol actual. El algoritmo genérico de edición de árboles calcula la distancia mínima de Levenshtein para árboles en \(\mathcal{O}(|T_1| \times |T_2| \times \max(\text{depth}(T_1), \text{depth}(T_2)))\). Para árboles del mismo tamaño \(N\), es \(O(N^3)\).
 
 React logra una recurrencia acotada de $O(N)$ por poda estricta:
 1. **Poda por Tipo (Type Pruning)**: Si $type(node_{T1}) \neq type(node_{T2})$, React destruye el subárbol $T1$ inmediatamente y lo reconstruye desde $T2$, evitando el coste de emparejamiento. Matemáticamente corta la rama de búsqueda, previniendo el $O(M^3)$ donde $M$ son los hijos.

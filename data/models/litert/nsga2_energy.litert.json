@@ -1,0 +1,17 @@
+{
+  "model_name": "nsga2_energy",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "80f6bb6b7f",
+      "scale": 0.003412,
+      "zero_point": -157,
+      "original_shape": [
+        5
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

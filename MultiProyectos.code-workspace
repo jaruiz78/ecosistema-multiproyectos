@@ -1,47 +1,78 @@
 {
-	"folders": [
-		{
-			"path": "AppViajes"
-		},
-		{
-			"path": "PCT"
-		},
-		{
-			"path": "SaaSRegantes"
-		},
-		{
-			"path": "corp-spring-boot-starter"
-		},
-		{
-			"path": "apps"
-		},
-		{
-			"path": "core"
-		},
-		{
-			"path": "scripts"
-		},
-		{
-			"path": "data"
-		},
-		{
-			"path": "docs"
-		},
-		{
-			"path": "pctMultiMicroservices"
-		}
-	],
-	"settings": {
-		"java.project.importOnFirstTimeStartup": "automatic",
-		"maven.view": "hierarchical",
-		"files.exclude": {
-			"**/.git": true,
-			"**/.svn": true,
-			"**/.hg": true,
-			"**/CVS": true,
-			"**/.DS_Store": true,
-			"**/Thumbs.db": true,
-			"**/__pycache__": true
-		}
-	}
+    "folders": [
+        {
+            "name": "01. Plataforma Base (corp-spring-boot-starter)",
+            "path": "corp-spring-boot-starter"
+        },
+        {
+            "name": "02. Movilidad y Tráfico (AppViajes)",
+            "path": "AppViajes"
+        },
+        {
+            "name": "03. Agronómico y Regadío (SaaSRegantes)",
+            "path": "SaaSRegantes"
+        },
+        {
+            "name": "04. Logística y Flotas (PCT)",
+            "path": "PCT"
+        },
+        {
+            "name": "05. Microservicios PCT (pctMultiMicroservices)",
+            "path": "pctMultiMicroservices"
+        },
+        {
+            "name": "06. Primitivas Core (core)",
+            "path": "core"
+        },
+        {
+            "name": "07. Verticales Ecosistema (apps)",
+            "path": "apps"
+        },
+        {
+            "name": "08. Gemelo Digital y Simulaciones (scripts)",
+            "path": "scripts"
+        },
+        {
+            "name": "09. Datos y Telemetría (data)",
+            "path": "data"
+        },
+        {
+            "name": "10. Documentación y ADRs (docs)",
+            "path": "docs"
+        }
+    ],
+    "settings": {
+        "java.project.importOnFirstTimeStartup": "automatic",
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.configuration.runtimes": [
+            {
+                "name": "JavaSE-25",
+                "default": true
+            }
+        ],
+        "java.jdt.ls.vmargs": "-XX:+UnlockExperimentalVMOptions -XX:+UseZGC --enable-preview",
+        "maven.view": "hierarchical",
+        "editor.formatOnSave": true,
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true,
+            "**/__pycache__": true,
+            "**/.pytest_cache": true,
+            "**/.dart_tool": true
+        },
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/**": true,
+            "**/target/**": true,
+            "**/dist/**": true,
+            "**/.venv/**": true,
+            "**/logs/**": true
+        }
+    }
 }

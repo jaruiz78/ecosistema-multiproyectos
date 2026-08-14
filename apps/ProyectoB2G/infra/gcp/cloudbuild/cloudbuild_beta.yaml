@@ -1,7 +1,7 @@
 steps:
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "bash"
-    args: ["-c", "echo 'Iniciando despliegue de servicio ${_SERVICE_NAME}'"]
+    args: ["-c", "echo 'Iniciando despliegue BETA de servicio ${_SERVICE_NAME}'"]
     id: "Log Service Info"
 
   - name: "gcr.io/cloud-builders/docker"
@@ -11,7 +11,7 @@ steps:
         "-f",
         "Dockerfile",
         "-t",
-        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/pct-repo/${_IMAGE_NAME}:latest",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:beta",
         ".",
       ]
     id: "Build JVM Image"
@@ -20,7 +20,7 @@ steps:
     args:
       [
         "push",
-        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/pct-repo/${_IMAGE_NAME}:latest",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:beta",
       ]
     id: "Push Image"
     waitFor: ["Build JVM Image"]
@@ -33,7 +33,7 @@ steps:
         "deploy",
         "${_SERVICE_NAME}",
         "--image",
-        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/pct-repo/${_IMAGE_NAME}:latest",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:beta",
         "--region",
         "${_REGION}",
         "--platform",
@@ -45,22 +45,23 @@ steps:
         "--concurrency",
         "100",
         "--cpu-boost",
+        "--cpu-throttling",
         "--timeout",
         "600",
         "--no-allow-unauthenticated",
         "--min-instances",
         "0",
         "--max-instances",
-        "1",
+        "2",
         "--service-account",
         "${_SA_EMAIL}",
-        "--update-env-vars=SPRING_PROFILES_ACTIVE=beta,GCP_PROJECT_ID=${_PROJECT_ID},JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -XX:TieredStopAtLevel=1 -XX:+ExitOnOutOfMemoryError -Xms256m -Xmx512m -Djdk.virtualThreadScheduler.parallelism=4",
+        "--update-env-vars=SPRING_PROFILES_ACTIVE=beta,GCP_PROJECT_ID=${_PROJECT_ID},JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -XX:TieredStopAtLevel=1 -XX:+ExitOnOutOfMemoryError -Xms256m -Xmx512m",
       ]
     id: "Deploy Service"
     waitFor: ["Push Image"]
 
 images:
-  - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/pct-repo/${_IMAGE_NAME}:latest"
+  - "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:beta"
 
 timeout: '1200s'
 options:
@@ -68,6 +69,7 @@ options:
 substitutions:
   _SERVICE_NAME: "b2g-backend-beta"
   _IMAGE_NAME: "b2g-backend"
-  _PROJECT_ID: "jara-pct-beta"
-  _SA_EMAIL: "b2g-backend-beta-sa@jara-pct-beta.iam.gserviceaccount.com"
+  _PROJECT_ID: "ecosistema-beta"
+  _REPO_NAME: "ecosystem-repo"
+  _SA_EMAIL: "b2g-backend-beta-sa@ecosistema-beta.iam.gserviceaccount.com"
   _REGION: "europe-west1"

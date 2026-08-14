@@ -1,0 +1,17 @@
+{
+  "model_name": "dqn_mobility",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "Trained for max fleet profit",
+  "tensors": {
+    "q_table": {
+      "quantized_bytes_b64": "7f80",
+      "scale": 0.002863,
+      "zero_point": -170,
+      "original_shape": [
+        2
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

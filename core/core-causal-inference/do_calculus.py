@@ -1,4 +1,12 @@
 """
+Arquitectura y especificación formal para do_calculus.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_0_software_engineering/01_arquitectura_hexagonal_ddd_puro.md
+- Referencia Académica: Martin (2017) Clean Architecture & DDD Pure Domain Standard
+"""
+"""
 do_calculus.py
 -------------------------------------------------------------------------
 core-causal-inference: Motor de Inferencia Causal Espacio-Temporal

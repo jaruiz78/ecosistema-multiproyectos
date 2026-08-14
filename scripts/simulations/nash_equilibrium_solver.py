@@ -1,3 +1,11 @@
+"""
+Arquitectura y especificación formal para nash_equilibrium_solver.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-003-unified-twin-peps-enkf.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_3_unified_twin_math/10_gemelo_digital_unificado_core.md
+- Referencia Académica: Verstraete, Murg, Cirac (2008) PEPS Tensor Networks; Evensen (2003) EnKF
+"""
 import logging
 import numpy as np
 

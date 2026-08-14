@@ -41,11 +41,11 @@ graph TD
 ## 3. 🔬 Fundamentación Matemática de Embeddings & Búsqueda Vectorial
 
 ### Distancia Coseno en Espacios Vectoriales de $D$ Dimensiones
-Los embeddings convierten palabras o fragmentos de código en vectores numéricos $\mathbf{v} \in \mathbb{R}^D$ (donde $D = 768$ o $1536$). La similitud semántica entre dos conceptos $\mathbf{A}$ y $\mathbf{B}$ se calcula como el **Coseno del Ángulo**:
+Los embeddings convierten palabras o fragmentos de código en vectores numéricos $\mathbf{v} \in \mathbb{R}^D$ (donde $D = 768$ o `$153`6$). La similitud semántica entre dos conceptos $\mathbf{A}$ y $\mathbf{B}$ se calcula como el **Coseno del Ángulo**:
 
-$$\text{SimilitudCoseno}(\mathbf{A}, \mathbf{B}) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\|_2 \|\mathbf{B}\|_2} = \frac{\sum_{i=1}^D A_i B_i}{\sqrt{\sum_{i=1}^D A_i^2} \sqrt{\sum_{i=1}^D B_i^2}}$$
+$\(\text{SimilitudCoseno}(\mathbf{A}, \mathbf{B}) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\|_2 \|\mathbf{B}\|_2} = \frac{\sum_{i=1}^D A_i B_i}{\sqrt{\sum_{i=1}^D A_i^2} \sqrt{\sum_{i=1}^D B_i^2}}\)$
 
-Un valor cercano a $1.0$ indica que dos conceptos son semánticamente idénticos independientemente de las palabras exactas utilizadas.
+Un valor cercano a `$1`.0$ indica que dos conceptos son semánticamente idénticos independientemente de las palabras exactas utilizadas.
 
 ---
 

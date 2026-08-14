@@ -1,0 +1,17 @@
+{
+  "model_name": "bio_agri_trace",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "827f4c80",
+      "scale": 0.588216,
+      "zero_point": -128,
+      "original_shape": [
+        4
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

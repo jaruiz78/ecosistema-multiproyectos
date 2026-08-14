@@ -26,6 +26,16 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.corp.tenant</groupId>
+            <artifactId>corp-contracts-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.corp.tenant</groupId>
+            <artifactId>corp-edge-litert-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.0</version>

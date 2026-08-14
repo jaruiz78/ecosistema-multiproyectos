@@ -6,7 +6,7 @@
 
 Si alquilas una Máquina Virtual o un nodo de Kubernetes en Google Cloud, vas a pagar dinero (ej. 50€ al mes) las 24 horas del día. Si a las 4:00 AM tu web no tiene ninguna visita, estás tirando dinero a la basura porque el procesador está encendido sin hacer nada (Idle).
 La arquitectura **Serverless (Sin Servidor)** no significa que no haya ordenadores físicos, significa que *tú no los gestionas y no los pagas cuando no se usan*.
-Si tienes 0 usuarios, tienes 0 servidores encendidos y pagas $0.00. 
+Si tienes 0 usuarios, tienes 0 servidores encendidos y pagas `$0.00`. 
 Cuando entra 1 usuario de golpe, Google enciende un contenedor en $<0.1$ segundos para atenderle, y te cobra solo por esos 50 milisegundos de uso. A este milagro matemático se le conoce como **Cloud Run (GCP)** o AWS Lambda.
 
 ---

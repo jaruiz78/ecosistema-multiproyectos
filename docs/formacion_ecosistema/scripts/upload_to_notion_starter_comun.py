@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""
+Arquitectura y especificación formal para upload_to_notion_starter_comun.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_0_software_engineering/01_arquitectura_hexagonal_ddd_puro.md
+- Referencia Académica: Martin (2017) Clean Architecture & DDD Pure Domain Standard
+"""
 import os
 import sys
 import glob

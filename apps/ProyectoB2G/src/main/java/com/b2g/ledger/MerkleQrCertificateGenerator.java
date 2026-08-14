@@ -7,6 +7,11 @@ import java.util.Objects;
  * Generador de Certificados de Auditoría Merkle + Código QR en 1-Clic (ProyectoB2G).
  * Permite a auditores estatales y ciudadanos verificar la proveniencia SLSA L4 y firma Cosign
  * en campo de forma inmediata (NPS Auditores B2G +93).
+  *
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-004-firestore-rls-bigquery-finops.md">ADR de Referencia</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/apps/VERTICALS_ARCHITECTURE_SPEC.md">Documentación y Módulo Formativo</a>
+ * @reference Evans (2003) Domain-Driven Design (Tackling Complexity in Software)
+ 
  */
 public final class MerkleQrCertificateGenerator {
 

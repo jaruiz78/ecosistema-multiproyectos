@@ -30,7 +30,7 @@ Un incidente no termina cuando se recupera el SLI; termina cuando el Postmortem 
 **Estructura Taxonómica del Postmortem**:
 *   **Contexto y Síntomas**: Qué sintió el usuario final y cuándo.
 *   **Timeline (Cronología de Precisión)**: Registro histórico de la derivada del incidente (ej. `10:04:02 UTC - Salta alarma Burn Rate. 10:15:00 - IC asume el mando. 10:45:00 - Rollback completado`).
-*   **Impacto Real**: Matemáticas puras (ej. "345,000 peticiones 500 arrojadas, $0.01\%$ de pérdida sobre SLA. 15,000$ impacto financiero estimado").
+*   **Impacto Real**: Matemáticas puras (ej. "345,000 peticiones 500 arrojadas, `$0.0`1\%$ de pérdida sobre SLA. 15,000$ impacto financiero estimado").
 *   **Root Cause (Causa Raíz)**: Desglose sistémico de las vulnerabilidades subyacentes.
 *   **Action Items (Remediaciones)**: Funciones forzantes a nivel de código (Tickets de Jira) para que la vulnerabilidad sea físicamente imposible de repetir (Evitar el mismo Root Cause).
 

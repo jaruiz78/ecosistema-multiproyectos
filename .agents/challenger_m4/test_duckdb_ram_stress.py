@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 """
+Arquitectura y especificación formal para test_duckdb_ram_stress.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_0_software_engineering/01_arquitectura_hexagonal_ddd_puro.md
+- Referencia Académica: Martin (2017) Clean Architecture & DDD Pure Domain Standard
+"""
+"""
 test_duckdb_ram_stress.py - Empirical Stress & RAM Measurement Harness for DuckDB Parquet OLAP.
 Empirical Challenger - Milestone 4 (AppViajes)
 """

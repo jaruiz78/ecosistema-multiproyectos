@@ -1,0 +1,17 @@
+{
+  "model_name": "synthetic_bio_foundry",
+  "format": "LiteRT_Edge_Tensor_v1",
+  "timestamp": "2026-08-14T10:00:00Z",
+  "metadata": "LiteRT Quantized Artifact",
+  "tensors": {
+    "primary_params": {
+      "quantized_bytes_b64": "807f",
+      "scale": 0.128418,
+      "zero_point": -136,
+      "original_shape": [
+        2
+      ],
+      "dtype": "INT8"
+    }
+  }
+}

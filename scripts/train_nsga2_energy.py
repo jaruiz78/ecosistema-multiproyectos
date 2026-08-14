@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 """
+Arquitectura y especificación formal para train_nsga2_energy.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-003-unified-twin-peps-enkf.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_3_unified_twin_math/10_gemelo_digital_unificado_core.md
+- Referencia Académica: Verstraete, Murg, Cirac (2008) PEPS Tensor Networks; Evensen (2003) EnKF
+"""
+"""
 Real NSGA-II Multi-Objective Genetic Algorithm for Energy Microgrids in ProyectoEnergia.
 Optimizes Bi-objective Pareto Front:
   Objective 1: Minimize Generation Cost ($/kWh)

@@ -14,7 +14,7 @@ El orquestador físico asimila los shocks macroeconómicos y sistémicos. Cuando
 ### B. Mecánica de Interrupción
 1. El gemelo digital emite `enkf_covariance` asíncronamente por un socket UDP Zero-Copy.
 2. Los microservicios Java (Spring Boot) poseen un hilo virtual ligero dedicado a leer este buffer de telemetría.
-3. Si el parámetro supera el umbral ($0.5$, por ejemplo), el `PredictiveCircuitBreaker` en Java interviene en el Request Filter y abre el circuito **antes de que ocurra la sobrecarga física**.
+3. Si el parámetro supera el umbral (`$0`.5$, por ejemplo), el `PredictiveCircuitBreaker` en Java interviene en el Request Filter y abre el circuito **antes de que ocurra la sobrecarga física**.
 4. El tráfico se redirige preventivamente a cachés locales estáticas, colas diferidas, o se aplican estrategias de gracia sin esperar al primer HTTP 500.
 
 ## 3. Conclusión

@@ -74,9 +74,9 @@ export const IrrigationControl: React.FC<IrrigationProps> = ({ plotId, initialAc
 
 | Métricas Web / a11y | Límite Objetivo | Regla CSS / HTML |
 | :--- | :--- | :--- |
-| **Contraste de Color** | $\ge 4.5:1$ | Verificado con espacio de color OKLCH |
-| **CLS (Cumulative Layout Shift)** | $< 0.1$ | `content-visibility: auto` + dimensiones de imagen explícitas |
-| **INP (Interaction to Next Paint)**| $< 200 \text{ ms}$ | Transiciones CSS desacopladas de hilos pesados de JS |
+| **Contraste de Color** | \(\ge 4.5:1\) | Verificado con espacio de color OKLCH |
+| **CLS (Cumulative Layout Shift)** | \(< 0.1\) | `content-visibility: auto` + dimensiones de imagen explícitas |
+| **INP (Interaction to Next Paint)**| \(< 200 \text{ ms}\) | Transiciones CSS desacopladas de hilos pesados de JS |
 
 ---
 

@@ -77,7 +77,7 @@ message CreateOrderResponse {
 | Propiedad | gRPC (Protobuf Binario) | REST (JSON HTTP/1.1) |
 | :--- | :--- | :--- |
 | **Tamaño de Payload** | **Ultra-pequeño (Binario comprimido)** | Mediano-Grande (Texto plano) |
-| **Serialización / Deserialización** | **$O(N)$ nativa directa (< 1ms)** | $O(N)$ con parsing String/Jackson |
+| **Serialización / Deserialización** | **\(O(N)\) nativa directa (< 1ms)** | \(O(N)\) con parsing String/Jackson |
 | **Multiplexación** | Nativa sobre HTTP/2 | Requiere HTTP/2 o conexiones múltiples |
 | **Uso Recomendado** | Comunicación interna Microservicio-a-Microservicio | APIs públicas web/móvil expuestas a Internet |
 

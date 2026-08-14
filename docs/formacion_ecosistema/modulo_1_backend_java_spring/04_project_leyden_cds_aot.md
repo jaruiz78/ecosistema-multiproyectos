@@ -5,7 +5,7 @@
 ## 1. 🐣 Rincón Junior: Conceptos desde Cero & Analogías
 
 ### ¿Qué es el Cold-Start y por qué es un problema?
-Cuando despliegas una aplicación en Google Cloud Run con **escalado a cero**, el servicio apaga todas las instancias si nadie lo usa para ahorrar dinero ($0.00 de coste). 
+Cuando despliegas una aplicación en Google Cloud Run con **escalado a cero**, el servicio apaga todas las instancias si nadie lo usa para ahorrar dinero (`$0.00` de coste). 
 
 Sin embargo, cuando entra un nuevo usuario, la JVM normal debe encenderse, buscar miles de archivos `.class`, parsearlos, verificar el bytecode y compilar el código en tiempo de ejecución (JIT). Esto hace que el primer usuario espere **entre 3 y 8 segundos** (**Cold-Start**).
 

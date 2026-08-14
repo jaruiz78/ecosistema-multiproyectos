@@ -109,6 +109,8 @@ Cada módulo está desglosado desde la abstracción de alto nivel hasta el códi
 4. [Terraform, DAGs Matemáticos y Lock del Estado Remoto (IaC)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/04_infraestructura_como_codigo_terraform.md)
 5. [Dataflow, Ray y Serverless Distribuido (Actor Model)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/05_arquitecturas_dataflow_y_serverless_distribuido.md)
 6. [Rutas de Aprendizaje Práctico: Google Cloud (GCP) & Infraestructura Inmutable](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/06_rutas_aprendizaje_gcp_cloud_native.md)
+7. [Arquitectura Streaming ETL, BigQuery Storage API y FinOps](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/07_arquitectura_etl_streaming_bigquery_finops.md)
+8. [Entrenamiento In-Situ BQML, Inferencia Edge Off-Heap y Asimilación EnKF](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/08_entrenamiento_bqml_inferencia_edge_gemelo_digital.md)
 
 ---
 

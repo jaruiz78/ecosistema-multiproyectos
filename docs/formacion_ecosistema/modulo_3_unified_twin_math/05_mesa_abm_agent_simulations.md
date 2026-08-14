@@ -80,9 +80,9 @@ class CityMobilityModel(mesa.Model):
 
 | Tipo de Scheduler Mesa | Complejidad Step | Caso de Uso Recomendado |
 | :--- | :--- | :--- |
-| `BaseScheduler` | $O(N)$ secuencial fijo | Agentes deterministas ordenados |
-| `RandomActivation` | $O(N)$ orden estocástico aleatorio | Simulaciones humanas / conductoras (Evita sesgo de orden) |
-| `SimultaneousActivation` | $O(N)$ evaluación en 2 fases | Redes donde los agentes reaccionan al estado anterior previo |
+| `BaseScheduler` | \(O(N)\) secuencial fijo | Agentes deterministas ordenados |
+| `RandomActivation` | \(O(N)\) orden estocástico aleatorio | Simulaciones humanas / conductoras (Evita sesgo de orden) |
+| `SimultaneousActivation` | \(O(N)\) evaluación en 2 fases | Redes donde los agentes reaccionan al estado anterior previo |
 
 ---
 

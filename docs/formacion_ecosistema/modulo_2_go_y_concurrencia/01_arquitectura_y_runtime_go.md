@@ -57,7 +57,7 @@ Gracias a esto, Go hoy en día es predecible (Low Latency) sin importar lo mal q
 **Diagnóstico Arquitectónico**:
 Por defecto, la función matemática de Go mira el Hardware Físico, no la cuota de Kubernetes (Cgroups). 
 El servidor físico de Amazon/GCP debajo de K8s puede tener 64 núcleos. Go ve 64 núcleos, y decide crear `GOMAXPROCS=64` Hilos del Sistema Operativo ($M$).
-Sin embargo, Kubernetes y Linux Cgroups te han limitado a $0.5$ núcleos de tiempo de CPU.
+Sin embargo, Kubernetes y Linux Cgroups te han limitado a `$0`.5$ núcleos de tiempo de CPU.
 Tus 64 hilos reales empezarán a pelearse salvajemente (Context Switching contention) por las migajas de tiempo de procesador que K8s te permite, colapsando el Kernel de Linux.
 
 **Solución SRE Obligatoria**:

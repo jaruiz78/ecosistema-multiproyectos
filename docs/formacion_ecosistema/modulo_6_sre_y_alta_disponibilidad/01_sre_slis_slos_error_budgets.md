@@ -20,7 +20,7 @@ SRE es "lo que ocurre cuando le pides a un ingeniero de software que diseñe un 
 2.  **SLO (Service Level Objective)**: Tu objetivo interno, el umbral de dolor del usuario.
     *   *Ejemplo*: "El $\text{SLI}$ debe ser $\ge 99.9\%$ en una ventana móvil de 28 días".
 3.  **SLA (Service Level Agreement)**: El contrato legal con el cliente que incluye penalizaciones económicas.
-    *   *Regla de Oro*: $\text{SLA} < \text{SLO}$. (Ej. Prometes $99.5\%$ legalmente, pero tu SLO de ingeniería es $99.9\%$ para tener un margen de seguridad interno antes de perder dinero).
+    *   *Regla de Oro*: $\text{SLA} < \text{SLO}$. (Ej. Prometes `$99`.5\%$ legalmente, pero tu SLO de ingeniería es `$99`.9\%$ para tener un margen de seguridad interno antes de perder dinero).
 
 ---
 

@@ -1,17 +1,16 @@
 """
 auto_adr_curator.py
 -------------------------------------------------------------------------
-Curador Autónomo de Decisiones de Arquitectura (ADRs) mediante Ollama GPU (gemma4:26b).
+Curador Autónomo de Decisiones de Arquitectura (ADRs) mediante Dual-Engine AI
+(Ollama GPU qwen2.5-coder:7b + NPU Router).
 Autogenera documentos Markdown en docs/adr/ a partir de los cambios estructurales.
 -------------------------------------------------------------------------
 """
-import requests
 import os
-import time
-
-OLLAMA_HOST = "http://localhost:11434"
+from ollama_local_bridge import OllamaLocalBridge
 
 def generate_adr(title: str, context: str, decision: str) -> str:
+    bridge = OllamaLocalBridge()
     prompt = f"""
     Title: {title}
     Context: {context}
@@ -24,23 +23,13 @@ def generate_adr(title: str, context: str, decision: str) -> str:
     ## Consequences
     Return ONLY valid Markdown.
     """
-    try:
-        r = requests.post(f"{OLLAMA_HOST}/api/generate", json={
-            "model": "gemma4:26b",
-            "prompt": prompt,
-            "stream": False,
-            "options": {"temperature": 0.1}
-        }, timeout=12.0)
-        if r.status_code == 200:
-            return r.json().get("response", "").strip()
-    except Exception as e:
-        return f"# ADR: {title}\n\nError: {str(e)}"
-    return ""
+    code, metrics = bridge.generate_completion(prompt, model="qwen2.5-coder:7b", temperature=0.1)
+    return code.strip() if code else f"# ADR: {title}\n\n## Context\n{context}\n\n## Decision\n{decision}"
 
 if __name__ == "__main__":
-    title = "Hybrid Edge-Cloud AI Execution Loop with Ollama Local GPU"
-    context = "Cloud LLM API costs and network latency for high-frequency simulation ticks."
-    decision = "Offload synthetic data generation, Zero-Mockito TDD stubs, and RAG embeddings to local RTX 5060 Ollama container."
+    title = "Hybrid Dual-Engine NPU-GPU Execution Loop with Lemonade and Ollama"
+    context = "VRAM contention and latency optimization when performing continuous vector embeddings and high-frequency code generation."
+    decision = "Offload vector embeddings to Lemonade NPU and code generation/stubs to GPU RTX 5060 Ollama container."
     
     print(f"📝 Curando Registro ADR autónomo: '{title}'...")
     adr_md = generate_adr(title, context, decision)

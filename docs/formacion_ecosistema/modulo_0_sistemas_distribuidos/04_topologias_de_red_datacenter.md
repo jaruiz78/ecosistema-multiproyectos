@@ -80,13 +80,13 @@ Toda la arquitectura depende del parámetro $k$ (número de puertos por switch).
 - Total de switches en el Core: $(k/2)^2$.
 
 **Ejemplo Práctico:** Si usamos switches baratos de 48 puertos ($k = 48$):
-- Servidores soportados: $48^3 / 4 = 110,592 / 4 = 27,648$ servidores.
+- Servidores soportados: `$48`^3 / 4 = 110,592 / 4 = 27,648$ servidores.
 - Switches en el Core: $(24)^2 = 576$ switches.
 
 **Teorema del Bisection Bandwidth (Ancho de Banda de Bisección):**
 En un k-ary Fat-Tree perfecto, si cada enlace tiene un ancho de banda $C$ (ej. 10 Gbps), el Bisection Bandwidth de la red entera es:
 $BB = \frac{N \times C}{2}$
-Si tenemos 27,648 servidores a 10 Gbps, la red ofrece $138,240 \text{ Gbps}$ (138 Tbps) de cruce puro, siendo una red *Non-Blocking* (Oversubscription 1:1 real).
+Si tenemos 27,648 servidores a 10 Gbps, la red ofrece `$138`,240 \text{ Gbps}$ (138 Tbps) de cruce puro, siendo una red *Non-Blocking* (Oversubscription 1:1 real).
 
 ## 7. Desafíos de Enrutamiento y El Fracaso del Spanning Tree (STP)
 

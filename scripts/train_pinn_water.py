@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 """
+Arquitectura y especificación formal para train_pinn_water.py.
+
+Documentación de Referencia:
+- ADR: file:///home/jaruiz/Desarrollo/docs/adr/adr-003-unified-twin-peps-enkf.md
+- Módulo Formativo: file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_3_unified_twin_math/10_gemelo_digital_unificado_core.md
+- Referencia Académica: Verstraete, Murg, Cirac (2008) PEPS Tensor Networks; Evensen (2003) EnKF
+"""
+"""
 Real Physics-Informed Neural Network (PINN) & PDE Water Hammer Solver for SaaSRegantes.
 Solves 1D Water Hammer Navier-Stokes Equations:
   dp/dt + a^2 * rho * dv/dx = 0

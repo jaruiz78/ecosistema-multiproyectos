@@ -60,7 +60,7 @@ Este algoritmo permite que la Red Neuronal "aprenda" cómo influyen las estructu
 **Incidente**: Intentas calcular los Autovalores del grafo de carreteras de Europa (20 millones de nodos) usando `numpy.linalg.eig(L)` y tu servidor de 512GB de RAM se colapsa instantáneamente con un `MemoryError`.
 
 **Diagnóstico Matemático (Sparse vs Dense)**:
-La Matriz Laplaciana para 20 millones de nodos tiene un tamaño de $20M \times 20M$ de números de 64 bits. Almacenarla en formato Denso requiere **3 Millones de Terabytes (Exabytes) de RAM**, lo cual es físicamente imposible.
+La Matriz Laplaciana para 20 millones de nodos tiene un tamaño de `$20`M \times 20M$ de números de 64 bits. Almacenarla en formato Denso requiere **3 Millones de Terabytes (Exabytes) de RAM**, lo cual es físicamente imposible.
 Sin embargo, un cruce de carretera solo se conecta a otros 4 cruces de media. Eso significa que el **99.9999% de la matriz son ceros**.
 
 **Solución SRE/Data Science**:

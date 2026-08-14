@@ -95,4 +95,4 @@ type PaddedCounter struct {
     _ [7]uint64 
 }
 ```
-Al separar físicamente los datos, el False Sharing desaparece y el paralelismo recupera un $100\%$ de eficiencia lineal. El código es feo, pero es la única forma de domar los electrones del servidor.
+Al separar físicamente los datos, el False Sharing desaparece y el paralelismo recupera un `$10`0\%$ de eficiencia lineal. El código es feo, pero es la única forma de domar los electrones del servidor.

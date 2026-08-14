@@ -121,7 +121,7 @@ En x86_64:
 - Una lectura NO puede ser reordenada con una escritura anterior.
 - **UNA ESCRITURA SÍ puede ser reordenada con una lectura posterior (StoreLoad Reordering).**
 
-Esto significa que, en x86_64, el JIT de Java *apenas necesita emitir barreras en ensamblador* para `volatile`, excepto la infame `StoreLoad` barrier (que en x86 suele implementarse con la instrucción atómica `lock addl $0,0(%rsp)` o `mfence`). El hardware x86 perdona muchos errores de concurrencia lógicos. Código mal escrito sin `volatile` a menudo "parece funcionar" en x86.
+Esto significa que, en x86_64, el JIT de Java *apenas necesita emitir barreras en ensamblador* para `volatile`, excepto la infame `StoreLoad` barrier (que en x86 suele implementarse con la instrucción atómica `lock addl `$0`,0(%rsp)` o `mfence`). El hardware x86 perdona muchos errores de concurrencia lógicos. Código mal escrito sin `volatile` a menudo "parece funcionar" en x86.
 
 ### ARM64 / Apple Silicon: Weak Memory Model (Relajado)
 La arquitectura ARM, predominante hoy en Cloud Run (AWS Graviton, GCP Tau T2A) y terminales móviles, usa un **Weak Memory Model**.
