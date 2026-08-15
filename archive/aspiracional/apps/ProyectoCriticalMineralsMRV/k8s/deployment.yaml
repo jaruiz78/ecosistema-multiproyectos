@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-critical-minerals-mrv
+  namespace: default
+  labels:
+    app: proyecto-critical-minerals-mrv
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-critical-minerals-mrv
+  template:
+    metadata:
+      labels:
+        app: proyecto-critical-minerals-mrv
+    spec:
+      containers:
+        - name: proyecto-critical-minerals-mrv
+          image: gcr.io/corp-ecosystem/proyecto-critical-minerals-mrv:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-critical-minerals-mrv-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-critical-minerals-mrv
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'test']
+    dir: 'apps/ProyectoEmergencyGeoGrid'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-emergency-geogrid:beta', 'apps/ProyectoEmergencyGeoGrid']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-emergency-geogrid:beta']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-emergency-geogrid:beta'

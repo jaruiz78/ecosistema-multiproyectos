@@ -69,3 +69,26 @@ $$ C = \frac{u_{max} \cdot \Delta t}{\Delta x} \le 1.0 $$
 **Remediación SRE / HPC**:
 1. **Reducción de Integración Temporal**: Hacer $\Delta t$ más pequeño. Incrementa el consumo de Cloud Compute (Costes FINOps), pero estabiliza la termodinámica al acotar el número de Courant $< 1.0$.
 2. **Métodos Implícitos (Euler Inverso)**: Abandono de simuladores explícitos en favor de Solvers Implícitos. Requieren cálculo de inversas de la Matriz Jacobiana en cada paso (costoso), pero son incondicionalmente estables y garantizan la conservación de la energía sin importar el tamaño del $\Delta t$.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Física de Fluidos, Termodinámica y Navier-Stokes (Nivel Caltech / Cambridge)** a un estudiante de secundaria, **sin usar las palabras:** "Física", "de", "Fluidos," ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

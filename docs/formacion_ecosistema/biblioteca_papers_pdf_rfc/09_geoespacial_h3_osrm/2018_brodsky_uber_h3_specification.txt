@@ -1,0 +1,22 @@
+TITLE: H3: A Hexagonal Hierarchical Spatial Index
+AUTHOR: Isaac Brodsky (2018)
+INSTITUTION: Uber Engineering
+
+CORE GEOMETRY & BIT ENCODING:
+1. Icosahedron Projection:
+   - Project sphere onto 20 triangular faces of an icosahedron.
+   - Subdivide each face into hierarchical hexagons with aperture 7.
+   - 12 pentagons placed at vertices to satisfy Euler characteristic (V - E + F = 2).
+
+2. Uniform Neighborhood Invariant:
+   - Every hexagonal cell has exactly 6 neighbors at identical Euclidean/Geodesic distance.
+   - k-Ring search cost: N(k) = 1 + 3k(k+1) computed in O(k^2) memory without trigonometric floating-point operations.
+
+3. uint64 Bit Representation:
+   - 4 bits: Mode (1 = Hexagon)
+   - 4 bits: Resolution (0 to 15)
+   - 7 bits: Base Cell (0 to 121)
+   - 45 bits: 15 hierarchical 3-bit directional digits.
+
+APPLICATION IN APPVIAJES:
+Ultra-fast dynamic surge pricing calculation and O(1) bipartite matching between drivers and passengers.

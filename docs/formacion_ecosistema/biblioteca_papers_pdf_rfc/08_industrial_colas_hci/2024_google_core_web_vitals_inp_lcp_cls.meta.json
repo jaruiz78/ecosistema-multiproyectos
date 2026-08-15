@@ -1,0 +1,12 @@
+{
+  "title": "Google Core Web Vitals Specification: Interaction to Next Paint (INP), LCP and CLS",
+  "authors": [
+    "Addy Osmani",
+    "Philip Walton",
+    "Rick Viscomi"
+  ],
+  "year": 2024,
+  "institution": "Google Chrome Team / web.dev",
+  "faculty": "08_industrial_colas_hci",
+  "url": null
+}

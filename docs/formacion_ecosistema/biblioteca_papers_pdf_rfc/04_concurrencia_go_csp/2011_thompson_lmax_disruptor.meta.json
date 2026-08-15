@@ -1,0 +1,14 @@
+{
+  "title": "The LMAX Disruptor: High Performance Alternative to Bounded Queues",
+  "authors": [
+    "Martin Thompson",
+    "Dave Farley",
+    "Michael Barker"
+  ],
+  "year": 2011,
+  "institution": "LMAX Exchange",
+  "faculty": "04_concurrencia_go_csp",
+  "urls": [
+    "https://lmax-exchange.github.io/disruptor/files/Disruptor-1.0.pdf"
+  ]
+}

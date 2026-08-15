@@ -83,3 +83,26 @@ FROM `saas-regantes.analytics.sensor_telemetry`;
 1. **Usar `COUNT(DISTINCT id)` en petabytes de datos en consultas de reporting frecuente**:
    * *Síntoma*: Tiempos de respuesta > 40 segundos y escaneos de memoria pesados entre slots de BigQuery.
    * *Solución*: Sustituye por `HLL_COUNT.EXTRACT(HLL_COUNT.INIT(id))` para obtener resultados en < 1 segundo.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **BigQuery SQL desde Cero, BigQuery ML (BQML), GQL, HyperLogLog (HLL) & FinOps** a un estudiante de secundaria, **sin usar las palabras:** "BigQuery", "SQL", "desde" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

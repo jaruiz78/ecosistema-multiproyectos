@@ -1,0 +1,11 @@
+TITLE: JEP 491: Synchronize Virtual Threads without Pinning (Java 25 Loom)
+AUTHORS: Ron Pressler, Alan Bateman (Oracle / OpenJDK)
+STATUS: Integrated in Java 24/25 LTS
+
+SUMMARY & FIRST PRINCIPLES:
+1. The Carrier Thread Pinning Problem:
+   In earlier versions (Java 21), when a virtual thread executed a blocking operation inside a synchronized block or method, it 'pinned' its carrier thread (OS ForkJoin worker), preventing other virtual threads from executing.
+2. JEP 491 Mechanism:
+   Re-engineers object monitors (synchronized) in HotSpot so that monitor acquisition and parking can unmount the virtual thread continuation from the carrier thread.
+3. Architectural Rule in PCT Ecosystem:
+   Enables seamless adoption of existing libraries using synchronized without fear of carrier pool starvation.

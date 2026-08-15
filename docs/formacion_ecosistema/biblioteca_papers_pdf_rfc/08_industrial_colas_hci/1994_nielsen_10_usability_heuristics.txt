@@ -1,0 +1,15 @@
+TITLE: 10 Usability Heuristics for User Interface Design
+AUTHOR: Jakob Nielsen (1994)
+INSTITUTION: Nielsen Norman Group
+
+THE 10 GOLDEN RULES FOR SAFE & INTUITIVE INTERFACES:
+1. Visibility of system status (always provide immediate feedback).
+2. Match between system and the real world (speak the user's language, isomorphic metaphors).
+3. User control and freedom (support undo and emergency exit).
+4. Consistency and standards (follow platform design tokens).
+5. Error prevention (design to eliminate error-prone states).
+6. Recognition rather than recall (minimize user memory load).
+7. Flexibility and efficiency of use (accelerators for experts).
+8. Aesthetic and minimalist design (remove mudas, dialogues with only necessary information).
+9. Help users recognize, diagnose, and recover from errors.
+10. Help and documentation.

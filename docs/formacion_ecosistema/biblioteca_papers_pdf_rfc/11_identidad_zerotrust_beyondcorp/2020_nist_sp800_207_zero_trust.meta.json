@@ -1,0 +1,15 @@
+{
+  "title": "NIST SP 800-207: Zero Trust Architecture",
+  "authors": [
+    "Scott Rose",
+    "Oliver Borchert",
+    "Stu Mitchell",
+    "Sean Connelly"
+  ],
+  "year": 2020,
+  "institution": "National Institute of Standards and Technology (NIST)",
+  "faculty": "11_identidad_zerotrust_beyondcorp",
+  "urls": [
+    "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-207.pdf"
+  ]
+}

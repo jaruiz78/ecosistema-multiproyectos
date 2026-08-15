@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-hotel-twin-revpar
+  namespace: default
+  labels:
+    app: proyecto-hotel-twin-revpar
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-hotel-twin-revpar
+  template:
+    metadata:
+      labels:
+        app: proyecto-hotel-twin-revpar
+    spec:
+      containers:
+        - name: proyecto-hotel-twin-revpar
+          image: gcr.io/corp-ecosystem/proyecto-hotel-twin-revpar:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-hotel-twin-revpar-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-hotel-twin-revpar
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

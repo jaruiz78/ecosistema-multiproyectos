@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-eco-tourism-passport
+  namespace: default
+  labels:
+    app: proyecto-eco-tourism-passport
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-eco-tourism-passport
+  template:
+    metadata:
+      labels:
+        app: proyecto-eco-tourism-passport
+    spec:
+      containers:
+        - name: proyecto-eco-tourism-passport
+          image: gcr.io/corp-ecosystem/proyecto-eco-tourism-passport:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-eco-tourism-passport-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-eco-tourism-passport
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

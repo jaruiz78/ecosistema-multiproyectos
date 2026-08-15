@@ -84,3 +84,26 @@ Si la probabilidad de que las transacciones choquen entre usuarios concurrentes 
 > [!TIP]
 > **Takeaway Arquitectónico**
 > Mientras Raft domina en sistemas de un solo Datacenter de baja latencia (etcd, Kubernetes Control Plane), la próxima generación de arquitecturas Cloud "Multi-Región Planetaria" (como los componentes internos experimentales de CockroachDB y Spanner) investigan arquitecturas Multi-Paxos Híbridas o Leaderless similares a EPaxos para mitigar la velocidad de la luz (latencia de fibra óptica intercontinental).
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Consenso Distribuido Avanzado (Paxos, Raft, EPaxos)** a un estudiante de secundaria, **sin usar las palabras:** "Consenso", "Distribuido", "Avanzado" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

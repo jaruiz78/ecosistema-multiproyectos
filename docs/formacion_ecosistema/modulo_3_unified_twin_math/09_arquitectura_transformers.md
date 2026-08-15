@@ -109,3 +109,26 @@ Cuando inferimos LLMs (generación de texto) en producción (Gemini, LLaMA), el 
 *   **Grouped-Query Attention (GQA)**: Compromiso intermedio usado en Llama-3. Si tenemos 32 cabezas $Q$, las agrupamos en 8 grupos, donde cada grupo de 4 $Q$ comparte 1 cabeza de $K$ y $V$. Resulta en la calidad analítica de MHA con la velocidad inferencial de MQA.
 
 Este nivel de ingeniería SRE / ML es el que separa a los investigadores académicos (que suelen morir de `OOM Errors` corriendo algoritmos nativos) de la infraestructura corporativa que sirve IA generativa a millones de usuarios en tiempo real con latencias $< 50$ ms.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura Transformers y Modelos Secuenciales (Nivel CMU / Tsinghua / MIT)** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "Transformers", "y" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

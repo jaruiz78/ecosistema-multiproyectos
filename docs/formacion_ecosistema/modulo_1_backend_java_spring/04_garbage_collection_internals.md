@@ -148,3 +148,26 @@ Generational ZGC (por defecto en Java 25) mantiene dos conjuntos (Young y Old). 
 1. **Evitar Pinning Pointers**: En JNI (Java Native Interface), invocar código en C/Rust bloquea a ZGC. El GC no puede mover el objeto porque C usa punteros crudos.
 2. **Dimensionamiento Real**: Si asignas un Heap de 32GB a ZGC (`-Xmx32G`), el Sistema Operativo podría reservar hasta `32G * 3 vistas = 96G` de espacio virtual (VIRT en `top`), aunque el espacio físico real residente (RES) sea 32GB. Esto es normal, pero debes ignorar alarmas en sistemas de monitorización obsoletos que alerten por VIRT.
 3. **Escalar Hilos, no Pausas**: La magia de ZGC cuesta CPU de forma concurrente. En lugar de pausar 1 segundo, ZGC puede devorar 4 núcleos enteros de tu CPU en background. Desplegar ZGC en contenedores Cloud Run de baja CPU (ej. 1 vCPU) es un grave anti-patrón de Cloud-Native Engineering. ZGC brilla en monstruos bare-metal de 32-128 núcleos (HPC, Datacenters de Cassandra/Kafka).
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Internals de Garbage Collection y Matemáticas del GC (Stanford/Berkeley)** a un estudiante de secundaria, **sin usar las palabras:** "Internals", "de", "Garbage" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

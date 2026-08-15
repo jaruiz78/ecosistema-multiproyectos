@@ -1,0 +1,12 @@
+{
+  "title": "Sound Null Safety: Static and Runtime Guarantees in Dart 3",
+  "authors": [
+    "Leaf Petersen",
+    "Bob Nystrom",
+    "Erik Ernst"
+  ],
+  "year": 2023,
+  "institution": "Google Dart Team",
+  "faculty": "08_industrial_colas_hci",
+  "url": null
+}

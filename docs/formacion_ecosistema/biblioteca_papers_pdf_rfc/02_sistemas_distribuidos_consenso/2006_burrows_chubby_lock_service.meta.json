@@ -1,0 +1,12 @@
+{
+  "title": "The Chubby Lock Service for Loosely-Coupled Distributed Systems",
+  "authors": [
+    "Mike Burrows"
+  ],
+  "year": 2006,
+  "institution": "Google / OSDI",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//archive/chubby-osdi06.pdf"
+  ]
+}

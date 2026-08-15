@@ -1,0 +1,14 @@
+{
+  "title": "New Directions in Cryptography (Public Key Cryptography & Key Exchange)",
+  "authors": [
+    "Whitfield Diffie",
+    "Martin E. Hellman"
+  ],
+  "year": 1976,
+  "institution": "Stanford University / IEEE Transactions on Information Theory",
+  "faculty": "11_identidad_zerotrust_beyondcorp",
+  "urls": [
+    "https://ee.stanford.edu/~hellman/publications/24.pdf",
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/security/new-directions-in-cryptography.pdf"
+  ]
+}

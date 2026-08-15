@@ -56,7 +56,7 @@ Sin embargo, notas en la base de datos que solo el 10% de los datos se procesan.
 **Diagnóstico SRE Arquitectónico (El estrangulamiento de CPU)**:
 El contrato legal de Cloud Run dice: *"Solo te cobro la CPU mientras estés procesando una petición HTTP activa"*.
 Si tu código envía la respuesta `200 OK` al usuario en el milisegundo 10... para Google, la petición ha terminado.
-Si tus Goroutines siguen trabajando en el milisegundo 11 (fuera del ciclo de vida de la petición), **Google estrangula físicamente la CPU de tu contenedor al $1\%$ (casi cero absoluto)**. Tus Goroutines se congelan matemáticamente, y el contenedor es apagado antes de que terminen de guardar en la BBDD.
+Si tus Goroutines siguen trabajando en el milisegundo 11 (fuera del ciclo de vida de la petición), **Google estrangula físicamente la CPU de tu contenedor al `$1`\%$ (casi cero absoluto)**. Tus Goroutines se congelan matemáticamente, y el contenedor es apagado antes de que terminen de guardar en la BBDD.
 
 **Solución SRE Estricta**:
 *   En plataformas Serverless puras, el contenedor **NUNCA** debe hacer trabajo asíncrono o hilos en background después de devolver la respuesta HTTP (a menos que habilites el modo *CPU Always Allocated*, que rompe el ahorro de costes del 100%).
@@ -94,3 +94,26 @@ Para evitar el cruce al Kernel del Host físico, Cloud Run utiliza la virtualiza
 3. Cuando la App emite una *Syscall*, el hardware del procesador activa un *VM Exit* interceptado de forma inmediata por el Sentry que corre en el Ring 0 virtual (Root-mode).
 4. El Sentry resuelve el 99% de las llamadas (memoria virtual, scheduling, threads, TCP/IP stack interno escrito en Go llamado *netstack*) sin jamás transferir el control al Kernel de Host de Google.
 Esta intercepción hiper-rápida (amortizada en nanosegundos) permite que Cloud Run tenga el aislamiento militar de las Máquinas Virtuales combinadas con la agilidad (Cold Starts $O(1)$) de los contenedores OCI estándar.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura Serverless, Cloud Run y Knative** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "Serverless,", "Cloud" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

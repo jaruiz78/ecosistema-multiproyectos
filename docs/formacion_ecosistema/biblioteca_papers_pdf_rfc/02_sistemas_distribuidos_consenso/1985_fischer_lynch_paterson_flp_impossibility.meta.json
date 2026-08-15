@@ -1,0 +1,14 @@
+{
+  "title": "Impossibility of Distributed Consensus with One Faulty Process (FLP)",
+  "authors": [
+    "Michael J. Fischer",
+    "Nancy A. Lynch",
+    "Michael S. Paterson"
+  ],
+  "year": 1985,
+  "institution": "Yale University / MIT (JACM)",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "urls": [
+    "https://groups.csail.mit.edu/tds/papers/Lynch/jacm85.pdf"
+  ]
+}

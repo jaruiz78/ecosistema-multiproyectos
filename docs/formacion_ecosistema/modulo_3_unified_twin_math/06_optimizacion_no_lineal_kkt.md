@@ -141,3 +141,26 @@ $$ f(y) - f(x^*) \ge \text{Algo positivo o cero} + 0 $$
 $$ f(y) \ge f(x^*) $$
 
 **Q.E.D.** Hemos demostrado matemáticamente que para cualquier punto factible imaginable $y$ en el universo, su coste $f(y)$ siempre será mayor o igual al coste en $x^*$. KKT bajo convexidad no es solo una sugerencia, es la garantía absoluta de suficiencia del óptimo global, la base algorítmica de los métodos de Interior Point que resuelven las logísticas mundiales.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Optimización No Lineal y Condiciones KKT (Nivel MIT/Stanford)** a un estudiante de secundaria, **sin usar las palabras:** "Optimización", "No", "Lineal" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

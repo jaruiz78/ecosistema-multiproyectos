@@ -1,0 +1,13 @@
+TITLE: Google Core Web Vitals: Interaction to Next Paint (INP), LCP and CLS
+AUTHORS: Google Chrome Web Platform Team
+
+THRESHOLDS OF HUMAN PERCEPTION & ERGONOMICS:
+1. Interaction to Next Paint (INP < 200 ms):
+   Measures UI responsiveness to user taps/clicks. Time from hardware touch to GPU screen buffer swap.
+2. Largest Contentful Paint (LCP < 2.5 s):
+   Measures perceived loading speed of the primary content block.
+3. Cumulative Layout Shift (CLS < 0.1):
+   Quantifies visual stability to prevent jarring accidental clicks.
+
+FEYNMAN MODEL:
+Un ascensor donde al pulsar el botón se enciende la luz de confirmación en menos de 0.2 segundos y no cambia de piso de repente mientras entras.

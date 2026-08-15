@@ -1,0 +1,14 @@
+{
+  "title": "Wasserstein GAN (Optimal Transport & Earth Mover Distance)",
+  "authors": [
+    "Martin Arjovsky",
+    "Soumith Chintala",
+    "Léon Bottou"
+  ],
+  "year": 2017,
+  "institution": "Courant Institute / Facebook AI Research / ICML",
+  "faculty": "05_gemelo_digital_tensores_enkf",
+  "urls": [
+    "https://arxiv.org/pdf/1701.07875.pdf"
+  ]
+}

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-enoturismo-rutas-vino
+  namespace: default
+  labels:
+    app: proyecto-enoturismo-rutas-vino
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-enoturismo-rutas-vino
+  template:
+    metadata:
+      labels:
+        app: proyecto-enoturismo-rutas-vino
+    spec:
+      containers:
+        - name: proyecto-enoturismo-rutas-vino
+          image: gcr.io/corp-ecosystem/proyecto-enoturismo-rutas-vino:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-enoturismo-rutas-vino-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-enoturismo-rutas-vino
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

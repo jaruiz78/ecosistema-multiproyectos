@@ -1,0 +1,13 @@
+{
+  "title": "Sigstore: Software Signing for Everybody",
+  "authors": [
+    "Luke Hinds",
+    "Dan Lorenc et al."
+  ],
+  "year": 2022,
+  "institution": "Linux Foundation / Google / ACM CCS",
+  "faculty": "12_supplychain_slsa_gitops",
+  "urls": [
+    "https://arxiv.org/pdf/2205.07628.pdf"
+  ]
+}

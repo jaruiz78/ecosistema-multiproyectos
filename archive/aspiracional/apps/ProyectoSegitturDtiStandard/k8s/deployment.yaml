@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-segittur-dti-standard
+  namespace: default
+  labels:
+    app: proyecto-segittur-dti-standard
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-segittur-dti-standard
+  template:
+    metadata:
+      labels:
+        app: proyecto-segittur-dti-standard
+    spec:
+      containers:
+        - name: proyecto-segittur-dti-standard
+          image: gcr.io/corp-ecosystem/proyecto-segittur-dti-standard:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-segittur-dti-standard-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-segittur-dti-standard
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

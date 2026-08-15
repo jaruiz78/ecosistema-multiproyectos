@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'package', '-DskipTests']
+    dir: 'apps/ProyectoEcotasaSoberanaTax'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-ecotasa-soberana-tax:latest', 'apps/ProyectoEcotasaSoberanaTax']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-ecotasa-soberana-tax:latest']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-ecotasa-soberana-tax:latest'

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-carbon-ledger
+  namespace: default
+  labels:
+    app: proyecto-carbon-ledger
+    tier: business-vertical
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-carbon-ledger
+  template:
+    metadata:
+      labels:
+        app: proyecto-carbon-ledger
+    spec:
+      containers:
+        - name: proyecto-carbon-ledger
+          image: gcr.io/corp-ecosystem/proyecto-carbon-ledger:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-carbon-ledger-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-carbon-ledger
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

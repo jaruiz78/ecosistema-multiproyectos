@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-smart-street-lighting-v2g
+  namespace: default
+  labels:
+    app: proyecto-smart-street-lighting-v2g
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-smart-street-lighting-v2g
+  template:
+    metadata:
+      labels:
+        app: proyecto-smart-street-lighting-v2g
+    spec:
+      containers:
+        - name: proyecto-smart-street-lighting-v2g
+          image: gcr.io/corp-ecosystem/proyecto-smart-street-lighting-v2g:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-smart-street-lighting-v2g-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-smart-street-lighting-v2g
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

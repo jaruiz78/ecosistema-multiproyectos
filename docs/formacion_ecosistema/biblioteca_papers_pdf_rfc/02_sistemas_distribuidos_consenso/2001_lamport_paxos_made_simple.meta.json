@@ -1,0 +1,12 @@
+{
+  "title": "Paxos Made Simple",
+  "authors": [
+    "Leslie Lamport"
+  ],
+  "year": 2001,
+  "institution": "Microsoft Research",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "urls": [
+    "https://lamport.azurewebsites.net/pubs/paxos-simple.pdf"
+  ]
+}

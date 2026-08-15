@@ -72,3 +72,13 @@ if __name__ == "__main__":
 1. **Tasas de mutación excesivamente altas (> 50%)**:
    * *Síntoma*: El algoritmo genético se comporta como una búsqueda aleatoria pura sin conservar las características de los mejores individuos de la generación anterior.
    * *Solución*: Mantén la tasa de mutación entre un 1% y un 15%.
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

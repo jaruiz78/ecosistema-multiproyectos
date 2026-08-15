@@ -108,3 +108,26 @@ java -Djdk.tracePinnedThreads=full -jar app.jar
 2. **Utilizar bloques `synchronized` envolviendo llamadas a I/O (DB, HTTP)**:
    * *Síntoma*: Produce *Carrier Thread Pinning*, bloqueando el hilo de plataforma subyacente.
    * *Solución*: Reemplaza `synchronized` por `java.util.concurrent.locks.ReentrantLock`.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Concurrencia Masiva con Java 25 & Virtual Threads (Loom)** a un estudiante de secundaria, **sin usar las palabras:** "Concurrencia", "Masiva", "con" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-quantum-resistant-rwa
+  namespace: default
+  labels:
+    app: proyecto-quantum-resistant-rwa
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-quantum-resistant-rwa
+  template:
+    metadata:
+      labels:
+        app: proyecto-quantum-resistant-rwa
+    spec:
+      containers:
+        - name: proyecto-quantum-resistant-rwa
+          image: gcr.io/corp-ecosystem/proyecto-quantum-resistant-rwa:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-quantum-resistant-rwa-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-quantum-resistant-rwa
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

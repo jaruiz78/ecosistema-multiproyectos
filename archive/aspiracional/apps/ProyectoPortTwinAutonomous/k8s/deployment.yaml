@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-port-twin-autonomous
+  namespace: default
+  labels:
+    app: proyecto-port-twin-autonomous
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-port-twin-autonomous
+  template:
+    metadata:
+      labels:
+        app: proyecto-port-twin-autonomous
+    spec:
+      containers:
+        - name: proyecto-port-twin-autonomous
+          image: gcr.io/corp-ecosystem/proyecto-port-twin-autonomous:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-port-twin-autonomous-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-port-twin-autonomous
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

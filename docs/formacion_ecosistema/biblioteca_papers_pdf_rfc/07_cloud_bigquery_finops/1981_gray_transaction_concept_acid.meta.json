@@ -1,0 +1,13 @@
+{
+  "title": "The Transaction Concept: Virtues and Limitations (ACID Principles)",
+  "authors": [
+    "Jim Gray"
+  ],
+  "year": 1981,
+  "institution": "Tandem Computers / VLDB",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/databases/the-transaction-concept-virtues-and-limitations.pdf",
+    "http://www.hpl.hp.com/techreports/tandem/TR-81.3.pdf"
+  ]
+}

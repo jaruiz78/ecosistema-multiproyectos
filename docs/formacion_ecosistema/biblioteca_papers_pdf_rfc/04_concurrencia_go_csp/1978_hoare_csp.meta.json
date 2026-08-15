@@ -1,0 +1,12 @@
+{
+  "title": "Communicating Sequential Processes (CSP)",
+  "authors": [
+    "C. A. R. Hoare"
+  ],
+  "year": 1978,
+  "institution": "Oxford University / CACM",
+  "faculty": "04_concurrencia_go_csp",
+  "urls": [
+    "https://www.cs.cmu.edu/~crary/819-f09/Hoare78.pdf"
+  ]
+}

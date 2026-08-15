@@ -1,0 +1,10 @@
+{
+  "title": "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure",
+  "authors": [
+    "Benjamin H. Sigelman et al."
+  ],
+  "year": 2010,
+  "institution": "Google Technical Report",
+  "faculty": "07_cloud_bigquery_finops",
+  "url": "https://static.googleusercontent.com/media/research.google.com/en//archive/dapper-2010-1.pdf"
+}

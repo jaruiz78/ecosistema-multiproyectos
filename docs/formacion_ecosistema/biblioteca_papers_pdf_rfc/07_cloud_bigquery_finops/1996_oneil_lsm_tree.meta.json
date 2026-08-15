@@ -1,0 +1,14 @@
+{
+  "title": "The Log-Structured Merge-Tree (LSM-Tree)",
+  "authors": [
+    "Patrick O'Neil",
+    "Edward O'Neil",
+    "Gerhard Weikum"
+  ],
+  "year": 1996,
+  "institution": "UMass Boston / Acta Informatica",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://www.cs.umb.edu/~poneil/lsmtree.pdf"
+  ]
+}

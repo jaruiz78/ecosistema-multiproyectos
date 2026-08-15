@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-zero-trust-ot-mesh
+  namespace: default
+  labels:
+    app: proyecto-zero-trust-ot-mesh
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-zero-trust-ot-mesh
+  template:
+    metadata:
+      labels:
+        app: proyecto-zero-trust-ot-mesh
+    spec:
+      containers:
+        - name: proyecto-zero-trust-ot-mesh
+          image: gcr.io/corp-ecosystem/proyecto-zero-trust-ot-mesh:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-zero-trust-ot-mesh-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-zero-trust-ot-mesh
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

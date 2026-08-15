@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-diputacion-turismo-rural
+  namespace: default
+  labels:
+    app: proyecto-diputacion-turismo-rural
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-diputacion-turismo-rural
+  template:
+    metadata:
+      labels:
+        app: proyecto-diputacion-turismo-rural
+    spec:
+      containers:
+        - name: proyecto-diputacion-turismo-rural
+          image: gcr.io/corp-ecosystem/proyecto-diputacion-turismo-rural:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-diputacion-turismo-rural-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-diputacion-turismo-rural
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

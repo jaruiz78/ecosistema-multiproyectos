@@ -122,3 +122,26 @@ Además de nacer aislado mediante `clone()`, un proceso existente puede aislarse
 
 Para completar la caja, `runc` inscribe el PID recién devuelto por `clone()` en el sistema de archivos virtual de Cgroups del Kernel (habitualmente `/sys/fs/cgroup`).
 En la moderna arquitectura **cgroup v2**, el kernel usa una jerarquía matemática unificada (un solo árbol). Escribir un valor como `100000 100000` en el archivo `/sys/fs/cgroup/mi_contenedor/cpu.max` impone algorítmicamente un estrangulamiento estricto de cuotas en el *Completely Fair Scheduler (CFS)* de Linux, evitando que microservicios devoradores comprometan el host físico (Cloud Run).
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Contenedores, Linux Cgroups y Namespaces** a un estudiante de secundaria, **sin usar las palabras:** "Contenedores,", "Linux", "Cgroups" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

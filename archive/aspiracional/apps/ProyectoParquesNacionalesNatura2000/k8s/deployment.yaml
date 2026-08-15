@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-parques-nacionales-natura2000
+  namespace: default
+  labels:
+    app: proyecto-parques-nacionales-natura2000
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-parques-nacionales-natura2000
+  template:
+    metadata:
+      labels:
+        app: proyecto-parques-nacionales-natura2000
+    spec:
+      containers:
+        - name: proyecto-parques-nacionales-natura2000
+          image: gcr.io/corp-ecosystem/proyecto-parques-nacionales-natura2000:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-parques-nacionales-natura2000-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-parques-nacionales-natura2000
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

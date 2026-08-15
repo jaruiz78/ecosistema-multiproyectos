@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'test']
+    dir: 'apps/ProyectoAgroEnergyVPP'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-agro-energy-vpp:beta', 'apps/ProyectoAgroEnergyVPP']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-agro-energy-vpp:beta']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-agro-energy-vpp:beta'

@@ -1,0 +1,1222 @@
+openapi: 3.0.3
+info:
+  title: Google Antigravity Unified API
+  description: Especificación Consolidada de todos los microservicios Java y Go.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: Local Gateway
+paths:
+  /search:
+    post:
+      summary: Endpoint generated from CloudRunSearcherAgentController.java
+      operationId: post_CloudRunSearcherAgentController
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      summary: Endpoint generated from CloudRunSearcherAgentController.java
+      operationId: get_CloudRunSearcherAgentController
+      responses:
+        '200':
+          description: Successful operation
+  /cpa:
+    post:
+      summary: Endpoint generated from GeofencingAtributionController.java
+      operationId: post_GeofencingAtributionController
+      responses:
+        '200':
+          description: Successful operation
+  /visit:
+    post:
+      summary: Endpoint generated from GeofencingAtributionController.java
+      operationId: post_GeofencingAtributionController
+      responses:
+        '200':
+          description: Successful operation
+  /ingest:
+    post:
+      summary: Endpoint generated from AudioIngestionController.java
+      operationId: post_AudioIngestionController
+      responses:
+        '200':
+          description: Successful operation
+  /fcm-token:
+    put:
+      summary: Endpoint generated from UserDeviceController.java
+      operationId: put_UserDeviceController
+      responses:
+        '200':
+          description: Successful operation
+  /draft:
+    post:
+      summary: Endpoint generated from CloudRunDrafterAgentController.java
+      operationId: post_CloudRunDrafterAgentController
+      responses:
+        '200':
+          description: Successful operation
+    get:
+      summary: Endpoint generated from CloudRunDrafterAgentController.java
+      operationId: get_CloudRunDrafterAgentController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}:
+    get:
+      summary: Endpoint generated from ExpedienteSancionadorController.java
+      operationId: get_ExpedienteSancionadorController
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      summary: Endpoint generated from ComuneroController.java
+      operationId: put_ComuneroController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/logistics-snapshot:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/financial-snapshot:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/aesthetic-snapshot:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /support/chat:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/mask:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/unmask:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/billing-status:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /agency/onboard-creators:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /multimodal:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /multimodal/status/{taskId}:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /recommend:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/co-create:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/co-create-stream:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/price-forecast:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /booking/{bookingId}/cancel:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /vertex-hedged:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /maintenance/tiering:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/like:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/review:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/social/photo:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/re-route:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/guide/audio:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/fork:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/social/audio-note:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/express-import:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/influencer/voice-clone:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/{id}/marketing-kit:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/personalize:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/book/external:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /group/sync:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/wallet/apple:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/wallet/google:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/ugc-video:
+    post:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: post_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /chaos/toggle:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /chaos/db/toggle:
+    get:
+      summary: Endpoint generated from ItineraryController.java
+      operationId: get_ItineraryController
+      responses:
+        '200':
+          description: Successful operation
+  /itinerary/{itineraryId}:
+    get:
+      summary: Endpoint generated from SpatialDataApi.java
+      operationId: get_SpatialDataApi
+      responses:
+        '200':
+          description: Successful operation
+  /moment:
+    post:
+      summary: Endpoint generated from SpatialDataApi.java
+      operationId: post_SpatialDataApi
+      responses:
+        '200':
+          description: Successful operation
+  /copilot/stream:
+    get:
+      summary: Endpoint generated from AiCopilotController.java
+      operationId: get_AiCopilotController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/book:
+    post:
+      summary: Endpoint generated from BillingController.java
+      operationId: post_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /gpay:
+    post:
+      summary: Endpoint generated from BillingController.java
+      operationId: post_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/direct-checkout:
+    post:
+      summary: Endpoint generated from BillingController.java
+      operationId: post_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /influencer/payout-advance:
+    post:
+      summary: Endpoint generated from BillingController.java
+      operationId: post_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/payout/unlock:
+    post:
+      summary: Endpoint generated from BillingController.java
+      operationId: post_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /data-marketplace/analytics:
+    get:
+      summary: Endpoint generated from BillingController.java
+      operationId: get_BillingController
+      responses:
+        '200':
+          description: Successful operation
+  /register/options:
+    post:
+      summary: Endpoint generated from PasskeyAuthController.java
+      operationId: post_PasskeyAuthController
+      responses:
+        '200':
+          description: Successful operation
+  /register/verify:
+    post:
+      summary: Endpoint generated from PasskeyAuthController.java
+      operationId: post_PasskeyAuthController
+      responses:
+        '200':
+          description: Successful operation
+  /authenticate:
+    post:
+      summary: Endpoint generated from PasskeyAuthController.java
+      operationId: post_PasskeyAuthController
+      responses:
+        '200':
+          description: Successful operation
+  /block-cell:
+    post:
+      summary: Endpoint generated from ChaosController.java
+      operationId: post_ChaosController
+      responses:
+        '200':
+          description: Successful operation
+  /clear-blocked:
+    post:
+      summary: Endpoint generated from ChaosController.java
+      operationId: post_ChaosController
+      responses:
+        '200':
+          description: Successful operation
+  /upload-delta:
+    post:
+      summary: Endpoint generated from FederatedAggregationController.java
+      operationId: post_FederatedAggregationController
+      responses:
+        '200':
+          description: Successful operation
+  /aggregate:
+    get:
+      summary: Endpoint generated from FederatedAggregationController.java
+      operationId: get_FederatedAggregationController
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/federated/weights/upload:
+    post:
+      summary: Endpoint generated from FederatedLearningController.java
+      operationId: post_FederatedLearningController
+      responses:
+        '200':
+          description: Successful operation
+  /api/v1/federated/weights/download:
+    get:
+      summary: Endpoint generated from FederatedLearningController.java
+      operationId: get_FederatedLearningController
+      responses:
+        '200':
+          description: Successful operation
+  /cache/status:
+    get:
+      summary: Endpoint generated from SreAdminController.java
+      operationId: get_SreAdminController
+      responses:
+        '200':
+          description: Successful operation
+  /cache/sync:
+    post:
+      summary: Endpoint generated from SreAdminController.java
+      operationId: post_SreAdminController
+      responses:
+        '200':
+          description: Successful operation
+  /cache/{tenantId}:
+    delete:
+      summary: Endpoint generated from SreAdminController.java
+      operationId: delete_SreAdminController
+      responses:
+        '200':
+          description: Successful operation
+  /outbox/status:
+    get:
+      summary: Endpoint generated from SreAdminController.java
+      operationId: get_SreAdminController
+      responses:
+        '200':
+          description: Successful operation
+  /outbox/retry:
+    post:
+      summary: Endpoint generated from SreAdminController.java
+      operationId: post_SreAdminController
+      responses:
+        '200':
+          description: Successful operation
+  /purchase:
+    post:
+      summary: Endpoint generated from SubscriptionController.java
+      operationId: post_SubscriptionController
+      responses:
+        '200':
+          description: Successful operation
+  /cancel:
+    post:
+      summary: Endpoint generated from SubscriptionController.java
+      operationId: post_SubscriptionController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign/whatsapp-style:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign/{campaignId}/click:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign/{campaignId}/visit:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign/{campaignId}/coupon/redeem:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/campaign/{campaignId}/report:
+    get:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: get_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/ads:
+    get:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: get_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/reverse-bid:
+    post:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: post_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /advertiser/reverse-bid/active:
+    get:
+      summary: Endpoint generated from AdCampaignController.java
+      operationId: get_AdCampaignController
+      responses:
+        '200':
+          description: Successful operation
+  /rage-clicks:
+    post:
+      summary: Endpoint generated from TelemetryController.java
+      operationId: post_TelemetryController
+      responses:
+        '200':
+          description: Successful operation
+  /upload-url:
+    post:
+      summary: Endpoint generated from TelemetryController.java
+      operationId: post_TelemetryController
+      responses:
+        '200':
+          description: Successful operation
+  /guide-purchased:
+    post:
+      summary: Endpoint generated from EventConsumerController.java
+      operationId: post_EventConsumerController
+      responses:
+        '200':
+          description: Successful operation
+  /trends:
+    get:
+      summary: Endpoint generated from DataPortalApi.java
+      operationId: get_DataPortalApi
+      responses:
+        '200':
+          description: Successful operation
+  /bid:
+    post:
+      summary: Endpoint generated from DataPortalApi.java
+      operationId: post_DataPortalApi
+      responses:
+        '200':
+          description: Successful operation
+  /jobs:
+    post:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: post_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/{id}:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+    delete:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: delete_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/order/{orderId}:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/updated:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/{id}/details:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/{id}/track:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/{id}/status:
+    put:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: put_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /users:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /users/{userId}/details:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /vehicles:
+    get:
+      summary: Endpoint generated from FleetController.java
+      operationId: get_FleetController
+      responses:
+        '200':
+          description: Successful operation
+  /vehicles/{vehicleId}/details:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/order/{orderId}/status:
+    get:
+      summary: Endpoint generated from TaxiCallerController.java
+      operationId: get_TaxiCallerController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings:
+    get:
+      summary: Endpoint generated from FirestoreReaderController.java
+      operationId: get_FirestoreReaderController
+      responses:
+        '200':
+          description: Successful operation
+  /reconciliations:
+    get:
+      summary: Endpoint generated from FirestoreReaderController.java
+      operationId: get_FirestoreReaderController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/{hbxBookingReference}:
+    get:
+      summary: Endpoint generated from FirestoreReaderController.java
+      operationId: get_FirestoreReaderController
+      responses:
+        '200':
+          description: Successful operation
+  /{jobId}/refresh:
+    post:
+      summary: Endpoint generated from JobController.java
+      operationId: post_JobController
+      responses:
+        '200':
+          description: Successful operation
+  /{jobId}/cancel:
+    post:
+      summary: Endpoint generated from JobController.java
+      operationId: post_JobController
+      responses:
+        '200':
+          description: Successful operation
+  /tc-connection:
+    get:
+      summary: Endpoint generated from TestController.java
+      operationId: get_TestController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/new:
+    get:
+      summary: Endpoint generated from HbxController.java
+      operationId: get_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/new/range:
+    get:
+      summary: Endpoint generated from HbxController.java
+      operationId: get_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/cancelled:
+    get:
+      summary: Endpoint generated from HbxController.java
+      operationId: get_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/{reference}:
+    get:
+      summary: Endpoint generated from HbxController.java
+      operationId: get_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/{reference}/driver:
+    put:
+      summary: Endpoint generated from HbxController.java
+      operationId: put_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /bookings/{reference}/cancel:
+    put:
+      summary: Endpoint generated from HbxController.java
+      operationId: put_HbxController
+      responses:
+        '200':
+          description: Successful operation
+  /taxicaller/assignment:
+    post:
+      summary: Endpoint generated from AssignmentWebhookController.java
+      operationId: post_AssignmentWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /taxicaller/cancellation:
+    post:
+      summary: Endpoint generated from AssignmentWebhookController.java
+      operationId: post_AssignmentWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /tracking/update:
+    post:
+      summary: Endpoint generated from SimulationController.java
+      operationId: post_SimulationController
+      responses:
+        '200':
+          description: Successful operation
+  /reset:
+    post:
+      summary: Endpoint generated from SimulationController.java
+      operationId: post_SimulationController
+      responses:
+        '200':
+          description: Successful operation
+  /sync-triggers:
+    post:
+      summary: Endpoint generated from SimulationController.java
+      operationId: post_SimulationController
+      responses:
+        '200':
+          description: Successful operation
+  /poll-job:
+    post:
+      summary: Endpoint generated from CloudTaskRequestHandler.java
+      operationId: post_CloudTaskRequestHandler
+      responses:
+        '200':
+          description: Successful operation
+  /start-tracking:
+    post:
+      summary: Endpoint generated from CloudTaskRequestHandler.java
+      operationId: post_CloudTaskRequestHandler
+      responses:
+        '200':
+          description: Successful operation
+  /synchronize-hbx-to-tc:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /synchronize-hbx-to-tc/{hbxBookingReference}:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /reconcile-assignments:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /tc-to-hbx/assignment/{tcJobId}:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /reconcile-cancellations:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /reconcile/{hbxBookingReference}:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /weather/ingest:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /archive:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /monthly-report:
+    post:
+      summary: Endpoint generated from MonthlyReportController.java
+      operationId: post_MonthlyReportController
+      responses:
+        '200':
+          description: Successful operation
+  /delay-patterns:
+    get:
+      summary: Endpoint generated from AnalyticsController.java
+      operationId: get_AnalyticsController
+      responses:
+        '200':
+          description: Successful operation
+  /sync-status:
+    get:
+      summary: Endpoint generated from MetricsController.java
+      operationId: get_MetricsController
+      responses:
+        '200':
+          description: Successful operation
+  /health/external-services:
+    get:
+      summary: Endpoint generated from MetricsController.java
+      operationId: get_MetricsController
+      responses:
+        '200':
+          description: Successful operation
+  /business-kpis:
+    get:
+      summary: Endpoint generated from MetricsController.java
+      operationId: get_MetricsController
+      responses:
+        '200':
+          description: Successful operation
+  /volume-by-hour:
+    get:
+      summary: Endpoint generated from MetricsController.java
+      operationId: get_MetricsController
+      responses:
+        '200':
+          description: Successful operation
+  /active-jobs:
+    get:
+      summary: Endpoint generated from TrackingFrontendController.java
+      operationId: get_TrackingFrontendController
+      responses:
+        '200':
+          description: Successful operation
+  /jobs/{hbxReference}:
+    get:
+      summary: Endpoint generated from TrackingFrontendController.java
+      operationId: get_TrackingFrontendController
+      responses:
+        '200':
+          description: Successful operation
+  /insights:
+    get:
+      summary: Endpoint generated from AiInsightsController.java
+      operationId: get_AiInsightsController
+      responses:
+        '200':
+          description: Successful operation
+  /insights/trigger:
+    post:
+      summary: Endpoint generated from AiInsightsController.java
+      operationId: post_AiInsightsController
+      responses:
+        '200':
+          description: Successful operation
+  /predict-delay:
+    get:
+      summary: Endpoint generated from AiInsightsController.java
+      operationId: get_AiInsightsController
+      responses:
+        '200':
+          description: Successful operation
+  /drivers:
+    get:
+      summary: Endpoint generated from FleetController.java
+      operationId: get_FleetController
+      responses:
+        '200':
+          description: Successful operation
+  /settings:
+    get:
+      summary: Endpoint generated from TenantController.java
+      operationId: get_TenantController
+      responses:
+        '200':
+          description: Successful operation
+    post:
+      summary: Endpoint generated from TenantController.java
+      operationId: post_TenantController
+      responses:
+        '200':
+          description: Successful operation
+  /list:
+    get:
+      summary: Endpoint generated from TenantController.java
+      operationId: get_TenantController
+      responses:
+        '200':
+          description: Successful operation
+  /live-tracking:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /stream-tracking:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /stats:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /{hbxReference}:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /orphans:
+    post:
+      summary: Endpoint generated from BookingController.java
+      operationId: post_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /needs-attention:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /export/csv:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /route:
+    get:
+      summary: Endpoint generated from BookingController.java
+      operationId: get_BookingController
+      responses:
+        '200':
+          description: Successful operation
+  /tracking/update/batch:
+    post:
+      summary: Endpoint generated from SimulationController.java
+      operationId: post_SimulationController
+      responses:
+        '200':
+          description: Successful operation
+  /update-weather:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /anonymize-pii:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /fleet-allocation/predictive:
+    get:
+      summary: Endpoint generated from AiInsightsController.java
+      operationId: get_AiInsightsController
+      responses:
+        '200':
+          description: Successful operation
+  /route-fraud/detect:
+    get:
+      summary: Endpoint generated from AiInsightsController.java
+      operationId: get_AiInsightsController
+      responses:
+        '200':
+          description: Successful operation
+  /stream:
+    get:
+      summary: Endpoint generated from ReactiveTelemetrySseController.java
+      operationId: get_ReactiveTelemetrySseController
+      responses:
+        '200':
+          description: Successful operation
+  /optimizacion-bombeo:
+    post:
+      summary: Endpoint generated from JobSchedulerController.java
+      operationId: post_JobSchedulerController
+      responses:
+        '200':
+          description: Successful operation
+  /batch:
+    post:
+      summary: Endpoint generated from JobSchedulerController.java
+      operationId: post_JobSchedulerController
+      responses:
+        '200':
+          description: Successful operation
+  /consultar:
+    post:
+      summary: Endpoint generated from AsistenteIAController.java
+      operationId: post_AsistenteIAController
+      responses:
+        '200':
+          description: Successful operation
+  /{token}:
+    post:
+      summary: Endpoint generated from TelegramWebhookController.java
+      operationId: post_TelegramWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /api/test-tenant:
+    get:
+      summary: Endpoint generated from TestTenantController.java
+      operationId: get_TestTenantController
+      responses:
+        '200':
+          description: Successful operation
+  /cesiones:
+    post:
+      summary: Endpoint generated from MercadoAguaController.java
+      operationId: post_MercadoAguaController
+      responses:
+        '200':
+          description: Successful operation
+  /parcela/{parcelaId}:
+    get:
+      summary: Endpoint generated from RecomendacionRiegoController.java
+      operationId: get_RecomendacionRiegoController
+      responses:
+        '200':
+          description: Successful operation
+  /comunero/{comuneroId}:
+    get:
+      summary: Endpoint generated from ExpedienteSancionadorController.java
+      operationId: get_ExpedienteSancionadorController
+      responses:
+        '200':
+          description: Successful operation
+  /ordenes:
+    post:
+      summary: Endpoint generated from MantenimientoController.java
+      operationId: post_MantenimientoController
+      responses:
+        '200':
+          description: Successful operation
+  /metrics:
+    get:
+      summary: Endpoint generated from DashboardController.java
+      operationId: get_DashboardController
+      responses:
+        '200':
+          description: Successful operation
+  /progreso:
+    get:
+      summary: Endpoint generated from SimulationMonitorController.java
+      operationId: get_SimulationMonitorController
+      responses:
+        '200':
+          description: Successful operation
+  /generar:
+    post:
+      summary: Endpoint generated from FacturacionController.java
+      operationId: post_FacturacionController
+      responses:
+        '200':
+          description: Successful operation
+  /descargar-zip:
+    get:
+      summary: Endpoint generated from FacturacionController.java
+      operationId: get_FacturacionController
+      responses:
+        '200':
+          description: Successful operation
+  /chirpstack/uplink:
+    post:
+      summary: Endpoint generated from IotWebhookController.java
+      operationId: post_IotWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /{id}/historico-deltas:
+    get:
+      summary: Endpoint generated from HidranteController.java
+      operationId: get_HidranteController
+      responses:
+        '200':
+          description: Successful operation
+  /sync/hidrante/{devEui}:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /sync/orphans:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /hidrante/manual:
+    post:
+      summary: Endpoint generated from BatchTriggerController.java
+      operationId: post_BatchTriggerController
+      responses:
+        '200':
+          description: Successful operation
+  /uplink/binary:
+    post:
+      summary: Endpoint generated from NonBlockingIotWebhookController.java
+      operationId: post_NonBlockingIotWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /uplink/fast:
+    post:
+      summary: Endpoint generated from NonBlockingIotWebhookController.java
+      operationId: post_NonBlockingIotWebhookController
+      responses:
+        '200':
+          description: Successful operation
+  /lectura:
+    post:
+      summary: Endpoint generated from BombaTelemetriaController.java
+      operationId: post_BombaTelemetriaController
+      responses:
+        '200':
+          description: Successful operation

@@ -1,0 +1,10 @@
+TITLE: Project Valhalla: Value Classes and Flat Data Layouts (JEP 401)
+AUTHORS: Brian Goetz, John Rose (Oracle / OpenJDK)
+
+CORE INNOVATION: "Codes like a class, works like an int"
+1. Identity-Free Objects:
+   Value objects lack object identity (== compares fields, no System.identityHashCode, no synchronization monitor).
+2. Flat In-Memory Layout:
+   Eliminates 12-16 byte object headers. Arrays of value classes (Point[1000]) are stored flat and contiguous in RAM, maximizing L1/L2 CPU cache-line prefetching and eliminating pointer chasing.
+3. Null-Restricted Types:
+   Enables atomic flat flattening in memory with zero heap overhead.

@@ -64,3 +64,26 @@ Si el Gemelo Digital detecta que las sumas tensoriales del modelo de IA varían 
 > La Verificación Formal cuesta 10x más esfuerzo que el Testing.
 > *Regla de Decisión*: Usa JUnit / Testcontainers para el 99% de tu código (El Frontend, el API, la base de datos). 
 > Usa Verificación Formal (Coq / TLA+) única y exclusivamente para el 1% de tu código que: (1) Involucra criptografía o dinero, o (2) Es el núcleo asíncrono hiper-distribuido del Gemelo Digital.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Verificación Formal y Seguridad de Algoritmos Críticos (Nivel ETH Zurich / Oxford)** a un estudiante de secundaria, **sin usar las palabras:** "Verificación", "Formal", "y" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -1,0 +1,11 @@
+{
+  "title": "Project Valhalla: Value Classes and Flat Data Layouts (JEP 401)",
+  "authors": [
+    "Brian Goetz",
+    "John Rose"
+  ],
+  "year": 2025,
+  "institution": "Oracle / OpenJDK",
+  "faculty": "03_runtime_jvm_memoria",
+  "url": null
+}

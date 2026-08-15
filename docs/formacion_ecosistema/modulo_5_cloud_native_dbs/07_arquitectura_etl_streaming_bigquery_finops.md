@@ -55,7 +55,7 @@ flowchart TD
 ### Reglas FinOps Mandatorias (Target: `< 0.015 USD/MAU/mes`)
 1. **`require_partition_filter = true`**: Bloquea cualquier consulta analítica que intente escanear la tabla completa sin acotar la fecha.
 2. **Clustering Celular por `tenant_id`**: Aísla físicamente los datos de cada cliente dentro de los bloques de almacenamiento, reduciendo los bytes escaneados a fracciones mínimas.
-3. **Vistas Materializadas In-Memory ($0 por consulta)**: Consultas recurrentes de dashboards leen agregaciones precalculadas automáticamente por BigQuery BI Engine.
+3. **Vistas Materializadas In-Memory (`$0` por consulta)**: Consultas recurrentes de dashboards leen agregaciones precalculadas automáticamente por BigQuery BI Engine.
 
 ---
 
@@ -100,3 +100,26 @@ func (w *EtlTelemetryWorker) Enqueue(evt EtlTelemetryEvent) bool {
 * **`pctMultiMicroservices`**: Desacoplamiento de eventos de ejecución de tareas y trazas OpenTelemetry hacia BigQuery. Latencia P99 cae de `> 800ms` a `< 35ms`.
 * **`SaaSRegantes`**: Reducción de escrituras en Firestore en un 80%+ sustituyéndolas por micro-batches a `telemetria_datalake.lecturas`.
 * **`AppViajes`**: Agregación de matrices de demanda/oferta espacial indexadas bajo celdas Uber H3 resolución 8.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura Streaming ETL, BigQuery Storage API y FinOps (Nivel CMU / MIT / Stanford)** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "Streaming", "ETL," ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

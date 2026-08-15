@@ -1,5 +1,17 @@
 # Arquitectura Multi-Tenancy y Row-Level Security (RLS)
 
+---
+
+## 1. 🐣 Ancla Mental Feynman & Analogía Isomórfica
+
+### El Modelo Intuitivo: Arquitectura Multi-Tenancy y Row-Level Security (RLS)
+Para comprender **Arquitectura Multi-Tenancy y Row-Level Security (RLS)** sin caer en la trampa de la jerga técnica, debemos anclar el concepto en un problema físico observable:
+* Todo sistema en computación resuelve un dilema fundamental: cómo organizar recursos limitados (tiempo de cálculo, espacio de memoria, ancho de banda o energía) para que el trabajo se realice sin bloqueos ni errores.
+* En **Arquitectura Multi-Tenancy y Row-Level Security (RLS)**, la clave reside en eliminar pasos redundantes y asegurar que cada componente conozca únicamente la información mínima indispensable para cumplir su función, tal como una línea de montaje bien coordinada donde nadie tiene que adivinar qué hizo el compañero anterior.
+
+---
+
+
 Diseñar sistemas SaaS modernos (como *SaaSRegantes*) requiere proveer servicios a múltiples clientes (Inquilinos o *Tenants*) utilizando la misma base de código subyacente y, a menudo, la misma infraestructura. El desafío crítico radica en garantizar un aislamiento hermético de los datos para cumplir con normativas (GDPR) mientras se optimizan los costes operacionales.
 
 Este documento formaliza los tres patrones principales de arquitectura *Multi-Tenant* en bases de datos (Relacionales, BigQuery y Firestore) y cómo orquestar la seguridad en la capa de acceso.
@@ -100,3 +112,26 @@ service cloud.firestore {
 
 ## 4. Veredicto del Consilium
 Para *SaaSRegantes*, la arquitectura recomendada es el **Patrón Pool**. Un clúster de base de datos unificado reduce los costes de cold-start y mantenimiento. La contrapartida de la fuga de datos queda matemáticamente neutralizada al combinar arquitecturas RLS en el plano SQL y *Custom Claims* validados inmutablemente en el plano Firestore. Esta sinergia asegura un *SaaS* económicamente resiliente y legalmente blindado.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura Multi-Tenancy y Row-Level Security (RLS)** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "Multi-Tenancy", "y" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

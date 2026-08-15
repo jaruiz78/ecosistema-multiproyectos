@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-tax-compliance-ledger
+  namespace: default
+  labels:
+    app: proyecto-tax-compliance-ledger
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-tax-compliance-ledger
+  template:
+    metadata:
+      labels:
+        app: proyecto-tax-compliance-ledger
+    spec:
+      containers:
+        - name: proyecto-tax-compliance-ledger
+          image: gcr.io/corp-ecosystem/proyecto-tax-compliance-ledger:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-tax-compliance-ledger-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-tax-compliance-ledger
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

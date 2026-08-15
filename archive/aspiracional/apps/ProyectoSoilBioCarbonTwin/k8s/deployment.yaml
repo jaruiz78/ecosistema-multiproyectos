@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-soil-bio-carbon-twin
+  namespace: default
+  labels:
+    app: proyecto-soil-bio-carbon-twin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-soil-bio-carbon-twin
+  template:
+    metadata:
+      labels:
+        app: proyecto-soil-bio-carbon-twin
+    spec:
+      containers:
+        - name: proyecto-soil-bio-carbon-twin
+          image: gcr.io/corp-ecosystem/proyecto-soil-bio-carbon-twin:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-soil-bio-carbon-twin-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-soil-bio-carbon-twin
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

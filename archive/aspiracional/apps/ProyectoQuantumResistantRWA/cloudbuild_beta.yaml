@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'test']
+    dir: 'apps/ProyectoQuantumResistantRWA'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-quantum-resistant-rwa:beta', 'apps/ProyectoQuantumResistantRWA']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-quantum-resistant-rwa:beta']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-quantum-resistant-rwa:beta'

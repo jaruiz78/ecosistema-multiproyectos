@@ -41,3 +41,13 @@ El `master_digital_twin.py` emite telemetría asíncrona hacia las JVMs de los m
 
 ### B. PredictiveCircuitBreaker
 En vez de reaccionar a errores 500 HTTP, los microservicios en Java interrumpen su tráfico de forma *preventiva* cuando la Covarianza del Filtro de Kalman (EnKF) o el riesgo de desastre supera los umbrales de seguridad, evitando el colapso en cascada del clúster antes de que ocurra físicamente.
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -118,3 +118,26 @@ La magia de `freeze()` y `thaw()` funciona manipulando punteros del JVM Stack.
 Si tu Virtual Thread llama a una función C nativa (ej. la librería de TensorFlow en Python/Java), se crea un "Native C Frame" en el Stack. El C++ de la JVM (el `freeze_stub`) sabe leer e interpretar los Java Frames (sabe dónde están las referencias a objetos para actualizar el GC).
 Pero la JVM es completamente **ciega** respecto al diseño interno de un Native C Frame. No sabe si hay punteros de C ocultos allí. Si la JVM intentara copiar (freeze) un Native Frame al Heap y moverlo a otra dirección de memoria, los punteros C estáticos se volverían colgantes (Dangling Pointers), provocando un `Segmentation Fault` fulminante en el SO.
 Por tanto, si la JVM detecta *cualquier* Native Frame en el Stack durante un intento de `yield()`, aborta el freeze silenciosamente. El Hilo Virtual se queda "pinned" bloqueando físicamente al Carrier Thread hasta que retorne.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Virtual Threads (Project Loom) e Internals de Continuaciones** a un estudiante de secundaria, **sin usar las palabras:** "Virtual", "Threads", "(Project" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

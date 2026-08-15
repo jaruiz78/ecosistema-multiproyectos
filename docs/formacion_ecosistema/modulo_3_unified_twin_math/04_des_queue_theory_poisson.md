@@ -96,3 +96,13 @@ class DiscreteEventSimulation:
 1. **Configurar el factor de utilización $\rho \ge 1$**:
    * *Síntoma*: La longitud de la cola crece hasta el infinito y la simulación explota en memoria.
    * *Solución*: Asegúrate de que el número de servidores $c$ satisface siempre $c \cdot \mu > \lambda$.
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

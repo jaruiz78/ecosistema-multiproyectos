@@ -1,0 +1,11 @@
+TITLE: Spring Framework 7 & Spring Boot 4.0: Native Ahead-of-Time Architecture
+AUTHORS: Spring Engineering Team (Broadcom)
+
+CORE ARCHITECTURAL UPGRADES:
+1. Baseline Requirements: Java 25 LTS baseline, native Virtual Threads (Executors.newVirtualThreadPerTaskExecutor).
+2. Project Leyden Integration:
+   Native CDS profile training in premain phase generates .jsa archive, achieving cold-start < 80ms on Google Cloud Run without GraalVM native-image closed-world limitations.
+3. Functional Web & HTTP/3:
+   Declarative HTTP/3 client interfaces and native gRPC streaming integrations.
+4. Pure DDD Domain Alignment:
+   Zero runtime reflection in domain modules, 100% record-based serialization.

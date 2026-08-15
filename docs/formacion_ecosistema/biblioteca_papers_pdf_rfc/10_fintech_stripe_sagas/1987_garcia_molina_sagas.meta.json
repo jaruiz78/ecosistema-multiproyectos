@@ -1,0 +1,13 @@
+{
+  "title": "Sagas: Distributed Long-Lived Transactions",
+  "authors": [
+    "Hector Garcia-Molina",
+    "Kenneth Salem"
+  ],
+  "year": 1987,
+  "institution": "Princeton University / ACM SIGMOD",
+  "faculty": "10_fintech_stripe_sagas",
+  "urls": [
+    "https://www.cs.cornell.edu/andru/cs711/2002fa/reading/sagas.pdf"
+  ]
+}

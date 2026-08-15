@@ -1,0 +1,12 @@
+{
+  "title": "Quantization and Training of Neural Networks for Integer-Arithmetic Inference (LiteRT)",
+  "authors": [
+    "Benoit Jacob et al."
+  ],
+  "year": 2018,
+  "institution": "Google Research / CVPR",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/1712.05877.pdf"
+  ]
+}

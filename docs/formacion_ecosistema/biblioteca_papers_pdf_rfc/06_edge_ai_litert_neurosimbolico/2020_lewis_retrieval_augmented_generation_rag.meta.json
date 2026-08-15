@@ -1,0 +1,14 @@
+{
+  "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (RAG)",
+  "authors": [
+    "Patrick Lewis",
+    "Ethan Perez",
+    "Aleksandra Piktus et al."
+  ],
+  "year": 2020,
+  "institution": "Facebook AI Research / UCL / NYU / NeurIPS",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/2005.11401.pdf"
+  ]
+}

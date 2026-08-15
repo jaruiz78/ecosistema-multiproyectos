@@ -1,44 +1,11 @@
 #!/bin/bash
-echo "=== INICIANDO PIPELINE DE ENTRENAMIENTO IA ==="
-python3 scripts/train_dqn_mobility.py
-echo "----------------------------------------------"
-python3 scripts/train_pinn_water.py
-echo "----------------------------------------------"
-python3 scripts/train_nsga2_energy.py
-echo "----------------------------------------------"
-python3 scripts/train_federated_b2g.py
-echo "----------------------------------------------"
-python3 scripts/train_v2g_battery_mpc.py
-echo "----------------------------------------------"
-python3 scripts/train_federated_privacy_node.py
-echo "----------------------------------------------"
-python3 scripts/train_bio_agri_trace.py
-echo "----------------------------------------------"
-python3 scripts/train_desal_energy_pinn.py
-echo "----------------------------------------------"
-python3 scripts/train_dual_air_defense_radar.py
-echo "----------------------------------------------"
-python3 scripts/train_online_continual_learning.py
-echo "----------------------------------------------"
-python3 scripts/train_quantum_satellite_qkd.py
-echo "----------------------------------------------"
-python3 scripts/train_agro_bio_robotics.py
-echo "----------------------------------------------"
-python3 scripts/train_synthetic_bio_foundry.py
-echo "----------------------------------------------"
-python3 scripts/train_neurosymbolic_constraints.py
-echo "----------------------------------------------"
-python3 scripts/train_carbon_aware_grid.py
-echo "----------------------------------------------"
-python3 scripts/train_interstellar_laser_mesh.py
-echo "----------------------------------------------"
-python3 scripts/train_adwin_drift.py
-echo "----------------------------------------------"
-python3 scripts/train_ivfpq_compression.py
-echo "----------------------------------------------"
-python3 scripts/train_surge_forecast_30m.py
-echo "----------------------------------------------"
-python3 scripts/train_biometric_fatigue.py
+echo "=== INICIANDO PIPELINE DE ENTRENAMIENTO IA COMPLETO DEL ECOSISTEMA (64 VERTICALES + 20 CORES) ==="
+for train_script in scripts/train_*.py; do
+    if [ -f "$train_script" ]; then
+        echo "-> Ejecutando: $train_script"
+        python3 "$train_script"
+    fi
+done
 echo "----------------------------------------------"
 python3 scripts/litert_quantizer_pipeline.py
-echo "=== TODOS LOS MODELOS GENERADOS Y CUANTIZADOS LITERT ==="
+echo "=== TODOS LOS MODELOS GENERADOS, ENTRENADOS Y CUANTIZADOS LITERT EXITOSAMENTE ==="

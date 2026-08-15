@@ -1,0 +1,13 @@
+{
+  "title": "What Every Programmer Should Know About Memory (CPU Caches, NUMA, TLB)",
+  "authors": [
+    "Ulrich Drepper"
+  ],
+  "year": 2007,
+  "institution": "Red Hat",
+  "faculty": "03_runtime_jvm_memoria",
+  "urls": [
+    "https://people.freebsd.org/~lstewart/articles/cpumemory.pdf",
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/systems/what-every-programmer-should-know-about-memory.pdf"
+  ]
+}

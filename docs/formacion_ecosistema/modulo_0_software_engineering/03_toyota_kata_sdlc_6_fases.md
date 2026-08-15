@@ -79,3 +79,26 @@ Ejecuta la revisión final pre-merge lanzando los auditores automáticos.
    * *Pensamiento peligroso*: "Es un cambio muy pequeño, no hace falta spec ni probarlo con tests".
    * *Consecuencia*: Bugs sutiles introducidos en producción que requieren horas de depuración.
    * *Regla*: Todo cambio estructural exige seguir las 6 fases del SDLC.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Toyota Kata, Ciclo SDLC de 6 Fases & Doubt-Driven Development** a un estudiante de secundaria, **sin usar las palabras:** "Toyota", "Kata,", "Ciclo" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

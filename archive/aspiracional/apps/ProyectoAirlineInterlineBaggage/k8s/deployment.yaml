@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-airline-interline-baggage
+  namespace: default
+  labels:
+    app: proyecto-airline-interline-baggage
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-airline-interline-baggage
+  template:
+    metadata:
+      labels:
+        app: proyecto-airline-interline-baggage
+    spec:
+      containers:
+        - name: proyecto-airline-interline-baggage
+          image: gcr.io/corp-ecosystem/proyecto-airline-interline-baggage:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-airline-interline-baggage-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-airline-interline-baggage
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

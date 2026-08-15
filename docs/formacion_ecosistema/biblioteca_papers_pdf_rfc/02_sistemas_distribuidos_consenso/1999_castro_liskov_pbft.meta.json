@@ -1,0 +1,11 @@
+{
+  "title": "Practical Byzantine Fault Tolerance (PBFT)",
+  "authors": [
+    "Miguel Castro",
+    "Barbara Liskov"
+  ],
+  "year": 1999,
+  "institution": "MIT Laboratory for Computer Science",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "url": "https://pmg.csail.mit.edu/papers/osdi99.pdf"
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Physics-Informed Neural Networks (PINNs): Deep Learning for PDEs",
+  "authors": [
+    "Maziar Raissi",
+    "Paris Perdikaris",
+    "George Em Karniadakis"
+  ],
+  "year": 2019,
+  "institution": "Brown University / Journal of Computational Physics",
+  "faculty": "05_gemelo_digital_tensores_enkf",
+  "urls": [
+    "https://arxiv.org/pdf/1711.10561.pdf"
+  ]
+}

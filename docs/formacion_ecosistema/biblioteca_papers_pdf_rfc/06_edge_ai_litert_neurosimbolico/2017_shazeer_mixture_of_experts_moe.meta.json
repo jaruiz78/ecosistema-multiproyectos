@@ -1,0 +1,14 @@
+{
+  "title": "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer",
+  "authors": [
+    "Noam Shazeer",
+    "Azalia Mirhoseini",
+    "Krzysztof Maziarz et al."
+  ],
+  "year": 2017,
+  "institution": "Google Brain / ICLR",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/1701.06538.pdf"
+  ]
+}

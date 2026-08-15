@@ -1,0 +1,13 @@
+{
+  "title": "An Axiomatic Basis for Computer Programming (Hoare Logic)",
+  "authors": [
+    "C. A. R. Hoare"
+  ],
+  "year": 1969,
+  "institution": "Queen's University of Belfast / CACM",
+  "faculty": "01_software_eng_ddd_tipos",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/cs_theory/an-axiomatic-basis-for-computer-programming.pdf",
+    "https://www.cs.cmu.edu/~crary/819-f09/Hoare69.pdf"
+  ]
+}

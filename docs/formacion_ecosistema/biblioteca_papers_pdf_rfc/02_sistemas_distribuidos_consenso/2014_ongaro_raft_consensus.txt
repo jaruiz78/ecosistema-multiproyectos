@@ -1,0 +1,22 @@
+TITLE: In Search of an Understandable Consensus Algorithm (Extended Version)
+AUTHORS: Diego Ongaro, John Ousterhout (2014)
+INSTITUTION: Stanford University
+
+KEY MECHANISMS:
+1. Leader Election:
+   - Split into terms (epochs).
+   - Randomized election timers (150-300ms) prevent split votes.
+   - A candidate needs a majority of votes to become leader.
+
+2. Log Replication:
+   - Leader accepts commands, appends to its log, sends AppendEntries RPC to followers.
+   - Entry committed once replicated on a majority of cluster nodes.
+   - Log Matching Property: If two logs contain an entry with the same index and term, they are identical up to that index.
+
+3. Safety Invariants:
+   - Election Safety: At most one leader can be elected in a given term.
+   - Leader Append-Only: A leader never overwrites or truncates its own log.
+   - Log Matching: If a leader commits an entry, all future leaders will contain that entry.
+
+FEYNMAN MODEL:
+El cuaderno notarial del pueblo: La mayoría de los notarios vivos debe rubricar cada nueva hoja del libro antes de que se considere ley.

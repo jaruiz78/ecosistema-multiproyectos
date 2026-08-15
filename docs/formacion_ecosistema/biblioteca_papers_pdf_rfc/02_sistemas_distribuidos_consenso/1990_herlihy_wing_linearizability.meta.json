@@ -1,0 +1,14 @@
+{
+  "title": "Linearizability: A Correctness Condition for Concurrent Objects",
+  "authors": [
+    "Maurice P. Herlihy",
+    "Jeannette M. Wing"
+  ],
+  "year": 1990,
+  "institution": "Carnegie Mellon University / ACM TOPLAS",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "urls": [
+    "https://cs.brown.edu/~mph/HerlihyW90/p463-herlihy.pdf",
+    "https://www.cs.cmu.edu/~wing/publications/HerlihyWing90.pdf"
+  ]
+}

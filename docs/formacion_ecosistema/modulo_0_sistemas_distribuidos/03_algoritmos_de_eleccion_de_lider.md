@@ -129,3 +129,26 @@ func (w *WAL) saveEntry(entry pb.Entry) error {
 ### Pre-Voting (Prevención SRE Avanzada)
 Si el clúster se desconecta y un Follower se queda aislado, su contador `term` subirá infinitamente al convocar elecciones fallidas en solitario (Term = 100, 101, 102...). Al reconectarse, su `term` será astronómicamente alto (103), forzando al Líder legítimo (Term = 4) a renunciar al poder de forma innecesaria.
 *Solución implementada en etcd*: La fase `Pre-Vote`. Un nodo aislado primero manda un sondeo (`PreVote`) sin subir su Term. Si no puede contactar a una mayoría, deduce matemáticamente que él es el aislado y *no* altera su mandato ni irrumpe en el clúster al volver.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Algoritmos de Elección de Líder (Leader Election)** a un estudiante de secundaria, **sin usar las palabras:** "Algoritmos", "de", "Elección" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

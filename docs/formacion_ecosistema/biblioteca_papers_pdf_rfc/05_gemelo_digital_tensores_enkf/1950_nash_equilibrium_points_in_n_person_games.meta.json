@@ -1,0 +1,13 @@
+{
+  "title": "Equilibrium Points in N-Person Games (Nash Equilibrium)",
+  "authors": [
+    "John F. Nash"
+  ],
+  "year": 1950,
+  "institution": "Princeton University / PNAS",
+  "faculty": "05_gemelo_digital_tensores_enkf",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/math/equilibrium-points-in-n-person-games.pdf",
+    "https://www.pnas.org/doi/pdf/10.1073/pnas.36.1.48"
+  ]
+}

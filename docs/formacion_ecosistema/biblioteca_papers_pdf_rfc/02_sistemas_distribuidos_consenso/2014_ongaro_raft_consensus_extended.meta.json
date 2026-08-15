@@ -1,0 +1,13 @@
+{
+  "title": "In Search of an Understandable Consensus Algorithm (Raft Extended)",
+  "authors": [
+    "Diego Ongaro",
+    "John Ousterhout"
+  ],
+  "year": 2014,
+  "institution": "Stanford University",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "urls": [
+    "https://raft.github.io/raft.pdf"
+  ]
+}

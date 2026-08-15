@@ -1,0 +1,11 @@
+{
+  "title": "JEP 491: Synchronize Virtual Threads without Pinning (Java 25 Loom)",
+  "authors": [
+    "Ron Pressler",
+    "Alan Bateman"
+  ],
+  "year": 2025,
+  "institution": "Oracle / OpenJDK",
+  "faculty": "03_runtime_jvm_memoria",
+  "url": null
+}

@@ -64,3 +64,26 @@ Desplegamos un clúster *OTEL Collector* altamente escalado (RAM en Kubernetes).
 2. El Collector no guarda nada en disco todavía. Amortiza el árbol completo de Spans en RAM durante una ventana (ej. 30 segundos) analizando su topología.
 3. **Decisión Tail-Based**: El filtro evalúa el grafo. Si la traza fue "Sana" ($<100ms$ y sin Excepciones HTTP 500), el colector la aniquila y tira a la basura (ahorrando cientos de miles de dólares en almacenamiento Cloud). 
 4. Si el grafo contiene un solo atributo de anomalía o fallo en cualquier sub-nodo lejano, el colector consolida la traza en su totalidad y la escribe de forma persistente. Garantiza 100% de retención de anomalías con 0.1% de gasto en disco.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Observabilidad y OpenTelemetry (Nivel SRE Moderno)** a un estudiante de secundaria, **sin usar las palabras:** "Observabilidad", "y", "OpenTelemetry" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

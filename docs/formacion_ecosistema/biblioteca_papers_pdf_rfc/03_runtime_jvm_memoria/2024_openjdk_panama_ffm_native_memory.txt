@@ -1,0 +1,7 @@
+TITLE: Foreign Function & Memory API (JEP 454)
+AUTHORS: Maurizio Cimadamore, Per-Ake Minborg (Oracle / OpenJDK)
+
+FIRST PRINCIPLES:
+1. Replacement for JNI: Safe, zero-overhead access to off-heap native memory (Arena, MemorySegment).
+2. Zero-Copy Interoperability:
+   Direct binding to C/C++ libraries, BLAS/LAPACK tensors, and Linux kernel io_uring/UDP sockets without copying buffers through JVM garbage-collected heap.

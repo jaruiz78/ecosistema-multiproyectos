@@ -1,0 +1,7 @@
+TITLE: Sound Null Safety: Static and Runtime Guarantees in Dart 3
+AUTHORS: Leaf Petersen, Bob Nystrom, Erik Ernst (Google)
+
+THEORETICAL GUARANTEES:
+1. 100% Soundness: If a type is non-nullable (String), the compiler proves it can NEVER be null at runtime.
+2. Compiler Optimizations:
+   Eliminates all runtime null-checks, shrinks ahead-of-time (AOT) binary size, and unboxes primitive values for faster register allocation.

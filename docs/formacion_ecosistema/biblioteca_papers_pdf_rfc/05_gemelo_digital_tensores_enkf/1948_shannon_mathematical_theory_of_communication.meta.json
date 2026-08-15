@@ -1,0 +1,13 @@
+{
+  "title": "A Mathematical Theory of Communication (Information Theory & Entropy)",
+  "authors": [
+    "Claude E. Shannon"
+  ],
+  "year": 1948,
+  "institution": "Bell System Technical Journal",
+  "faculty": "05_gemelo_digital_tensores_enkf",
+  "urls": [
+    "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf",
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/information_theory/a-mathematical-theory-of-communication.pdf"
+  ]
+}

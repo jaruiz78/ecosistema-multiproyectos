@@ -1,0 +1,12 @@
+{
+  "title": "Large-Scale Cluster Management at Google with Borg",
+  "authors": [
+    "Abhishek Verma et al."
+  ],
+  "year": 2015,
+  "institution": "Google / EuroSys",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43438.pdf"
+  ]
+}

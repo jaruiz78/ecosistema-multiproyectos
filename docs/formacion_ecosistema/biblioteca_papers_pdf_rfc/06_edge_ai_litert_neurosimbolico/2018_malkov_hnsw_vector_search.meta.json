@@ -1,0 +1,13 @@
+{
+  "title": "Efficient and Robust Approximate Nearest Neighbor Search Using HNSW",
+  "authors": [
+    "Yu. A. Malkov",
+    "D. A. Yashunin"
+  ],
+  "year": 2018,
+  "institution": "IEEE TPAMI",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/1603.09320.pdf"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+  "authors": [
+    "Edward J. Hu",
+    "Yelong Shen",
+    "Phillip Wallis et al."
+  ],
+  "year": 2021,
+  "institution": "Microsoft Corporation / ICLR",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/2106.09685.pdf"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "title": "RFC 8725: JSON Web Token Best Current Practices",
+  "authors": [
+    "Yaron Sheffer",
+    "Dick Hardt",
+    "Michael B. Jones"
+  ],
+  "year": 2020,
+  "institution": "Internet Engineering Task Force (IETF)",
+  "faculty": "11_identidad_zerotrust_beyondcorp",
+  "summary": "Mejores prácticas de seguridad para prevenir vulnerabilidades de confusión de algoritmos (alg: none), validación de issuer y gestión de caducidad en tokens JWT."
+}

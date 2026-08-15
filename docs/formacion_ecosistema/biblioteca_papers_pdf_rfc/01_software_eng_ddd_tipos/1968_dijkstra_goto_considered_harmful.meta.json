@@ -1,0 +1,13 @@
+{
+  "title": "Go To Statement Considered Harmful",
+  "authors": [
+    "Edsger W. Dijkstra"
+  ],
+  "year": 1968,
+  "institution": "Eindhoven University of Technology / CACM",
+  "faculty": "01_software_eng_ddd_tipos",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/programming_languages/go-to-statement-considered-harmful.pdf",
+    "https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf"
+  ]
+}

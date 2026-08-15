@@ -92,3 +92,26 @@ En React, si un padre se re-renderiza, **TODOS sus hijos se re-renderizan matem�
 
 Cuando el algoritmo de Fiber descarta subárboles enteros por la regla de Tipo (Ej: Condicional ternario renderiza `<ComponentA/>` o `<ComponentB/>`), destruye todos los Fiber nodes de la rama antigua. Esto genera **Garbage** (basura) masiva en la memoria *Young Generation* (Nursery) del motor V8 (JavaScript).
 Si hay re-renders excesivos destruyendo nodos gigantes en cada tick, el GC (Garbage Collector) del V8 dispara un "Scavenge", lo que congela el Main Thread de forma impredecible. Por tanto, escribir React de alto rendimiento implica no solo usar memoización, sino mantener una topología de nodos estable para que el V8 pueda promover los objetos Fiber a la memoria *Old Generation*, donde son escaneados pasivamente sin congelar la pantalla.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura de React, Virtual DOM y Fiber** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "de", "React," ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

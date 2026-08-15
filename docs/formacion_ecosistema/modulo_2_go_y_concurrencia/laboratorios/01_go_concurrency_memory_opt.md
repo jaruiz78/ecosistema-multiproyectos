@@ -1,5 +1,17 @@
 # Módulo 2 - Lección 1: Concurrencia de Alto Rendimiento & Optimización de Memoria en Go
 
+---
+
+## 1. 🐣 Ancla Mental Feynman & Analogía Isomórfica
+
+### El Modelo Intuitivo: Concurrencia de Alto Rendimiento & Optimización de Memoria en Go
+Para comprender **Concurrencia de Alto Rendimiento & Optimización de Memoria en Go** sin caer en la trampa de la jerga técnica, debemos anclar el concepto en un problema físico observable:
+* Todo sistema en computación resuelve un dilema fundamental: cómo organizar recursos limitados (tiempo de cálculo, espacio de memoria, ancho de banda o energía) para que el trabajo se realice sin bloqueos ni errores.
+* En **Concurrencia de Alto Rendimiento & Optimización de Memoria en Go**, la clave reside en eliminar pasos redundantes y asegurar que cada componente conozca únicamente la información mínima indispensable para cumplir su función, tal como una línea de montaje bien coordinada donde nadie tiene que adivinar qué hizo el compañero anterior.
+
+---
+
+
 ## 1. El Modelo de Concurrencia CSP (Goroutines & Channels)
 
 Go utiliza el modelo **Communicating Sequential Processes (CSP)**. Las **Goroutines** son hilos en espacio de usuario ultraligeros (~2KB de pila inicial), gestionados por el planificador `M:N` de Go.
@@ -114,3 +126,26 @@ go build -gcflags="-m -l" ./...
 ```
 * **Pila (Stack)**: Si la variable no sobrevive a la ejecución de la función.
 * **Heap**: Si se devuelve un puntero a una variable local o se pasa a una interfaz `any`.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Concurrencia de Alto Rendimiento & Optimización de Memoria en Go** a un estudiante de secundaria, **sin usar las palabras:** "Concurrencia", "de", "Alto" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -1,5 +1,17 @@
 # Módulo 3 - Lección 3: Simulación de Eventos Discretos (DES), Procesos de Poisson & Teoría de Colas
 
+---
+
+## 1. 🐣 Ancla Mental Feynman & Analogía Isomórfica
+
+### El Modelo Intuitivo: Simulación de Eventos Discretos (DES), Procesos de Poisson & Teoría de Colas
+Para comprender **Simulación de Eventos Discretos (DES), Procesos de Poisson & Teoría de Colas** sin caer en la trampa de la jerga técnica, debemos anclar el concepto en un problema físico observable:
+* Todo sistema en computación resuelve un dilema fundamental: cómo organizar recursos limitados (tiempo de cálculo, espacio de memoria, ancho de banda o energía) para que el trabajo se realice sin bloqueos ni errores.
+* En **Simulación de Eventos Discretos (DES), Procesos de Poisson & Teoría de Colas**, la clave reside en eliminar pasos redundantes y asegurar que cada componente conozca únicamente la información mínima indispensable para cumplir su función, tal como una línea de montaje bien coordinada donde nadie tiene que adivinar qué hizo el compañero anterior.
+
+---
+
+
 ## 1. Modelado Estocástico de Llegadas: Procesos de Poisson
 
 En hubs turísticos (aeropuertos, estaciones de tren en `AppViajes`) y en la distribución de turnos de riego (`SaaSRegantes`), las peticiones o eventos de llegada siguen una distribución de **Proceso de Poisson**.
@@ -99,3 +111,13 @@ class DiscreteEventSimulation:
             "system_utilization": (self.lam) / (self.c * self.mu)
         }
 ```
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-drone-airspace-uspace
+  namespace: default
+  labels:
+    app: proyecto-drone-airspace-uspace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-drone-airspace-uspace
+  template:
+    metadata:
+      labels:
+        app: proyecto-drone-airspace-uspace
+    spec:
+      containers:
+        - name: proyecto-drone-airspace-uspace
+          image: gcr.io/corp-ecosystem/proyecto-drone-airspace-uspace:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-drone-airspace-uspace-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-drone-airspace-uspace
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

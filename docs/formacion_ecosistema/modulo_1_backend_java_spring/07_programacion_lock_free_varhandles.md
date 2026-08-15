@@ -171,3 +171,26 @@ Cuando la JVM carga esta clase, el Classloader insertará dinámicamente un rell
 > La anotación `jdk.internal.vm.annotation.Contended` está oculta en los módulos internos de la JVM y restringida por seguridad. Para que tenga efecto en tus clases de aplicación en Cloud Run/Kubernetes, **debes** arrancar la JVM con el flag explícito de desbloqueo:
 > `-XX:-RestrictContended`
 > Si omites este flag, la anotación se ignorará en silencio y sufrirás la penalización del False Sharing de todos modos.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Programación Lock-Free, CAS y VarHandles (Nivel Ph.D.)** a un estudiante de secundaria, **sin usar las palabras:** "Programación", "Lock-Free,", "CAS" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

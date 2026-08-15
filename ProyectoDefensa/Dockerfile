@@ -1,0 +1,1 @@
+FROM eclipse-temurin:25-jre\nCMD ["echo", "ProyectoDefensa started"]

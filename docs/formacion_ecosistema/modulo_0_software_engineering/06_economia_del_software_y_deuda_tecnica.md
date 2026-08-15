@@ -67,3 +67,26 @@ Un equipo empieza un microservicio. Hacen las cosas rápido y mal. La fricción 
 *   **Error Budgets (SRE)**: Si el presupuesto de errores se agota (el SLO de disponibilidad baja del 99.9%), **se detiene el desarrollo de nuevas features a nivel de empresa**. Todo el equipo de ingeniería pasa a trabajar 100% en estabilidad y pago de deuda técnica (Reliability).
 *   **Scout Rule (Regla del Boy Scout)**: Cada PR debe dejar el archivo un poco más limpio de lo que lo encontró (pagos microscópicos del principal diario).
 *   **Architecture Decision Records (ADRs)**: Cada atajo de "Deuda Prudente Deliberada" debe documentarse en un ADR con una fecha de caducidad obligatoria. Al llegar la fecha, el orquestador abre un ticket bloqueante de P0 para pagar la deuda.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Economía del Software y Deuda Técnica (Nivel USC / CMU)** a un estudiante de secundaria, **sin usar las palabras:** "Economía", "del", "Software" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

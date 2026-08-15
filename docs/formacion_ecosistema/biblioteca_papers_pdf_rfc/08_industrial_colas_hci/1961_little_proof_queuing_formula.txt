@@ -1,0 +1,18 @@
+TITLE: A Proof for the Queuing Formula: L = λ W
+AUTHOR: John D. C. Little (1961)
+INSTITUTION: Operations Research, Vol. 9, No. 3
+
+FUNDAMENTAL LAW OF QUEUING THEORY:
+L = λ * W
+
+Where:
+- L: Average number of items/requests in the stationary system.
+- λ: Long-term average arrival rate (requests per second).
+- W: Average time an item spends in the system (latency / response time).
+
+NON-LINEAR SATURATION DYNAMICS (M/M/1):
+W = 1 / (μ - λ) = 1 / (μ * (1 - ρ))
+where ρ = λ / μ (server utilization).
+
+As utilization ρ approaches 1.0 (100%), average response time and queue size diverge towards infinity (∞).
+Therefore, engineering rule mandates keeping average CPU utilization below 0.70 (70%) to avoid exponential latency spikes.

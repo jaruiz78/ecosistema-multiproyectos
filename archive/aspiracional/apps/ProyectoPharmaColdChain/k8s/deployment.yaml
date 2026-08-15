@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-pharma-cold-chain
+  namespace: default
+  labels:
+    app: proyecto-pharma-cold-chain
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-pharma-cold-chain
+  template:
+    metadata:
+      labels:
+        app: proyecto-pharma-cold-chain
+    spec:
+      containers:
+        - name: proyecto-pharma-cold-chain
+          image: gcr.io/corp-ecosystem/proyecto-pharma-cold-chain:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-pharma-cold-chain-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-pharma-cold-chain
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

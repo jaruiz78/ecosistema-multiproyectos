@@ -1,0 +1,12 @@
+{
+  "title": "Dremel: Interactive Analysis of Web-Scale Datasets (BigQuery Capacitor)",
+  "authors": [
+    "Sergey Melnik et al."
+  ],
+  "year": 2010,
+  "institution": "Google Research / VLDB",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36632.pdf"
+  ]
+}

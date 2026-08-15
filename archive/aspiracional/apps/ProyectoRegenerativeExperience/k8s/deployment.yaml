@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-regenerative-experience
+  namespace: default
+  labels:
+    app: proyecto-regenerative-experience
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-regenerative-experience
+  template:
+    metadata:
+      labels:
+        app: proyecto-regenerative-experience
+    spec:
+      containers:
+        - name: proyecto-regenerative-experience
+          image: gcr.io/corp-ecosystem/proyecto-regenerative-experience:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-regenerative-experience-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-regenerative-experience
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

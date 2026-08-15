@@ -144,3 +144,26 @@ def fictitious_play(payoff_matrix_1, payoff_matrix_2, iterations=10000):
     return nash_eq_1, nash_eq_2
 ```
 A medida que las iteraciones tienden a infinito, la distribución histórica de jugadas converge probabilísticamente a un Equilibrio de Nash en estrategias mixtas, permitiendo a los simuladores Cloud resolver juegos estocásticos masivos con convergencia garantizada (en juegos de suma cero o juegos de potencial).
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Teoría de Juegos, Equilibrio de Nash y Diseño de Mecanismos** a un estudiante de secundaria, **sin usar las palabras:** "Teoría", "de", "Juegos," ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

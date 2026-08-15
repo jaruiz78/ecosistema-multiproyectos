@@ -111,3 +111,26 @@ func main() {
 Como regla de hierro impuesta por Google y el proyecto Kubernetes:
 **Los Controllers y el Kube-Scheduler NUNCA leen directamente del API Server (`clientset.CoreV1().Pods().List(...)`).**
 En su lugar, inician un *SharedInformer*, que sincroniza asincrónicamente el estado del clúster en una memoria caché local del proceso de Go (Lister). Todos los bucles de reconciliación matemáticos en K8s se resuelven cruzando memoria local contra memoria local, evitando absolutamente latencias de red o bloqueos de transacciones hacia la base de datos `etcd`.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Internals de Kubernetes (K8s), etcd y Control Plane** a un estudiante de secundaria, **sin usar las palabras:** "Internals", "de", "Kubernetes" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

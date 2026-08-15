@@ -1,0 +1,13 @@
+{
+  "title": "A Relational Model of Data for Large Shared Data Banks",
+  "authors": [
+    "Edgar F. Codd"
+  ],
+  "year": 1970,
+  "institution": "IBM Research / CACM",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/databases/a-relational-model-of-data-for-large-shared-data-banks.pdf",
+    "https://www.seas.upenn.edu/~zives/03f/cis550/codd.pdf"
+  ]
+}

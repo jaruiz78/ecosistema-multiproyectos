@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'package', '-DskipTests']
+    dir: 'apps/ProyectoDroneAirspaceUSpace'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-drone-airspace-uspace:latest', 'apps/ProyectoDroneAirspaceUSpace']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-drone-airspace-uspace:latest']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-drone-airspace-uspace:latest'

@@ -1,0 +1,14 @@
+{
+  "title": "A New Golden Age for Computer Architecture: Domain-Specific Accelerators",
+  "authors": [
+    "John L. Hennessy",
+    "David A. Patterson"
+  ],
+  "year": 2018,
+  "institution": "Stanford / UC Berkeley / ACM Turing Lecture",
+  "faculty": "03_runtime_jvm_memoria",
+  "urls": [
+    "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/hardware/a-new-golden-age-for-computer-architecture.pdf",
+    "https://cacm.acm.org/system/assets/0003/1879/011719_CACMpg48_A-New-Golden-Age.pdf"
+  ]
+}

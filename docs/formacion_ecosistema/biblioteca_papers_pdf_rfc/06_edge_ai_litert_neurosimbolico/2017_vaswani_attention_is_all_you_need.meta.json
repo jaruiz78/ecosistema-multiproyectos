@@ -1,0 +1,14 @@
+{
+  "title": "Attention Is All You Need (Transformers Architecture)",
+  "authors": [
+    "Ashish Vaswani",
+    "Noam Shazeer",
+    "Niki Parmar et al."
+  ],
+  "year": 2017,
+  "institution": "Google Brain / Google Research / NeurIPS",
+  "faculty": "06_edge_ai_litert_neurosimbolico",
+  "urls": [
+    "https://arxiv.org/pdf/1706.03762.pdf"
+  ]
+}

@@ -91,3 +91,26 @@ class CityMobilityModel(mesa.Model):
 1. **Modificar el estado global de la cuadrícula durante la fase de evaluación de `step()`**:
    * *Síntoma*: Sesgos de ejecución donde los primeros agentes procesados tienen ventaja injusta sobre los últimos en el mismo tick.
    * *Solución*: Utiliza `SimultaneousActivation` o separa la fase de cálculo de la de movimiento.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Simulación Basada en Agentes (ABM) con Mesa & Perfiles Sintéticos** a un estudiante de secundaria, **sin usar las palabras:** "Simulación", "Basada", "en" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

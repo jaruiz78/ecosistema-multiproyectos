@@ -1,45 +1,40 @@
-# 📚 Mapa Maestro de Documentación del Ecosistema
+# 📚 Mapa Maestro de Documentación y Universidad Privada del Ecosistema
 
-**Proyecto:** `corp-spring-boot-starter` & **Gemelo Digital Unificado**  
-**Estándar de Calidad:** Rigor Ph.D. / Staff Engineer (Carnegie Mellon, MIT, Stanford, UC Berkeley)
+**Proyecto:** Ecosistema Multi-Proyecto Google Antigravity & **Gemelo Digital Unificado**  
+**Estándar Académico:** Nivel Ph.D. / Principal Fellow (Carnegie Mellon, MIT, Stanford, UC Berkeley, Princeton IAS, ETH Zurich)
 
-Este documento es la **Guía Base Central** para navegar por toda la documentación técnica, arquitectónica y educativa del repositorio. La documentación está estructurada de forma modular en **3 Bloques Principales**:
-
----
-
-## 🏛️ Bloque 1: Arquitectura del Chasis y Plataforma (`docs/architecture/`)
-*Documentación técnica de diseño, propuestas de plataforma y especificaciones del starter.*
-
-1. [Visión General de Arquitectura (`ARCHITECTURE.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/ARCHITECTURE.md)
-2. [Especificación Técnica del Starter (`STARTER_SPEC.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/STARTER_SPEC.md)
-3. [Especificaciones del Consilium Romano (`CONSILIUM_ROMANO_SPECS.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/CONSILIUM_ROMANO_SPECS.md)
-4. [Sinergias entre Sistemas del Ecosistema (`CROSS_SYSTEM_SYNERGIES.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/CROSS_SYSTEM_SYNERGIES.md)
-5. [Propuesta de Dominio Base (`DOMAIN_BASE_PROPOSAL.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/DOMAIN_BASE_PROPOSAL.md)
-6. [Arquitectura de Plataforma Base (`PLATFORM_BASE_ARCHITECTURE.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/PLATFORM_BASE_ARCHITECTURE.md)
-7. [Arquitectura de Contenedores Schrödingers (`SCHRODINGER_CONTAINER_ARCHITECTURE.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/SCHRODINGER_CONTAINER_ARCHITECTURE.md)
-8. [Propuesta Base del Gemelo Digital (`TWIN_BASE_PROPOSAL.md`)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/architecture/TWIN_BASE_PROPOSAL.md)
+Este documento es la **Guía Central de Navegación** para explorar la arquitectura de software, las bases de conocimiento y el curriculum de la **Universidad Privada del Ecosistema**.
 
 ---
 
-## 📋 Bloque 2: Registro de Decisiones de Arquitectura (`docs/adr/`)
-*Registro cronológico de decisiones arquitectónicas y técnicas (Architecture Decision Records).*
+## 🏛️ Bloque 1: Universidad Privada & Base de Conocimiento Viva
 
-- Directorio central de ADRs: [`docs/adr/`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/adr/)
+- 🗺️ **[Mapa Maestro y Arquitectura Integral del Ecosistema 2026 (`ECOSISTEMA_GLOBAL_MAPA_MAESTRO_2026.md`)](file:///home/jaruiz/Desarrollo/docs/ECOSISTEMA_GLOBAL_MAPA_MAESTRO_2026.md)**: Censo completo de los 88 proyectos, topología de capas, sinergias y vertical de turismo DTI.
+- 🎓 **[Curriculum Maestro: Universidad Privada de Ciencias Computacionales (`UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md`)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md)**: Plan doctoral estructurado en **12 Grandes Facultades** (CMU, MIT, Stanford, Berkeley, Princeton IAS, ETH Zurich, Oxford, Cambridge, INRIA, TUM, RWTH Aachen, Technion, Chicago).
+- 📍 **[Guía de Estudio y Navegación de Módulos (`INDEX_MASTER_GUIA_ESTUDIO.md`)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/INDEX_MASTER_GUIA_ESTUDIO.md)**.
+- 📖 **[Bibliografía Científica y Académica de Referencia (`BIBLIOGRAFIA_ACADEMICA.md`)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/BIBLIOGRAFIA_ACADEMICA.md)**.
+- ⚡ **[Motor de Grounding y RAG Semántico (`scripts/auto_university_rag_sync.py`)](file:///home/jaruiz/Desarrollo/scripts/auto_university_rag_sync.py)**: Indexación vectorial (768d `nomic-embed-text`) en SQLite (`simulations_telemetry.db`).
+
+### Las 12 Grandes Facultades Universitarias del Ecosistema:
+1. **Facultad I: Ingeniería de Software y Arquitectura Hexagonal** (CMU SEI, Stanford, USC).
+2. **Facultad II: Sistemas Distribuidos y Consenso TLA+** (MIT 6.5840, UC Berkeley).
+3. **Facultad III: Runtime JVM, Compilación AOT y Memoria** (OpenJDK Leyden / Valhalla, ETH Zurich).
+4. **Facultad IV: Concurrencia Go CSP y Redes de Alto Rendimiento** (ITMO, Peking University).
+5. **Facultad V: Gemelo Digital, Redes Tensoriales y Física** (Princeton IAS, Caltech).
+6. **Facultad VI: IA Híbrida, Edge AI y Neuro-Simbólico** (MIT 6.S191, Stanford AI, Google AI).
+7. **Facultad VII: Cloud-Native, Big Data, FinOps y Zero-Trust** (Google Cloud, SLSA.dev).
+8. **Facultad VIII: Ingeniería Industrial, Operaciones y HCI** (Georgia Tech, Purdue, Stanford HCI).
+9. **Facultad IX: Verificación Formal, Lean 4 e Interpretación Abstracta** (INRIA, ENS Paris-Saclay, Oxford).
+10. **Facultad X: Seguridad por Silicio, Arquitectura CHERI y Criptografía Cuántica** (Cambridge, Waterloo).
+11. **Facultad XI: Minería de Procesos y Autómatas Híbridos Ciberfísicos** (RWTH Aachen, TU Munich).
+12. **Facultad XII: Optimización Robusta DRO y Microeconomía de Subastas** (Technion, Chicago Booth, Columbia).
 
 ---
 
-## 🎓 Bloque 3: Grafo de Conocimiento y Formación (`docs/formacion_ecosistema/`)
-*Plan de formación corporativo e ingeniería de sistemas de nivel universitario avanzado.*
+## 🏛️ Bloque 2: Arquitectura del Chasis y Gobernanza
 
-- 📍 **[Índice Maestro de Formación (Guía Completa de Estudio)](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/INDEX_MASTER_GUIA_ESTUDIO.md)**
-- 📖 **[Bibliografía Académica de Referencia](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/BIBLIOGRAFIA_ACADEMICA.md)**
-
-### Estructura de Módulos Formativos:
-- **[Módulo 0A: Ingeniería de Software y Arquitectura](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_0_software_engineering/)**: DDD Hexagonal, TDD Zero-Mockito, Toyota Kata, Compliance.
-- **[Módulo 0B: Sistemas Distribuidos](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_0_sistemas_distribuidos/)**: Lamport Clocks, Raft/Paxos, Topologías Datacenter, TLA+.
-- **[Módulo 1: Backend Java 25 & Spring Boot 4.0](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_1_backend_java_spring/)**: Virtual Threads (Loom), Project Leyden (AOT/CDS), JMM, Panama FFI.
-- **[Módulo 2: Go, Runtime y Concurrencia CSP](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_2_go_y_concurrencia/)**: Planificador M:N, Garbage Collection en Go, Worker Pools, [Laboratorios de Concurrencia](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_2_go_y_concurrencia/laboratorios/).
-- **[Módulo 3: Gemelo Digital Unificado y Matemáticas HPC](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_3_unified_twin_math/)**: Redes Tensoriales (PEPS), EnKF, Cálculo Estocástico, Simulación ABM y Navier-Stokes.
-- **[Módulo 4: Frontend Moderno, UI Engines y Movilidad Espacial](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_4_frontend_y_motores_ui/)**: React/Flutter, Skia/Impeller, Core Web Vitals, [Ruteo H3/OSRM](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_4_frontend_y_motores_ui/movilidad_h3/).
-- **[Módulo 5: Cloud-Native, Big Data & Fintech](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/)**: Serverless (Cloud Run), BigQuery, Terraform, [Fintech & Vertex AI](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_5_cloud_native_dbs/fintech_y_ia/).
-- **[Módulo 6: SRE, Resiliencia y Alta Disponibilidad](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/)**: SLIs/SLOs, Canary Deployments, Error Budgets, Project Bootstrap.
+- ⚖️ **[Tribunal Consilium Romano 3.0 (`scripts/consilium_romano_tribunal.py`)](file:///home/jaruiz/Desarrollo/scripts/consilium_romano_tribunal.py)**: Tribunal neuro-simbólico multi-LLM (`deepseek-r1:8b`, `qwen2.5-coder:7b`, `pct-budget-governor`).
+- 📜 **[Protocolo Oficial del Senatus Consultum (`CONSILIUM_ROMANO_SPECS.md`)](file:///home/jaruiz/Desarrollo/docs/architecture/CONSILIUM_ROMANO_SPECS.md)**.
+- 🏭 **[Fábrica de Proyectos Empresariales (`scripts/scaffolding/create_enterprise_project.py`)](file:///home/jaruiz/Desarrollo/scripts/scaffolding/create_enterprise_project.py)**: Scaffolder universal con certificación inmediata *Summa Cum Laude*.
+- 📋 **[Registro de Decisiones de Arquitectura (`docs/adr/`)](file:///home/jaruiz/Desarrollo/docs/adr/)**.
+- 🏆 **[Informe Oficial de Auditoría Integral del Ecosistema 2026](file:///home/jaruiz/Desarrollo/docs/INFORME_CONSILIUM_ROMANO_AUDITORIA_INTEGRAL_ECOSISTEMA_2026.md)**.

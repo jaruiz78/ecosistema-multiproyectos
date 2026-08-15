@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-gov-procure-match
+  namespace: default
+  labels:
+    app: proyecto-gov-procure-match
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-gov-procure-match
+  template:
+    metadata:
+      labels:
+        app: proyecto-gov-procure-match
+    spec:
+      containers:
+        - name: proyecto-gov-procure-match
+          image: gcr.io/corp-ecosystem/proyecto-gov-procure-match:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-gov-procure-match-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-gov-procure-match
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -268,3 +268,13 @@ El Cuaderno debe estructurarse en:
 4. Integración Fintech: Idempotencia transaccional con Stripe Connect, patron Saga y cuentas de custodia (Escrow).
 5. Examen Teórico-Práctico de Seguridad e Integridad de Datos.
 ```
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

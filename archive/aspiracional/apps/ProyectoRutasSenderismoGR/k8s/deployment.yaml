@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-rutas-senderismo-gr
+  namespace: default
+  labels:
+    app: proyecto-rutas-senderismo-gr
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-rutas-senderismo-gr
+  template:
+    metadata:
+      labels:
+        app: proyecto-rutas-senderismo-gr
+    spec:
+      containers:
+        - name: proyecto-rutas-senderismo-gr
+          image: gcr.io/corp-ecosystem/proyecto-rutas-senderismo-gr:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-rutas-senderismo-gr-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-rutas-senderismo-gr
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,12 @@
+{
+  "title": "RFC 7519: JSON Web Token (JWT)",
+  "authors": [
+    "Michael B. Jones",
+    "John Bradley",
+    "Nat Sakimura"
+  ],
+  "year": 2015,
+  "institution": "Internet Engineering Task Force (IETF)",
+  "faculty": "11_identidad_zerotrust_beyondcorp",
+  "summary": "Estándar formal IETF que define el formato compacto y autónomo para la transmisión segura de claims entre partes como un objeto JSON firmado."
+}

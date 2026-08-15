@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-presa-twin-scada
+  namespace: default
+  labels:
+    app: proyecto-presa-twin-scada
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-presa-twin-scada
+  template:
+    metadata:
+      labels:
+        app: proyecto-presa-twin-scada
+    spec:
+      containers:
+        - name: proyecto-presa-twin-scada
+          image: gcr.io/corp-ecosystem/proyecto-presa-twin-scada:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-presa-twin-scada-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-presa-twin-scada
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'test']
+    dir: 'apps/ProyectoDiputacionTurismoRural'
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/proyecto-diputacion-turismo-rural:beta', 'apps/ProyectoDiputacionTurismoRural']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/proyecto-diputacion-turismo-rural:beta']
+images:
+  - 'gcr.io/$PROJECT_ID/proyecto-diputacion-turismo-rural:beta'

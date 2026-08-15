@@ -79,3 +79,13 @@ Si un ingeniero configura el paso temporal $\Delta t$ a 5 segundos para que la s
 **Solución Inmediata SRE**:
 1.  **Reducir $\Delta t$** de emergencia para que la condición CFL sea menor a 1.0 (o adaptarlo dinámicamente en cada celda según la velocidad máxima local).
 2.  **Switch a Integración Implícita**: Cambiar el solver explícito de Godunov por un solver Implícito (Backward Euler), el cual es incondicionalmente estable independientemente del $CFL$, a costa de tener que invertir matrices tridiagonales gigantes (Jacobianos) en cada paso de tiempo, disparando el uso de CPU pero garantizando estabilidad matemática total en producción.
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -70,3 +70,26 @@ El modelo CQRS rompe por completo la Consistencia Fuerte (Linearizability). La p
 **Solución Arquitectónica (Read-Your-Own-Writes)**:
 1. **Lado del Servidor (Causal Consistency)**: El Command devuelve un `version_token` o `vector_clock` (Módulo 0.2). El Query del cliente debe enviar ese token. El servicio de lectura bloquea o retrasa la respuesta hasta que su Proyección local haya consumido los eventos hasta alcanzar dicho token.
 2. **Lado del Cliente (Optimistic UI)**: La App Móvil (Flutter) asume que la operación síncrona de pago será exitosa y falsifica el saldo actualizado en su RAM local (UX fluida sin latencia de red), conciliando en *background* el estado real vía WebSockets una vez que el EventStore haya estabilizado el Grafo.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Diseño Guiado por el Dominio (DDD) y Arquitectura Hexagonal** a un estudiante de secundaria, **sin usar las palabras:** "Diseño", "Guiado", "por" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

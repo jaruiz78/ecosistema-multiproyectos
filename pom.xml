@@ -19,11 +19,21 @@
         <!-- Proyectos Legacy / SaaS -->
         <module>SaaSRegantes</module>
         
-        <!-- Primitivas Core -->
+        <!-- Primitivas Core & Módulos Matemáticos -->
         <module>core/core-geogrid-h3</module>
         <module>core/core-govtech-ledger</module>
+        <module>core/core-pinn-solver</module>
+        <module>core/core-nonlinear-mpc</module>
+        <module>core/core-tensor-peps-network</module>
+        <module>core/core-alert-aggregator</module>
+        <module>core/core-graph-neural-matcher</module>
+        <module>core/core-sync-mesh</module>
+        <module>core/core-game-theory-optimizer</module>
+        <module>core/core-stochastic-pde</module>
+        <module>core/core-lie-group-robotics</module>
+        <module>core/core-wasserstein-transport</module>
 
-        <!-- Nuevos Verticales Apps -->
+        <!-- Verticales Apps Consolidados & Fundacionales -->
         <module>apps/JobsSearch</module>
         <module>apps/ProyectoB2G</module>
         <module>apps/ProyectoCircular</module>
@@ -32,6 +42,73 @@
         <module>apps/ProyectoLogistica</module>
         <module>apps/ProyectoTokenRWA</module>
         <module>apps/ProyectoVPP</module>
+        <module>apps/ProyectoAgua</module>
+        <module>apps/ProyectoCatastrofes</module>
+        <module>apps/ProyectoGeneralista</module>
+        <module>apps/ProyectoSalud</module>
+        <module>apps/ProyectoV2G</module>
+        <module>apps/ProyectoMaritime</module>
+        <module>apps/ProyectoAgroBioRobotics</module>
+        <module>apps/ProyectoBioAgriTrace</module>
+        <module>apps/ProyectoDualAirDefense</module>
+        <module>apps/ProyectoQuantumSatelliteSync</module>
+        <module>apps/ProyectoSmartWaterDesal</module>
+        <module>apps/ProyectoSyntheticBiologyFoundry</module>
+        
+        <!-- Nuevos Verticales Fase 1 (Sostenibilidad, Logística Frío, VPP, B2G, Presas) -->
+        <module>apps/ProyectoCarbonLedger</module>
+        <module>apps/ProyectoFleetColdChain</module>
+        <module>apps/ProyectoAgroEnergyVPP</module>
+        <module>apps/ProyectoGovProcureMatch</module>
+        <module>apps/ProyectoPresaTwinSCADA</module>
+
+        <!-- Nuevos Verticales Fase 2 (TravelTech & Turismo Inteligente) -->
+        <module>apps/ProyectoSmartDestinationDTI</module>
+        <module>apps/ProyectoHotelTwinRevPAR</module>
+        <module>apps/ProyectoEcoTourismPassport</module>
+        <module>apps/ProyectoSeamlessIntermodalHub</module>
+        <module>apps/ProyectoRegenerativeExperience</module>
+
+        <!-- Nuevos Verticales Fase 3 (Pharma, Minerales Críticos, Emergencias, Ciberseguridad OT, H2 Desalación) -->
+        <module>apps/ProyectoPharmaColdChain</module>
+        <module>apps/ProyectoCriticalMineralsMRV</module>
+        <module>apps/ProyectoEmergencyGeoGrid</module>
+        <module>apps/ProyectoZeroTrustOTMesh</module>
+        <module>apps/ProyectoGreenHydrogenDesal</module>
+
+        <!-- Verticales Independientes Ciclos Evolutivos 1 al 10 (2026-2031) -->
+        <module>apps/ProyectoPortTwinAutonomous</module>
+        <module>apps/ProyectoDroneAirspaceUSpace</module>
+        <module>apps/ProyectoSubSurfaceGeoTwin</module>
+        <module>apps/ProyectoCircularTextileDPP</module>
+        <module>apps/ProyectoSoilBioCarbonTwin</module>
+        <module>apps/ProyectoIndustrialMicrogridMPC</module>
+        <module>apps/ProyectoClinicalTrialsZK</module>
+        <module>apps/ProyectoSmartStreetLightingV2G</module>
+        <module>apps/ProyectoTaxComplianceLedger</module>
+        <module>apps/ProyectoQuantumResistantRWA</module>
+
+        <!-- Verticales Turismo Global e Intermodalidad -->
+        <module>apps/ProyectoGlobalCruiseMRV</module>
+        <module>apps/ProyectoAirportTouristIntermodal</module>
+        <module>apps/ProyectoMiceConferenceTwin</module>
+        <module>apps/ProyectoHeritageDigitalTwin3D</module>
+        <module>apps/ProyectoAirlineInterlineBaggage</module>
+
+        <!-- Verticales Turismo Español (Municipal, Provincial & Autonómico) -->
+        <module>apps/ProyectoSegitturDtiStandard</module>
+        <module>apps/ProyectoDiputacionTurismoRural</module>
+        <module>apps/ProyectoCaminoSantiagoXacobeo</module>
+        <module>apps/ProyectoPlayasInteligentesCostas</module>
+        <module>apps/ProyectoRedParadoresTwin</module>
+        <module>apps/ProyectoParquesNacionalesNatura2000</module>
+        <module>apps/ProyectoEcotasaSoberanaTax</module>
+        <module>apps/ProyectoEnoturismoRutasVino</module>
+        <module>apps/ProyectoCascoHistoricoCrowd</module>
+        <module>apps/ProyectoFiestasInteresTuristico</module>
+        <module>apps/ProyectoTurismoTermalBalnearios</module>
+        <module>apps/ProyectoAstroturismoStarlight</module>
+        <module>apps/ProyectoRutasSenderismoGR</module>
     </modules>
 
 </project>

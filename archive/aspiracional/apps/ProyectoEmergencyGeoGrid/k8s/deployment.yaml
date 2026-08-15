@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-emergency-geogrid
+  namespace: default
+  labels:
+    app: proyecto-emergency-geogrid
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-emergency-geogrid
+  template:
+    metadata:
+      labels:
+        app: proyecto-emergency-geogrid
+    spec:
+      containers:
+        - name: proyecto-emergency-geogrid
+          image: gcr.io/corp-ecosystem/proyecto-emergency-geogrid:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-emergency-geogrid-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-emergency-geogrid
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -69,3 +69,26 @@ Esto elimina el cuello de botella central (Centralized Bottleneck), permitiendo 
 **Prevención SRE (Dataflow / CMU Tactics)**:
 1.  **Dynamic Work Rebalancing (Liquid Sharding)**: Si el Maestro detecta que un servidor va muy lento, toma la mitad de los datos de su cola de trabajo RAM y se los quita en caliente, entregándolos a los 999 servidores que ya están libres. Dataflow en GCP hace esto mágicamente.
 2.  **Salting / Key Stretching**: Para evitar Data Skew, nunca agrupas directamente por `ID_Conductor`. Agrupas por `ID_Conductor + Numero_Aleatorio(1 a 10)`. Esto divide al bot gigante en 10 trozos aleatorios forzando al clúster a distribuir la carga uniformemente (Map-Side Aggregation) antes del `Reduce` final.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Dataflow, Ray y Serverless Distribuido (Nivel UC Berkeley RISELab / CMU)** a un estudiante de secundaria, **sin usar las palabras:** "Dataflow,", "Ray", "y" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

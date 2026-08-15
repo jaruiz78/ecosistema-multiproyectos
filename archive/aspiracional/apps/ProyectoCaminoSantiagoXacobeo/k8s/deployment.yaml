@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-camino-santiago-xacobeo
+  namespace: default
+  labels:
+    app: proyecto-camino-santiago-xacobeo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-camino-santiago-xacobeo
+  template:
+    metadata:
+      labels:
+        app: proyecto-camino-santiago-xacobeo
+    spec:
+      containers:
+        - name: proyecto-camino-santiago-xacobeo
+          image: gcr.io/corp-ecosystem/proyecto-camino-santiago-xacobeo:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-camino-santiago-xacobeo-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-camino-santiago-xacobeo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,11 @@
+{
+  "title": "Rust: Memory Safety Without Garbage Collection",
+  "authors": [
+    "Nicholas D. Matsakis",
+    "Felix S. Klock II"
+  ],
+  "year": 2014,
+  "institution": "Mozilla Research / ACM Ada Letters",
+  "faculty": "01_software_eng_ddd_tipos",
+  "url": "https://raw.githubusercontent.com/papers-we-love/papers-we-love/master/languages/rust/rust-memory-safety.pdf"
+}

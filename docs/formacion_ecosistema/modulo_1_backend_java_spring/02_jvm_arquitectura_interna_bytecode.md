@@ -217,3 +217,26 @@ Al utilizar Project Leyden (CDS) y compilación GraalVM Native Image (AOT), la J
 > **Consecuencias de la Instrumentación en Entornos Cloud-Native Modernos (Java 25)**
 > A partir de las normativas de seguridad estrictas (JEP 451: Prepare to Disallow the Dynamic Loading of Agents), cargar agentes de instrumentación de Java en una JVM ya en marcha requerirá flag explicitas de bypass (`-XX:+EnableDynamicAgentLoading`). 
 > Los ingenieros SRE modernos no inyectan instrumentación *al vuelo*. Migran a OpenTelemetry AOT nativo inyectado **en tiempo de compilación mediante plugins de Maven**, para evitar colisiones con Spring Boot AOT y retener arranques en nanosegundos requeridos para contenedores Serverless Scale-to-Zero.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura Interna de la JVM, Bytecode y Classloaders (Nivel Ph.D.)** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura", "Interna", "de" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

@@ -1,0 +1,1 @@
+# core-geogrid-h3\nGenerado automáticamente como parte del objetivo de atomización.\n

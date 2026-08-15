@@ -66,3 +66,26 @@ Cuando un incidente impacta los Service Level Indicators, medimos la derivada de
 No intentes bajar el MTTR depurando el código con hilos colgados a las 3 AM. A las 3 AM tu cerebro opera con un déficit cognitivo severo.
 Para llevar el MTTR matemático a valores de milisegundos, la estrategia universal es **el Rollback Ciego e Inmediato** (Revertir al contenedor/imagen Docker de hace 1 hora) o el Failover de DNS/BGP a una región sana (Canary Routing). 
 El análisis forense de *Root-Cause* (Postmortem Blameless) se realiza al día siguiente analizando los perfiles de Pprof o *coredumps* bajo estricta luz diurna.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Ingeniería de Confiabilidad del Sitio (SRE) y Matemáticas del Riesgo** a un estudiante de secundaria, **sin usar las palabras:** "Ingeniería", "de", "Confiabilidad" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

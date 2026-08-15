@@ -1,0 +1,50 @@
+# ==============================================================================
+# cloudbuild_nightly_benchmarks.yaml
+# ==============================================================================
+# Pipeline declarativo de Google Cloud Build para ejecución programada nocturna
+# de benchmarks continuos, validación de contratos y control estocástico EnKF.
+# ==============================================================================
+steps:
+  # Paso 1: Validación y generación de contratos canónicos
+  - name: 'bash'
+    id: 'validate-unified-contracts'
+    args:
+      - '-c'
+      - |
+        chmod +x scripts/generate_unified_contracts_artifacts.sh
+        ./scripts/generate_unified_contracts_artifacts.sh
+
+  # Paso 2: Ejecución de la suite TDD de Reconciliador BigQuery y Outbox Edge
+  - name: 'maven:3.9-eclipse-temurin-21'
+    id: 'run-resilience-and-bigquery-tests'
+    args:
+      - 'mvn'
+      - 'test'
+      - '-Dtest=DeclarativeBigQuerySchemaReconcilerTest,EdgeOutboxCompactorTest,UnifiedContractsValidationTest'
+    dir: 'corp-spring-boot-starter'
+
+  # Paso 3: Ejecución del benchmark nocturno continuo y detección de derivas EnKF
+  - name: 'python:3.11-slim'
+    id: 'run-nightly-continuous-benchmark'
+    args:
+      - 'bash'
+      - '-c'
+      - |
+        pip install --no-cache-dir numpy
+        python3 scripts/run_nightly_continuous_benchmark.py --ticks 1000
+
+artifacts:
+  objects:
+    location: 'gs://${_BENCHMARK_BUCKET_NAME}/nightly-reports/$BUILD_ID'
+    paths:
+      - 'docs/NIGHTLY_BENCHMARK_REPORT.md'
+      - 'simulations_telemetry.db'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _BENCHMARK_BUCKET_NAME: 'corp-sovereign-benchmarks-telemetry'
+
+timeout: '1800s'

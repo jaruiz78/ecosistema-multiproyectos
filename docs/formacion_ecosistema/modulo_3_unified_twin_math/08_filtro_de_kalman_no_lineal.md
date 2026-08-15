@@ -165,3 +165,26 @@ def unscented_transform(x_mean, P_cov, f_nonlinear_func, alpha=1e-3, kappa=0, be
 # 1 vez para el Paso de Observación H(x) y calcular las covarianzas cruzadas.
 ```
 Esta arquitectura garantiza que la varianza y media reconstruidas son exactas hasta derivadas de orden 3, superando de largo al EKF, que comete errores de truncamiento catastróficos ya en el 2º orden al utilizar linealizaciones tangenciales. Todo esto sin escribir ni calcular un solo Jacobiano diferencial.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Filtros de Kalman No Lineales (UKF y Particle Filters)** a un estudiante de secundaria, **sin usar las palabras:** "Filtros", "de", "Kalman" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

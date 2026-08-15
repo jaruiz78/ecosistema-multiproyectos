@@ -1,0 +1,14 @@
+{
+  "title": "Bigtable: A Distributed Storage System for Structured Data",
+  "authors": [
+    "Fay Chang",
+    "Jeffrey Dean",
+    "Sanjay Ghemawat et al."
+  ],
+  "year": 2006,
+  "institution": "Google / OSDI",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf"
+  ]
+}

@@ -111,3 +111,26 @@ Go resuelve esto dinámicamente:
 6. Eventualmente, la Syscall de Linux de la Goroutine inicial termina. El viejo hilo $M1$ despierta, intenta devolver el resultado de la Syscall, pero se da cuenta de que ya no tiene a su $P1$. Entonces, $M1$ aparca a la Goroutine finalizada en la Global Run Queue, se pone en estado latente (Sleep), y entra a un pool de hilos de reserva (Thread Cache) para futuros Handoffs, limitando un máximo de 10,000 OS Threads.
 
 La belleza matemática de este proceso radica en que para ti, el programador de microservicios, el código Go se ve totalmente síncrono línea por línea, mientras el Runtime de Go enruta, roba, bloquea y transfiere los Contextos de Procesador ($P$) por debajo del hardware invisiblemente a escala de decenas de microsegundos, simulando un paralelismo puro.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Arquitectura, Runtime de Go y Goroutines** a un estudiante de secundaria, **sin usar las palabras:** "Arquitectura,", "Runtime", "de" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

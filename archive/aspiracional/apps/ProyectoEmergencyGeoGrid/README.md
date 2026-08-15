@@ -1,0 +1,2 @@
+# Proyecto Vertical: ProyectoEmergencyGeoGrid
+Este microproyecto implementa la lógica de dominio para el contexto ProyectoEmergencyGeoGrid, asegurando un aislamiento total de la infraestructura y una latencia de cálculo O(1).

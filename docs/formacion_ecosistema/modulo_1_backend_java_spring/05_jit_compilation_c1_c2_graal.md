@@ -121,3 +121,26 @@ Un JIT sabe exactamente que un salto condicional es 99% verdadero en *tu* hardwa
 
 El compilador Graal, en Fase 3, lee el `.iprof` y aplica *Monomorphic Dispatch Inlining* y *Loop Unrolling* matemáticamente perfectos para la carga de trabajo *exacta* que sufrió el binario en Fase 2.
 El resultado es un contenedor nativo (Scale-to-Zero, Cold Start < 50ms) que **iguala o supera** la velocidad pico de una JVM clásica que llevara 3 días calentando.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Compilación JIT, C1/C2 y Graal Compiler (Nivel Principal)** a un estudiante de secundaria, **sin usar las palabras:** "Compilación", "JIT,", "C1/C2" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

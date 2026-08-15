@@ -1,0 +1,13 @@
+{
+  "title": "MapReduce: Simplified Data Processing on Large Clusters",
+  "authors": [
+    "Jeffrey Dean",
+    "Sanjay Ghemawat"
+  ],
+  "year": 2004,
+  "institution": "Google / OSDI",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf"
+  ]
+}

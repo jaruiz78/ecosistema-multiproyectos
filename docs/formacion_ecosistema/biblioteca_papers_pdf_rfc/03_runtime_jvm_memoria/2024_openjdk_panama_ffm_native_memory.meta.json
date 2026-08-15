@@ -1,0 +1,11 @@
+{
+  "title": "JEP 454: Foreign Function & Memory API (Project Panama)",
+  "authors": [
+    "Maurizio Cimadamore",
+    "Per-Ake Minborg"
+  ],
+  "year": 2024,
+  "institution": "Oracle / OpenJDK",
+  "faculty": "03_runtime_jvm_memoria",
+  "url": null
+}

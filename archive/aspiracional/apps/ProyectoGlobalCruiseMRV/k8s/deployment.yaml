@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-global-cruise-mrv
+  namespace: default
+  labels:
+    app: proyecto-global-cruise-mrv
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-global-cruise-mrv
+  template:
+    metadata:
+      labels:
+        app: proyecto-global-cruise-mrv
+    spec:
+      containers:
+        - name: proyecto-global-cruise-mrv
+          image: gcr.io/corp-ecosystem/proyecto-global-cruise-mrv:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-global-cruise-mrv-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-global-cruise-mrv
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

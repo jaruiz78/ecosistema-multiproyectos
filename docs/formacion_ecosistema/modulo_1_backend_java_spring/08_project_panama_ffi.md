@@ -177,3 +177,26 @@ FFI no es de un solo sentido. Panama permite crear *Upcalls*: pasar un puntero a
 3. Usa `Linker.upcallStub()` para generar un puntero de código C nativo en memoria (stub).
 4. Pasa ese `MemorySegment` (que actúa como un `void (*callback)(int)`) a tu función C de registro.
 5. El compilador nativo JIT conectará dinámicamente las convenciones de llamada ABI (Application Binary Interface) del sistema operativo, invirtiendo el proceso de Inlining para retornar a la JVM de forma segura.
+
+
+---
+
+## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
+
+> [!NOTE]
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Project Panama y Foreign Function Interface (FFI)** a un estudiante de secundaria, **sin usar las palabras:** "Project", "Panama", "y" ni tecnicismos complejos de memoria.
+
+### Criterio de Verificación
+* **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
+* **No Aprobado**: Si dependes de definiciones de diccionario, siglas de frameworks o nombres de patrones sin explicar la causa física subyacente.
+
+
+
+---
+## 🧠 Ejercicio Práctico: El Método Feynman
+
+Para garantizar una asimilación profunda de los conceptos presentados en este módulo, aplica el **Método Feynman**:
+
+> **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
+
+*Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.

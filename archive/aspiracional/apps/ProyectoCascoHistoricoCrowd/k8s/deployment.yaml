@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-casco-historico-crowd
+  namespace: default
+  labels:
+    app: proyecto-casco-historico-crowd
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-casco-historico-crowd
+  template:
+    metadata:
+      labels:
+        app: proyecto-casco-historico-crowd
+    spec:
+      containers:
+        - name: proyecto-casco-historico-crowd
+          image: gcr.io/corp-ecosystem/proyecto-casco-historico-crowd:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-casco-historico-crowd-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-casco-historico-crowd
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,13 @@
+TITLE: Supply-chain Levels for Software Artifacts (SLSA) v1.0
+INSTITUTION: OpenSSF / Linux Foundation (2023)
+
+LEVEL DEFINITIONS:
+- SLSA Build L1: Provenance exists showing how artifact was produced.
+- SLSA Build L2: Hosted build service generates signed provenance.
+- SLSA Build L3: Hardened, ephemeral build environment preventing tampering; hermetic build parameters.
+- SLSA Source / Package L4: Two-party review and hermetic bit-by-bit reproducible builds.
+
+SECURITY GUARANTEES:
+1. Verifiable Provenance: Cryptographically attested build chain via Sigstore/Cosign.
+2. Inmutable Digest: Deployments pinned to sha256 digests, forbidding mutable tags (:latest).
+3. Dependency Transparency: Complete CycloneDX/SPDX SBOM embedded in container metadata.

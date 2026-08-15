@@ -1,0 +1,14 @@
+{
+  "title": "Spanner: Google’s Globally-Distributed Database (TrueTime & Paxos)",
+  "authors": [
+    "James C. Corbett",
+    "Jeffrey Dean",
+    "Sanjay Ghemawat et al."
+  ],
+  "year": 2012,
+  "institution": "Google Research / OSDI",
+  "faculty": "07_cloud_bigquery_finops",
+  "urls": [
+    "https://static.googleusercontent.com/media/research.google.com/en//archive/spanner-osdi2012.pdf"
+  ]
+}

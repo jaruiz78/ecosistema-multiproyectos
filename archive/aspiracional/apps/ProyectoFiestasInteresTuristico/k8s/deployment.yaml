@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto-fiestas-interes-turistico
+  namespace: default
+  labels:
+    app: proyecto-fiestas-interes-turistico
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: proyecto-fiestas-interes-turistico
+  template:
+    metadata:
+      labels:
+        app: proyecto-fiestas-interes-turistico
+    spec:
+      containers:
+        - name: proyecto-fiestas-interes-turistico
+          image: gcr.io/corp-ecosystem/proyecto-fiestas-interes-turistico:latest
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto-fiestas-interes-turistico-service
+  namespace: default
+spec:
+  selector:
+    app: proyecto-fiestas-interes-turistico
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
