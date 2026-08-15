@@ -1,0 +1,48 @@
+package com.corp.proyectobiotecnologia.domain;
+
+import com.corp.proyectobiotecnologia.domain.model.BioCompound;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+/**
+ * Test de Dominio Puro (Zero-Mockito Policy).
+ * Verifica invariantes y comportamiento de BioCompound sin dependencias externas.
+ */
+class BioCompoundDomainTest {
+
+    @Test
+    @DisplayName("Debe instanciar correctamente la entidad de dominio con datos válidos")
+    void shouldCreateValidEntity() {
+        BioCompound entity = new BioCompound(
+            "item-001",
+            "tenant-alpha",
+            "Test Asset",
+            150.0,
+            "ACTIVE",
+            Instant.now()
+        );
+
+        assertThat(entity.id()).isEqualTo("item-001");
+        assertThat(entity.tenantId()).isEqualTo("tenant-alpha");
+        assertThat(entity.value()).isEqualTo(150.0);
+    }
+
+    @Test
+    @DisplayName("Debe rechazar valores negativos por invariante de negocio")
+    void shouldRejectNegativeValue() {
+        assertThatThrownBy(() -> new BioCompound(
+            "item-002",
+            "tenant-alpha",
+            "Invalid Asset",
+            -10.0,
+            "ACTIVE",
+            Instant.now()
+        )).isInstanceOf(IllegalArgumentException.class)
+          .hasMessageContaining("no puede ser negativo");
+    }
+}

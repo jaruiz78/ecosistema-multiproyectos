@@ -145,6 +145,29 @@ class UniversityKnowledgeEngine:
                 except Exception as e:
                     print(f"Error procesando ADR {p.name}: {e}")
 
+        # 3. Indexar Katas Maestras
+        katas_dir = DOCS_DIR / "katas_formacion"
+        if katas_dir.exists():
+            for p in katas_dir.glob("*.md"):
+                try:
+                    content = p.read_text(encoding="utf-8", errors="ignore")
+                    lines = [l.strip() for l in content.split("\n") if l.strip()]
+                    title = lines[0].replace("#", "").strip() if lines else p.stem
+                    summary = " ".join(lines[1:6]) if len(lines) > 1 else title
+
+                    node_id = f"kata::{p.stem}"
+                    nodes.append({
+                        "id": node_id,
+                        "category": "KATA_MAESTRA_FEYNMAN",
+                        "title": title,
+                        "file_path": str(p.relative_to(WORKSPACE_ROOT)),
+                        "summary": summary[:400],
+                        "benchmark": "Feynman Method / Elite Engineering",
+                        "text_for_embed": f"{title} {summary}"
+                    })
+                except Exception as e:
+                    print(f"Error procesando Kata {p.name}: {e}")
+
         # Guardar y generar embeddings
         print(f"📚 Nodos de conocimiento detectados: {len(nodes)}")
         conn = sqlite3.connect(DB_PATH)

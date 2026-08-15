@@ -39,62 +39,21 @@ def create_enterprise_project(project_name: str, domain_entity: str, description
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.corp</groupId>
-        <artifactId>corp-spring-boot-starter</artifactId>
-        <version>2026.1.0-PRO</version>
+        <groupId>com.corp.tenant</groupId>
+        <artifactId>corp-spring-boot-starter-parent</artifactId>
+        <version>1.0.0</version>
         <relativePath>../../corp-spring-boot-starter/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.corp.apps</groupId>
-    <artifactId>{project_name}</artifactId>
-    <version>2026.1.0-PRO</version>
+    <groupId>com.corp.{pkg_name}</groupId>
+    <artifactId>{pkg_name}</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <name>{project_name}</name>
     <description>{description}</description>
 
-    <dependencies>
-        <!-- Chasis Corporativo Base -->
-        <dependency>
-            <groupId>com.corp</groupId>
-            <artifactId>corp-core-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.corp</groupId>
-            <artifactId>corp-telemetry-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.corp</groupId>
-            <artifactId>corp-ai-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.corp</groupId>
-            <artifactId>corp-resilience-spring-boot-starter</artifactId>
-        </dependency>
-
-        <!-- Testing Hermético (Zero-Mockito en Dominio) -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <release>25</release>
-                    <enablePreview>true</enablePreview>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <properties>
+        <java.version>25</java.version>
+    </properties>
 </project>
 """
     (project_dir / "pom.xml").write_text(pom_content, encoding="utf-8")
@@ -368,7 +327,122 @@ class {entity_name}DomainTest {{
 """
     (src_test_java / "domain" / f"{entity_name}DomainTest.java").write_text(domain_test_code, encoding="utf-8")
 
-    # 8. AGENTS.md
+    # 8. Multi-Stage Dockerfile (Java 25 LTS / Distroless)
+    dockerfile_content = f"""# syntax=docker/dockerfile:1.4
+# Stage 1: Build & Package
+FROM eclipse-temurin:25-jdk-noble AS builder
+WORKDIR /workspace
+
+# Cache de dependencias de Maven
+COPY pom.xml ./
+COPY src ./src
+
+RUN mvn clean package -DskipTests -B
+
+# Stage 2: Distroless Runtime
+FROM gcr.io/distroless/java25-debian12:nonroot
+WORKDIR /app
+
+COPY --from=builder /workspace/target/{project_name}-*.jar app.jar
+
+USER nonroot:nonroot
+ENV JAVA_TOOL_OPTIONS="-XX:+UseVirtualThreads -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom"
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+"""
+    (project_dir / "Dockerfile").write_text(dockerfile_content, encoding="utf-8")
+
+    # 9. CloudBuild Pipeline (SLSA L3 & Cosign Keyless Signing)
+    cloudbuild_content = f"""# cloudbuild.yaml - Pipeline SLSA L3 & Cosign para {project_name}
+steps:
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - '--destination=europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/{pkg_name}:$SHORT_SHA'
+      - '--cache=true'
+      - '--dockerfile=Dockerfile'
+
+  - name: 'anchore/syft:latest'
+    args:
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/{pkg_name}:$SHORT_SHA'
+      - '-o'
+      - 'cyclonedx-json'
+      - '--file'
+      - 'sbom.json'
+
+  - name: 'gcr.io/projectsigstore/cosign:latest'
+    env:
+      - 'COSIGN_EXPERIMENTAL=1'
+    args:
+      - 'sign'
+      - '--yes'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/{pkg_name}:$SHORT_SHA'
+"""
+    (project_dir / "cloudbuild.yaml").write_text(cloudbuild_content, encoding="utf-8")
+
+    # 10. Application Properties (Dual Architecture: LOCAL vs PROD)
+    src_main_res = project_dir / "src" / "main" / "resources"
+    src_main_res.mkdir(parents=True, exist_ok=True)
+
+    app_properties = f"""# ===================================================================
+# Detección y Separación de Arquitecturas: LOCAL vs PRODUCTION
+# ===================================================================
+spring.application.name={pkg_name}
+spring.profiles.active=${{SPRING_PROFILES_ACTIVE:local}}
+server.port=8080
+
+# Habilitar Virtual Threads en Java 25
+spring.threads.virtual.enabled=true
+
+# Excluir auto-configuraciones no utilizadas para compatibilidad AOT
+spring.autoconfigure.exclude=org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration
+"""
+    (src_main_res / "application.properties").write_text(app_properties, encoding="utf-8")
+
+    app_local_properties = f"""# Perfil LOCAL: Emuladores y Mocks en Memoria
+google.cloud.project-id=itinera-local
+firestore.emulator.host=localhost:8089
+bigquery.emulator.host=http://localhost:8086
+
+# Telemetría e Ingesta Local
+pct.telemetry.in-memory=true
+logging.level.com.corp=DEBUG
+"""
+    (src_main_res / "application-local.properties").write_text(app_local_properties, encoding="utf-8")
+
+    app_prod_properties = f"""# Perfil PROD: Google Cloud Serverless Managed Services
+google.cloud.project-id=${{GCP_PROJECT_ID}}
+spring.cloud.gcp.secretmanager.enabled=true
+
+# BigQuery Particionado Obligatorio & FinOps
+bigquery.dataset={pkg_name}_analytics
+logging.level.com.corp=INFO
+"""
+    (src_main_res / "application-prod.properties").write_text(app_prod_properties, encoding="utf-8")
+
+    # 11. Notion Project Dossier
+    docs_dir = project_dir / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    dossier_content = f"""# 🏛️ NOTION DOSSIER: {project_name}
+
+## 1. Visión y Resumen Ejecutivo
+* **Nombre**: {project_name}
+* **Entidad Dominio**: {entity_name}
+* **Descripción**: {description}
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
+
+## 2. Pila Tecnológica & Moat
+* **Backend**: Java 25 (Project Loom Virtual Threads & Records).
+* **Infraestructura**: Google Cloud Run, Cloud Tasks, BigQuery Columnar Storage Write API.
+* **Seguridad**: SLSA L3, Cosign Keyless Signatures, Zero-Trust BeyondCorp & Zero-PII.
+
+## 3. Estado Operativo & Tareas Kanban
+* **Estado**: Producción / Activo
+* **FinOps Target**: < 0.015 USD / MAU / mes
+"""
+    (dossier_content_path := docs_dir / "NOTION_PROJECT_DOSSIER.md").write_text(dossier_content, encoding="utf-8")
+
+    # 12. AGENTS.md
     agents_md = f"""# AGENTS.md - Proyecto Independiente {project_name} (Google Antigravity)
 
 Este proyecto opera como un vertical especializado de alta calidad dentro del ecosistema Multi-Proyecto de Google Antigravity.

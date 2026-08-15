@@ -20,6 +20,7 @@ from pathlib import Path
 
 ECOSYSTEM_DIR = Path("/home/jaruiz/Desarrollo")
 FORMACION_DIR = ECOSYSTEM_DIR / "docs" / "formacion_ecosistema"
+KATAS_DIR = ECOSYSTEM_DIR / "docs" / "katas_formacion"
 REPORT_PATH = ECOSYSTEM_DIR / "docs" / "FEYNMAN_KNOWLEDGE_AUDIT_REPORT.md"
 DB_PATH = ECOSYSTEM_DIR / "scripts" / "simulations_telemetry.db"
 
@@ -93,9 +94,14 @@ def analyze_file(file_path: Path):
     
     grade = "A+" if feynman_index >= 0.90 else ("A" if feynman_index >= 0.80 else ("B" if feynman_index >= 0.70 else "C"))
     
+    try:
+        rel_path = str(file_path.relative_to(FORMACION_DIR))
+    except ValueError:
+        rel_path = str(file_path.relative_to(ECOSYSTEM_DIR / "docs"))
+
     return {
         "file_path": str(file_path),
-        "rel_path": str(file_path.relative_to(FORMACION_DIR)),
+        "rel_path": rel_path,
         "is_structural": is_structural,
         "word_count": word_count,
         "sections": sections_found,
@@ -112,7 +118,7 @@ def main():
     print("  AUDITORÍA DE CALIDAD Y CLARIDAD PEDAGÓGICA (MÉTODO FEYNMAN)")
     print("====================================================================")
     
-    md_files = sorted(list(FORMACION_DIR.glob("**/*.md")))
+    md_files = sorted(list(FORMACION_DIR.glob("**/*.md")) + list(KATAS_DIR.glob("*.md")))
     results = []
     
     total_words = 0
@@ -125,7 +131,7 @@ def main():
         results.append(res)
         total_words += res["word_count"]
         total_score += res["feynman_index"]
-        type_str = "[Índice]" if res["is_structural"] else "[Lección]"
+        type_str = "[Índice]" if res["is_structural"] else ("[Kata]" if "katas" in res["rel_path"] else "[Lección]")
         print(f"  • {res['rel_path']:<60} {type_str:<9} | IF: {res['feynman_index']:.2f} ({res['grade']})")
 
     avg_feynman_index = total_score / max(1, len(results))
