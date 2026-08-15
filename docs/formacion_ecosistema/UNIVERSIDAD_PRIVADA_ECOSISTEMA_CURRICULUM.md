@@ -80,10 +80,11 @@ mindmap
 
 ---
 
-#### 🤖 FACULTAD VI: IA HÍBRIDA, EDGE AI & NEURO-SIMBÓLICO (MIT 6.S191 / Stanford AI)
+#### 🤖 FACULTAD VI: IA HÍBRIDA, EDGE AI & METAPROGRAMACIÓN AGÉNTICA (MIT / Stanford)
 1. **Edge AI con LiteRT**: Inferencia local INT8 confinada off-heap con latencia `< 15 ms` y coste `$0.00 USD/mes`.
-2. **Arquitectura Dual-Engine**: NPU Lemonade (embeddings vectoriales 768d) + GPU Ollama (`deepseek-r1:8b` y `qwen2.5-coder:7b`).
-3. **Razonamiento Neuro-Simbólico**: Fusión de LLMs probabilísticos con verificadores deductivos deterministas (SMT Solvers).
+2. **Razonamiento Neuro-Simbólico**: Fusión de LLMs probabilísticos con verificadores deductivos deterministas (SMT Solvers).
+3. **Metaprogramación Agéntica (Semantic Loop)**: Orquestación masiva de código multi-repositorio guiada por *Toyota Kata* (Límite de 3 auto-reparaciones).
+4. **Tribunal Adversario (Consilium Romano 3.0)**: Oposición dialéctica de modelos locales (Inquisidor, Censor Morum, Praetor FinOps) para erradicar el sesgo de confirmación.
 
 ---
 

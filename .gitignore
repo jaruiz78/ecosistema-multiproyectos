@@ -7,7 +7,13 @@ venv/
 
 # Build, IDE binaries & Logs
 *.log
+*.log.gz
+*.out
 *.db
+*.db-journal
+*.jsa
+*.ckpt
+logs/
 target/
 .idea/
 .vscode/
@@ -23,3 +29,5 @@ PCT/
 SaaSRegantes/
 corp-spring-boot-starter/
 apps/JobsSearch/
+
+scratch/

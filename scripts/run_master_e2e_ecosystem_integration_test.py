@@ -39,7 +39,7 @@ def test_corp_spring_boot_starter():
     if not cwd.exists():
         print(color(f"Directorio no encontrado: {cwd}", "31"))
         return False
-    return run_cmd("mvn compile test-compile", cwd, project)
+    return run_cmd("mvn test", cwd, project)
 
 def test_pct_multi_microservices():
     project = "pctMultiMicroservices"
@@ -47,8 +47,8 @@ def test_pct_multi_microservices():
     if not cwd.exists():
         print(color(f"Directorio no encontrado: {cwd}", "31"))
         return False
-    go_success = run_cmd("go build ./...", cwd / "services/bff-go", project + " (Go)")
-    java_success = run_cmd("mvn compile test-compile", cwd / "services/backend-java", project + " (Java)")
+    go_success = run_cmd("go test ./...", cwd / "services/bff-go", project + " (Go)")
+    java_success = run_cmd("mvn test", cwd / "services/backend-java", project + " (Java)")
     return go_success and java_success
 
 def test_saas_regantes():
@@ -58,7 +58,7 @@ def test_saas_regantes():
         print(color(f"Directorio no encontrado: {cwd}", "31"))
         return False
     frontend_cwd = cwd / "frontend"
-    backend_success = run_cmd("mvn compile test-compile", cwd, project)
+    backend_success = run_cmd("mvn test", cwd, project)
     frontend_success = True
     if frontend_cwd.exists():
         frontend_success = run_cmd("npm install && npm run build", frontend_cwd, project + " (Frontend)")
@@ -70,7 +70,7 @@ def test_app_viajes():
     if not cwd.exists():
         print(color(f"Directorio no encontrado: {cwd}", "31"))
         return False
-    return run_cmd("flutter analyze", cwd, project)
+    return run_cmd("flutter test", cwd, project)
 
 def main():
     print_header("SUITE MAESTRA DE PRUEBAS DEL ECOSISTEMA (PRODUCTIVO REAL)")

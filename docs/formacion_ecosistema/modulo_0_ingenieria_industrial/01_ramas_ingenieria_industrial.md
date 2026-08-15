@@ -26,7 +26,7 @@ mindmap
     3. Ergonomía y HCI["3. Ergonomía: UX/DX & Core Web Vitals"]
     4. Analítica y Simulación["4. Simulación: EnKF & Gemelo Digital"]
     5. Calidad Six Sigma["5. Calidad: SRE, SLOs & TDD"]
-    6. Finanzas y FinOps["6. FinOps: Coste < $0.015/MAU"]
+    6. Finanzas y FinOps["6. FinOps: Coste < `$0.015`/MAU"]
     7. Sostenibilidad["7. Sostenibilidad: Estrés Hídrico & Huella CO2"]
 ```
 

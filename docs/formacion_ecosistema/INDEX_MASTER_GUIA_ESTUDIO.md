@@ -10,9 +10,13 @@ Cada módulo está desglosado desde la abstracción de alto nivel hasta el códi
 1. [Manual y Guía Pedagógica del Método Feynman](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/METODO_FEYNMAN_GUIA_PEDAGOGICA.md)
 2. [Curriculum Maestro de las 12 Grandes Facultades](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md)
 3. [Guía de Estudio Progresivo: De Junior a Staff Architect (Nivel Ph.D.)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/GUIA_DE_ESTUDIO_JUNIOR_A_EXPERTO.md)
-4. [Estrategia de Expansión y Gap Analysis](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/00_ESTRATEGIA_EXPANSION_Y_GAP_ANALYSIS.md)
-5. [Bibliografía Académica y Referencias Internacionales](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/BIBLIOGRAFIA_ACADEMICA.md)
-6. [Biblioteca Multiformato de Papers Académicos, RFCs y Fuentes Primarias](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/biblioteca_papers_pdf_rfc/README.md)
+4. [Laboratorios Prácticos Ejecutables (NumPy, Go, EnKF, Token Bucket)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/laboratorios_practicos/README.md)
+5. [Mapas de Memoria, Microarquitectura CPU y Layouts Físicos](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/MAPAS_DE_MEMORIA_Y_MICROARQUITECTURA.md)
+6. [Casos de Estudio de Postmortems Reales & Inyección de Fallos](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/CASOS_DE_ESTUDIO_POSTMORTEMS_REALES.md)
+7. [Grafo Isomórfico Universal Inter-Facultades](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/GRAFO_ISOMORFICO_INTER_FACULTADES.md)
+8. [Estrategia de Expansión y Gap Analysis](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/00_ESTRATEGIA_EXPANSION_Y_GAP_ANALYSIS.md)
+9. [Bibliografía Académica y Referencias Internacionales](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/BIBLIOGRAFIA_ACADEMICA.md)
+10. [Biblioteca Multiformato de Papers Académicos, RFCs y Fuentes Primarias](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/biblioteca_papers_pdf_rfc/README.md)
 
 ---
 
@@ -121,11 +125,12 @@ Cada módulo está desglosado desde la abstracción de alto nivel hasta el códi
 3. [Domain-Driven Design Puro y Arquitectura Hexagonal](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/03_arquitectura_hexagonal_y_ddd.md)
 4. [Patrones de Resiliencia, Circuit Breakers y Fail-Fast](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/04_patrones_de_resiliencia_circuit_breaker.md)
 5. [Predictive Circuit Breakers y Covarianza EnKF](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/05_predictive_circuit_breakers.md)
-6. [Observabilidad, OpenTelemetry y Trazas Distribuidas](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/06_observabilidad_y_telemetria_otel.md)
-7. [Despliegues Zero-Downtime (Canary y Blue/Green)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/07_despliegues_canary_y_blue_green.md)
-8. [Bases de Datos Distribuidas y Google Cloud Spanner TrueTime](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/08_bases_de_datos_distribuidas.md)
-9. [Gestión de Incidentes (ICS) y Cultura Blameless](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/09_gestion_de_incidentes_y_postmortems.md)
-10. [Ingeniería de Software Empírica y Análisis de Fallos](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/10_ingenieria_de_software_empirica.md)
+6. [Observabilidad, OpenTelemetry y Trazas Distribuidas](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/05_observabilidad_y_telemetria_otel.md)
+7. [Despliegues Zero-Downtime (Canary y Blue/Green)](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/06_despliegues_canary_y_blue_green.md)
+8. [Bases de Datos Distribuidas y Google Cloud Spanner TrueTime](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/07_bases_de_datos_distribuidas.md)
+9. [Gestión de Incidentes (ICS) y Cultura Blameless](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/08_gestion_de_incidentes_y_postmortems.md)
+10. [Ingeniería de Software Empírica y Análisis de Fallos](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/09_ingenieria_de_software_empirica.md)
+11. [Bootstrap de Proyectos Zero-to-Hero](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_6_sre_y_alta_disponibilidad/10_zero_to_hero_project_bootstrap.md)
 
 ---
 

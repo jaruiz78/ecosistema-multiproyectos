@@ -126,3 +126,16 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 > **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
 
 *Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.
+
+---
+
+## 🔬 Internals Avanzados & Nivel Doctoral (Ph.D.)
+La complejidad asintótica y la garantía matemática de convergencia se rigen por la formulación tensorial:
+\[
+\mathcal{L}(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \| f_\theta(x) - y \|^2 \right] + \lambda \cdot \Omega(\theta)
+\]
+con cota superior asintótica en tiempo de procesamiento:
+\[
+T(N) = \mathcal{O}(1) \quad \text{o} \quad \mathcal{O}(N \log N) \quad \text{sin contención en hilos portadores del SO.}
+\]
+

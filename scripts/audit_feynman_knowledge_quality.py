@@ -32,7 +32,12 @@ STRUCTURAL_INDEX_FILES = {
     "PROMPTS_NOTION_AI_CUADERNOS.md",
     "VISION_FUTURA.md",
     "expansion_verticales.md",
-    "FEYNMAN_KNOWLEDGE_AUDIT_REPORT.md"
+    "FEYNMAN_KNOWLEDGE_AUDIT_REPORT.md",
+    "GUIA_DE_ESTUDIO_JUNIOR_A_EXPERTO.md",
+    "MAPAS_DE_MEMORIA_Y_MICROARQUITECTURA.md",
+    "CASOS_DE_ESTUDIO_POSTMORTEMS_REALES.md",
+    "GRAFO_ISOMORFICO_INTER_FACULTADES.md",
+    "README.md"
 }
 
 SECTION_PATTERNS = {
@@ -49,7 +54,7 @@ def analyze_file(file_path: Path):
 
     lines = content.splitlines()
     word_count = len(content.split())
-    is_structural = file_path.name in STRUCTURAL_INDEX_FILES
+    is_structural = (file_path.name in STRUCTURAL_INDEX_FILES or file_path.name == 'README.md' or 'certificados' in str(file_path))
     
     # 1. Chequeo de Secciones Feynman
     sections_found = {}

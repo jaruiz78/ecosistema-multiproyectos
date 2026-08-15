@@ -179,3 +179,26 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 > **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
 
 *Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.
+
+
+## Katas Prácticas (Red-to-Green) con Método Feynman
+
+El Método Feynman requiere explicar conceptos en términos simples. Para asegurar la maestría técnica, se deben realizar las siguientes **Katas Red-to-Green**:
+
+### Kata 1: Creación de un Stub In-Memory
+1. **Red**: Crea un test unitario que invoque un servicio de dominio que espera una interfaz de repositorio (e.g. `UserRepository`). El test debe fallar (Red) porque el repositorio real no está inyectado y no puedes usar Mockito.
+2. **Green**: Implementa una clase `InMemoryUserRepository` que implemente la interfaz y almacene los datos en un `ConcurrentHashMap`. Pasa el test.
+3. **Feynman**: Explica en un comentario o en el PR por qué este stub in-memory es superior a un mock (hint: comportamiento real de estado vs expectativa de invocación).
+
+### Kata 2: Testcontainers Integration
+1. **Red**: Escribe un test que intente consultar PostgreSQL usando JDBC nativo sin mockear. El test fallará al no haber BD.
+2. **Green**: Instancia un contenedor de PostgreSQL usando Testcontainers y anota tu test con `@Testcontainers`. Haz que el test pase.
+3. **Feynman**: Explica por qué el costo de tiempo (cold-start) del contenedor compensa el riesgo de regresiones que tendríamos con bases de datos H2 o mocks de red.
+
+---
+
+## ⚙️ Primeros Principios & Fundamentos Conceptuales
+1. **Descomposición Atómica:** Cada componente en Módulo 0 - Lección 2: Test-Driven Development (TDD), Zero Mockito & Testcontainers se modela de forma determinista y sin estado mutable compartido.
+2. **Invariante de Dominio:** Los estados del sistema transicionan exclusivamente a través de funciones puras e interfaces selladas.
+3. **Cero Suposiciones:** No se asume fiabilidad de red ni memoria infinita; cada llamada maneja explícitamente fallos y límites de cuota.
+

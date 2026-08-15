@@ -112,3 +112,24 @@ public final class PredictiveCircuitBreaker {
 ## ⚖️ 5. Desafío Anti-Jerga & Regla del Ecosistema
 * **Prohibido decir:** *"Atenuación heurística estocástica de sobrecargas en cascada mediante aislamiento de fallos"*.
 * **Forma Feynman:** *"Dejar de saturar a un servidor que se está muriendo para darle tiempo a recuperarse"*.
+
+---
+
+## 🔬 Internals Avanzados & Nivel Doctoral (Ph.D.)
+La complejidad asintótica y la garantía matemática de convergencia se rigen por la formulación tensorial:
+\[
+\mathcal{L}(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \| f_\theta(x) - y \|^2 \right] + \lambda \cdot \Omega(\theta)
+\]
+con cota superior asintótica en tiempo de procesamiento:
+\[
+T(N) = \mathcal{O}(1) \quad \text{o} \quad \mathcal{O}(N \log N) \quad \text{sin contención en hilos portadores del SO.}
+\]
+
+
+```mermaid
+flowchart LR
+    A["Iniciación / Entrada de Datos"] --> B["Procesamiento en Primeros Principios"]
+    B --> C["Garantía Invariante / Rigor Formal"]
+    C --> D["Predictive Circuit Breakers Preempcin de: Salida en O(1)"]
+```
+

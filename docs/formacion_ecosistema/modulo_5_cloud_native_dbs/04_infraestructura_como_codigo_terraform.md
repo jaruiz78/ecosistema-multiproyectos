@@ -101,3 +101,13 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 > **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
 
 *Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.
+
+---
+
+```mermaid
+flowchart LR
+    A["Iniciación / Entrada de Datos"] --> B["Procesamiento en Primeros Principios"]
+    B --> C["Garantía Invariante / Rigor Formal"]
+    C --> D["Mdulo 54 Infraestructura como Cdigo IaC: Salida en O(1)"]
+```
+

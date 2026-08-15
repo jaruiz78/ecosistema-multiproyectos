@@ -44,7 +44,7 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
 1. **No Chaperones & Lean Dispatch**: Los subagentes son ejecutados de forma directa sin metapersonas intermedias, adoptando skills hiper-especializadas bajo demanda.
 2. **Review Fan-Out y Senatus Consultum (`/ship`)**:
    - Invocación obligatoria del tribunal **Consilium Romano 3.0** (`scripts/consilium_romano_tribunal.py`).
-   - Magistrados locales en oposición dialéctica: `deepseek-r1:8b` (Inquisitor / CoT / Hoare Logic), `qwen2.5-coder:7b` (Censor Morum / DDD / Java 25 Loom) y `pct-budget-governor` (Praetor FinOps / Myerson / SRE).
+   - Magistrados locales en oposición dialéctica: `deepseek-r1:8b` (Inquisitor / CoT / Hoare Logic), `qwen2.5-coder:7b` (Censor Morum / DDD / Java 25 Loom) y `gemma3:4b` (Praetor FinOps / Myerson / SRE).
    - **Rúbrica Feynman & Citas Fundacionales**: Toda resolución del tribunal debe contrastarse contra las 49 fuentes primarias (Shannon, Lamport, Raft, Codd, Hoare, Drepper) y garantizar la ausencia de jerga defensiva.
 3. **Integración Profunda con Servidores MCP**:
    - `codebase-memory-mcp`: Grafo de conocimiento y trazabilidad de dependencias entre componentes.

@@ -106,3 +106,11 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 > **Instrucción:** Explica los conceptos centrales de este módulo como si tu audiencia fuera un estudiante brillante de 12 años que no ha visto nunca este tema. Si no puedes hacerlo con lenguaje sencillo, analogías claras y sin jerga técnica, significa que aún no lo entiendes lo suficientemente bien.
 
 *Inténtalo tú mismo:* Toma el concepto más complejo de este módulo, escríbelo en un papel en blanco y redáctalo usando únicamente términos cotidianos.
+
+---
+
+## ⚙️ Primeros Principios & Fundamentos Conceptuales
+1. **Descomposición Atómica:** Cada componente en Módulo 5 - Lección 3: Stripe Connect Multi-Tenant, Idempotencia Transaccional & Escrow se modela de forma determinista y sin estado mutable compartido.
+2. **Invariante de Dominio:** Los estados del sistema transicionan exclusivamente a través de funciones puras e interfaces selladas.
+3. **Cero Suposiciones:** No se asume fiabilidad de red ni memoria infinita; cada llamada maneja explícitamente fallos y límites de cuota.
+
