@@ -1,23 +1,69 @@
-# cloudbuild.yaml - Pipeline SLSA L3 & Cosign para ProyectoCircularTextileDPP
 steps:
-  - name: 'gcr.io/kaniko-project/executor:latest'
-    args:
-      - '--destination=europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectocirculartextiledpp:$SHORT_SHA'
-      - '--cache=true'
-      - '--dockerfile=Dockerfile'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "bash"
+    args: ["-c", "echo '🚀 Iniciando despliegue de servicio ${_SERVICE_NAME} en Cloud Run (${_ENVIRONMENT})'"]
+    id: "Log Service Info"
 
-  - name: 'anchore/syft:latest'
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectocirculartextiledpp:$SHORT_SHA'
-      - '-o'
-      - 'cyclonedx-json'
-      - '--file'
-      - 'sbom.json'
+      [
+        "build",
+        "-f",
+        "Dockerfile",
+        "-t",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/corp-microservices/${_IMAGE_NAME}:${SHORT_SHA}",
+        "-t",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/corp-microservices/${_IMAGE_NAME}:latest",
+        ".",
+      ]
+    id: "Build JVM Image AOT Leyden"
 
-  - name: 'gcr.io/projectsigstore/cosign:latest'
-    env:
-      - 'COSIGN_EXPERIMENTAL=1'
+  - name: "gcr.io/cloud-builders/docker"
     args:
-      - 'sign'
-      - '--yes'
-      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectocirculartextiledpp:$SHORT_SHA'
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/corp-microservices/${_IMAGE_NAME}:${SHORT_SHA}",
+      ]
+    id: "Push Immutable Image"
+    waitFor: ["Build JVM Image AOT Leyden"]
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "${_SERVICE_NAME}",
+        "--image",
+        "${_REGION}-docker.pkg.dev/${_PROJECT_ID}/corp-microservices/${_IMAGE_NAME}:${SHORT_SHA}",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+        "--cpu",
+        "1.0",
+        "--memory",
+        "512Mi",
+        "--min-instances",
+        "0",
+        "--max-instances",
+        "50",
+        "--concurrency",
+        "250",
+        "--set-env-vars",
+        "SPRING_PROFILES_ACTIVE=${_ENVIRONMENT},JAVA_TOOL_OPTIONS=-XX:+UseZGC -XX:ActiveProcessorCount=2",
+        "--allow-unauthenticated",
+      ]
+    id: "Deploy to Cloud Run"
+    waitFor: ["Push Immutable Image"]
+
+substitutions:
+  _PROJECT_ID: "corp-ecosystem-prod"
+  _REGION: "europe-west1"
+  _SERVICE_NAME: "corp-service-circulartextiledpp"
+  _IMAGE_NAME: "proyectocirculartextiledpp"
+  _ENVIRONMENT: "prod"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  substitutionOption: "ALLOW_LOOSE"

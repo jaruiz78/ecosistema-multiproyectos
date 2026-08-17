@@ -37,4 +37,5 @@ Este documento es la **Guía Central de Navegación** para explorar la arquitect
 - 📜 **[Protocolo Oficial del Senatus Consultum (`CONSILIUM_ROMANO_SPECS.md`)](file:///home/jaruiz/Desarrollo/docs/architecture/CONSILIUM_ROMANO_SPECS.md)**.
 - 🏭 **[Fábrica de Proyectos Empresariales (`scripts/scaffolding/create_enterprise_project.py`)](file:///home/jaruiz/Desarrollo/scripts/scaffolding/create_enterprise_project.py)**: Scaffolder universal con certificación inmediata *Summa Cum Laude*.
 - 📋 **[Registro de Decisiones de Arquitectura (`docs/adr/`)](file:///home/jaruiz/Desarrollo/docs/adr/)**.
+- 🗺️ **[Guía Visual Maestra de Arquitectura, Flujos y Sinergias (`ECOSISTEMA_GUIA_VISUAL_ARQUITECTURA_Y_FLUJOS.md`)](file:///home/jaruiz/Desarrollo/docs/ECOSISTEMA_GUIA_VISUAL_ARQUITECTURA_Y_FLUJOS.md)**.
 - 🏆 **[Informe Oficial de Auditoría Integral del Ecosistema 2026](file:///home/jaruiz/Desarrollo/docs/INFORME_CONSILIUM_ROMANO_AUDITORIA_INTEGRAL_ECOSISTEMA_2026.md)**.

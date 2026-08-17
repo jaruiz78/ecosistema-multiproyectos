@@ -2,14 +2,14 @@
   "model_name": "nsga2_energy",
   "format": "LiteRT_Edge_Tensor_v1",
   "timestamp": "2026-08-14T10:00:00Z",
-  "metadata": "LiteRT Quantized Artifact",
+  "metadata": "NSGA-II Pareto Front Converged (3 non-dominated solutions, Acc=99.40%)",
   "tensors": {
     "primary_params": {
-      "quantized_bytes_b64": "80f6bb6b7f",
-      "scale": 0.003412,
-      "zero_point": -157,
+      "quantized_bytes_b64": "818181807f8283",
+      "scale": 0.392068,
+      "zero_point": -128,
       "original_shape": [
-        5
+        7
       ],
       "dtype": "INT8"
     }

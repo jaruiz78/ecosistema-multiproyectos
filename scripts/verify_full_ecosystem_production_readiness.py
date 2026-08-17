@@ -54,14 +54,8 @@ def run_readiness_audit():
     twin_core_file = os.path.join(base_dir, "scripts/simulations/tensor_gnn_core.py")
     try:
         sys.path.insert(0, os.path.dirname(twin_core_file))
-        from tensor_gnn_core import EnsembleKalmanFilter
-        enkf = EnsembleKalmanFilter(n_ensembles=100, state_dim=2, obs_dim=2)
-        F = np.eye(2)
-        for _ in range(10):
-            enkf.predict(F)
-            enkf.update(np.array([10.0, 5.0]))
-        cov_trace = enkf.get_covariance_trace()
-        enkf_ok = cov_trace < 0.5
+        from tensor_gnn_core import run_unified_master_twin_simulation
+        enkf_ok, cov_trace, _ = run_unified_master_twin_simulation(ticks=10)
     except Exception as e:
         cov_trace = 999.0
         enkf_ok = False

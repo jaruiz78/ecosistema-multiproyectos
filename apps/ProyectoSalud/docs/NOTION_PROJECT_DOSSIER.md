@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoSalud
-* **Entidad Dominio**: Salud
-* **Descripción**: Microservicio Vertical Especializado en Salud para el Ecosistema Corporativo.
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: ClinicalTrialSubject
+* **Descripción**: Ensayos Clínicos Descentralizados y Cadena de Custodia Biológica Zero-PII
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

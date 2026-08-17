@@ -15,9 +15,22 @@
     <artifactId>proyectosalud</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoSalud</name>
-    <description>Microservicio Vertical Especializado en Salud para el Ecosistema Corporativo.</description>
+    <description>Ensayos Clínicos Descentralizados y Cadena de Custodia Biológica Zero-PII</description>
 
     <properties>
         <java.version>25</java.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.pct.ecosystem</groupId>
+            <artifactId>core-zkp-privacy</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.corp.tenant</groupId>
+            <artifactId>corp-crypto-postquantum-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>

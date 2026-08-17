@@ -449,6 +449,21 @@ graph TD
 | **ProyectoTurismoTermalBalnearios** | `corp-spring-boot-starter` | Loom + Mineral Spring Health | Termalismo histórico y balnearios en España |
 | **ProyectoAstroturismoStarlight** | `corp-spring-boot-starter` | Loom + Dark Sky SQM Metrics | Astroturismo y certificación de reservas Starlight |
 | **ProyectoRutasSenderismoGR** | `corp-spring-boot-starter` | Loom + Mountain Safety IoT | Senderos GR/PR y seguridad en montaña |
+| **ProyectoSmartGridStorageVPP** | `corp-spring-boot-starter` | Loom + BESS Electrochemistry | Almacenamiento con baterías BESS y arbitraje intradiario |
+| **ProyectoCriticalSupplyRisk** | `corp-spring-boot-starter` | Loom + Cascade Graph Disruption | Gemelo digital de riesgo geopolítico y materias primas críticas |
+| **ProyectoSpaceTrafficCoordination** | `corp-spring-boot-starter` | Loom + SGP4 Orbit Conjunction | Coordinación de tráfico espacial LEO y desorbitación pasiva |
+| **ProyectoClinicalOmicsMultiTenant** | `corp-spring-boot-starter` | Loom + Zero-PII Variant Scoring | Medicina personalizada y genómica federada multi-tenant |
+| **ProyectoFusionPowerGrid** | `corp-spring-boot-starter` | Loom + Tokamak MHD Plasma | Confinamiento magnético MHD y control de reactores de fusión |
+| **ProyectoCarbonDirectAirCapture** | `corp-spring-boot-starter` | Loom + Basalt Mineralization DAC | Captura directa de aire DAC y mineralización en basalto |
+| **ProyectoAutonomousShippingCorridor** | `corp-spring-boot-starter` | Loom + COLREGs S-100 Navigation | Corredores marítimos autónomos y cartas náuticas S-100 |
+| **ProyectoBiodiversityGenomicBank** | `corp-spring-boot-starter` | Loom + eDNA Shannon Biodiversity | Biobanco de ADN ambiental eDNA y créditos de biodiversidad |
+| **ProyectoQuantumMaterialsGraphene** | `corp-spring-boot-starter` | Loom + Twisted Graphene 2D | Superconductividad de ángulo mágico y bandas planas |
+| **ProyectoStratosphericAerosolGeoengineering** | `corp-spring-boot-starter` | Loom + SAI Radiative Forcing | Balance radiativo terrestre y aerosoles estratosféricos |
+| **ProyectoCislunarSpaceLogistics** | `corp-spring-boot-starter` | Loom + CR3BP Lagrange Navigation | Transferencia orbital L1/L2 Tierra-Luna y logística espacial |
+| **ProyectoSyntheticEnzymeBioFoundry** | `corp-spring-boot-starter` | Loom + De Novo Enzyme Design | Biofundición de enzimas sintéticas para degradar PFAS |
+| **ProyectoNuclearFusionStellarator** | `corp-spring-boot-starter` | Loom + 3D Non-Planar Coils | Fusión nuclear estacionaria sin corriente neta de plasma |
+| **ProyectoInterplanetarySwarmMesh** | `corp-spring-boot-starter` | Loom + DTN Bundle Protocol | Redes tolerantes a retrasos interplanetarias y custodia de paquetes |
+| **ProyectoDeNovoPlasticDegradation** | `corp-spring-boot-starter` | Loom + PETase Catalytic Kinetics | Biofundición para despolimerización de microplásticos y PET |
 
 ---
 
@@ -461,11 +476,11 @@ Todos los proyectos verticales integran el estándar de **Streaming ETL** desaco
    * `PARTITION BY DATE(timestamp)` con `require_partition_filter = true`.
    * `CLUSTER BY tenant_id, [vertical_specific_dimension]`.
 3. **Mapeo de Datasets y Tablas por Vertical**:
-   * `ProyectoEnergia` / `ProyectoVPP` / `ProyectoAgroEnergyVPP` / `ProyectoHotelTwinRevPAR` / `ProyectoGreenHydrogenDesal` / `ProyectoIndustrialMicrogridMPC` / `ProyectoSmartStreetLightingV2G` / `ProyectoRedParadoresTwin` → `energy_analytics.smart_meter_readings_stream` (Cluster: `tenant_id, node_id`).
-   * `ProyectoLogistica` / `ProyectoFleetColdChain` / `ProyectoSeamlessIntermodal` / `ProyectoPharmaColdChain` / `ProyectoPortTwinAutonomous` / `ProyectoDroneAirspaceUSpace` / `ProyectoGlobalCruiseMRV` / `ProyectoAirportTouristIntermodal` / `ProyectoAirlineInterlineBaggage` → `logistics_analytics.fleet_dispatch_events_stream` (Cluster: `tenant_id, h3_res8`).
-   * `ProyectoCircular` / `ProyectoCarbonLedger` / `ProyectoEcoTourismPassport` / `ProyectoCriticalMineralsMRV` / `ProyectoCircularTextileDPP` / `ProyectoSoilBioCarbonTwin` / `ProyectoParquesNacionalesNatura2000` / `ProyectoAstroturismoStarlight` → `circular_analytics.waste_trace_stream` (Cluster: `tenant_id, waste_category`).
+   * `ProyectoEnergia` / `ProyectoVPP` / `ProyectoAgroEnergyVPP` / `ProyectoHotelTwinRevPAR` / `ProyectoGreenHydrogenDesal` / `ProyectoIndustrialMicrogridMPC` / `ProyectoSmartStreetLightingV2G` / `ProyectoRedParadoresTwin` / `ProyectoSmartGridStorageVPP` / `ProyectoFusionPowerGrid` / `ProyectoQuantumMaterialsGraphene` → `energy_analytics.smart_meter_readings_stream` (Cluster: `tenant_id, node_id`).
+   * `ProyectoLogistica` / `ProyectoFleetColdChain` / `ProyectoSeamlessIntermodal` / `ProyectoPharmaColdChain` / `ProyectoPortTwinAutonomous` / `ProyectoDroneAirspaceUSpace` / `ProyectoGlobalCruiseMRV` / `ProyectoAirportTouristIntermodal` / `ProyectoAirlineInterlineBaggage` / `ProyectoCriticalSupplyRisk` / `ProyectoAutonomousShippingCorridor` / `ProyectoCislunarSpaceLogistics` → `logistics_analytics.fleet_dispatch_events_stream` (Cluster: `tenant_id, h3_res8`).
+   * `ProyectoCircular` / `ProyectoCarbonLedger` / `ProyectoEcoTourismPassport` / `ProyectoCriticalMineralsMRV` / `ProyectoCircularTextileDPP` / `ProyectoSoilBioCarbonTwin` / `ProyectoParquesNacionalesNatura2000` / `ProyectoAstroturismoStarlight` / `ProyectoCarbonDirectAirCapture` / `ProyectoBiodiversityGenomicBank` / `ProyectoStratosphericAerosolGeoengineering` / `ProyectoSyntheticEnzymeBioFoundry` → `circular_analytics.waste_trace_stream` (Cluster: `tenant_id, waste_category`).
    * `ProyectoB2G` / `ProyectoTokenRWA` / `ProyectoGovProcureMatch` / `ProyectoRegenerativeExperience` / `ProyectoTaxComplianceLedger` / `ProyectoQuantumResistantRWA` / `ProyectoSegitturDtiStandard` / `ProyectoDiputacionTurismoRural` / `ProyectoMiceConferenceTwin` / `ProyectoEcotasaSoberanaTax` / `ProyectoEnoturismoRutasVino` / `ProyectoTurismoTermalBalnearios` → `govtech_analytics.tender_ledger_stream` (Cluster: `tenant_id, tender_id`).
-   * `ProyectoPresaTwinSCADA` / `ProyectoSmartDestinationDTI` / `ProyectoEmergencyGeoGrid` / `ProyectoZeroTrustOTMesh` / `ProyectoSubSurfaceGeoTwin` / `ProyectoClinicalTrialsZK` / `ProyectoCaminoSantiagoXacobeo` / `ProyectoPlayasInteligentesCostas` / `ProyectoCascoHistoricoCrowd` / `ProyectoFiestasInteresTuristico` / `ProyectoHeritageDigitalTwin3D` / `ProyectoRutasSenderismoGR` → `emergency_analytics.scada_mesh_stream` (Cluster: `tenant_id, h3_res8`).
+   * `ProyectoPresaTwinSCADA` / `ProyectoSmartDestinationDTI` / `ProyectoEmergencyGeoGrid` / `ProyectoZeroTrustOTMesh` / `ProyectoSubSurfaceGeoTwin` / `ProyectoClinicalTrialsZK` / `ProyectoCaminoSantiagoXacobeo` / `ProyectoPlayasInteligentesCostas` / `ProyectoCascoHistoricoCrowd` / `ProyectoFiestasInteresTuristico` / `ProyectoHeritageDigitalTwin3D` / `ProyectoRutasSenderismoGR` / `ProyectoSpaceTrafficCoordination` / `ProyectoClinicalOmicsMultiTenant` → `emergency_analytics.scada_mesh_stream` (Cluster: `tenant_id, h3_res8`).
 
 
 

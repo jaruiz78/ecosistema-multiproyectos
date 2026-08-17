@@ -37,6 +37,11 @@ PROJECTS = [
     ProjectProfile("ProyectoTokenRWA", "Fintech & RWA Sagas Escrow", 85_000, 1200, 30.0, "CRITICA"),
     ProjectProfile("ProyectoLogistica", "VRP Routing & Fleet Telemetry", 450_000, 750, 20.0, "ALTA"),
     ProjectProfile("ProyectoEnergia", "VPP & Grid Spot Market", 180_000, 400, 15.0, "MEDIA"),
+    ProjectProfile("ProyectoFusionPowerGrid", "Nuclear Tokamak MHD & BESS", 320_000, 850, 10.0, "CRITICA"),
+    ProjectProfile("ProyectoStratosphericAerosolGeoengineering", "SAI Radiative Forcing Cloud", 150_000, 920, 20.0, "ALTA"),
+    ProjectProfile("ProyectoCislunarSpaceLogistics", "CR3BP Orbital Lagrange Transfer", 95_000, 1100, 15.0, "CRITICA"),
+    ProjectProfile("ProyectoSyntheticEnzymeBioFoundry", "De Novo PFAS Enzyme Kinetics", 140_000, 1250, 25.0, "ALTA"),
+    ProjectProfile("ProyectoQuantumMaterialsGraphene", "Magic Angle Superconductivity", 80_000, 1400, 12.0, "ALTA"),
 ]
 
 ENVIRONMENTS = ["local", "beta", "prod"]

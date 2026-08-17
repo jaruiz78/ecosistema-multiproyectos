@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "core-kalman-twin"
+version = "1.0.0"
+description = "Ensemble Kalman Filter (EnKF) Mathematical Core for Unified Digital Twin"
+authors = [{ name = "Ecosistema Corporativo", email = "engineering@corp.local" }]
+dependencies = [
+    "numpy>=1.26.0",
+    "scipy>=1.12.0"
+]
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

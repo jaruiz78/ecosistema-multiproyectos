@@ -20,4 +20,17 @@
     <properties>
         <java.version>25</java.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.pct.ecosystem</groupId>
+            <artifactId>core-govtech-ledger</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.pct.ecosystem</groupId>
+            <artifactId>core-zkp-privacy</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

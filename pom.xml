@@ -34,6 +34,21 @@
         <module>core/core-stochastic-pde</module>
         <module>core/core-lie-group-robotics</module>
         <module>core/core-wasserstein-transport</module>
+        <module>core/core-neuromorphic-spiking</module>
+        <module>core/core-symbolic-verifier</module>
+        <module>core/core-hyperbolic-embeddings</module>
+        <module>core/core-digital-law-contract</module>
+        <module>core/core-topological-data-analysis</module>
+        <module>core/core-stochastic-game-auctions</module>
+        <module>core/core-thermodynamic-exergy</module>
+        <module>core/core-quantum-approximate-qaoa</module>
+        <module>core/core-matrix-product-states</module>
+        <module>core/core-asynchronous-byzantine-consensus</module>
+        <module>core/core-hyperspectral-remote-sensing</module>
+        <module>core/core-synthetic-biology-gene-circuit</module>
+        <module>core/core-lattice-boltzmann-fluid</module>
+        <module>core/core-semidefinite-programming-sos</module>
+        <module>core/core-geometric-deep-learning-se3</module>
 
         <!-- Verticales Apps Consolidados & Fundacionales -->
         <module>apps/JobsSearch</module>
@@ -82,7 +97,9 @@
 
         <!-- Verticales Independientes Ciclos Evolutivos 1 al 10 (2026-2031) -->
         <module>apps/ProyectoPortTwinAutonomous</module>
+        <module>apps/ProyectoDroneAirspace</module>
         <module>apps/ProyectoDroneAirspaceUSpace</module>
+        <module>apps/ProyectoHidrogeno</module>
         <module>apps/ProyectoSubSurfaceGeoTwin</module>
         <module>apps/ProyectoCircularTextileDPP</module>
         <module>apps/ProyectoSoilBioCarbonTwin</module>
@@ -113,6 +130,23 @@
         <module>apps/ProyectoTurismoTermalBalnearios</module>
         <module>apps/ProyectoAstroturismoStarlight</module>
         <module>apps/ProyectoRutasSenderismoGR</module>
+        
+        <!-- Nuevos Verticales Estratégicos & DeepTech Ciclo 2026-2032 -->
+        <module>apps/ProyectoSmartGridStorageVPP</module>
+        <module>apps/ProyectoCriticalSupplyRisk</module>
+        <module>apps/ProyectoSpaceTrafficCoordination</module>
+        <module>apps/ProyectoClinicalOmicsMultiTenant</module>
+        <module>apps/ProyectoFusionPowerGrid</module>
+        <module>apps/ProyectoCarbonDirectAirCapture</module>
+        <module>apps/ProyectoAutonomousShippingCorridor</module>
+        <module>apps/ProyectoBiodiversityGenomicBank</module>
+        <module>apps/ProyectoQuantumMaterialsGraphene</module>
+        <module>apps/ProyectoStratosphericAerosolGeoengineering</module>
+        <module>apps/ProyectoCislunarSpaceLogistics</module>
+        <module>apps/ProyectoSyntheticEnzymeBioFoundry</module>
+        <module>apps/ProyectoNuclearFusionStellarator</module>
+        <module>apps/ProyectoInterplanetarySwarmMesh</module>
+        <module>apps/ProyectoDeNovoPlasticDegradation</module>
     </modules>
 
 </project>

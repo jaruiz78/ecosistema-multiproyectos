@@ -73,25 +73,47 @@ mindmap
 
 ---
 
-#### 🌐 FACULTAD V: GEMELO DIGITAL UNIFICADO, FÍSICA & MATEMÁTICAS (Princeton IAS / Caltech)
+#### 🌐 FACULTAD V: GEMELO DIGITAL UNIFICADO, FÍSICA, TERMODINÁMICA & CUÁNTICA (Princeton IAS / Caltech / ETH)
 1. **Redes Tensoriales PEPS**: Contracción de grafos tensoriales 2D/3D en \(\mathcal{O}(N)\) para modelado físico acoplado.
 2. **Asimilación de Datos con EnKF**: Filtrado de Kalman por ensambles con convergencia de covarianza garantizada (\(\mathcal{P} < 0.5\)).
 3. **Physics-Informed Neural Networks (PINNs)**: Inyección de ecuaciones diferenciales de Navier-Stokes y Saint-Venant en funciones de pérdida.
+4. **Análisis Topológico de Datos (TDA)**: Homología persistente sobre complejos de Vietoris-Rips para detección de anomalías (`core-topological-data-analysis`).
+5. **Termodinámica de No-Equilibrio & Exergía**: Destrucción de exergía Gouy-Stodola y balances térmicos de segunda ley (`core-thermodynamic-exergy`).
+6. **Algoritmos Cuánticos Variacionales (QAOA)**: Optimización combinatoria Max-Cut sobre Hamiltonianos de Ising (`core-quantum-approximate-qaoa`).
+7. **Matrix Product States (MPS) & Tensor-Train**: Compresión exponencial de estados cuánticos en \(O(N \cdot d \cdot \chi^2)\) (`core-matrix-product-states`).
+8. **Teledetección Hiperespectral & N-FINDR**: Extracción de firmas espectrales puras y desmezclado lineal satelital (`core-hyperspectral-remote-sensing`).
+9. **Circuitos Genéticos Sintéticos & Cinética de Hill**: Puertas lógicas biológicas y biosensores celulares (`core-synthetic-biology-gene-circuit`).
 
 ---
 
 #### 🤖 FACULTAD VI: IA HÍBRIDA, EDGE AI & METAPROGRAMACIÓN AGÉNTICA (MIT / Stanford)
-1. **Edge AI con LiteRT**: Inferencia local INT8 confinada off-heap con latencia `< 15 ms` y coste `$0.00 USD/mes`.
-2. **Razonamiento Neuro-Simbólico**: Fusión de LLMs probabilísticos con verificadores deductivos deterministas (SMT Solvers).
-3. **Metaprogramación Agéntica (Semantic Loop)**: Orquestación masiva de código multi-repositorio guiada por *Toyota Kata* (Límite de 3 auto-reparaciones).
-4. **Tribunal Adversario (Consilium Romano 3.0)**: Oposición dialéctica de modelos locales (Inquisidor, Censor Morum, Praetor FinOps) para erradicar el sesgo de confirmación.
+1. **Edge AI con LiteRT & Computación Neuromórfica (SNN)**: Inferencia local INT8 confinada off-heap y modelos Leaky Integrate-and-Fire (LIF) en tiempo discreto (`core-neuromorphic-spiking`).
+2. **Razonamiento Neuro-Simbólico & Model Checking LTL**: Fusión de LLMs probabilísticos con verificadores deductivos formales de Lógica Temporal Lineal (`core-symbolic-verifier`).
+3. **Geometría Hiperbólica de Poincaré**: Proyección conforme en discos y espacios hiperboloides de Lorentz para taxonomías complejas (`core-hyperbolic-embeddings`).
+4. **Subastas Estocásticas y Compatibilidad de Incentivos (VCG)**: Mecanismos Strategy-Proof y equilibrios de Stackelberg (`core-stochastic-game-auctions`).
+5. **Consenso Bizantino Asíncrono (aBFT) & DAG-Tangle**: Tolerancia a fallos bizantinos arbitrarios \(f < n/3\) sin líder central (`core-asynchronous-byzantine-consensus`).
+6. **Metaprogramación Agéntica (Semantic Loop)**: Orquestación masiva de código multi-repositorio guiada por *Toyota Kata* (Límite de 3 auto-reparaciones).
+7. **Tribunal Adversario (Consilium Romano 3.0)**: Oposición dialéctica de modelos locales (Inquisidor, Censor Morum, Praetor FinOps) para erradicar el sesgo de confirmación.
 
 ---
 
-#### ☁️ FACULTAD VII: CLOUD-NATIVE, BIG DATA & FINOPS (Google Cloud)
+#### ☁️ FACULTAD VII: CLOUD-NATIVE, BIG DATA, eBPF, RDMA, ENCLAVES & QKD (Google Cloud / Linux Foundation)
 1. **BigQuery Capacitor & FinOps**: Particionado forzoso (`_PARTITIONDATE` / `_PARTITIONTIME`) y coste $< 0.005\text{ USD/MAU/mes}$.
-2. **Arquitectura Serverless y Cloud Run**: Escala a cero, gVisor sandbox e infraestructura inmutable.
-3. **Streaming ETL In-Memory**: Storage Write API en micro-batches \(\mathcal{O}(1)\).
+2. **Observabilidad Kernel-Space con eBPF**: Captura de eventos de red y sockets sin sobrecarga en la JVM (`corp-ebpf-telemetry-starter`).
+3. **Transferencia Directa de Memoria RDMA/RoCE**: Latencias inferiores a \(5\ \mu\text{s}\) sin copias en TCP/IP (`corp-rdma-direct-memory-starter`).
+4. **Malla de Actores Virtuales con Afinidad Espacial**: Actores ligeros gobernados por celdas H3 (`corp-distributed-actor-mesh-starter`).
+5. **Atestación Confidencial ZK-STARK**: Pruebas criptográficas de conocimiento cero sobre estados cifrados (`corp-homomorphic-zk-attestation-starter`).
+6. **Enclaves Seguros de Hardware SGX/SEV**: Aislamiento en memoria cifrada de hardware y atestación remota (`corp-confidential-enclave-sgx-starter`).
+7. **Malla de Eventos DAG sin Líder**: Event-mesh escalable de latencia sub-milisegundo (`corp-hyperscale-dag-eventmesh-starter`).
+8. **Distribución Cuántica de Claves (QKD)**: Transporte seguro de claves BB84 con validación QBER (`corp-quantum-key-distribution-starter`).
+9. **Plugins Aislados en WebAssembly (WASM)**: Sandboxing hermético para extensiones corporativas seguras (`corp-mesh-wasm-plugin-starter`).
+10. **Datos Sintéticos con Cópulas Arquimedianas**: Modelado de dependencias estocásticas con garantías $(\epsilon, \delta)$-DP (`corp-synthetic-data-copula-starter`).
+
+---
+
+#### ⚖️ CÁTEDRA TRANSVERSAL: DERECHO DIGITAL FORMAL & CUMPLIMIENTO REGULATORIO
+1. **Auditoría Automatizada EU AI Act**: Clasificación determinista de sistemas de IA (Reglamento UE 2024/1689) y verificación de supervisión humana (`core-digital-law-contract`).
+2. **Pasaporte Digital de Producto (DPP)**: Verificación criptográfica de huella de carbono y contenido reciclado bajo normativa europea de ecodiseño.
 
 ---
 
