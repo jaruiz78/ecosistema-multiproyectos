@@ -442,32 +442,107 @@ logging.level.com.corp=INFO
 """
     (dossier_content_path := docs_dir / "NOTION_PROJECT_DOSSIER.md").write_text(dossier_content, encoding="utf-8")
 
-    # 12. AGENTS.md
-    agents_md = f"""# AGENTS.md - Proyecto Independiente {project_name} (Google Antigravity)
-
-Este proyecto opera como un vertical especializado de alta calidad dentro del ecosistema Multi-Proyecto de Google Antigravity.
-
-## 1. Mapeo de Intención a Skill (SDLC 6-Phase Dispatch)
-Cada vez que se reciba un requerimiento u objetivo para este vertical:
-- **Nueva Funcionalidad:** `spec-driven-development` -> `planning-and-task-breakdown` -> `incremental-implementation` -> `zero-mockito-tdd-engineer` -> `code-review-and-quality` -> `slsa-sigstore-release-sentinel`
-- **Compilación AOT & Leyden CDS:** `leyden-aot-build-master`
-- **Diseño de APIs & Puertos:** `api-and-interface-design`
-- **Bugs o Refactorización:** `debugging-and-error-recovery` -> `doubt-driven-development`
-- **Auditoría Pre-Merge & Senado:** `@code-reviewer`, `@Zero-Trust-Security-Auditor`, `@test-engineer` -> `Consilium Romano 3.0`
-
-## 2. Reglas del Proyecto y Trazabilidad Documental
-1. **Arquitectura Hexagonal Pura:** Cero dependencias de infraestructura en `domain/`.
-2. **Java 25 & Virtual Threads:** Uso de Records inmutables y `ReentrantLock` para evitar el *Carrier Thread Pinning*.
-3. **Parent Dependency:** Hereda de [`corp-spring-boot-starter`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter).
-4. **Grounded Javadoc Obligatorio:** Toda clase o record debe incluir `@see apps/VERTICALS_ARCHITECTURE_SPEC.md` y `@see docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md`.
-5. **Testing Estricto:** Zero-Mockito con JUnit 5 & Testcontainers.
-
-## 3. Especificación Técnica
-👉 Consulte: [`apps/VERTICALS_ARCHITECTURE_SPEC.md`](file:///home/jaruiz/Desarrollo/apps/VERTICALS_ARCHITECTURE_SPEC.md)
+    # 13. OpenAPI 3.1 Specification
+    openapi_spec = f"""openapi: 3.1.0
+info:
+  title: {project_name} API
+  description: {description}
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/{pkg_name}
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/{pkg_name}/{{id}}:
+    get:
+      summary: Obtener {entity_name} por Identificador
+      operationId: get{entity_name}ById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: {entity_name} recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/{entity_name}'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    {entity_name}:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
 """
-    (project_dir / "AGENTS.md").write_text(agents_md, encoding="utf-8")
+    (docs_dir / "openapi.yaml").write_text(openapi_spec, encoding="utf-8")
+
+    # 14. AsyncAPI 3.0 Specification
+    asyncapi_spec = f"""asyncapi: 3.0.0
+info:
+  title: {project_name} Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para {project_name}
+channels:
+  {pkg_name}Events:
+    address: corp-{pkg_name}-events
+    messages:
+      {entity_name}Updated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer
+"""
+    (docs_dir / "asyncapi.yaml").write_text(asyncapi_spec, encoding="utf-8")
+
+    # 15. Cloud Run & Cloud Tasks FinOps Manifests
+    infra_dir = project_dir / "infra" / "gcp"
+    infra_dir.mkdir(parents=True, exist_ok=True)
+    cloudrun_yaml = f"""apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: {pkg_name}-service
+  annotations:
+    run.googleapis.com/launch-stage: GA
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/cpu-throttling: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 15
+      containers:
+        - image: europe-west1-docker.pkg.dev/${{PROJECT_ID}}/corp-docker-repo/{pkg_name}:latest
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "256Mi"
+"""
+    (infra_dir / "cloudrun_service.yaml").write_text(cloudrun_yaml, encoding="utf-8")
 
     print(f"✓ Proyecto {project_name} creado exitosamente en {project_dir}")
+    print(f"  • OpenAPI 3.1: {docs_dir / 'openapi.yaml'}")
+    print(f"  • AsyncAPI 3.0: {docs_dir / 'asyncapi.yaml'}")
+    print(f"  • Cloud Run FinOps: {infra_dir / 'cloudrun_service.yaml'}")
     return project_dir
 
 if __name__ == "__main__":

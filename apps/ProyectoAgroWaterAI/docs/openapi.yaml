@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAgroWaterAI API
+  description: Gestión predictiva y automatizada de recursos hídricos con IA en Edge
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoagrowaterai
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoagrowaterai/{id}:
+    get:
+      summary: Obtener WaterIrrigationPlan por Identificador
+      operationId: getWaterIrrigationPlanById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: WaterIrrigationPlan recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WaterIrrigationPlan'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    WaterIrrigationPlan:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
