@@ -93,9 +93,9 @@ public class ThreadSafeResource {
 
 ---
 
-## 3. Configuración en Spring Boot 4.0
+## 3. Configuración en Spring Boot 4.1
 
-Para habilitar Virtual Threads de forma global en Spring Boot 4.0 para tomcat, ejecución de tareas asíncronas y programación de tareas:
+Para habilitar Virtual Threads de forma global en Spring Boot 4.1 para tomcat, ejecución de tareas asíncronas y programación de tareas:
 
 ```yaml
 # application.yml

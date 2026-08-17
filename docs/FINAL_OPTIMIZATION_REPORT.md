@@ -2,7 +2,7 @@
 
 **Autor**: Consilium Romano Auditor & Implementer (Worker M6)  
 **Fecha de Emisión**: 2026-07-29  
-**Entorno de Auditoría**: Java 25 (LTS), Spring Boot 4.0 / 4.1, Project Leyden CDS Archive, Vector API SIMD, Go 1.22+ sync.Pool, DuckDB-WASM, LiteRT Edge AI, Google Cloud Platform (Cloud Run Scale-to-Zero, BigQuery Zero-ETL, AlloyDB).  
+**Entorno de Auditoría**: Java 25 (LTS), Spring Boot 4.1 / 4.1, Project Leyden CDS Archive, Vector API SIMD, Go 1.22+ sync.Pool, DuckDB-WASM, LiteRT Edge AI, Google Cloud Platform (Cloud Run Scale-to-Zero, BigQuery Zero-ETL, AlloyDB).  
 **Repositorios Auditados**:
 1. `/home/jaruiz/Desarrollo/corp-spring-boot-starter`
 2. `/home/jaruiz/Desarrollo/SaaSRegantes`

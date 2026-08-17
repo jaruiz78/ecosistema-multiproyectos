@@ -6,7 +6,8 @@ Este archivo define la arquitectura agéntica, las reglas de orquestación y el 
 
 Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondicionalmente las skills correspondientes:
 
-- **Nueva funcionalidad o módulo** → `formal_verification_architect` → `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` → `zero-mockito-tdd-engineer` → `consilium_romano_architect`
+- **Nueva funcionalidad o módulo (SDLC 6-Phase Pipeline)** → `formal_verification_architect` / `spec-driven-development` (DEFINE) → `planning-and-task-breakdown` (PLAN) → `incremental-implementation` (BUILD) → `test-driven-development` / `zero-mockito-tdd-engineer` (VERIFY) → `code-review-and-quality` / `consilium_romano_architect` (REVIEW) → `shipping-and-launch` / `slsa-sigstore-release-sentinel` (SHIP)
+  > *Nota de Armonización SDLC*: Las skills canónicas de `GEMINI.md` (`test-driven-development`, `code-review-and-quality`) definen el marco metodológico general de 6 fases, mientras que las skills especializadas del ecosistema (`zero-mockito-tdd-engineer`, `consilium_romano_architect`) implementan las reglas estrictas de dominio puro sin mocks y el tribunal dialéctico pre-merge.
 - **Creación de Nuevo Proyecto / Vertical** → Script: `scripts/scaffolding/create_enterprise_project.py`
 - **Verificación Formal y Demostración de Teoremas** → `formal_verification_architect` (Lean 4, Z3 SMT, Interpretación Abstracta)
 - **Ingesta Masiva y Streaming ETL** → `streaming_etl_architect` → `sre_finops_auditor`
@@ -25,7 +26,7 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
 
 ## 2. Matriz de Especialización por Proyecto
 
-### A. `corp-spring-boot-starter` & `pctMultiMicroservices` (Java 25 / Spring Boot 4.0 / Go)
+### A. `corp-spring-boot-starter` & `pctMultiMicroservices` (Java 25 / Spring Boot 4.1 / Go 1.26)
 * Delega en la skill `corp-go-high-throughput-expert` y las de backend Java.
 
 ### B. `SaaSRegantes` (Cloud Run / Firestore / BigQuery / React Multi-Tenant)

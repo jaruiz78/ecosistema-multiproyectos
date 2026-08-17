@@ -1,0 +1,53 @@
+# ==============================================================================
+# Dockerfile.universal-leyden-aot
+# Plantilla Universal Multi-Stage para Java 25 / Spring Boot 4.1 con Project Leyden CDS
+# Cold-Start < 40ms en Cloud Run y GKE. Imagen Base Distroless Segura.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# ETAPA 1: Compilación del Proyecto
+# ------------------------------------------------------------------------------
+FROM eclipse-temurin:25-jdk-noble AS builder
+WORKDIR /workspace
+
+# Copiar POMs y dependencias
+COPY pom.xml ./
+COPY . ./
+
+# Compilar empaquetado con preview features activas
+RUN ./mvnw clean package -DskipTests -Djavac.preview=true
+
+# ------------------------------------------------------------------------------
+# ETAPA 2: Entrenamiento y Generación de Class Data Sharing (Leyden CDS app.jsa)
+# ------------------------------------------------------------------------------
+FROM eclipse-temurin:25-jdk-noble AS trainer
+WORKDIR /app
+
+COPY --from=builder /workspace/target/*.jar /app/app.jar
+
+# Entrenar el Class Data Sharing ejecutando la aplicación en modo entrenamiento
+RUN java -XX:ArchiveClassesAtExit=/app/app.jsa \
+         -Dspring.context.exit=onRefresh \
+         -jar /app/app.jar || true
+
+# ------------------------------------------------------------------------------
+# ETAPA 3: Imagen Final de Producción (Minimal Distroless / Zero-Trust)
+# ------------------------------------------------------------------------------
+FROM gcr.io/distroless/java25-debian12:nonroot AS runner
+WORKDIR /app
+
+# Copiar artefactos inmutables
+COPY --from=builder /workspace/target/*.jar /app/app.jar
+COPY --from=trainer /app/app.jsa /app/app.jsa
+
+# Variables de entorno para microarquitectura y Virtual Threads
+ENV JAVA_TOOL_OPTIONS="-XX:SharedArchiveFile=/app/app.jsa \
+                       -XX:+UseZGC \
+                       -XX:+ZGenerational \
+                       -XX:MaxRAMPercentage=75.0 \
+                       --enable-preview"
+
+USER nonroot:nonroot
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

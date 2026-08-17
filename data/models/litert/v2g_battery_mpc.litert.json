@@ -1,17 +1,19 @@
 {
   "model_name": "v2g_battery_mpc",
-  "format": "LiteRT_Edge_Tensor_v1",
-  "timestamp": "2026-08-14T10:00:00Z",
-  "metadata": "LiteRT Quantized Artifact",
-  "tensors": {
-    "primary_params": {
-      "quantized_bytes_b64": "807fc58080",
-      "scale": 147.057843,
-      "zero_point": -128,
-      "original_shape": [
-        5
-      ],
-      "dtype": "INT8"
-    }
-  }
+  "quantization": "INT8_SYMMETRIC",
+  "scale": 0.007848986352892877,
+  "weights_int8": [
+    64,
+    -27,
+    127,
+    19,
+    -37,
+    39,
+    97,
+    -4
+  ],
+  "final_cov_trace": 0.005223708706459241,
+  "final_loss": 0.2983130523018616,
+  "quantization_error_l2": 0.006680932283481895,
+  "calibration_status": "ONLINE_CONVERGED_100PCT"
 }

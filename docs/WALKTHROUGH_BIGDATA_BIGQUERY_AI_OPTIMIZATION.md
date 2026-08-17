@@ -22,7 +22,7 @@
 - **[`SemanticCacheManager.java`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/corp-bigdata-ai-starter/src/main/java/com/corp/bigdata/SemanticCacheManager.java)**:
   - Caché semántica L1 en memoria para inferencias de IA con umbral de similitud coseno \(\ge 0.96\) y resolución en **`< 0.07 ms` con `$0.00` de coste de tokens**.
 - **[`BigDataAiAutoConfiguration.java`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/corp-bigdata-ai-starter/src/main/java/com/corp/bigdata/config/BigDataAiAutoConfiguration.java)**:
-  - Registro condicional de beans de Spring Boot 4.0 / Java 25.
+  - Registro condicional de beans de Spring Boot 4.1 / Java 25.
 
 ---
 

@@ -4,7 +4,7 @@
 **Aceptado** (Consilium Romano Architecture Review)
 
 ## Contexto
-1. En el ecosistema multi-proyecto conviven servicios en Java 25 (Spring Boot 4.x), Go 1.24 (BFFs, Proxies y Workers) y clientes en Flutter y React.
+1. En el ecosistema multi-proyecto conviven servicios en Java 25 (Spring Boot 4.x), Go 1.26 (BFFs, Proxies y Workers) y clientes en Flutter y React.
 2. Anteriormente existían discrepancias en las respuestas de error: respuestas en texto plano (`http.Error`), mapas JSON ad-hoc (`Map<String, Object>`), respuestas vacías con solo código HTTP (`.build()`), y falta de correlación del identificador de traza (`traceId`) devuelto al cliente.
 3. La resiliencia ante fallos dependía en algunos puntos de variables en memoria aisladas (`AtomicBoolean` en controladores), impidiendo la coordinación ante escalado horizontal en Cloud Run y exponiendo al sistema a sobrecargas en cascada sin cabeceras semánticas (`Retry-After`).
 4. Para operar con alta confiabilidad y bajo coste por usuario (`< 0.015 USD/MAU/mes`), es necesario un mecanismo de auto-remediación rápida, clasificación de incidentes por código de dominio y aprendizaje continuo frente a derivas de servicio.

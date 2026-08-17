@@ -1,13 +1,13 @@
-# 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0
+# 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1
 
 ---
 
 ## 1. 🐣 Ancla Mental Feynman & Analogía Isomórfica
 
-### El Modelo Intuitivo: 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0
-Para comprender **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0** sin caer en la trampa de la jerga técnica, debemos anclar el concepto en un problema físico observable:
+### El Modelo Intuitivo: 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1
+Para comprender **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1** sin caer en la trampa de la jerga técnica, debemos anclar el concepto en un problema físico observable:
 * Todo sistema en computación resuelve un dilema fundamental: cómo organizar recursos limitados (tiempo de cálculo, espacio de memoria, ancho de banda o energía) para que el trabajo se realice sin bloqueos ni errores.
-* En **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0**, la clave reside en eliminar pasos redundantes y asegurar que cada componente conozca únicamente la información mínima indispensable para cumplir su función, tal como una línea de montaje bien coordinada donde nadie tiene que adivinar qué hizo el compañero anterior.
+* En **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1**, la clave reside en eliminar pasos redundantes y asegurar que cada componente conozca únicamente la información mínima indispensable para cumplir su función, tal como una línea de montaje bien coordinada donde nadie tiene que adivinar qué hizo el compañero anterior.
 
 ---
 
@@ -59,7 +59,7 @@ La arquitectura de referencia mantenida por la comunidad.
 ## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
 
 > [!NOTE]
-> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0** a un estudiante de secundaria, **sin usar las palabras:** "11.", "Rutas", "de" ni tecnicismos complejos de memoria.
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1** a un estudiante de secundaria, **sin usar las palabras:** "11.", "Rutas", "de" ni tecnicismos complejos de memoria.
 
 ### Criterio de Verificación
 * **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
@@ -79,7 +79,7 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 ---
 
 ## ⚙️ Primeros Principios & Fundamentos Conceptuales
-1. **Descomposición Atómica:** Cada componente en 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.0 se modela de forma determinista y sin estado mutable compartido.
+1. **Descomposición Atómica:** Cada componente en 11. Rutas de Aprendizaje Práctico: Backend Java 25 & Spring Boot 4.1 se modela de forma determinista y sin estado mutable compartido.
 2. **Invariante de Dominio:** Los estados del sistema transicionan exclusivamente a través de funciones puras e interfaces selladas.
 3. **Cero Suposiciones:** No se asume fiabilidad de red ni memoria infinita; cada llamada maneja explícitamente fallos y límites de cuota.
 

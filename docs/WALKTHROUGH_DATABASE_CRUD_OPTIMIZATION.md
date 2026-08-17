@@ -24,7 +24,7 @@
   - Generador de índices HNSW vectoriales con métrica de similitud coseno (`vector_cosine_ops`), parámetros \(m \ge 16\), \(\text{ef\_construction} \ge 64\).
   - Generador de índices de cobertura (*Covering Indexes* / Index-Only Scans) con cláusula `INCLUDE (...)`.
 - **[`DatabaseOptimizerAutoConfiguration.java`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/corp-db-optimizer-starter/src/main/java/com/corp/db/config/DatabaseOptimizerAutoConfiguration.java)**:
-  - Registro condicional de beans de Spring Boot 4.0 / Java 25.
+  - Registro condicional de beans de Spring Boot 4.1 / Java 25.
 
 ---
 

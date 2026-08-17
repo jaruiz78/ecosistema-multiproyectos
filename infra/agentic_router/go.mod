@@ -1,6 +1,6 @@
 module antigravity/agentic_router
 
-go 1.25.0
+go 1.26.0
 
 require (
 	go.opentelemetry.io/otel v1.45.0

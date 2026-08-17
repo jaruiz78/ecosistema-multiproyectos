@@ -6,7 +6,7 @@
 
 ## 1. Censo y Resumen Ejecutivo del Ecosistema
 
-El ecosistema **MultiProyectos** constituye una plataforma de ingeniería distribuida, modular y de ultra-alto rendimiento basada en **Java 25 LTS**, **Spring Boot 4.0**, **Go**, **Flutter** y **Google Cloud Platform (GCP)**. 
+El ecosistema **MultiProyectos** constituye una plataforma de ingeniería distribuida, modular y de ultra-alto rendimiento basada en **Java 25 LTS**, **Spring Boot 4.1**, **Go**, **Flutter** y **Google Cloud Platform (GCP)**. 
 
 A fecha de agosto de 2026, el ecosistema cuenta con un total de **118 Módulos y Proyectos Registrados**, todos integrados bajo el reactor agregador Maven ([`pom.xml`](file:///home/jaruiz/Desarrollo/pom.xml)) y mapeados en los 17 workspaces de **Antigravity IDE**.
 
@@ -28,13 +28,13 @@ A fecha de agosto de 2026, el ecosistema cuenta con un total de **118 Módulos y
 
 | Capa / Repositorio | Módulos | Tecnologías Clave | Propósito Principal |
 | :--- | :---: | :--- | :--- |
-| **`corp-spring-boot-starter`** | 32 | Java 25, Spring Boot 4.0, Loom, Leyden CDS, Resiliencia, Zero-Copy IPC, LiteRT | Chasis empresarial transversal y starters reutilizables |
+| **`corp-spring-boot-starter`** | 32 | Java 25, Spring Boot 4.1, Loom, Leyden CDS, Resiliencia, Zero-Copy IPC, LiteRT | Chasis empresarial transversal y starters reutilizables |
 | **`core/`** | 12 | Java 25, H3, PEPS Tensor Networks, PINN, MPC, Nash Game Theory, Lie SE(3), Wasserstein | Primitivas matemáticas, físicas, tensoriales y geoespaciales |
 | **`apps/`** | 57 | Java 25, Hexagonal DDD, Docker Leyden AOT, K8s, Cloud Build | Verticales sectoriales independientes (Industria, Energía, Turismo, B2G) |
 | **`SaaSRegantes`** | 12 | Java 25, Multi-Tenancy Celular, Firestore RLS, BigQuery | Plataforma SaaS de gestión de comunidades de regantes |
 | **`AppViajes`** | 1 | Flutter (Dart 3), H3 GeoGrid, OSRM, SQLite | App móvil de movilidad urbana y cálculo dinámico de surge |
 | **`pctMultiMicroservices`**| 5 | Go, Java 25, Cloud Run, Ring-Buffers, Arrow Flight | BFF, microservicios de red y workers de ingesta masiva |
-| **`scripts/` & `data/`** | 2 | Python 3.12, SQLite (`simulations_telemetry.db`), NumPy | Macro-suites de simulación (300M eventos), telemetría y benchmarks |
+| **`scripts/` & `data/`** | 2 | Python 3.14+, SQLite (`simulations_telemetry.db`), NumPy | Macro-suites de simulación (300M eventos), telemetría y benchmarks |
 
 ---
 
@@ -244,7 +244,7 @@ graph TD
 | **Base de Datos Transaccional**| Cloud Firestore | Multi-Tenant RLS | Aislamiento celular por `tenant_id`, latencia submilisegundo en consultas directas |
 | **Base de Datos Analítica** | Google BigQuery | Standard SQL | Particionado diario obligatorio (`requirePartitionFilter=true`), almacenamiento columnar |
 | **Telemetría & Simulación** | SQLite | `simulations_telemetry.db` | Cero coste en la nube para auditoría local, pruebas de estrés y almacenamiento Store-Forward |
-| **Computación Matemática** | NumPy / SciPy / PEPS | Python 3.12 / Java Panama | Álgebra tensorial, optimización no lineal, asimilación estocástica de Kalman (EnKF) |
+| **Computación Matemática** | NumPy / SciPy / PEPS | Python 3.14+ / Java Panama | Álgebra tensorial, optimización no lineal, asimilación estocástica de Kalman (EnKF) |
 | **Compilación & Empaquetado** | Docker / Leyden AOT | `eclipse-temurin:25-jre` | Generación de imágenes de clases compartidas (`application.jsa`), Generational ZGC |
 | **Orquestación & CI/CD** | Kubernetes / Cloud Build | Manifests K8s / Cloud Build | Despliegues inmutables, escalado horizontal automático, firmas SLSA L3 con Sigstore |
 

@@ -14,6 +14,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * Motor de sincronización offline bidireccional que gestiona réplicas CRDT por tenant y recurso.
  * Proporciona convergencia determinista O(1) ante desconexiones intermitentes.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_2_go_y_concurrencia">FACULTAD_IV: Concurrencia Go CSP & Ring-Buffers</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom Anti-Pinning</a>
+ */
 public class SyncMeshEngine {
 
     private final String localNodeId;

@@ -3,8 +3,8 @@
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoSegitturDtiStandard
 * **Entidad Dominio**: SegitturDtiStandard
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
-* **Parent Chassis**: `corp-spring-boot-starter`
+* **Descripción**: Microservicio Vertical Especializado en SegitturDtiStandard para el Ecosistema Corporativo.
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

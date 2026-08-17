@@ -1,0 +1,8 @@
+{
+  "title": "Z3: An Efficient SMT Solver",
+  "authors": "Leonardo de Moura, Nikolaj Bjørner",
+  "year": 2008,
+  "institution": "Microsoft Research / CAV 2008",
+  "faculty": "FACULTAD_VI",
+  "abstract": "Satisfiability Modulo Theories (SMT) solvers have become the core engine in many applications in software verification, automated theorem proving, and hardware testing."
+}

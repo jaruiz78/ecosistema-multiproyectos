@@ -20,6 +20,8 @@
         <module>SaaSRegantes</module>
         
         <!-- Primitivas Core & Módulos Matemáticos -->
+        <module>core/core-agent-swarm</module>
+        <module>core/core-ai-rag-engine</module>
         <module>core/core-geogrid-h3</module>
         <module>core/core-govtech-ledger</module>
         <module>core/core-pinn-solver</module>
@@ -50,8 +52,10 @@
         <module>apps/ProyectoMaritime</module>
         <module>apps/ProyectoAgroBioRobotics</module>
         <module>apps/ProyectoBioAgriTrace</module>
+        <module>apps/ProyectoBiotecnologia</module>
         <module>apps/ProyectoDualAirDefense</module>
         <module>apps/ProyectoQuantumSatelliteSync</module>
+        <module>apps/ProyectoSmartAgriSupplyChain</module>
         <module>apps/ProyectoSmartWaterDesal</module>
         <module>apps/ProyectoSyntheticBiologyFoundry</module>
         

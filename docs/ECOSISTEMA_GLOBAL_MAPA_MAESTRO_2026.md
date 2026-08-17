@@ -149,8 +149,8 @@ graph LR
 
 | Capa | Tecnologías Clave | Beneficio Arquitectónico y Rigor |
 | :--- | :--- | :--- |
-| **Lenguajes** | Java 25 (LTS), Go 1.24+, Python 3.12+, Dart 3.7+ | Virtual Threads nativos, concurrencia CSP M:N, computación científica tensorial y Flutter UI. |
-| **Backend & Runtime** | Spring Boot 4.0, Project Leyden (CDS AOT), GraalVM Native | Arranque en Cloud Run `< 80 ms`, cero calentamiento JIT y reducción de memoria en un 70%. |
+| **Lenguajes** | Java 25 (LTS), Go 1.26+, Python 3.14+, Dart 3.13+ | Virtual Threads nativos, concurrencia CSP M:N, computación científica tensorial y Flutter UI. |
+| **Backend & Runtime** | Spring Boot 4.1, Project Leyden (CDS AOT), GraalVM Native | Arranque en Cloud Run `< 80 ms`, cero calentamiento JIT y reducción de memoria en un 70%. |
 | **Concurrencia & Memoria** | Java Loom (`ReentrantLock`, `ScopedValue`), Project Panama FFM, LMAX Ring-Buffer | Concurrencia masiva sin *Carrier Thread Pinning* y acceso a memoria off-heap con overhead de `0.0 ns`. |
 | **Gemelo Digital & IA** | PEPS Tensor Networks, EnKF Kalman, PINNs, LiteRT Edge AI, Dual-Engine (NPU Lemonade + GPU Ollama) | Inferencia local a `$0.00 USD/token`, latencia `< 15 ms` y convergencia de covarianza garantizada. |
 | **Geoespacial** | Uber H3 (resoluciones 7 a 10), OSRM Routing, PostGIS | Indexación espacial discreta en $\mathcal{O}(1)$ y optimización combinatoria VRP. |

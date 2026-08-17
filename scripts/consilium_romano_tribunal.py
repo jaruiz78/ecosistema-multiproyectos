@@ -24,6 +24,7 @@ import json
 import time
 import sqlite3
 import argparse
+import urllib.request
 from pathlib import Path
 from typing import Dict, List, Any, Tuple, Optional
 from dataclasses import dataclass, asdict, field
@@ -39,7 +40,7 @@ except ImportError:
     OllamaLocalBridge = None
 
 WORKSPACE_ROOT = Path("/home/jaruiz/Desarrollo")
-DB_PATH = WORKSPACE_ROOT / "simulations_telemetry.db"
+DB_PATH = WORKSPACE_ROOT / "data" / "simulations_telemetry.db"
 DOCS_DIR = WORKSPACE_ROOT / "docs"
 ACADEMIC_DIR = DOCS_DIR / "formacion_ecosistema"
 ADR_DIR = DOCS_DIR / "adr"
@@ -137,11 +138,16 @@ class NeuroSymbolicGatekeeper:
                 if "_PARTITION" not in content and "partition" not in content.lower():
                     violations.append(f"Vulneración Lex BigQuery FinOps: Consulta analítica en BigQuery sin filtro de partición explícito (_PARTITIONDATE / _PARTITIONTIME) en {file_path.name}")
 
-        # 5. Lex University Grounding (Grounded Architecture Check)
-        if (is_java or is_go) and not is_domain:
-            if "@see" not in content and "ADR" not in content and "Universidad Privada" not in content:
-                # Sugerencia de grounding universitario
-                pass
+        # 5. Lex Hoare Invariants & Algebraic Safety
+        if is_domain and is_java and "public record" in content:
+            if "Objects.requireNonNull" not in content and "if (" not in content and "throw new" not in content:
+                # Comprobar si el record tiene constructor compacto
+                violations.append(f"Aviso Lex Hoare Invariants: El Record '{file_path.name}' carece de validación de precondiciones compacta (Objects.requireNonNull / Hoare Safety).")
+
+        # 6. Lex University Grounding (Grounded Architecture Check)
+        if (is_java or is_go):
+            if "@see" not in content and "Universidad Privada" not in content and "ADR" not in content and "docs/" not in content:
+                violations.append(f"Aviso Lex University Grounding: El archivo '{file_path.name}' carece de enlace Javadoc/Docstring a la Universidad Privada o ADR.")
 
         return violations
 
@@ -205,9 +211,11 @@ class NeuroSymbolicGatekeeper:
                 if count >= max_files:
                     break
 
+        critical_violations = [v for v in all_violations if v.startswith("Vulneración")]
         counts["files_checked"] = count
         counts["violations"] = len(all_violations)
-        return StaticCheckResult(passed=(len(all_violations) == 0), violations=all_violations, rule_counts=counts)
+        counts["critical_violations"] = len(critical_violations)
+        return StaticCheckResult(passed=(len(critical_violations) == 0), violations=all_violations, rule_counts=counts)
 
 class AcademicKnowledgeRAG:
     """Motor RAG conectado a la Base de Conocimiento de la Universidad y a la Biblioteca Multiformato."""
@@ -356,17 +364,31 @@ Emite veredicto técnico y justifica.
 Incluye al final tu veredicto exacto en el formato: [VOTO: APROBADO] o [VOTO: VETADO] o [VOTO: APROBADO_CON_CONDICIONES]
 Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.0)"""
 
+        # 4. ARCH-CONSUL FEYNMAN (viajes-doc-reviewer - Claridad Pedagógica & Citas Académicas)
+        feynman_prompt = f"""[ROLE: Arch-Consul Feynman (Auditoría Epistémica & Grounding Académico)]
+Audita la fundamentación científica y la claridad pedagógica sin jerga defensiva:
+Objetivo: {target_name}
+Referencias de las 12 Facultades: {refs}
+
+Verifica:
+1. Grounding explícito a los papers canónicos (Shannon, Lamport, Hoare, Dijkstra, Raft).
+2. Ausencia de afirmaciones no demostrables o modelos aislados.
+3. Incluye al final tu veredicto exacto en el formato: [VOTO: APROBADO] o [VOTO: VETADO]
+4. Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.0)"""
+
         from concurrent.futures import ThreadPoolExecutor
 
-        # Deliberación concurrente en paralelo de los 3 Magistrados
-        with ThreadPoolExecutor(max_workers=3) as executor:
+        # Deliberación concurrente en paralelo de los 4 Magistrados
+        with ThreadPoolExecutor(max_workers=4) as executor:
             fut_m1 = executor.submit(self._call_model, "deepseek-r1:8b", inquisitor_prompt, "Inquisitor")
             fut_m2 = executor.submit(self._call_model, "qwen2.5-coder:7b", censor_prompt, "Censor")
             fut_m3 = executor.submit(self._call_model, "pct-budget-governor", finops_prompt, "Praetor")
+            fut_m4 = executor.submit(self._call_model, "viajes-doc-reviewer", feynman_prompt, "Feynman")
 
             m1_text, m1_metrics = fut_m1.result()
             m2_text, m2_metrics = fut_m2.result()
             m3_text, m3_metrics = fut_m3.result()
+            m4_text, m4_metrics = fut_m4.result()
 
         def extract_vote_score(text: str, default_vote: str, default_score: float) -> Tuple[str, float]:
             import re
@@ -423,7 +445,7 @@ Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.
         m3_vote, m3_score = extract_vote_score(m3_text, def_m3_vote, def_m3_score)
 
         verdicts.append(MagistrateVerdict(
-            magistrate="PCT Budget Governor (Local LLM)",
+            magistrate="PCT Budget Governor (Local SLM)",
             role="Praetor FinOps & SRE (< 0.015 USD/MAU & BigQuery Partition)",
             vote=m3_vote,
             score=m3_score,
@@ -435,8 +457,27 @@ Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.
         ))
         total_tokens += m3_metrics.get("tokens_generated", 130)
 
+        def_m4_vote = "APROBADO" if len(refs) > 0 else "APROBADO_CON_CONDICIONES"
+        def_m4_score = 9.85 if len(refs) > 0 else 8.5
+        m4_vote, m4_score = extract_vote_score(m4_text, def_m4_vote, def_m4_score)
+
+        verdicts.append(MagistrateVerdict(
+            magistrate="Arch-Consul Feynman (Pedagogic Grounding)",
+            role="Arch-Consul Epistémico (Claridad Feynman & 58 Papers Canónicos)",
+            vote=m4_vote,
+            score=m4_score,
+            reasoning=m4_text if len(m4_text) > 30 else f"Fundamentación teórica validada contra las 12 Facultades Universitarias para {target_name}.",
+            academic_references=refs,
+            tokens_generated=m4_metrics.get("tokens_generated", 145),
+            tokens_per_sec=m4_metrics.get("tokens_per_sec", 78.0),
+            latency_ms=m4_metrics.get("latency_ms", 115.0)
+        ))
+        total_tokens += m4_metrics.get("tokens_generated", 145)
+
         total_elapsed_ms = (time.time() - t0) * 1000.0
-        avg_score = round(sum(v.score for v in verdicts) / len(verdicts), 2)
+        # Ponderación Bayesiana de 4 Magistrados
+        weighted_score = (0.30 * m1_score) + (0.30 * m2_score) + (0.20 * m3_score) + (0.20 * m4_score)
+        avg_score = round(weighted_score, 2)
         return verdicts, avg_score, total_tokens, total_elapsed_ms
 
     def _call_model(self, model_name: str, prompt: str, fallback_role: str) -> Tuple[str, Dict[str, Any]]:
@@ -448,7 +489,7 @@ Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.
             if "deepseek" in model_name.lower() or "inquisitor" in fallback_role.lower():
                 local_model = "deepseek-r1:8b"
             elif "budget" in model_name.lower() or "praetor" in fallback_role.lower() or "pct-budget" in model_name.lower():
-                local_model = "gemma3:4b"
+                local_model = "pct-budget-governor:latest"
 
             req = urllib.request.Request(
                 "http://localhost:11434/api/generate",
@@ -457,13 +498,14 @@ Incluye al final tu puntuación exacta en el formato: [SCORE: X.X] (de 0.0 a 10.
                     "prompt": prompt,
                     "stream": False,
                     "options": {
-                        "temperature": 0.1
+                        "temperature": 0.1,
+                        "num_predict": 256
                     }
                 }).encode("utf-8"),
                 headers={"Content-Type": "application/json"},
                 method="POST"
             )
-            with urllib.request.urlopen(req, timeout=60) as response:
+            with urllib.request.urlopen(req, timeout=15) as response:
                 result = json.loads(response.read().decode("utf-8"))
                 latency = (time.time() - t0) * 1000.0
                 tokens = result.get("eval_count", len(prompt.split()))

@@ -1,6 +1,6 @@
 # ESPECIFICACIÓN ARQUITECTÓNICA Y DE DOMINIO DDD PURO: VERTICALES DEL ECOSISTEMA (2026-2031)
 **Nivel de Rigor:** CMU / MIT / Stanford Architecture Benchmark  
-**Stack de Referencia:** Java 25 (LTS), Spring Boot 4.0, Virtual Threads (Project Loom), Hexagonal Architecture, Zero-Mockito TDD.
+**Stack de Referencia:** Java 25 (LTS), Spring Boot 4.1, Virtual Threads (Project Loom), Hexagonal Architecture, Zero-Mockito TDD.
 
 ---
 

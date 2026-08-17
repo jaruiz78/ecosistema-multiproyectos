@@ -1,17 +1,19 @@
 {
   "model_name": "surge_forecast_30m",
-  "format": "LiteRT_Edge_Tensor_v1",
-  "timestamp": "2026-08-14T10:00:00Z",
-  "metadata": "LiteRT Quantized Artifact",
-  "tensors": {
-    "primary_params": {
-      "quantized_bytes_b64": "7f80",
-      "scale": 0.012686,
-      "zero_point": -204,
-      "original_shape": [
-        2
-      ],
-      "dtype": "INT8"
-    }
-  }
+  "quantization": "INT8_SYMMETRIC",
+  "scale": 0.009162344713957354,
+  "weights_int8": [
+    48,
+    -12,
+    127,
+    33,
+    -46,
+    57,
+    109,
+    7
+  ],
+  "final_cov_trace": 0.008971460362841209,
+  "final_loss": 0.23154807689453388,
+  "quantization_error_l2": 0.005123214872786005,
+  "calibration_status": "ONLINE_CONVERGED_100PCT"
 }

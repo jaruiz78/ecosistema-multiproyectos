@@ -1,8 +1,12 @@
 package com.corp.corealertaggregator.domain;
 
 /**
- * Entidad de dominio puro para Corealertaggregator.
- * Cumple política Zero-Mockito. Asignaciones de memoria deterministas.
+ * Entidad de dominio pura.
+ */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_1_java_spring_boot">FACULTAD_I: Software Engineering, DDD Puro & Tipos</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom Anti-Pinning</a>
  */
 public record CorealertaggregatorEntity(
     java.util.UUID id,
@@ -11,10 +15,6 @@ public record CorealertaggregatorEntity(
     double metricValue
 ) {
     public CorealertaggregatorEntity {
-        if (metricValue < 0) throw new IllegalArgumentException("Metric cannot be negative");
-    }
-    
-    public CorealertaggregatorEntity updateState(String newState, double newMetric) {
-        return new CorealertaggregatorEntity(this.id, newState, this.timestamp, newMetric);
+        if (timestamp < 0) throw new IllegalArgumentException("Invalid state");
     }
 }

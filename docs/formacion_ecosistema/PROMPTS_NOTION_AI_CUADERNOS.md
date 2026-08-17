@@ -15,7 +15,7 @@
 
 ---
 
-### ☕ Prompt 1: Cuaderno de Estudio del Lenguaje Java (Java 25 LTS & Spring Boot 4.0)
+### ☕ Prompt 1: Cuaderno de Estudio del Lenguaje Java (Java 25 LTS & Spring Boot 4.1)
 
 **📄 Documentos de Referencia Exclusivos:**
 - `@ [REFERENCIA PRINCIPAL] README.md`
@@ -24,12 +24,12 @@
 ```text
 RESTRICCIÓN DE CONTEXTO: Utiliza ÚNICAMENTE el README.md principal (@ [REFERENCIA PRINCIPAL] README.md) y el Libro Máster (@ [LIBRO MÁSTER PDF] CORPORATE_ARCHITECTURE_MASTER_BOOK.pdf) como fuentes de información. Ignora cualquier otro documento individual o módulo no listado.
 
-Actúa como un Distinguished Principal Engineer en Java y docente de nivel MIT/Carnegie Mellon. Extrayendo la información relevante ÚNICAMENTE del Libro Máster PDF y el README principal, genera un Cuaderno Formativo (Notebook) exhaustivo enfocado en el Lenguaje Java (Java 25 LTS) y Spring Boot 4.0 (Módulo 1).
+Actúa como un Distinguished Principal Engineer en Java y docente de nivel MIT/Carnegie Mellon. Extrayendo la información relevante ÚNICAMENTE del Libro Máster PDF y el README principal, genera un Cuaderno Formativo (Notebook) exhaustivo enfocado en el Lenguaje Java (Java 25 LTS) y Spring Boot 4.1 (Módulo 1).
 
 El Cuaderno debe incluir las siguientes secciones detalladas:
 1. Sintaxis Moderna & Concurrencia Ligera: Explicación y snippets ejecutables de Java 25 Records, Pattern Matching exhaustivo, Scoped Values, Virtual Threads (Project Loom) y prevención de Carrier Thread Pinning.
 2. Optimización del Runtime & Cold-Start: Análisis de Project Leyden, entrenamiento y generación de CDS (Class Data Sharing .jsa), compatibilidad AOT con GraalVM Native Image y Generational ZGC.
-3. Arquitectura de Infraestructura en Spring Boot 4.0: Configuración modular bajo Java 25, propagación de contexto en hilos virtuales y cero reflexión dinámica innecesaria.
+3. Arquitectura de Infraestructura en Spring Boot 4.1: Configuración modular bajo Java 25, propagación de contexto en hilos virtuales y cero reflexión dinámica innecesaria.
 4. Ejercicios Prácticos y Casos de Estudio: 3 problemas de concurrencia masiva e ingesta de datos con sus soluciones paso a paso en Java 25 puro.
 5. Preguntas de Autoevaluación & Flashcards de Examen.
 ```

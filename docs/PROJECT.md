@@ -2,7 +2,7 @@
 
 ## Overview
 Implementación de optimizaciones avanzadas de nivel Google en los 4 repositorios del ecosistema:
-1. `corp-spring-boot-starter`: Starter corporativo Spring Boot 4.0 / Java 25.
+1. `corp-spring-boot-starter`: Starter corporativo Spring Boot 4.1 / Java 25.
 2. `SaaSRegantes`: Plataforma de gestión hídrica y subastas multi-tenant.
 3. `pctMultiMicroservices`: Sistema de microservicios de movilidad/transporte con Go BFF y Java backend.
 4. `AppViajes`: Aplicación móvil/web de movilidad e itinerarios inteligentes.

@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoBiotecnologia
-* **Entidad Dominio**: BioCompound
-* **Descripción**: Microservicio para formulación y optimización biotecnológica
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: Biotecnologia
+* **Descripción**: Microservicio Vertical Especializado en Biotecnologia para el Ecosistema Corporativo.
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

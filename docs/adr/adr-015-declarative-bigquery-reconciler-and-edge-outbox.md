@@ -28,7 +28,7 @@ Durante la auditoría integral de la arquitectura del ecosistema (2026–2031), 
 
 ### 3. Centralización de Contratos (`corp-contracts-starter`)
 - Ubicación de esquemas en `src/main/resources/proto/` y `src/main/resources/avro/`.
-- Pipeline de validación sintáctica y compatibilidad Java 25 / Go 1.24 vía `scripts/generate_unified_contracts_artifacts.sh`.
+- Pipeline de validación sintáctica y compatibilidad Java 25 / Go 1.26 vía `scripts/generate_unified_contracts_artifacts.sh`.
 
 ### 4. Pipeline Nocturno de Benchmarks (`cloudbuild_nightly_benchmarks.yaml`)
 - Ejecución diaria con disparador Cloud Scheduler / Cloud Build.

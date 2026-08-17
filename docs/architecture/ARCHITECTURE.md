@@ -7,7 +7,7 @@ Este documento especifica la arquitectura técnica, patrones de diseño y están
 ## 1. Visión General y Propósito
 
 **corp-spring-boot-starter** actúa como la espina dorsal compartida para todos los microservicios del ecosistema (SaaSRegantes, PCT, AppViajes). Ofrece:
-1. Autoconfiguración extensible y desacoplada mediante Spring Boot 4.0 (`@ConditionalOnMissingBean`).
+1. Autoconfiguración extensible y desacoplada mediante Spring Boot 4.1 (`@ConditionalOnMissingBean`).
 2. Propagación de trazas distribuidas W3C `traceparent` tanto para HTTP Servlet como para gRPC Netty.
 3. Aislamiento estricto de datos Multi-Tenant con `ScopedValue` / `ThreadLocal` optimizado para Java 25 Loom Virtual Threads.
 4. Generación de archivos CDS (Class Data Sharing) de Project Leyden para un arranque nativo en Cloud Run en <100ms.

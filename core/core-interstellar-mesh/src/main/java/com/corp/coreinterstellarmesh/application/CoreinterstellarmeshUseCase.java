@@ -4,16 +4,25 @@ import com.corp.coreinterstellarmesh.domain.CoreinterstellarmeshEntity;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Despachador de lógica real para Coreinterstellarmesh.
+ * Despachador de lógica pura.
+ */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_1_java_spring_boot">FACULTAD_I: Software Engineering, DDD Puro & Tipos</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom Anti-Pinning</a>
  */
 public class CoreinterstellarmeshUseCase {
     private final ReentrantLock lock = new ReentrantLock();
-    
-    public double executeBusinessLogic(CoreinterstellarmeshEntity input) {
+
+    public CoreinterstellarmeshEntity processLogic(CoreinterstellarmeshEntity input) {
         lock.lock();
         try {
-            // Lógica compleja de negocio
-            return input.specializedMetric() * 1.05;
+            return new CoreinterstellarmeshEntity(
+                input.id(),
+                "PROCESSED",
+                System.currentTimeMillis(),
+                input.metricValue() * 1.05
+            );
         } finally {
             lock.unlock();
         }

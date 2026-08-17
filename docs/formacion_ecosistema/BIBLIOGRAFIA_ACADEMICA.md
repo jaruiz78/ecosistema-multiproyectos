@@ -83,7 +83,7 @@ Este documento consolida el registro formal de todos los papers, libros, especif
   * *Institución:* Oracle / OpenJDK  
   * *Formato & Tamaño:* `TXT` | 88 palabras | Hash: `7582ff391d74...`  
 
-* **[Spring Framework 7 & Spring Boot 4.0: Native Ahead-of-Time and Virtual Thread Architecture](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/biblioteca_papers_pdf_rfc/03_runtime_jvm_memoria/2025_spring_boot4_spring7_aot_architecture.txt)** (2025)  
+* **[Spring Framework 7 & Spring Boot 4.1: Native Ahead-of-Time and Virtual Thread Architecture](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/biblioteca_papers_pdf_rfc/03_runtime_jvm_memoria/2025_spring_boot4_spring7_aot_architecture.txt)** (2025)  
   * *Autores:* Juergen Hoeller, Stephane Nicoll, Phil Webb  
   * *Institución:* Broadcom / Spring Engineering  
   * *Formato & Tamaño:* `TXT` | 85 palabras | Hash: `ef96a07a3891...`  

@@ -1,0 +1,8 @@
+{
+  "title": "RFC 2697: A Single Rate Three Color Marker (Token Bucket Algorithm)",
+  "authors": "J. Heinanen, R. Guerin",
+  "year": 1999,
+  "institution": "IETF Network Working Group",
+  "faculty": "FACULTAD_X",
+  "abstract": "This document defines a Single Rate Three Color Marker (srTCM), which meters an IP packet stream and marks its packets according to three traffic parameters: Committed Information Rate (CIR), Committed Burst Size (CBS), and Excess Burst Size (EBS)."
+}

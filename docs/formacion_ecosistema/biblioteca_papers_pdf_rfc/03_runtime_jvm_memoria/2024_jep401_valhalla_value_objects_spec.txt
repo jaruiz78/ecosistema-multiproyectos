@@ -1,0 +1,1340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=us-ascii" /><meta http-equiv="Content-Type" content="text/html; charset=us-ascii" /><title>JEP 401: Value Objects (Preview)</title><link rel="shortcut icon" href="/images/nanoduke.ico" /><link rel="stylesheet" type="text/css" href="/page.css" /><script type="text/javascript" src="/page.js"><noscript></noscript></script><script src="https://cdn.usefathom.com/script.js" data-site="KCYJJPZX" defer="yes"></script><style type="text/css" xml:space="preserve">
+      TABLE { border-collapse: collapse; padding: 0px; margin: 1em 0 1em 2em; }
+      TR:first-child TH, TR:first-child TD { padding-top: 0; }
+      TH, TD { padding: 0px; padding-top: .5ex; vertical-align: baseline; text-align: left; }
+      TD + TD, TH + TH { padding-left: 1em; }
+      TD:first-child, TH:first-child, TD.jep { text-align: right; }
+      TABLE.head TD:first-child { font-style: italic; padding-left: 2em; white-space: nowrap; }
+      PRE { padding-left: 2em; margin: 1ex 0; font-size: inherit; }
+      TABLE PRE { padding-left: 0; margin: 0; }
+      TABLE.jeps TD:first-child + TD,
+      TABLE.jeps TD:first-child + TD + TD { padding-left: .5em; }
+      TABLE.jeps TD:first-child,
+      TABLE.jeps TD:first-child + TD,
+      TABLE.jeps TD:first-child + TD + TD { font-size: smaller; }
+      TABLE.jeps TD.cl { font-size: smaller; padding-right: 0; text-align: right; }
+      TABLE.jeps TD.cm { font-size: smaller; padding-left: .1em; padding-right: .1em; }
+      TABLE.jeps TD.cr { font-size: smaller; padding-left: 0; }
+      TABLE.jeps TD.z { padding-left: 0; padding-right: 0; }
+      TABLE.head TD { padding-top: 0; }
+    </style></head><body><div id="main"><h1>JEP 401: Value Objects (Preview)</h1><table class="head"><tr><td>Owner</td><td>Dan Smith</td></tr><tr><td>Type</td><td>Feature</td></tr><tr><td>Scope</td><td>SE</td></tr><tr><td>Status</td><td>Integrated</td></tr><tr><td>Release</td><td>28</td></tr><tr><td>Discussion</td><td>valhalla dash dev at openjdk dot org</td></tr><tr><td>Effort</td><td>XL</td></tr><tr><td>Duration</td><td>XL</td></tr><tr><td>Relates to</td><td><a href="539">JEP 539: Strict Field Initialization in the JVM (Preview)</a></td></tr><tr><td>Reviewed by</td><td>Alex Buckley, Brian Goetz</td></tr><tr><td>Endorsed by</td><td>Brian Goetz</td></tr><tr><td>Created</td><td>2020/08/13 19:31</td></tr><tr><td>Updated</td><td>2026/08/07 18:02</td></tr><tr><td>Issue</td><td><a href="https://bugs.openjdk.org/browse/JDK-8251554">8251554</a></td></tr></table><div class="markdown">
+<h2 id="Summary">Summary</h2>
+<p>Introduce <em>value objects</em>, which are immutable and lack object identity. Value
+objects are distinguished solely by the values of their fields, and can be
+represented by Java Virtual Machines in ways that improve performance. This is a
+<a href="https://openjdk.org/jeps/12">preview language and VM feature</a>.</p>
+<h2 id="Goals">Goals</h2>
+<ul>
+<li>
+<p>Enable developers to opt in to a programming model for immutable data in
+which the <code>==</code> operator, and all other operations, distinguish objects by
+the values of their fields rather than their identities.</p>
+</li>
+<li>
+<p>Support the compatible migration of existing classes that represent
+immutable data to this model. Migrate suitable existing classes in the Java
+Platform API, such as <code>Integer</code> and <code>LocalDate</code>, to have value object
+instances.</p>
+</li>
+<li>
+<p>Do not ask developers to learn new semantics for memory management or
+variable storage. The Java language should continue to operate on just two
+kinds of data: primitives and object references.</p>
+</li>
+<li>
+<p>Maximize the freedom of JVM implementors to represent immutable data in ways
+that improve memory footprint, locality, and garbage collection efficiency.</p>
+</li>
+</ul>
+<h2 id="Non-Goals">Non-Goals</h2>
+<ul>
+<li>
+<p>It is not a goal to automatically treat instances of existing classes as
+value objects. Value objects do not uniformly work the same way as other
+objects, so class authors must explicitly choose to have value object
+instances.</p>
+</li>
+<li>
+<p>It is not a goal to revise the <code>==</code> operator so that it can be used in place
+of the <code>equals</code> method. We redefine <code>==</code> only as much as necessary to cope
+with a new kind of identity-free object. The usual advice to compare objects
+in most contexts using the <code>equals</code> method still applies.</p>
+</li>
+<li>
+<p>It is not a goal to introduce a <code>struct</code> feature, as found in the
+<a href="https://en.wikipedia.org/wiki/Struct_(C_programming_language)">C</a> and
+<a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/struct">C#</a>
+languages.</p>
+</li>
+<li>
+<p>It is not a goal to change the treatment of primitive types. Primitives
+behave like value objects in many ways, but are a distinct concept.</p>
+</li>
+<li>
+<p>It is not a goal to guarantee any particular optimization strategy or memory
+layout. This proposal enables many optimizations, but we will implement only
+some of them initially. Some optimizations, such as layouts that exclude
+<code>null</code>, will only become possible after future language and JVM
+enhancements.</p>
+</li>
+</ul>
+<h2 id="Motivation">Motivation</h2>
+<p>Many kinds of simple data values are immutable: complex numbers, pixel colors,
+times, dates, and so on. We usually model such values with classes that contain
+just enough logic to construct, validate, and transform instances, and that
+define the <code>equals</code>, <code>hashCode</code>, and <code>toString</code> methods so that equivalent
+instances can be used interchangeably.</p>
+<p>As an example, the Platform API's <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/time/LocalDate.html"><code>LocalDate</code></a> class models dates:</p>
+<pre><code>jshell&gt; LocalDate d1 = LocalDate.of(1996, 1, 23)
+d1 ==&gt; 1996-01-23
+
+jshell&gt; LocalDate d2 = d1.plusYears(30)
+d2 ==&gt; 2026-01-23
+
+jshell&gt; LocalDate d3 = d2.minusYears(30)
+d3 ==&gt; 1996-01-23
+
+jshell&gt; d1.equals(d3)
+$4 ==&gt; true</code></pre>
+<p>Intuitively, the essence of a <code>LocalDate</code> object rests in its year, month, and
+day values. But in the Java language, the essence of any object is its
+<em>identity</em>. Each time the <code>LocalDate.of</code> method invokes <code>new LocalDate(...)</code>,
+the JVM creates a new object with a unique identity, distinguishable from every
+other object in the system.</p>
+<p>The easiest way to observe the identity of an object is with the <code>==</code> operator:</p>
+<pre><code>jshell&gt; d1 == d3
+$6 ==&gt; false</code></pre>
+<p>Even though <code>d1</code> and <code>d3</code> represent the same year-month-day triple &#8212; that is,
+<code>d1.equals(d3)</code> is <code>true</code> &#8212; they are two objects with distinct identities.</p>
+<h3 id="Immutable-data-does-not-need-identity">Immutable data does not need identity</h3>
+<p>For mutable objects, identity is important: It lets us distinguish two objects
+that have the same state now but may have different states in the future.
+Consider a text-editing application in which lines of text are represented by
+instances of a <code>Line</code> class. The sole field of the class is a list of
+characters, which is mutated when the user edits the line. Two <code>Line</code> objects
+might contain equivalent character lists, and thus also be equivalent, but that
+would be a coincidence; when the user changes one of the lines, the application
+will mutate the character list of that object but not the other, relying on
+identity to mutate the right one.</p>
+<p>In other words, when objects are mutable, they cannot be interchangeable &#8212; yet
+most immutable data values are interchangeable. There is no practical difference
+between two <code>LocalDate</code> objects representing <code>1996-01-23</code>, because their state
+is fixed and unchanging. They represent the same value, both now and in the
+future. There is no need to distinguish the two objects via their identities.</p>
+<p>Object identity is, in fact, actively confusing when objects are immutable and
+interchangeable. Most of us can recall the experience of unwittingly using <code>==</code>
+to compare objects, as in <code>d1 == d3</code> above, and being mystified by a <code>false</code>
+result even though the objects' state and behavior seem identical.</p>
+<p>Even worse, object identity can expose incidental implementation choices that
+result in surprising behavior. For example, the <code>Integer</code> class <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/Integer.html#valueOf(int)">uses a
+cache</a> to avoid creating unnecessary <code>Integer</code> objects with
+unique identities. There is, e.g., typically just a single <code>Integer</code> object
+representing the value <code>1</code>. The cache is of fixed size, however, and does not
+extend to larger <code>int</code> values such as <code>1996</code>:</p>
+<pre><code>jshell&gt; Integer i = 1, j = 1;
+i ==&gt; 1
+j ==&gt; 1
+
+jshell&gt; i == j
+$3 ==&gt; true
+
+jshell&gt; Integer x = 1996, y = 1996;
+x ==&gt; 1996
+y ==&gt; 1996
+
+jshell&gt; x == y
+$6 ==&gt; false</code></pre>
+<p>We could avoid this sort of unexpected outcome if objects whose state and
+behavior make them interchangeable could be freed from the legacy requirement to
+have distinct identities.</p>
+<h3 id="Object-identity-is-expensive-at-run-time">Object identity is expensive at run time</h3>
+<p>The Java language's requirement that every object have identity, whether needed
+or not, is a performance impediment. It forces JVMs to allocate memory for each
+newly created object, thereby distinguishing that object from every other object
+already in the system, and access that memory whenever the object is used.</p>
+<p>For example, suppose that a program creates arrays of <code>int</code> values and
+<code>LocalDate</code> references:</p>
+<pre><code>jshell&gt; int[] ints = { 1996, 2006, 1996, 1, 23 }
+ints ==&gt; int[5] { 1996, 2006, 1996, 1, 23 }
+
+jshell&gt; LocalDate[] dates = { d1, d1, d2, null, d3 }
+dates ==&gt; LocalDate[5] { 1996-01-23, 1996-01-23, 2026-01-23,
+                         null, 1996-01-23 }</code></pre>
+<p>The <code>int</code> array can be represented by a single block of memory containing <code>int</code>
+values:</p>
+<pre><code>+----------+
+| int[5]   |
++----------+
+| 1996     |
+| 2006     |
+| 1996     |
+| 1        |
+| 23       |
++----------+</code></pre>
+<p>The <code>LocalDate</code> array, by contrast, must be represented by a block of memory
+containing a sequence of pointers, each referencing another block of memory
+representing a <code>LocalDate</code> object:</p>
+<pre><code>+--------------+
+| LocalDate[5] |
++--------------+
+| 87fa1a09     | -----------------------&gt; +-----------+
+| 87fa1a09     | -----------------------&gt; | LocalDate |
+| 87fb4ad2     | ------&gt; +-----------+    +-----------+
+| 00000000     |         | LocalDate |    | y=1996    |
+| 87fb5366     | ---     +-----------+    | m=1       |
++--------------+   |     | y=2026    |    | d=23      |
+                   v     | m=1       |    +-----------+
+        +-----------+    | d=23      |
+        | LocalDate |    +-----------+
+        +-----------+
+        | y=1996    |
+        | m=1       |
+        | d=23      |
+        +-----------+</code></pre>
+<p>Even though the data represented by the <code>LocalDate</code> array is not significantly
+more complex than the <code>int</code> array &#8212; a year-month-day triple is effectively 48
+bits of primitive data &#8212; the memory footprint is far greater because of the
+pointers and allocated objects.</p>
+<p>To make matters worse, when a program iterates over the <code>LocalDate</code> array, it
+may dereference each pointer. Modern CPUs improve performance by caching small
+chunks of memory called
+<a href="https://en.wikipedia.org/wiki/CPU_cache#CACHE-LINES"><em>cache lines</em></a>.
+The various <code>LocalDate</code> objects could be allocated at memory addresses that are
+far apart if, e.g., they were created at different times, or they were moved by
+the garbage collector. The resulting poor
+<a href="https://en.wikipedia.org/wiki/Locality_of_reference">reference locality</a>
+could degrade performance by requiring every dereference to load a different
+cache line from memory.</p>
+<p>Out of desperation, we might try to improve performance by writing code that
+creates as few objects as possible, thereby de-stressing the garbage collector
+and improving reference locality. For example, rather than use <code>LocalDate</code>
+objects we could model dates with <code>int</code> values counting the <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/time/chrono/ChronoLocalDate.html#toEpochDay()">number of days
+since 1970-01-01</a>. Unfortunately, this approach gives up the features
+of classes that make Java code so maintainable: meaningful names, private state,
+data validation by constructors, convenience methods, and so forth. It would be
+all too easy to forget &#8212; or for a colleague simply not to know &#8212; that <code>int</code>
+dates are relative to 1970-01-01 rather than some other date, leading to bugs
+that are difficult to diagnose.</p>
+<h3 id="Programming-without-identity">Programming without identity</h3>
+<p>Trillions of Java objects are created every day, each one bearing a unique
+identity. We should enable developers to choose which objects in a program need
+identity, and which do not. The author of a class such as <code>LocalDate</code>, which
+represents simple immutable data, should be able to opt out of identity. Two
+<code>LocalDate</code> objects representing the date <code>1996-01-23</code> should be
+indistinguishable, just as two <code>int</code> values representing the number <code>4</code> are
+indistinguishable.</p>
+<p>By opting out of identity, developers opt in to a programming model that enables
+the best of both worlds: the abstraction of classes, with the simplicity and
+performance benefits of primitives.</p>
+<p>In the future, this programming model will support new Java Platform APIs, such
+as classes that encode different kinds of integers and floating-point values,
+and new Java language features, such as user-defined conversions and
+mathematical operators for immutable data.</p>
+<h2 id="Description">Description</h2>
+<p>We introduce <em>value objects</em> to model simple immutable data. A value object is
+an instance of a <em>value class</em>, declared with the <code>value</code> modifier. Classes
+without the <code>value</code> modifier are <em>identity classes</em>, and their instances are
+<em>identity objects</em>.</p>
+<p>Java programs manipulate objects through <em>references</em>. A reference to an object
+is stored in a variable and enables us to find the object's fields.
+Traditionally, references are represented in a JVM as pointers to memory
+locations, thus encoding the unique identity of each object. Each invocation of
+the <code>new</code> operator allocates a fresh object, in a fresh block of memory, and
+returns a unique reference. And, traditionally, the <code>==</code> operator compares
+references by comparing pointers, so distinct references to two objects are not
+<code>==</code> even if the referenced objects are interchangeable.</p>
+<p>Value objects are different. A reference to a value object is stored in a
+variable and enables us to find the object's fields. In a JVM, however, it might
+not be represented by a pointer and thus does not encode the unique identity of
+the object. For a value class, invoking the <code>new</code> operator might not allocate a
+fresh object; it might, instead, return a reference to an existing object, or
+even a reference that embodies the object directly. The <code>==</code> operator compares
+references to value objects by comparing the objects' field values, so
+references to two objects are <code>==</code> if the objects have identical field values.</p>
+<p>We can save memory and improve performance by using value objects for immutable
+data. Because a program cannot distinguish two value objects with identical
+field values, not even with the <code>==</code> operator, a JVM is able to change how a
+value object is laid out in memory without affecting the program. A JVM could,
+e.g., store the fields of a value object on the stack or even in CPU registers,
+rather than the heap.</p>
+<h3 id="Value-objects-are-a-preview-language-and-VM-feature-disabled-by-default">Value objects are a <a href="https://openjdk.org/jeps/12">preview language and VM feature</a>, disabled by default</h3>
+<p>To use this feature in JDK 28, you must enable preview features:</p>
+<ul>
+<li>
+<p>Compile the program with <code>javac --release 28 --enable-preview Main.java</code> and
+run it with <code>java --enable-preview Main</code>; or,</p>
+</li>
+<li>
+<p>When using the <a href="https://openjdk.org/jeps/330">source code launcher</a>, run the program with
+<code>java <span style="white-space: nowrap">--enable-preview</span>
+Main.java</code>; or,</p>
+</li>
+<li>
+<p>When using <a href="https://openjdk.org/jeps/222">jshell</a>, start it with <code>jshell --enable-preview</code>.</p>
+</li>
+</ul>
+<p><a href="#Value-classes-in-the-Java-Platform">Some classes</a>
+in the Java Platform API become value classes only when preview features are
+enabled; otherwise, they behave just as they did in JDK 27.</p>
+<p>For example, if your code refers to the <code>LocalDate</code> class and you compile with
+preview features disabled, the compiler uses the existing identity-object
+version of <code>LocalDate</code> and you do not need to run the program with preview
+features enabled. If you compile with preview features enabled, however, the
+compiler uses the new value-object version of <code>LocalDate</code> and you must run the
+program with preview features enabled. It is not possible to use the
+identity-object version of <code>LocalDate</code> when preview features are enabled.</p>
+<h3 id="Contents">Contents</h3>
+<blockquote><div style="columns: 2; font-size: smaller; white-space: nowrap;">
+<a href="#Programming-with-value-objects">Programming with value objects</a><br />
+<a href="#Declaring-value-classes">Declaring value classes</a><br />
+<a href="#Comparing-value-objects">Comparing value objects</a><br />
+<a href="#Value-classes-and-subclassing">Value classes and subclassing</a><br />
+<a href="#Safe-construction-of-value-objects">Safe construction of value objects</a><br />
+<a href="#Other-construction-enhancements">Other construction enhancements</a><br />
+<a href="#Inherited-methods-of-java-lang-Object">Inherited methods of <code>java.lang.Object</code></a><br />
+<a href="#Migrating-to-value-classes">Migrating to value classes</a><br />
+<a href="#Value-classes-in-the-Java-Platform">Value classes in the Java Platform</a><br />
+<a href="#Run-time-optimizations-for-value-objects">Run-time optimizations for value objects</a><br />
+<a href="#Reference-flattening">Reference flattening</a><br />
+<a href="#Reference-scalarization">Reference scalarization</a><br />
+<a href="#When-can-flattening-and-scalarization-be-done?">When can flattening and scalarization be done?</a><br />
+</div></blockquote>
+<h3 id="Programming-with-value-objects">Programming with value objects</h3>
+<p>In the Java Platform API, 30 classes are now declared as value classes. Examples
+include:</p>
+<table style="white-space: nowrap;">
+  <thead>
+    <tr><th>Package</th><th>Classes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>java.lang</td>
+        <td><code>Integer</code>,
+            <code>Long</code>,
+            <code>Float</code>,
+            <code>Double</code>,
+            <code>Byte</code>,
+            <code>Short</code>,
+            <code>Character</code>,
+            <code>Boolean</code>
+         </td></tr>
+    <tr><td>java.util</td>
+        <td><code>Optional</code>,
+            <code>OptionalInt</code>,
+            <code>OptionalLong</code>,
+            <code>OptionalDouble</code>
+        </td></tr>
+    <tr><td>java.time</td>
+        <td><code>LocalDate</code>,
+            <code>LocalTime</code>,
+            <code>LocalDateTime</code>,
+            <code>ZonedDateTime</code>,
+            <code>Duration</code>
+        </td></tr>
+  </tbody>
+</table>
+<p>All instances of these classes are value objects. This includes the <a href="https://download.java.net/java/early_access/jdk28/docs/specs/jls/jls-5.html#jls-5.1.7">boxed
+primitives</a> that are instances of <code>Integer</code>, <code>Long</code>, and so
+forth. The <code>==</code> operator compares value objects by their field values, so, e.g.,
+two <code>Integer</code> objects are <code>==</code> if they represent the same primitive value:</p>
+<pre><code>$ jshell --enable-preview
+|  Welcome to JShell -- Version 28-internal
+|  For an introduction type: /help intro
+
+jshell&gt; Integer x = 1996, y = 1996;
+x ==&gt; 1996
+y ==&gt; 1996
+
+jshell&gt; x == y
+$3 ==&gt; true</code></pre>
+<p>Similarly, two <code>LocalDate</code> objects are <code>==</code> if they have the same year, month,
+and day values:</p>
+<pre><code>jshell&gt; LocalDate d1 = LocalDate.of(1996, 1, 23)
+d1 ==&gt; 1996-01-23
+
+jshell&gt; LocalDate d2 = d1.plusYears(30)
+d2 ==&gt; 2026-01-23
+
+jshell&gt; LocalDate d3 = d2.minusYears(30)
+d3 ==&gt; 1996-01-23
+
+jshell&gt; d1 == d3
+$7 ==&gt; true</code></pre>
+<p>We can use the new <code>Objects.hasIdentity</code> method to observe whether an object is
+an identity object:</p>
+<pre><code>jshell&gt; Objects.hasIdentity(d1)
+$8 ==&gt; false</code></pre>
+<p>The <code>String</code> class, due to some dependencies on object identity in its API and
+implementation, is not a value class, so instances of <code>String</code> are always
+identity objects:</p>
+<pre><code>jshell&gt; String s = "abcd"
+s ==&gt; "abcd"
+
+jshell&gt; Objects.hasIdentity(s)
+$10 ==&gt; true
+
+jshell&gt; String t = "aabcd".substring(1)
+t ==&gt; "abcd"
+
+jshell&gt; s == t
+$12 ==&gt; false</code></pre>
+<p>In most respects, value objects work the way that objects have always worked in
+the language: They have fields and methods, they are handled by reference, and
+their references can be null.</p>
+<p>A few identity-sensitive operations, however, are not supported by value
+objects, including synchronization:</p>
+<pre><code>jshell&gt; synchronized (d1) { d1.notify(); }
+|  Error:
+|  unexpected type
+|    required: a type with identity
+|    found:    java.time.LocalDate
+|  synchronized (d1) { d1.notify(); }
+|  ^--------------------------------^
+
+jshell&gt; Object o = d1
+o ==&gt; 1996-01-23
+
+jshell&gt; synchronized (o) { o.notify(); }
+|  Exception java.lang.IdentityException: Cannot synchronize on
+   an instance of value class java.time.LocalDate
+|        at (#19:1)</code></pre>
+<p>JVM implementors have the freedom to encode references to value objects at run
+time in ways that optimize memory footprint, locality, and garbage collection
+efficiency. For example, we saw the following array earlier, implemented with
+pointers to heap objects:</p>
+<pre><code>jshell&gt; LocalDate[] dates = { d1, d1, d2, null, d3 }
+dates ==&gt; LocalDate[5] { 1996-01-23, 1996-01-23, 2026-01-23,
+                         null, 1996-01-23 }</code></pre>
+<p>Now that <code>LocalDate</code> objects lack identity, a JVM need not represent references
+to them using pointers; it can, rather, encode the fields of <code>LocalDate</code> objects
+directly in the references. Each element of the <code>dates</code> array can be represented
+as a 64-bit word that indicates whether the reference is null and, if not,
+directly stores the year, month, and day field values of the value object:</p>
+<pre><code>+--------------+
+| LocalDate[5] |
++--------------+
+| 1|1996|01|23 |
+| 1|1996|01|23 |
+| 1|2026|01|23 |
+| 0|0000|00|00 |
+| 1|1996|01|23 |
++--------------+</code></pre>
+<p>The performance characteristics of this <code>LocalDate</code> array may be similar to
+those of an ordinary <code>int</code> array, with lower memory footprint and better
+reference locality:</p>
+<pre><code>+----------+
+| int[5]   |
++----------+
+| 1996     |
+| 2006     |
+| 1996     |
+| 1        |
+| 23       |
++----------+</code></pre>
+<p>This optimization is just one example; some value classes, such as
+<code>LocalDateTime</code>, are too large to take advantage of this particular technique.
+Still, the lack of identity enables JVM implementors to optimize references to
+value objects in many ways.</p>
+<h3 id="Declaring-value-classes">Declaring value classes</h3>
+<p>You can declare your own value classes by applying the <code>value</code> modifier to any
+class whose instances should be immutable and interchangeable:</p>
+<ul>
+<li>
+<p><em>Immutable</em> &#8212; All instance fields of the class are <code>final</code>, and the value
+represented by an instance will not change over time; and</p>
+</li>
+<li>
+<p><em>Interchangeable</em> &#8212; It is not necessary to distinguish between two
+separately-created instances that represent the same value.</p>
+</li>
+</ul>
+<p>When the <code>value</code> modifier is applied to a class, the fields of the class are
+implicitly <code>final</code>. The class itself is also implicitly <code>final</code>, so it cannot be
+extended. Because the class is <code>final</code>, its methods cannot be overridden.</p>
+<p>There is no restriction on the types of fields in a value class. The fields
+may store references to other value objects, or to identity objects, e.g.,
+strings.</p>
+<p><a href="https://openjdk.org/jeps/395">Record classes</a> are <code>final</code> and all their fields are <code>final</code>, so they
+are often good candidates to be value classes:</p>
+<pre><code>jshell&gt; value record Point(int x, int y) {}
+|  created record Point
+
+jshell&gt; Point p = new Point(17, 3)
+p ==&gt; Point[x=17, y=3]
+
+jshell&gt; Objects.hasIdentity(p)
+$3 ==&gt; false
+
+jshell&gt; new Point(17, 3) == p
+$4 ==&gt; true</code></pre>
+<p>Many classes have immutable and interchangeable instances, but they cannot be
+record classes because their fields do not correspond exactly to their
+constructor arguments; i.e., they are not <em>transparent</em>. Such classes might use
+private fields internally in a more efficient way than is exposed externally
+through public methods. For example, a class might represent a quantity of euros
+and cents with a single <code>long</code> field to save memory; it cannot be a value
+record, but it can still be a value class:</p>
+<pre><code>value class EURCurrency {
+
+    private long cs;  // implicitly final
+
+    private EURCurrency(long cs) { this.cs = cs; }
+
+    public EURCurrency(long e, int c, boolean neg) {
+        this(neg ? -e * 100 - c : e * 100 + c);
+    }
+
+    public EURCurrency(long e, int c) { this(e, c, false); }
+
+    public long euros() { return Math.abs(cs) / 100; }
+    public int cents() { return (int) Math.abs(cs) % 100; }
+    public boolean negative() { return cs &lt; 0; }
+
+    public String toString() {
+        var prefix = negative() ? "-&#8364;" : "&#8364;";
+        return "%s%d,%d".formatted(prefix, euros(), cents());
+    }
+
+}</code></pre>
+<h3 id="Comparing-value-objects">Comparing value objects</h3>
+<p>Traditionally, the purpose of the <code>==</code> operator was to test whether two
+referenced objects have the same identity.</p>
+<p>After the introduction of value objects, the purpose of the <code>==</code> operator is to
+test whether two referenced objects are indistinguishable. Since identity
+objects are, by definition, distinguished by their identities, this means that
+the <code>==</code> operator works the same for identity objects in Java 28 as it has since
+Java 1.0: It tests for references to the same object &#8212; at the same location in
+memory &#8212; or for matching <code>null</code> references.</p>
+<p>When comparing two value objects, the <code>==</code> operator tests for references to
+instances of the same class with the same field values. That is, two value
+objects are indistinguishable if:</p>
+<ul>
+<li>
+<p>They are instances of the same value class,</p>
+</li>
+<li>
+<p>Their primitive-typed fields store the same bit patterns, and</p>
+</li>
+<li>
+<p>Their reference-typed fields are indistinguishable, applying the <code>==</code>
+operator recursively.</p>
+</li>
+</ul>
+<p>When that is the case, a JVM can freely replace one reference with the other,
+and no code will be able to tell the difference.</p>
+<p>The <code>==</code> operator and the <code>equals</code> method will often produce the same results
+for value objects. For some value classes, however, instances may be
+interchangeable (i.e., <code>equals</code>) even if their field values are different (i.e.,
+not <code>==</code>). <strong>To test whether two value objects represent the same value, use the
+<code>equals</code> method. When declaring a class, define <code>equals</code> in a way that always
+returns <code>true</code> for interchangeable instances.</strong></p>
+<p>The <code>Substring</code> value class, below, illustrates how <code>==</code> and <code>equals</code> may differ
+for some value objects. This class represents a substring of a string without
+allocating a new <code>char[]</code> in memory. The internal state of a <code>Substring</code>
+instance is a source string and two coordinates, while the value represented by
+the instance is a character sequence, as produced by <code>toString</code>. Accordingly,
+two instances may represent the same character sequence (i.e., are <code>equals</code>)
+even though their internal state is different (i.e., not <code>==</code>).</p>
+<pre><code>value class Substring {
+
+    private String str;
+    private int start, end;
+
+    public Substring(String s, int i, int j) {
+        str = s; start = i; end = j;
+    }
+
+    public String toString() {
+        return str.substring(start, end);
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof Substring &amp;&amp; toString().equals(o.toString());
+    }
+
+    public int hashCode() {
+        return Objects.hash(Substring.class, toString());
+    }
+
+}
+
+jshell&gt; Substring sub1 = new Substring("ringing", 1, 4);
+sub1 ==&gt; ing
+
+jshell&gt; Substring sub2 = new Substring("ringing", 4, 7);
+sub2 ==&gt; ing
+
+jshell&gt; sub1.equals(sub2)
+$3 ==&gt; true
+
+jshell&gt; sub1 == sub2
+$4 ==&gt; false</code></pre>
+<p>The results of the <code>==</code> operator and the <code>equals</code> method may also be different
+if the fields of two value objects refer to distinct identity objects that are
+interchangeable according to <code>equals</code>:</p>
+<pre><code>jshell&gt; String r = "bringing".substring(1);
+r ==&gt; ringing
+
+jshell&gt; r == "ringing"
+$6 ==&gt; false
+
+jshell&gt; Substring sub3 = new Substring(r, 1, 4);
+sub3 ==&gt; ing
+
+jshell&gt; sub1.equals(sub3)
+$8 ==&gt; true
+
+jshell&gt; sub1 == sub3  // tests sub1.str == sub3.str
+$9 ==&gt; false</code></pre>
+<p>Another situation in which the <code>==</code> operator and <code>equals</code> may differ is when
+value objects have <code>float</code> or <code>double</code> fields. The primitive floating-point
+types support multiple <code>NaN</code> values. These <code>NaN</code> values are treated as
+interchangeable by most floating-point operations, but because each value is
+distinct, value objects that wrap different <code>NaN</code> values are distinguishable by
+the <code>==</code> operator. When declaring a value class, you must decide whether that
+distinction is meaningful for the <code>equals</code> method. For example, in a value
+record, the default behavior of <code>equals</code> treats all <code>NaN</code> values as
+interchangeable:</p>
+<pre><code>jshell&gt; value record Length(float val) {}
+|  created record Length
+
+jshell&gt; Length l1 = new Length(Float.intBitsToFloat(0x7ff80000))
+l1 ==&gt; Length[val=NaN]
+
+jshell&gt; Length l2 = new Length(Float.intBitsToFloat(0x7ff80001))
+l2 ==&gt; Length[val=NaN]
+
+jshell&gt; l1.equals(l2)
+$4 ==&gt; true
+
+jshell&gt; l1 == l2
+$5 ==&gt; false
+
+jshell&gt; Integer.toHexString(Float.floatToRawIntBits(l1.val()))
+$6 ==&gt; "0x7ff80000"
+
+jshell&gt; Integer.toHexString(Float.floatToRawIntBits(l2.val()))
+$7 ==&gt; "0x7ff80001"</code></pre>
+<p>(For more on the different kinds of equivalence between floating-point values,
+see the <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/Double.html#fpNumericalEq">specification of the <code>Double</code> class</a>.)</p>
+<p>Because the <code>==</code> operator compares the reference-typed fields of value objects
+recursively, applying it to two value objects may require an unbounded number of
+comparisons. In the following example, two deep nests of <code>Box</code> objects must be
+fully traversed to determine whether the objects are indistinguishable:</p>
+<pre><code>jshell&gt; value record Box(Object val) {}
+|  created record Box
+
+jshell&gt; var b1 = new Box(new Box(new Box(new Box(l1))))
+b1 ==&gt; Box[val=Box[val=Box[val=Box[val=Length[val=NaN]]]]]
+
+jshell&gt; var b2 = new Box(new Box(new Box(new Box(l2))))
+b2 ==&gt; Box[val=Box[val=Box[val=Box[val=Length[val=NaN]]]]]
+
+jshell&gt; b1.equals(b2)
+$11 ==&gt; true
+
+jshell&gt; b1 == b2
+$12 ==&gt; false</code></pre>
+<p>Constructors of value classes are constrained, as discussed
+<a href="#Safe-construction-of-value-objects">below</a>, so that the recursive application
+of the <code>==</code> operator to value objects will never cause an infinite loop. But
+deep comparisons may take a long time, or even trigger a <code>StackOverflowError</code>.</p>
+<h3 id="Value-classes-and-subclassing">Value classes and subclassing</h3>
+<p>Every value class belongs to a class hierarchy with <code>java.lang.Object</code> at its
+root, just like every identity class. There is no <code>java.lang.Value</code> superclass
+of all value classes.</p>
+<p>Value classes can implement interfaces. Thus variables declared with an
+interface type, or with the type <code>Object</code>, can store references to both value
+objects and identity objects:</p>
+<pre><code>jshell&gt; Comparable&lt;?&gt; comp = LocalDate.of(1996, 1, 23)
+comp ==&gt; 1996-01-23
+
+jshell&gt; Objects.hasIdentity(comp)
+$2 ==&gt; false
+
+jshell&gt; comp = "abc"
+comp ==&gt; "abc"
+
+jshell&gt; Objects.hasIdentity(comp)
+$4 ==&gt; true</code></pre>
+<p>By default, a value class is implicitly <code>final</code> and cannot be extended. A value
+class may, however, be declared <code>abstract</code>, allowing it to be extended by other
+classes and have its methods overridden. The fields of an abstract value class
+are implicitly <code>final</code>, as in a concrete value class. The methods of an abstract
+value class may be marked <code>abstract</code>, as in an abstract identity class.</p>
+<p>Declaring an abstract value class is an indication that the class itself has no
+need for identity. Its subclasses may be value classes or identity classes. (The
+<code>value</code> modifier on an abstract value class can be read as meaning
+<em>value-compatible</em>.)</p>
+<p>A value class can extend either <code>java.lang.Object</code> or an abstract value class,
+but not an identity class. (The <code>Object</code> class is unique in this respect: It is
+neither abstract nor a value class, and instances produced by <code>new Object()</code>
+have identity, yet it also permits extension by value classes.)</p>
+<p>Many existing abstract classes, if they are designed to be publicly extensible,
+are good candidates to be abstract value classes. For example, the abstract
+class <code>Number</code> has no fields, nor any code that depends on identity-sensitive
+features, so it can safely be migrated to an abstract value class:</p>
+<pre><code>abstract value class Number implements Serializable {
+    public abstract int intValue();
+    public abstract long longValue();
+    public byte byteValue() { return (byte) intValue(); }
+    ...
+}</code></pre>
+<p><code>Integer</code>, which is a value class, and <code>java.math.BigInteger</code>, which is an
+identity class, both extend <code>Number</code>:</p>
+<pre><code>jshell&gt; Number num = 123
+num ==&gt; 123
+
+jshell&gt; Objects.hasIdentity(num)
+$2 ==&gt; false
+
+jshell&gt; num = BigInteger.valueOf(123)
+num ==&gt; 123
+
+jshell&gt; Objects.hasIdentity(num)
+$4 ==&gt; true</code></pre>
+<p>An abstract value class can be <a href="https://openjdk.org/jeps/409">sealed</a> in order
+to limit the classes that can extend the class:</p>
+<pre><code>sealed abstract value class UserID
+    permits EmailID, PhoneID, UsernameID
+{
+    ...
+}
+
+value class EmailID extends UserID {
+    private String name, domain; ...
+}
+
+value class PhoneID extends UserID {
+    private String digits; ...
+}
+
+value class UsernameID extends UserID {
+    private String name; ...
+}</code></pre>
+<h3 id="Safe-construction-of-value-objects">Safe construction of value objects</h3>
+<p>Constructors initialize newly-created objects by setting the values of their
+fields. Because value objects do not have identity, they must only be observed
+by other code with their field values fully initialized.</p>
+<p>To ensure this is true, the fields of a value object must be set before the
+object is shared with other code. This also prevents any two value objects from
+referring to each other, either directly or indirectly, thereby ensuring that
+invoking the <code>==</code> operator never results in an infinite loop.</p>
+<p>An object in the process of being constructed is <em>larval</em> &#8212; it has been created,
+but is not yet fully formed. Larval objects should always be handled carefully:
+If a larval object is shared with code outside the constructor then invariant
+properties of the object may not yet hold, and that code may even observe the
+mutation of <code>final</code> fields.</p>
+<p>Traditionally, a constructor begins the initialization process by invoking a
+superclass constructor, <code>super(...)</code>. If a constructor does not do this
+explicitly then the Java compiler inserts a <code>super()</code> call at the beginning of
+the constructor's body. After the superclass constructor returns, the subclass
+constructor proceeds to set its declared instance fields and perform other
+initialization tasks. This pattern exposes an object with completely
+uninitialized subclass fields to larval object leakage in any superclass
+constructor.</p>
+<p><a href="https://openjdk.org/jeps/513">Flexible constructor bodies</a>, introduced in Java 25, enable
+safer initialization by allowing fields to be set and other code to be executed
+before the <code>super(...)</code> invocation. With this feature, there are two phases to
+the object initialization process: <em>early construction</em>, before the <code>super(...)</code>
+invocation, and <em>late construction</em>, afterwards.</p>
+<p>During the early construction phase, larval object leakage is impossible: The
+constructor may set the fields of the larval object, but may not invoke instance
+methods or otherwise make use of <code>this</code>. Fields that are initialized in the
+early construction phase are therefore set before they can ever be read, even if
+a superclass leaks the larval object. Final fields, in particular, can never be
+observed to be mutated.</p>
+<p>In a value class, constructor code always runs in the early construction phase.
+The Java compiler inserts a <code>super()</code> call at the end of the constructor body,
+not the beginning. Attempts to invoke instance methods or otherwise use <code>this</code>
+will fail:</p>
+<pre><code>value class Name {
+
+    String name;
+    int length;
+
+    private int strLength() {
+        return name.length();
+    }
+
+    Name(String n) {
+        name = n;
+        length = strLength();  // Error, invokes this.strLength()
+    }
+
+}</code></pre>
+<p>Instance fields that are declared with initializer expressions are set at the
+start of the constructor, in the early construction phase. Instance initializer
+blocks, a rarely-used feature, are run in the late construction phase; they are
+not allowed to set the instance fields of value classes.</p>
+<p>If a value class constructor contains code that needs to work with <code>this</code>, an
+explicit <code>super(...)</code> or <code>this(...)</code> call can be used to mark the transition
+from the early construction phase to the late construction phase. Before
+<code>super(...)</code> can be called, however, all the class's fields must be assigned,
+without referring to <code>this</code>:</p>
+<pre><code>value class Name {
+
+    String name;
+    int length;
+
+    private static int strLength(String n) {
+        return n.length();
+    }
+
+    Name(String n) {
+        name = n;
+        length = strLength(name);  // OK, strLength is now static
+        super();                   // All fields must be set at this point
+        System.out.println("Name: " + this);
+    }
+
+}</code></pre>
+<h3 id="Other-construction-enhancements">Other construction enhancements</h3>
+<p>We loosen some of the restrictions on accessing the fields of all larval
+objects, whether they are value objects or identity objects. In Java 27, a new
+object's fields could be set in the early construction phase, but not read. In
+Java 28, with preview features enabled, these fields can be both written and
+read in the early construction phase. It continues to be illegal to refer to
+inherited fields, invoke instance methods, or share <code>this</code> with other code until
+the late construction phase.</p>
+<p>In addition, for simplicity and improved performance, in Java 28, with preview
+features enabled, all record classes, whether value records or identity records,
+adopt the same safe construction rules as value classes. A record class's
+constructor always runs in the early construction phase. The fields of a record
+must be set before they can be observed, thus users of the class can always
+expect component accesses to produce consistent results.</p>
+<p>This change is not source compatible for identity record constructor
+declarations, though we expect incompatibilities to be rare in practice. For
+example, this record class fails to compile because its canonical constructor
+refers to <code>this</code> in the early construction phase:</p>
+<pre><code>record Node(String label, List&lt;Node&gt; edges) {
+
+    static void nullCheck(Object arg, Object owner) {
+        if (arg == null) {
+            String msg = "null arg for " + owner.toString();
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+   public Node {
+        nullCheck(label, this);  // Error with --enable-preview
+        nullCheck(edges, this);  // Error with --enable-preview
+    }
+
+}</code></pre>
+<p>Such incompatibilities will be rare because, as illustrated here, most attempts
+to use <code>this</code> in a record constructor are bugs &#8212; the fields of a <code>Node</code> are not
+yet set when this code calls <code>toString()</code>. A survey of existing record class
+declarations in a large source-code corpus confirms that it is rare for record
+classes to violate the new rules.</p>
+<p>If a record constructor legitimately must access <code>this</code> then you can insert an
+explicit <code>super()</code> invocation, but you must explicitly set the record's fields
+before that, in the early construction phase.</p>
+<h3 id="Inherited-methods-of-java-lang-Object">Inherited methods of <code>java.lang.Object</code></h3>
+<p>Like any class, a value class inherits methods including <code>equals</code>, <code>hashCode</code>,
+and <code>toString</code> from <code>java.lang.Object</code>, unless overridden. These methods
+traditionally depend on identity, but when operating on a value object, they use
+the values of the object's fields instead. Specifically:</p>
+<ul>
+<li>
+<p>The inherited implementation of <code>Object.equals</code> uses the <code>==</code> operator to
+test whether the objects are indistinguishable. <a href="#Comparing-value-objects">This might be the right
+<code>equals</code> behavior</a> for a value class, but if it is
+not then the class should override the <code>equals</code> method.</p>
+</li>
+<li>
+<p>The inherited implementation of <code>Object.hashCode</code> computes a hash from the
+object's field values. (This value can also be computed via
+<code>System.identityHashCode</code> &#8212; an unfortunate legacy name.) As usual, if a
+value class overrides <code>equals</code> then it should also override <code>hashCode</code>.</p>
+</li>
+<li>
+<p>The inherited implementation of <code>Object.toString</code> returns a string of the
+form <code>"ClassName@hashCode"</code>. Since value classes represent immutable data,
+they should override <code>toString</code> to more legibly convey the values
+represented by their instances.</p>
+</li>
+</ul>
+<p>In a value record, as for all records, the default behavior of the <code>equals</code>,
+<code>hashCode</code>, and <code>toString</code> methods is to recursively apply the same operations
+to the record's components.</p>
+<p>A few other methods of <code>Object</code> interact with value objects:</p>
+<ul>
+<li>
+<p>For a <code>Cloneable</code> value class, the <code>Object.clone</code> method produces a value
+object that is indistinguishable from the original. The usual expectation
+that <code>x.clone() != x</code> is not meaningful for value objects. When declaring a
+value class that holds references to identity objects, consider overriding
+the <code>clone</code> method to create deep copies of those objects.</p>
+</li>
+<li>
+<p>The <code>wait</code> and <code>notify</code> methods require that the object be locked in the
+current thread. Since it is impossible to synchronize on a value object,
+attempts to call these methods always fail with an
+<code>IllegalMonitorStateException</code>.</p>
+</li>
+<li>
+<p>The <code>finalize</code> method of a value object is never invoked by the garbage
+collector. <code>javac</code> issues <code>identity</code> warnings for value classes that
+override <code>finalize</code>.</p>
+</li>
+</ul>
+<h3 id="Migrating-to-value-classes">Migrating to value classes</h3>
+<p>Value classes and records are useful tools for any class that models simple
+immutable data.</p>
+<p>As a general rule, if a class with immutable state does not require identity
+then it is probably appropriate to adopt the <code>value</code> modifier. This includes
+abstract classes, which often have no state at all and should not impose an
+unnecessary identity requirement on their subclasses. (Some abstract classes
+define an inherently mutable API, even if they declare no mutable state, and so
+should not be made value classes. Some concrete classes do not model data at all
+&#8212; for example, they may be designed to be instantiated only once.)</p>
+<p>If a class is either <code>final</code> or <code>abstract</code>, and has only <code>final</code> fields, then
+adding or removing the <code>value</code> keyword is a binary-compatible change.</p>
+<p>Migrating an identity class to a value class does present source and behavioral
+incompatibility risks worth considering:</p>
+<ul>
+<li>
+<p>If the class has public constructors, existing clients may rely on them to
+create objects that are known to be distinguishable from every other object
+via the <code>==</code> operator. Changing the class to be a value class will
+invalidate that logic, possibly leading to run-time bugs.</p>
+<p>If this incompatibility is a serious concern, it may be appropriate to
+deprecate the public constructors and encourage the use of factory methods
+instead. As an example, in Java 9 we deprecated the constructors of
+<code>Integer</code>, <code>Long</code>, etc., recommending the use of the corresponding factory
+methods <code>Integer.valueOf</code>, <code>Long.valueOf</code>, etc., instead.</p>
+</li>
+<li>
+<p>If existing clients synchronize on instances of the class then after
+migration they will fail, either with a compile-time error or an
+<code>IdentityException</code> at run time. This incompatibility is more likely to be a
+risk for classes with public constructors, since clients may rely on those
+constructors to create unique instances for locking.</p>
+</li>
+<li>
+<p>If the <code>equals</code> and <code>hashCode</code> methods have not already been overridden,
+they will behave differently after migration. A good migration candidate
+will override these methods prior to migration so that their behavior does
+not depend on identity.</p>
+</li>
+<li>
+<p>If the class encapsulates sensitive data, be cautious about the risk of
+exposing that data via the <code>==</code> operator or <code>System.identityHashCode</code>. A
+malicious user could use these operations to try to infer the data inside an
+instance. Value objects are not designed to protect sensitive data against
+such attacks.</p>
+</li>
+<li>
+<p>If the class implements <code>Serializable</code> then it may require special handling,
+as discussed <a href="#serialization">below</a>. Migrating it to a value class may,
+moreover, break certain uses of the reflection and garbage collection APIs,
+also discussed <a href="#reflection">below</a>, or other specialized identity-sensitive
+code.</p>
+</li>
+</ul>
+<h3 id="Value-classes-in-the-Java-Platform">Value classes in the Java Platform</h3>
+<p>In the Java Platform API, 30 classes are now declared as value classes:</p>
+<table>
+  <thead>
+    <tr><th>Package</th><th>Classes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>java.lang</code></td>
+        <td><code>Integer</code>,
+            <code>Long</code>,
+            <code>Float</code>,
+            <code>Double</code>,
+            <code>Byte</code>,
+            <code>Short</code>,
+            <code>Character</code>,
+            <code>Boolean</code>,
+            <code>Number</code>,
+            <code>Record</code>
+         </td></tr>
+    <tr><td><code>java.util</code></td>
+        <td><code>Optional</code>,
+            <code>OptionalInt</code>,
+            <code>OptionalLong</code>,
+            <code>OptionalDouble</code>
+        </td></tr>
+    <tr><td><code>java.time</code></td>
+        <td><code>LocalDate</code>,
+            <code>LocalTime</code>,
+            <code>LocalDateTime</code>,
+            <code>ZonedDateTime</code>,
+            <code>OffsetTime</code>,
+            <code>OffsetDateTime</code>,
+            <code>Duration</code>,
+            <code>Instant</code>,
+            <code>Period</code>,
+            <code>Year</code>,
+            <code>YearMonth</code>,
+            <code>MonthDay</code>
+        </td></tr>
+    <tr><td><code>java.time.chrono</code></td>
+        <td><code>MinguoDate</code>,
+            <code>HijrahDate</code>,
+            <code>JapaneseDate</code>,
+            <code>ThaiBuddhistDate</code>
+        </td></tr>
+  </tbody>
+</table>
+<p>To minimize compatibility risks, the specifications of these classes have long
+discouraged relying on the identities of their instances, and have long been
+specified as <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/doc-files/ValueBased.html"><em>value-based</em></a>. They have also discouraged or even
+prevented instance creation via constructors. Since Java 16, <a href="https://openjdk.org/jeps/390">warnings for
+value-based classes</a> have discouraged synchronizing on instances
+of these classes.</p>
+<p>The vast majority of the Platform APIs work seamlessly with value objects.
+Methods that operate on <code>Object</code> or <code>Object[]</code> parameters accept value objects.
+Almost anywhere you need to provide an implementation of an interface, the
+implementation may be a value class. Generic types such as <code>List&lt;T&gt;</code> and
+<code>Comparable&lt;T&gt;</code> can be instantiated with value classes as the type arguments.</p>
+<p>Additional changes in the Platform APIs further support value objects:</p>
+<ul>
+<li>
+<p>Two new methods in the <code>java.util.Objects</code> class, <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/util/Objects.html#hasIdentity(java.lang.Object)"><code>hasIdentity</code></a> and
+<a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/util/Objects.html#requireIdentity(T,java.util.function.Supplier)"><code>requireIdentity</code></a>, allow you to distinguish between identity objects and
+value objects.</p>
+</li>
+<li>
+<p>A new constant in <code>java.lang.reflect.AccessFlag</code>, <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/reflect/AccessFlag.html#IDENTITY"><code>IDENTITY</code></a>, tells when a
+class is an identity class.</p>
+<p>Whether a class is an identity class or a value class is recorded in its
+class file. Identity classes have the <code>ACC_IDENTITY</code> flag set; value classes
+do not. This flag supersedes the legacy <code>ACC_SUPER</code> flag. The JVM
+Specification has always recommended that compilers and tools set the
+<code>ACC_SUPER</code> flag in class files, so, by default, compilers and tools will
+continue to set the flag in new class files and thus generate identity
+classes.</p>
+</li>
+<li>
+<p><a id="serialization"> Serialization of value records works automatically,
+but serialization of non-record value classes requires manual intervention.
+Value classes that implement <code>Serializable</code> must implement the
+</a><a href="https://download.java.net/java/early_access/jdk28/docs/specs/serialization/output.html#the-writereplace-method"><code>writeReplace</code></a> and <a href="https://download.java.net/java/early_access/jdk28/docs/specs/serialization/input.html#the-readresolve-method"><code>readResolve</code></a> methods so that a replacement object is
+serialized and deserialized in place of the value object itself. If these
+methods are not implemented, attempts to serialize or deserialize the value
+object will fail with an <code>InvalidClassException</code>.</p>
+<p>These methods must be implemented because value classes are compiled using
+<a href="https://openjdk.org/jeps/539">strictly-initialized fields</a>, and deserialization cannot safely
+initialize such fields. Value objects may only be created, and their fields
+initialized, by invoking a constructor. In the future, we expect to enhance
+the serialization mechanism so that serializable value classes can be
+serialized and deserialized automatically.</p>
+<p><code>javac</code> issues <code>serial</code> warnings for value classes that will fail
+serialization at run time.</p>
+</li>
+<li>
+<p><a id="reflection"> Using <em></em></a><em><a href="https://openjdk.org/jeps/8305968#Undermining-integrity">deep reflection</a></em>, as embodied in the
+<a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/reflect/Field.html#setAccessible(boolean)"><code>setAccessible</code></a> and <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/reflect/Field.html#set(java.lang.Object,java.lang.Object)"><code>set</code></a> methods of the <code>java.lang.reflect.Field</code> API,
+to mutate the fields of a value object is not supported. Libraries that
+modify <code>final</code> fields via deep reflection are incompatible with safe
+construction. They are not permitted to modify the fields of value objects
+even if the <a href="https://openjdk.org/jeps/500#Description"><code>--enable-final-field-mutation</code></a> option is
+given on the command line. Libraries must initialize instances of a value
+class using the class's constructors.</p>
+</li>
+<li>
+<p>The garbage collection APIs in the <a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/lang/ref/package-summary.html"><code>java.lang.ref</code></a> package and the
+<a href="https://download.java.net/java/early_access/jdk28/docs/api/java.base/java/util/WeakHashMap.html"><code>java.util.WeakHashMap</code></a> class cannot be used with value
+objects. Attempting to create <code>Reference</code> objects for value objects will
+cause an <code>IdentityException</code> to be thrown.</p>
+<p>Since JDK 25, <code>javac</code> has issued
+<a href="https://bugs.openjdk.org/browse/JDK-8354556"><code>identity</code> warnings</a> when
+value-based classes are used with these APIs. As of JDK 28, <code>javac</code> also
+issues <code>identity</code> warnings when value classes are used with these APIs.</p>
+</li>
+</ul>
+<h3 id="Run-time-optimizations-for-value-objects">Run-time optimizations for value objects</h3>
+<p>At run time, a JVM can optimize value objects by encoding references to them in
+more compact forms than references to identity objects. Instead of allocating
+space in the heap for a value object, a JVM can <em>flatten</em> and <em>scalarize</em> the
+reference to the object.</p>
+<ul>
+<li>
+<p><em>Reference flattening:</em> When a field of one object, or an element of an
+array, stores a reference to another object, a JVM can encode the other
+object's field values directly into the reference. When this is done, the
+reference is not a pointer to the other object in memory. The reference is
+said to be <em>flattened</em>.</p>
+</li>
+<li>
+<p><em>Reference scalarization:</em> When a method parameter or local variable stores
+a reference to an object, a JVM can encode the object's field values into
+additional local variables. When this is done, again, the reference is not a
+pointer to the object in memory. The reference is said to be <em>scalarized</em>.</p>
+</li>
+</ul>
+<p>When a reference is flattened or scalarized, it needs no independent object
+representation in the heap. This means it has no impact on garbage collection,
+and its data is always co-located in memory with the referencing object or call
+stack.</p>
+<h3 id="Reference-flattening">Reference flattening</h3>
+<p>As an example, a JVM could flatten an array of <code>Integer</code> references so that each
+array element holds a reference that directly encodes the underlying integer
+value instead of pointing to the memory location of an <code>Integer</code> object. Each
+reference also indicates whether the original <code>Integer</code> reference was <code>null</code> by
+prepending a <code>0</code> (<code>null</code>) or <code>1</code> (non-<code>null</code>) flag to the integer value:</p>
+<pre><code>+--------------+
+| Integer[5]   |
++--------------+
+| 1|1996       |
+| 1|2006       |
+| 1|1996       |
+| 0|0          |
+| 0|0          |
++--------------+</code></pre>
+<p>Each <code>int</code> value takes up 32 bits, and each <code>null</code> flag requires at least one
+additional bit. Due to hardware constraints, a JVM will probably encode each
+flattened <code>Integer</code> reference as a 64-bit word. An <code>Integer</code> array thus has a
+larger memory footprint than a plain <code>int</code> array, but a significantly smaller
+total footprint than an array of pointers to <code>Integer</code> objects. (Each pointer is
+a 32- or 64-bit value, and each referenced object requires <a href="https://openjdk.org/jeps/450">at least 64
+bits</a> just for its header.) Even more significantly, all of the
+<code>Integer</code> data is stored directly inside the array, where it can be accessed
+without any additional memory loads.</p>
+<p>As shown earlier, an array of <code>LocalDate</code> references can be flattened by
+prepending a <code>null</code> flag to the year-month-day triple of a <code>LocalDate</code> object
+(an <code>int</code> and two <code>byte</code>s). Like flattened <code>Integer</code> references, these flattened
+<code>LocalDate</code> references can fit in 64 bits:</p>
+<pre><code>+--------------+
+| LocalDate[5] |
++--------------+
+| 1|1996|01|23 |
+| 1|1996|01|23 |
+| 1|2026|01|23 |
+| 0|0000|00|00 |
+| 1|1996|01|23 |
++--------------+</code></pre>
+<p>Fields can also store flattened references. For example, a <code>LocalDateTime</code>
+object has two fields, a <code>LocalDate</code> and a <code>LocalTime</code>, and each can store a
+flattened reference:</p>
+<pre><code>+----------------------+
+| LocalDateTime        |
++----------------------+
+| date=1|2026|01|23    |
+| time=1|09|00|00|0000 |
++----------------------+</code></pre>
+<p>Reference flattening must maintain the integrity of data. A flattened reference
+must always be read and written atomically, or it could become corrupted. On
+common hardware architectures, this limits the size of mutable fields that store
+flattened references to no more than 64 bits.</p>
+<p>For example, attempting to flatten a reference to a <code>LocalDateTime</code> object would
+embed fields from the underlying <code>LocalDate</code> and <code>LocalTime</code> objects, plus a
+null flag for each, plus a null flag for the <code>LocalDateTime</code> itself. The
+flattened reference would likely be too big to read and write atomically, so a
+JVM could not store it in a mutable field of type <code>LocalDateTime</code>, such as the
+<code>lastClicked</code> time of an identity class <code>Button</code>:</p>
+<pre><code>+--------------------------------------------+
+| Button                                     |
++--------------------------------------------+
+| lastClicked=1|1|2026|01|23|1|09|00|00|0000 |  // Not possible
+| ...                                        |
++--------------------------------------------+</code></pre>
+<p>Instead, the JVM would choose &#8212; silently, at its discretion &#8212; a reference layout
+compatible with a mutable <code>lastClicked</code> field. Perhaps the field would store a
+pointer to a <code>LocalDateTime</code> object, whose own fields may store flattened
+references as shown earlier:</p>
+<pre><code>+----------------------+
+| Button               |
++----------------------+
+| lastClicked=87fa50a0 |------&gt; +----------------------+
+| ...                  |        | LocalDateTime        |
++----------------------+        +----------------------+
+                                | date=1|2026|01|23    |
+                                | time=1|09|00|00|0000 |
+                                +----------------------+</code></pre>
+<p>The fields of a value class, by contrast, do not have this atomicity limitation,
+since the fields of value objects can never be observed to be mutated. Thus, for
+example, the <code>timestamp</code> field of an <code>Event</code> value class could store a flattened
+reference to a <code>LocalDateTime</code> object:</p>
+<pre><code>+------------------------------------------+
+| Event                                    |
++------------------------------------------+
+| timestamp=1|1|2026|01|23|1|09|00|00|0000 |  // OK in a value class
+| ...                                      |
++------------------------------------------+</code></pre>
+<p>Future enhancements may enable more flattening of references to 64-bit and even
+larger value objects. For example, additional language features may allow value
+classes to opt out of atomicity constraints, or perhaps 128-bit atomic mutable
+fields will become viable on some hardware architectures.</p>
+<h3 id="Reference-scalarization">Reference scalarization</h3>
+<p>When a JVM loads a flattened reference from the field of an object in the heap,
+it must decode the reference into a form that it can readily work with. For code
+compiled by the JVM's just-in-time (JIT) compiler, this form can be a scalarized
+reference.</p>
+<p>For example, consider this code fragment:</p>
+<pre><code>LocalDate d = dates[0];
+dates[0] = d.plusYears(30);</code></pre>
+<p>The <code>LocalDate.plusYears</code> method itself might be declared:</p>
+<pre><code>public LocalDate plusYears(long yearsToAdd) {
+    int newYear = YEAR.checkValidIntValue(this.year + yearsToAdd);
+    return new LocalDate(newYear, this.month, this.day);
+}</code></pre>
+<p>In pseudo-code, the result of JIT-compiling the <code>plusYears</code> method might look
+like the following, using the notation <code>{ ... }</code> to indicate that multiple
+values are returned from a JIT-compiled method (this is purely notational; there
+is no wrapper at run time):</p>
+<pre><code>static { boolean, int, byte, byte }
+    plusYears(boolean this_null,
+              int this_year, byte this_month, byte this_day,
+              long yearsToAdd)
+{
+    if (this_null) throw new NullPointerException();
+    int newYear = YEAR.checkValidIntValue(this_year + yearsToAdd);
+    return { false, newYear, this_month, this_day };
+}</code></pre>
+<p>Then the result of JIT-compiling the fragment that updates the <code>dates</code> array
+might look like:</p>
+<pre><code>{ d_null, d_year, d_month, d_day } = dates[0];
+dates[0] = plusYears(d_null, d_year, d_month, d_day, 30);</code></pre>
+<p>Thanks to the JVM's optimizations, this code never touches a pointer to a
+heap-allocated <code>LocalDate</code> object:</p>
+<ul>
+<li>
+<p>A flattened reference in <code>dates[0]</code> is converted to a scalarized reference
+when read,</p>
+</li>
+<li>
+<p>A new scalarized reference is returned from <code>plusYears</code>, and</p>
+</li>
+<li>
+<p>That reference is then converted to another flattened reference when written.</p>
+</li>
+</ul>
+<p>Unlike reference flattening, reference scalarization is not constrained by the
+size of the data. Local variables that are pushed and popped on the stack are
+not at risk of data races. Thus it is possible to operate routinely on
+scalarized encodings of <code>LocalDateTime</code> references: three values and a null flag
+for the underlying <code>LocalDate</code>, four values and a null flag for the underlying
+<code>LocalTime</code>, and a null flag for the <code>LocalDateTime</code> itself.</p>
+<p>JVMs have used <a href="https://docs.oracle.com/en/java/javase/26/vm/java-hotspot-virtual-machine-performance-enhancements.html#GUID-6BD8FCB5-995B-4AE9-BFAA-B2C7DE2BA5CD">similar techniques</a> to scalarize references to
+identity objects when they can prove that an object's identity is never used.
+Scalarization of references to value objects is more predictable and
+far-reaching, even across method boundaries.</p>
+<h3 id="When-can-flattening-and-scalarization-be-done?">When can flattening and scalarization be done?</h3>
+<p>Reference flattening and scalarization are optimizations, not language features.
+You cannot directly control them. Like all optimizations, they are done at the
+discretion of the JVM. There are, however, things you can do to make it more
+likely that a JVM can apply these optimizations.</p>
+<p>First, flattening and scalarization require that a variable only stores
+references to instances of a specific value class; e.g., the <code>date</code> field of a
+<code>LocalDateTime</code> object always stores a <code>LocalDate</code> reference. Flattening and
+scalarization typically cannot be applied to a variable declared with a
+supertype of a value class, such as <code>Object</code>.</p>
+<p>For example, the following two arrays store the same <code>Integer</code> values when they
+are created, but because the second array can have arbitrary <code>Object</code> references
+stored in it in the future, a JVM must encode its elements as pointers to
+ordinary objects on the heap:</p>
+<pre><code>Integer[] ints = { 1996, 2006, 1996, null, null };  // flattenable
+Object[] objs = { 1996, 2006, 1996, null, null };   // not flattenable</code></pre>
+<p>Value objects written to the <code>objs</code> array need to be converted to ordinary heap
+objects:</p>
+<pre><code>Integer i = -1;
+ints[3] = i;  // write a flattened reference
+objs[3] = i;  // write a heap pointer</code></pre>
+<p>A field with a generic type <code>T</code> usually has erased type <code>Object</code>, and so behaves
+at run time just like an <code>Object</code>-typed field:</p>
+<pre><code>record Box&lt;T&gt;(T field) { }    // field is not flattenable
+var b = new Box&lt;Integer&gt;(i);  // field stores a heap pointer</code></pre>
+<p>These conversions between encodings do not have any semantic impact &#8212; the
+<code>Integer</code> objects referenced by <code>objs</code> and <code>field</code> are still value objects, and
+do not have identity. The JVM simply encodes the same value object in different
+ways.</p>
+<p>The same principles apply to method parameters: A parameter of type <code>LocalDate</code>
+is reliably scalarizable, while a parameter of type <code>Object</code> or <code>T</code> is not. (If
+the method call can be inlined, however, a JIT may be able to skip the
+assignment and heap allocation completely.)</p>
+<p>A second factor that influences whether a JVM applies flattening and
+scalarization is the content of a class file that uses value classes. When a
+class is compiled, the names of value classes mentioned by its field and method
+signatures are recorded in a new <code>LoadableDescriptors</code> class-file attribute.
+This attribute enables the JVM to load the named value classes early enough to
+set up flattened fields and scalarized method parameters.</p>
+<p>If a value class <code>V</code> is not listed in the <code>LoadableDescriptors</code> attribute of
+<code>C.class</code>, then when <code>C</code> is loaded, a JVM may not know that <code>V</code> is a value
+class. In practice, this means that if an existing class <code>V</code> is migrated to be a
+value class then, for optimal performance, classes that were compiled against
+older versions of <code>V</code> should be recompiled.</p>
+<p>When reference flattening and scalarization are not possible, a JVM uses an
+ordinary reference to an object allocated in the heap. In non-optimal
+circumstances, this may cause a new object to be allocated upon each read of a
+field or invocation of a method. This behavior is most common during the warmup
+phase of a program, before a JVM&#8217;s JIT has generated optimized code.</p>
+<h2 id="Future-Work">Future Work</h2>
+<ul>
+<li>
+<p><a href="https://openjdk.org/jeps/402">JEP 402</a>, <em>Enhanced Primitive Boxing</em>, will
+improve the treatment of primitive types to take advantage of the
+lighter-weight characteristics of boxing to value objects.</p>
+</li>
+<li>
+<p><a href="https://openjdk.org/jeps/218">JEP 218</a>, <em>Generics over Primitive Types</em> (with revisions), will
+allow generic classes and methods to specialize field, array, and local
+variable layouts when parameterized by value class types.</p>
+</li>
+</ul>
+<h2 id="Alternatives">Alternatives</h2>
+<ul>
+<li>
+<p>As discussed, JVMs have long performed escape analysis to identify objects
+that never rely on identity throughout their lifespan and can be scalarized.
+These optimizations are somewhat unpredictable, however, and do not help
+with objects that escape the scope of the optimization, such as storage in
+fields and arrays.</p>
+</li>
+<li>
+<p>The C language and its relatives support flattened storage for <code>struct</code>s and
+similar class-like abstractions. For example, the C# language has <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/value-types"><em>value
+types</em></a>.
+Unlike value objects, instances of these abstractions have identity, meaning
+they support operations such as field mutation. As a result, the semantics
+of copying on assignment, invocation, etc., must be carefully specified,
+leading to a more complex user model and less flexibility for runtime
+implementations. We prefer an approach that leaves these low-level details
+to the discretion of JVM implementors.</p>
+</li>
+</ul>
+<h2 id="Risks-and-Assumptions">Risks and Assumptions</h2>
+<ul>
+<li>
+<p>This feature makes significant changes to the Java object model. Developers
+may be surprised by, or encounter bugs due to, changes in the behavior of
+the <code>==</code> operator and the <code>synchronized</code> keyword. We expect such disruptions
+to be rare and tractable.</p>
+</li>
+<li>
+<p>Some changes could affect the performance of identity objects. The
+<a href="https://download.java.net/java/early_access/jdk28/docs/specs/jvms/jvms-6.html#jvms-6.5.if_acmp_cond"><code>if_acmpeq</code></a> bytecode (<code>==</code>), for example, typically costs only one
+instruction cycle, but will now need an additional check to detect value
+objects. But the identity class case can be optimized as a fast path, and we
+believe we have minimized any performance regressions.</p>
+</li>
+<li>
+<p>There is a security risk that the <code>==</code> operator and the <code>identityHashCode</code>
+method can indirectly expose <code>private</code> field values. Further, the <code>==</code>
+operator can take unbounded time when comparing two large trees of value
+objects. Developers need to understand these risks.</p>
+</li>
+</ul>
+<h2 id="Dependencies">Dependencies</h2>
+<p><a href="https://openjdk.org/jeps/539">JEP 539</a>, <em>Strict Field Initialization in the JVM</em>, provides the
+mechanism to require, via bytecode verification, that value object fields be
+initialized during the early construction phase.</p>
+</div></div><div id="sidebar"><div id="openjdk-sidebar-logo"><a href="/"><img alt="OpenJDK logo" width="91" height="25" src="/images/openjdk2.svg" /></a></div><div class="links"><div class="link"><a href="/install/">Installing</a></div><div class="link"><a href="/guide/#contributing-to-an-openjdk-project">Contributing</a></div><div class="link"><a href="/guide/#reviewing-and-sponsoring-a-change">Sponsoring</a></div><div class="link"><a href="/guide/">Developers' Guide</a></div><div class="link"><a href="/groups/vulnerability/report">Vulnerabilities</a></div><div class="link"><a href="https://jdk.java.net">JDK GA/EA Builds</a></div></div><div class="links"><div class="links"><a href="https://mail.openjdk.org">Mailing lists</a></div><div class="link"><a href="https://wiki.openjdk.org">Wiki</a>
+                      &#183; <a href="/irc">IRC</a></div><div class="link"><a href="https://mastodon.social/@openjdk" rel="me">Mastodon</a></div><div class="link"><a href="https://bsky.app/profile/openjdk.org">Bluesky</a></div></div><div class="links"><div class="links"><a href="/bylaws">Bylaws</a> &#183; <a href="/census">Census</a></div><div class="link"><a href="/legal/">Legal</a> &#183; <a href="/legal/ai">AI</a></div></div><div class="links"><div class="links"><a href="/workshop"><b>Workshop</b></a></div></div><div class="links"><div class="links"><a href="/jeps/0"><b>JEP Process</b></a></div></div><div class="links"><div class="about">Source code</div><div class="link"><a href="https://github.com/openjdk/">GitHub</a></div><div class="link"><a href="https://hg.openjdk.org">Mercurial</a></div></div><div class="links"><div class="about">Tools</div><div class="link"><a href="http://git-scm.org/">Git</a></div><div class="link"><a href="/jtreg/">jtreg harness</a></div></div><div class="links"><div class="about">Groups</div><div class="link"><a href="/groups/">(overview</a>,
+      <a href="/groups/archive">archive</a>)</div><div class="link"><a href="/groups/adoption">Adoption</a></div><div class="link"><a href="/groups/build">Build</a></div><div class="link"><a href="/groups/client-libs">Client Libraries</a></div><div class="link"><a href="/groups/csr">Compatibility &amp; Specification Review</a></div><div class="link"><a href="/groups/compiler">Compiler</a></div><div class="link"><a href="/groups/conformance">Conformance</a></div><div class="link"><a href="/groups/core-libs">Core Libraries</a></div><div class="link"><a href="/groups/gb">Governing Board</a></div><div class="link"><a href="/groups/hotspot">HotSpot</a></div><div class="link"><a href="/groups/ide-support">IDE Tooling &amp; Support</a></div><div class="link"><a href="/groups/i18n">Internationalization</a></div><div class="link"><a href="/groups/members">Members</a></div><div class="link"><a href="/groups/net">Networking</a></div><div class="link"><a href="/groups/porters">Porters</a></div><div class="link"><a href="/groups/quality">Quality</a></div><div class="link"><a href="/groups/security">Security</a></div><div class="link"><a href="/groups/serviceability">Serviceability</a></div><div class="link"><a href="/groups/vulnerability">Vulnerability</a></div><div class="link"><a href="/groups/web">Web</a></div></div><div class="links"><div class="about">Projects</div><div class="link">(<a href="/projects/">overview</a>,
+      <a href="/projects/archive">archive</a>)</div><div class="link"><a href="/projects/amber">Amber</a></div><div class="link"><a href="/projects/babylon">Babylon</a></div><div class="link"><a href="/projects/brisbane">Brisbane</a></div><div class="link"><a href="/projects/crac">CRaC</a></div><div class="link"><a href="/projects/code-tools">Code Tools</a></div><div class="link"><a href="/projects/coin">Coin</a></div><div class="link"><a href="/projects/cvmi">Common VM Interface</a></div><div class="link"><a href="/projects/detroit">Detroit</a></div><div class="link"><a href="/projects/guide">Developers' Guide</a></div><div class="link"><a href="/projects/duke">Duke</a></div><div class="link"><a href="/projects/icedtea">IcedTea</a></div><div class="link"><a href="/projects/jdk8u">JDK 8 Updates</a></div><div class="link"><a href="/projects/jdk9">JDK 9</a></div><div class="link"><a href="/projects/jdk">JDK</a>
+      (&#8230;,
+       <a href="/projects/jdk/26">26</a>,
+       <a href="/projects/jdk/27">27</a>,
+       <a href="/projects/jdk/28">28</a>)</div><div class="link"><a href="/projects/jdk-updates">JDK Updates</a></div><div class="link"><a href="/projects/jmc">JMC</a></div><div class="link"><a href="/projects/jigsaw">Jigsaw</a></div><div class="link"><a href="/projects/lanai">Lanai</a></div><div class="link"><a href="/projects/leyden">Leyden</a></div><div class="link"><a href="/projects/lilliput">Lilliput</a></div><div class="link"><a href="/projects/loom">Loom</a></div><div class="link"><a href="/projects/jmm">Memory Model Update</a></div><div class="link"><a href="/projects/mlvm">Multi-Language VM</a></div><div class="link"><a href="/projects/nashorn">Nashorn</a></div><div class="link"><a href="/projects/nio">New I/O</a></div><div class="link"><a href="/projects/openjfx">OpenJFX</a></div><div class="link"><a href="/projects/panama">Panama</a></div><div class="link"><a href="/projects/aarch32-port">Port: AArch32</a></div><div class="link"><a href="/projects/aarch64-port">Port: AArch64</a></div><div class="link"><a href="/projects/bsd-port">Port: BSD</a></div><div class="link"><a href="/projects/haiku-port">Port: Haiku</a></div><div class="link"><a href="/projects/mips-port">Port: MIPS</a></div><div class="link"><a href="/projects/mobile">Port: Mobile</a></div><div class="link"><a href="/projects/ppc-aix-port">Port: PowerPC/AIX</a></div><div class="link"><a href="/projects/riscv-port">Port: RISC-V</a></div><div class="link"><a href="/projects/s390x-port">Port: s390x</a></div><div class="link"><a href="/projects/sctp">SCTP</a></div><div class="link"><a href="/projects/shenandoah">Shenandoah</a></div><div class="link"><a href="/projects/skara">Skara</a></div><div class="link"><a href="/projects/sumatra">Sumatra</a></div><div class="link"><a href="/projects/tsan">Tsan</a></div><div class="link"><a href="/projects/valhalla">Valhalla</a></div><div class="link"><a href="/projects/wakefield">Wakefield</a></div><div class="link"><a href="/projects/zero">Zero</a></div><div class="link"><a href="/projects/zgc">ZGC</a></div></div><div class="buttons"><a href="https://oracle.com"><img alt="Oracle logo" width="100" height="13" src="/images/oracle.svg" /></a></div></div><div id="footer">
+
+        &#169; 2026 Oracle Corporation and/or its affiliates
+        <br /><a href="/legal/tou/">Terms of Use</a>
+        &#183;
+        
+            License: <a href="/legal/gplv2+ce.html">GPLv2</a>
+        &#183; <a href="https://www.oracle.com/us/legal/privacy/">Privacy</a>
+        &#183; <a href="https://openjdk.org/legal/openjdk-trademark-notice.html">Trademarks</a></div><script type="text/javascript"  src="/aw7nxk/I/c/njAX6paTnYj2/OaLizJDh5LNJp6/B0cnVxsD/EX1kJCB/JDwsB"></script></body></html>

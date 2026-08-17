@@ -1,4 +1,4 @@
-# Módulo 1 - Lección 3: Spring Boot 4.0 & Spring Framework 7.0 desde Cero
+# Módulo 1 - Lección 3: Spring Boot 4.1 & Spring Framework 7.0 desde Cero
 
 ---
 
@@ -7,7 +7,7 @@
 ### ¿Qué es Spring Boot y por qué lo usamos?
 Imagina un restaurante. Si tuvieras que construir la cocina desde cero (comprar ladrillos, instalar tuberías de gas, fabricar sartenes), tardarías meses antes de servir el primer plato.
 
-**Spring Boot 4.0** te entrega una cocina industrial completa lista para usar. Se encarga de gestionar los objetos (**Beans**), inyectar dependencias automáticamente (**IoC Container**), configurar el servidor HTTP web y conectar con la base de datos de forma segura.
+**Spring Boot 4.1** te entrega una cocina industrial completa lista para usar. Se encarga de gestionar los objetos (**Beans**), inyectar dependencias automáticamente (**IoC Container**), configurar el servidor HTTP web y conectar con la base de datos de forma segura.
 
 ---
 
@@ -15,7 +15,7 @@ Imagina un restaurante. Si tuvieras que construir la cocina desde cero (comprar 
 
 ```mermaid
 graph TD
-    subgraph Spring Boot 4.0 Application Context
+    subgraph Spring Boot 4.1 Application Context
         CTRL[RestController / Spring Web Endpoint]
         SVC[Application Service / Business Service]
         REPO[Spring Data JPA Repository]
@@ -66,7 +66,7 @@ public class OrderController {
 
 ## 4. 🧠 Referencia Senior: Cheatsheet, Performance & Internals
 
-### Optimización de Contexto Spring Boot 4.0
+### Optimización de Contexto Spring Boot 4.1
 
 | Técnica de Optimización | Configuración | Impacto |
 | :--- | :--- | :--- |
@@ -88,7 +88,7 @@ public class OrderController {
 ## 5. 🎯 Desafío Feynman & Auto-Evaluación sin Jerga
 
 > [!NOTE]
-> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Spring Boot 4.0 & Spring Framework 7.0 desde Cero** a un estudiante de secundaria, **sin usar las palabras:** "Spring", "Boot", "4.0" ni tecnicismos complejos de memoria.
+> **El Reto de los 12 Años**: Explica el mecanismo esencial y la utilidad práctica de **Spring Boot 4.1 & Spring Framework 7.0 desde Cero** a un estudiante de secundaria, **sin usar las palabras:** "Spring", "Boot", "4.0" ni tecnicismos complejos de memoria.
 
 ### Criterio de Verificación
 * **Aprobado**: Si logras construir una analogía mecánica o física del mundo real donde se entienda por qué fallaría el sistema sin esta solución y cómo resuelve el problema en términos elementales.
@@ -108,7 +108,7 @@ Para garantizar una asimilación profunda de los conceptos presentados en este m
 ---
 
 ## ⚙️ Primeros Principios & Fundamentos Conceptuales
-1. **Descomposición Atómica:** Cada componente en Módulo 1 - Lección 3: Spring Boot 4.0 & Spring Framework 7.0 desde Cero se modela de forma determinista y sin estado mutable compartido.
+1. **Descomposición Atómica:** Cada componente en Módulo 1 - Lección 3: Spring Boot 4.1 & Spring Framework 7.0 desde Cero se modela de forma determinista y sin estado mutable compartido.
 2. **Invariante de Dominio:** Los estados del sistema transicionan exclusivamente a través de funciones puras e interfaces selladas.
 3. **Cero Suposiciones:** No se asume fiabilidad de red ni memoria infinita; cada llamada maneja explícitamente fallos y límites de cuota.
 

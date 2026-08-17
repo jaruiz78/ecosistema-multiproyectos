@@ -4,7 +4,7 @@
 
 En el ecosistema PCT, manejamos ingestas masivas de telemetría GPS provenientes de TaxiCaller. Se requería una solución capaz de soportar picos de 10,000 vehículos moviéndose simultáneamente (miles de peticiones por segundo) y deduplicarlas espacialmente (H3) antes de inyectarlas en el pipeline analítico ETL de DuckDB/BigQuery.
 Teníamos dos opciones principales en el ecosistema corporativo:
-1. Re-utilizar el backend corporativo Java 25 (con Spring Boot 4.0 y Loom Virtual Threads).
+1. Re-utilizar el backend corporativo Java 25 (con Spring Boot 4.1 y Loom Virtual Threads).
 2. Desarrollar un BFF en Go.
 
 ## 2. Decisión

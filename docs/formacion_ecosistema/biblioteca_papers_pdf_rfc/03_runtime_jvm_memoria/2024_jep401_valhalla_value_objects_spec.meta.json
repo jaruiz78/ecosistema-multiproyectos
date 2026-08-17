@@ -1,0 +1,8 @@
+{
+  "title": "JEP 401: Value Classes and Objects (Preview)",
+  "authors": "Brian Goetz, John Rose, OpenJDK Compiler Team",
+  "year": 2024,
+  "institution": "Oracle / OpenJDK",
+  "faculty": "FACULTAD_III",
+  "abstract": "Enhance the Java object model with value classes and objects, enabling user-defined primitive-like types with flat memory layout, zero pointer overhead, and cache-friendly L1/L2 alignment."
+}

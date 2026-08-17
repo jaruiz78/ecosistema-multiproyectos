@@ -46,7 +46,7 @@ graph TD
 
     subgraph GCP Cloud Run Serverless Cluster (Region europe-west1)
         GATEWAY[Api Gateway / Go BFF Worker]
-        SPRING[Spring Boot 4.0 Microservice - Virtual Threads]
+        SPRING[Spring Boot 4.1 Microservice - Virtual Threads]
     end
 
     subgraph Persistencia Multi-Tenant & Telemetría
@@ -85,7 +85,7 @@ mkdir -p ${PROJECT_NAME}/src/test/java/com/corp/infrastructure/adapter/out/persi
 cd ${PROJECT_NAME}
 ```
 
-### Paso 2: Archivo `pom.xml` Completo de Producción (Java 25 & Spring Boot 4.0)
+### Paso 2: Archivo `pom.xml` Completo de Producción (Java 25 & Spring Boot 4.1)
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -100,7 +100,7 @@ cd ${PROJECT_NAME}
     <packaging>jar</packaging>
 
     <name>corp-enterprise-service</name>
-    <description>Servicio empresarial serverless basado en Java 25, Spring Boot 4.0 y Virtual Threads</description>
+    <description>Servicio empresarial serverless basado en Java 25, Spring Boot 4.1 y Virtual Threads</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

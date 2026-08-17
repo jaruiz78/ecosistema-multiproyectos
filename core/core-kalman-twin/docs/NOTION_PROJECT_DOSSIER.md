@@ -7,7 +7,7 @@
 * **Prioridad**: 
 * **Región de Despliegue**: GCP Cloud Run () / Edge Local
 * **Coste FinOps PRO**: **** (\(pprox $0,0045	ext{ USD/MAU/mes}\))
-* **Stack Tecnológico**: Python 3.11 / FilterPy / EnKF
+* **Stack Tecnológico**: Python 3.14 / FilterPy / EnKF
 
 ---
 

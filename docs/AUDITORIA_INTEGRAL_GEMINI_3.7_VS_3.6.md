@@ -1,7 +1,7 @@
 # 🏛️ AUDITORÍA INTEGRAL DE ARQUITECTURA, CÓDIGO, ALGORITMOS Y SIMULACIONES: IMPACTO MEDIBLE Y CUANTIFICABLE DE GEMINI 3.7 FLASH VS. GEMINI 3.6 FLASH
 
 **Autor**: Consilium Romano Engineering Board & Chief AI Architect  
-**Entorno de Auditoría**: Java 25 (LTS), Spring Boot 4.0/4.1, Go 1.22+, Google Cloud Platform (Cloud Run, Firestore, BigQuery, Vertex AI), Google LiteRT INT8, Uber H3, EnKF Kalman Twin, DuckDB-WASM.  
+**Entorno de Auditoría**: Java 25 (LTS), Spring Boot 4.1/4.1, Go 1.22+, Google Cloud Platform (Cloud Run, Firestore, BigQuery, Vertex AI), Google LiteRT INT8, Uber H3, EnKF Kalman Twin, DuckDB-WASM.  
 **Módulos Auditados**: 35 Módulos (Starters Corporativos, Motores Core Algorítmicos, Verticales Industriales y de Hiper-Escala).  
 **Fecha de Emisión**: 2026-08-13  
 
@@ -30,7 +30,7 @@ La transición a **Gemini 3.7 Flash** (con su arquitectura híbrida de razonamie
 
 ## 2. ANÁLISIS POR CAPAS: ARQUITECTURA SOFTWARE, GCP, CÓDIGO Y TESTING
 
-### 2.1 Arquitectura Software Backend (Java 25 LTS & Spring Boot 4.0/4.1)
+### 2.1 Arquitectura Software Backend (Java 25 LTS & Spring Boot 4.1/4.1)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐

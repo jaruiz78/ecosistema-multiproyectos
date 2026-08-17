@@ -1,6 +1,6 @@
 # MARCO AGÉNTICO CORPORATIVO Y GOBERNANZA DEL CONSILIUM ROMANO
 **Google Antigravity Enterprise Autonomous Framework 2026**
-*Referencia: Ecosistema MultiProyectos | Java 25 LTS & Spring Boot 4.0*
+*Referencia: Ecosistema MultiProyectos | Java 25 LTS & Spring Boot 4.1*
 
 ---
 
@@ -50,7 +50,7 @@ Las skills no son agentes chaperones en segundo plano, sino **capacidades operat
 | Skill Especializada | Dominio Técnico | Herramientas & Prácticas |
 | :--- | :--- | :--- |
 | **`Platform-DevSecOps-Architect`** | IaC, Kubernetes, GitOps, SLSA L3/L4 | ArgoCD, Cloud Build, Cosign, SBOM CycloneDX |
-| **`Java-Spring-Expert`** | Java 25, Spring Boot 4.0, Loom, FFM Panama | Records inmutables, `ReentrantLock`, Leyden CDS |
+| **`Java-Spring-Expert`** | Java 25, Spring Boot 4.1, Loom, FFM Panama | Records inmutables, `ReentrantLock`, Leyden CDS |
 | **`Go-Gopher`** | Microservicios de red, BFF, Ring-Buffers | Goroutines, Zero-Copy IPC, Canales Go |
 | **`Frontend-Wizard`** | React, Tailwind OKLCH, PWA Offline-First | Service Workers, WCAG 2.2 AA, CLS < 0.1 |
 | **`Mobile-Mobility-Architect`** | Flutter, Dart 3, Malla Espacial H3 | Geolocalización adaptativa, SQLite local |

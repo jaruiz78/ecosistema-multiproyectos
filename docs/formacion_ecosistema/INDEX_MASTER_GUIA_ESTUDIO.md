@@ -52,7 +52,7 @@ Cada módulo está desglosado desde la abstracción de alto nivel hasta el códi
 
 ---
 
-## ☕ Módulo 1: Backend Java 25, Spring Boot 4.0 & JVM Internals
+## ☕ Módulo 1: Backend Java 25, Spring Boot 4.1 & JVM Internals
 *Ingeniería de backend ultra-eficiente, compilación AOT y memoria.*
 1. [Sintaxis Java 25, Pattern Matching y Valhalla](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_1_backend_java_spring/01_java_25_sintaxis_y_tipos_avanzado.md)
 2. [Arquitectura Interna JVM y Bytecode](file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_1_backend_java_spring/02_jvm_arquitectura_interna_bytecode.md)

@@ -42,7 +42,7 @@ graph TD
 
 ## 3. 🚀 Guía Paso a Paso e Implementación Práctica (0 a 100)
 
-### Paso 1: Configurar Virtual Threads en Spring Boot 4.0
+### Paso 1: Configurar Virtual Threads en Spring Boot 4.1
 
 ```yaml
 # application.yml

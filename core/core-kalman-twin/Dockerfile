@@ -1,10 +1,10 @@
-# Multi-stage build for Python 3.11+ / EnKF Twin / Cloud Run
-FROM python:3.11-slim AS builder
+# Multi-stage build for Python 3.14+ / EnKF Twin / Cloud Run
+FROM python:3.14-slim AS builder
 WORKDIR /app
 COPY setup.py requirements.txt* ./
 RUN pip install --no-cache-dir --user -e . 2>/dev/null || true
 
-FROM python:3.11-slim
+FROM python:3.14-slim
 WORKDIR /app
 COPY --from=builder /root/.local /root/.local
 COPY . .

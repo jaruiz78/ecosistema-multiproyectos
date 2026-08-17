@@ -6,7 +6,7 @@
 
 ---
 
-## 2. Estándares Inconvenientes y Autoconfiguración Spring Boot 4.0
+## 2. Estándares Inconvenientes y Autoconfiguración Spring Boot 4.1
 
 ```mermaid
 graph LR

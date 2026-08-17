@@ -12,7 +12,12 @@ import java.util.*;
  */
 public final class OrSet<E> implements Serializable {
 
-    public record ElementTag<E>(E element, String tag) implements Serializable {}
+    /**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/modulo_2_go_y_concurrencia">FACULTAD_IV: Concurrencia Go CSP & Ring-Buffers</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom Anti-Pinning</a>
+ */
+public record ElementTag<E>(E element, String tag) implements Serializable {}
 
     private final Set<ElementTag<E>> addSet;
     private final Set<ElementTag<E>> removeSet;
