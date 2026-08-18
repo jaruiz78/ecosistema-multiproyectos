@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoHealthFederatedClinical API
+  description: Plataforma de ensayos clínicos multicéntricos con aprendizaje federado y privacidad diferencial Zero-PII
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectohealthfederatedclinical
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectohealthfederatedclinical/{id}:
+    get:
+      summary: Obtener ClinicalTrialEnclave por Identificador
+      operationId: getClinicalTrialEnclaveById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ClinicalTrialEnclave recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClinicalTrialEnclave'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ClinicalTrialEnclave:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

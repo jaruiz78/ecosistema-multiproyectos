@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoMaritimeAutonomousFleet API
+  description: Gestión y ruteo cinemático de flotas marítimas autónomas y boyas oceánicas acelerado por SIMD
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectomaritimeautonomousfleet
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectomaritimeautonomousfleet/{id}:
+    get:
+      summary: Obtener AutonomousVesselVoyage por Identificador
+      operationId: getAutonomousVesselVoyageById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AutonomousVesselVoyage recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutonomousVesselVoyage'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AutonomousVesselVoyage:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

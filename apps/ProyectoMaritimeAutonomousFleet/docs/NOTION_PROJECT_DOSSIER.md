@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoEcotasaSoberanaTax
+# 🏛️ NOTION DOSSIER: ProyectoMaritimeAutonomousFleet
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoEcotasaSoberanaTax
-* **Entidad Dominio**: SovereignEcoTaxAssessment
-* **Descripción**: Liquidación tributaria ambiental y tasas turísticas sostenibles con certificación en ledger verificable
+* **Nombre**: ProyectoMaritimeAutonomousFleet
+* **Entidad Dominio**: AutonomousVesselVoyage
+* **Descripción**: Gestión y ruteo cinemático de flotas marítimas autónomas y boyas oceánicas acelerado por SIMD
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

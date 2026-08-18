@@ -1,0 +1,39 @@
+package com.corp.proyectomaritimeautonomousfleet.infrastructure.adapter.in.web;
+
+import com.corp.proyectomaritimeautonomousfleet.domain.model.AutonomousVesselVoyage;
+import com.corp.proyectomaritimeautonomousfleet.domain.port.in.ManageAutonomousVesselVoyageUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectomaritimeautonomousfleet")
+public class AutonomousVesselVoyageRestController {
+
+    private final ManageAutonomousVesselVoyageUseCase useCase;
+
+    public AutonomousVesselVoyageRestController(ManageAutonomousVesselVoyageUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<AutonomousVesselVoyage> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        AutonomousVesselVoyage created = useCase.createAutonomousVesselVoyage(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectomaritimeautonomousfleet/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AutonomousVesselVoyage> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findAutonomousVesselVoyageById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

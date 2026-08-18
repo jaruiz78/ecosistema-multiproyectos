@@ -1,0 +1,39 @@
+package com.corp.proyectohealthfederatedclinical.infrastructure.adapter.in.web;
+
+import com.corp.proyectohealthfederatedclinical.domain.model.ClinicalTrialEnclave;
+import com.corp.proyectohealthfederatedclinical.domain.port.in.ManageClinicalTrialEnclaveUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectohealthfederatedclinical")
+public class ClinicalTrialEnclaveRestController {
+
+    private final ManageClinicalTrialEnclaveUseCase useCase;
+
+    public ClinicalTrialEnclaveRestController(ManageClinicalTrialEnclaveUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<ClinicalTrialEnclave> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        ClinicalTrialEnclave created = useCase.createClinicalTrialEnclave(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectohealthfederatedclinical/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClinicalTrialEnclave> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findClinicalTrialEnclaveById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

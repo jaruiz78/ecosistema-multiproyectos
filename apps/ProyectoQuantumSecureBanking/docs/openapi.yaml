@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumSecureBanking API
+  description: Sistema bancario multi-tenant con custodia y transferencias blindadas con criptografía post-cuántica (ML-KEM/Dilithium)
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantumsecurebanking
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantumsecurebanking/{id}:
+    get:
+      summary: Obtener QuantumVaultAccount por Identificador
+      operationId: getQuantumVaultAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: QuantumVaultAccount recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantumVaultAccount'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    QuantumVaultAccount:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

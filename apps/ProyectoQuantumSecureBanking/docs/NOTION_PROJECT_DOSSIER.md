@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoEcotasaSoberanaTax
+# 🏛️ NOTION DOSSIER: ProyectoQuantumSecureBanking
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoEcotasaSoberanaTax
-* **Entidad Dominio**: SovereignEcoTaxAssessment
-* **Descripción**: Liquidación tributaria ambiental y tasas turísticas sostenibles con certificación en ledger verificable
+* **Nombre**: ProyectoQuantumSecureBanking
+* **Entidad Dominio**: QuantumVaultAccount
+* **Descripción**: Sistema bancario multi-tenant con custodia y transferencias blindadas con criptografía post-cuántica (ML-KEM/Dilithium)
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

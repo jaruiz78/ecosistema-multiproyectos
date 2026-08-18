@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoEcotasaSoberanaTax
+# 🏛️ NOTION DOSSIER: ProyectoHealthFederatedClinical
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoEcotasaSoberanaTax
-* **Entidad Dominio**: SovereignEcoTaxAssessment
-* **Descripción**: Liquidación tributaria ambiental y tasas turísticas sostenibles con certificación en ledger verificable
+* **Nombre**: ProyectoHealthFederatedClinical
+* **Entidad Dominio**: ClinicalTrialEnclave
+* **Descripción**: Plataforma de ensayos clínicos multicéntricos con aprendizaje federado y privacidad diferencial Zero-PII
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

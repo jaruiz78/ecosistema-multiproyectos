@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEcotasaSoberanaTax API
+  description: Liquidación tributaria ambiental y tasas turísticas sostenibles con certificación en ledger verificable
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoecotasasoberanatax
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoecotasasoberanatax/{id}:
+    get:
+      summary: Obtener SovereignEcoTaxAssessment por Identificador
+      operationId: getSovereignEcoTaxAssessmentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SovereignEcoTaxAssessment recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SovereignEcoTaxAssessment'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SovereignEcoTaxAssessment:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
