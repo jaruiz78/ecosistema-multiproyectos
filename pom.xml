@@ -290,6 +290,7 @@
         <module>apps/ProyectoSmartWaterDesal</module>
         <module>apps/ProyectoSnowpackWaterResourceTwin</module>
         <module>apps/ProyectoSoilBioCarbonTwin</module>
+        <module>apps/ProyectoSolarTocina</module>
         <module>apps/ProyectoSolidStateBatteryStorage</module>
         <module>apps/ProyectoSpaceAgriRegenerativeHabitat</module>
         <module>apps/ProyectoSpaceDebrisLaserMitigation</module>

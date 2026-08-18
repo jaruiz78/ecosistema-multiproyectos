@@ -1,0 +1,50 @@
+{
+  "version": "2.0",
+  "description": "Antigravity 2.0 & Managed Agents Hooks Configuration for Multi-Project Ecosystem",
+  "hooks": {
+    "pre_tool_call": {
+      "command": "python3 /home/jaruiz/Desarrollo/scripts/hooks/pre_tool_hook.py",
+      "timeout_ms": 2000,
+      "blocking": true,
+      "enabled": true,
+      "intercept_tools": [
+        "write_to_file",
+        "replace_file_content",
+        "multi_replace_file_content",
+        "run_command",
+        "call_mcp_tool"
+      ]
+    },
+    "post_tool_call": {
+      "command": "python3 /home/jaruiz/Desarrollo/scripts/hooks/post_tool_hook.py",
+      "timeout_ms": 3000,
+      "blocking": false,
+      "enabled": true,
+      "intercept_tools": [
+        "write_to_file",
+        "replace_file_content",
+        "multi_replace_file_content",
+        "run_command",
+        "call_mcp_tool"
+      ]
+    },
+    "on_session_start": {
+      "command": "python3 /home/jaruiz/Desarrollo/scripts/hooks/session_lifecycle_hook.py start",
+      "timeout_ms": 5000,
+      "enabled": true
+    },
+    "on_session_finish": {
+      "command": "python3 /home/jaruiz/Desarrollo/scripts/hooks/session_lifecycle_hook.py finish",
+      "timeout_ms": 5000,
+      "enabled": true
+    }
+  },
+  "governance": {
+    "max_total_tokens_per_loop": 150000,
+    "max_iterations_per_task": 10,
+    "context_caching_prefix_pinning": true,
+    "cost_ceiling_usd_per_mau": 0.015,
+    "zero_trust_security_level": "BEYOND_CORP_L3",
+    "slsa_provenance_level": "SLSA_L3"
+  }
+}

@@ -1,0 +1,159 @@
+# Antigravity 2.0 & Google Managed Agents - Custom Agents Catalog
+version: "2.0"
+governance:
+  caching_policy: "PREFIX_PINNING_75_PERCENT_DISCOUNT"
+  default_model: "gemini-3.7-flash"
+  reasoning_model: "gemini-3.7-pro"
+  cost_ceiling_per_mau_usd: 0.015
+  zero_trust_level: "BEYOND_CORP_L3"
+
+agents:
+  - id: "java-spring-expert"
+    name: "Java 25 & Spring Boot 4.1 Architect"
+    model: "gemini-3.7-flash"
+    description: "Especialista en Java 25, Spring Boot 4.1, Loom Virtual Threads sin pinning, Leyden AOT CDS y arquitectura hexagonal pura sin dependencias de infraestructura en domain/."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/java_spring_expert.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+      - "list_dir"
+    mcps:
+      - "codebase-memory-mcp"
+      - "sqlite-mcp-server"
+    token_budget:
+      max_total_tokens: 120000
+      max_iterations: 8
+
+  - id: "go-gopher-expert"
+    name: "Go High-Throughput & Spatial Worker Specialist"
+    model: "gemini-3.7-flash"
+    description: "Especialista en Go 1.26, goroutines, sync.Pool para 0 allocs/op, microservicios de transporte de ultra-baja latencia y ruteo geoespacial H3/OSRM."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/go_gopher_expert.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "gopls-mcp-server"
+      - "codebase-memory-mcp"
+    token_budget:
+      max_total_tokens: 100000
+      max_iterations: 8
+
+  - id: "frontend-wizard"
+    name: "Frontend Modern UI & WCAG 2.2 AA Engineer"
+    model: "gemini-3.7-flash"
+    description: "Especialista en React, Next.js, Tailwind OKLCH, analítica en cliente con DuckDB-Wasm, accesibilidad WCAG 2.2 AA y rendimiento web (CLS < 0.1, INP < 200ms)."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/frontend_wizard.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "chrome-devtools-mcp"
+      - "visualization"
+    token_budget:
+      max_total_tokens: 100000
+      max_iterations: 8
+
+  - id: "mobile-mobility-expert"
+    name: "Flutter Mobility & H3 Spatial Architect"
+    model: "gemini-3.7-flash"
+    description: "Especialista en Flutter/Dart para movilidad, mallas hexagonales Uber H3, renderizado Impeller, GPS adaptativo y sincronización offline."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/mobile_mobility_expert.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "dart-mcp-server"
+      - "sqlite-mcp-server"
+    token_budget:
+      max_total_tokens: 100000
+      max_iterations: 8
+
+  - id: "unified-twin-architect"
+    name: "Unified Digital Twin (PEPS & EnKF) Architect"
+    model: "gemini-3.7-pro"
+    description: "Especialista en Redes Tensoriales (PEPS), Asimilación EnKF con convergencia de covarianza (<0.50), cuantización LiteRT INT8 e inyección en tensor_gnn_core.py."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/unified_twin_architect.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "sqlite-mcp-server"
+      - "codebase-memory-mcp"
+      - "visualization"
+    token_budget:
+      max_total_tokens: 150000
+      max_iterations: 10
+
+  - id: "zero-trust-security-auditor"
+    name: "Zero-Trust & SLSA Supply Chain Sentinel"
+    model: "gemini-3.7-flash"
+    description: "Especialista en Zero-Trust Architecture (BeyondCorp), JWT RS256/EdDSA, reglas Firestore RLS, firmas Cosign/Sigstore y proveniencia SLSA L3."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/zero_trust_security_auditor.md"
+    tools:
+      - "view_file"
+      - "write_to_file"
+      - "replace_file_content"
+      - "multi_replace_file_content"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "firebase-mcp-server"
+      - "codebase-memory-mcp"
+    token_budget:
+      max_total_tokens: 100000
+      max_iterations: 8
+
+  - id: "consilium-romano-tribunal"
+    name: "Consilium Romano 3.0 Dialectic Magistrate"
+    model: "gemini-3.7-pro"
+    description: "Tribunal neuro-simbólico que arbitra decisiones de arquitectura y emite el Senatus Consultum contrastando contra las 12 Facultades del currículum académico."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/consilium_romano_tribunal.md"
+    tools:
+      - "view_file"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "sqlite-mcp-server"
+      - "codebase-memory-mcp"
+      - "google-developer-knowledge"
+    token_budget:
+      max_total_tokens: 120000
+      max_iterations: 6
+
+  - id: "finops-sre-sentinel"
+    name: "FinOps & Cloud SRE Sentinel"
+    model: "gemini-3.7-flash"
+    description: "Auditor de costes FinOps (<0.015 USD/MAU/mes), particionamiento forzoso en BigQuery, resiliencia serverless y telemetría de latencia."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/finops_sre_sentinel.md"
+    tools:
+      - "view_file"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "bigquery"
+      - "google-cloud-monitoring"
+      - "cloudrun"
+    token_budget:
+      max_total_tokens: 90000
+      max_iterations: 6

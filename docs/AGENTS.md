@@ -1,46 +1,60 @@
 # AGENTS.md - Ecosistema Corporativo de Desarrollo Agéntico & Universidad Privada (12 Facultades)
 
-Este archivo define la arquitectura agéntica, las reglas de orquestación y el mapeo implícito de intenciones a skills para todos los subagentes y proyectos bajo `/home/jaruiz/Desarrollo`.
+Este archivo define la arquitectura agéntica, las reglas de orquestación, los Custom Agents de Antigravity 2.0, los Hooks de entorno y el mapeo implícito de intenciones a skills para todos los subagentes y proyectos bajo `/home/jaruiz/Desarrollo`.
 
-## 1. Mapeo de Intención a Skill (SDLC Automated Dispatch 6-Phase)
+## 1. Mapeo de Intención a Skill & Custom Agent (SDLC Automated Dispatch 6-Phase)
 
-Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondicionalmente las skills correspondientes:
+Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondicionalmente los Custom Agents y skills correspondientes:
 
 - **Nueva funcionalidad o módulo (SDLC 6-Phase Pipeline)** → `formal_verification_architect` / `spec-driven-development` (DEFINE) → `planning-and-task-breakdown` (PLAN) → `incremental-implementation` (BUILD) → `test-driven-development` / `zero-mockito-tdd-engineer` (VERIFY) → `code-review-and-quality` / `consilium_romano_architect` (REVIEW) → `shipping-and-launch` / `slsa-sigstore-release-sentinel` (SHIP)
   > *Nota de Armonización SDLC*: Las skills canónicas de `GEMINI.md` (`test-driven-development`, `code-review-and-quality`) definen el marco metodológico general de 6 fases, mientras que las skills especializadas del ecosistema (`zero-mockito-tdd-engineer`, `consilium_romano_architect`) implementan las reglas estrictas de dominio puro sin mocks y el tribunal dialéctico pre-merge.
-- **Creación de Nuevo Proyecto / Vertical** → Script: `scripts/scaffolding/create_enterprise_project.py`
-- **Verificación Formal y Demostración de Teoremas** → `formal_verification_architect` (Lean 4, Z3 SMT, Interpretación Abstracta)
-- **Ingesta Masiva, Web Scraping & Streaming ETL** → `web-scraping-and-ingestion-engineer` → `streaming_etl_architect` → `sre_finops_auditor`
-- **Compilación AOT & Leyden CDS** → `leyden-aot-build-master`
-- **Diseño de APIs (REST / gRPC)** → `api-and-interface-design`
-- **Trabajo de UI / Dashboard / PWA / Browser-Use** → `frontend-ui-engineering` → `browser-testing-with-devtools` → `web-scraping-and-ingestion-engineer`
-- **Bugs, infracciones o tracebacks** → `debugging-and-error-recovery` (Auto-fix: `scripts/consilium_romano_tribunal.py --auto-fix`)
-- **Simulación y Gemelo Digital** → `digital-twin-enkf-orchestrator` → `simulation-telemetry-sqlite-analyzer`
-- **Base de Conocimiento y Grounding (Crawl4AI & MarkItDown)** → Script: `scripts/auto_university_rag_sync.py` → `web-scraping-and-ingestion-engineer`
-- **Documentación & ADRs** → `adr-knowledge-graph-curator` (`codebase-memory-mcp`)
-- **Auditoría Pre-Merge & Senatus Consultum (`/ship`)** → `scripts/consilium_romano_tribunal.py` (`@deepseek-r1`, `@qwen2.5-coder`, `@gemma3:4b`)
-- **Seguridad, SLSA L3 y Firmas Cosign** → `slsa-sigstore-release-sentinel`
-- **Despliegue y Release** → `shipping-and-launch` → `slsa-sigstore-release-sentinel`
+- **Backend Java 25 / Spring Boot 4.1** → Custom Agent: `java-spring-expert` (`leyden-aot-build-master`, `zero-mockito-tdd-engineer`)
+- **Microservicios Go / Spatial Workers** → Custom Agent: `go-gopher-expert` (`corp-go-high-throughput-expert`)
+- **Frontend Web / React / Next.js / DuckDB-Wasm** → Custom Agent: `frontend-wizard` (`frontend_expert`, `a11y-debugging`)
+- **Mobile Flutter / Uber H3 Movilidad** → Custom Agent: `mobile-mobility-expert` (`corp-flutter-mobility-expert`, `h3-surge-calculator`)
+- **Gemelo Digital Unificado / PEPS / EnKF** → Custom Agent: `unified-twin-architect` (`digital-twin-enkf-orchestrator`, `unified-twin-node-injector`)
+- **Ciberseguridad Zero-Trust & SLSA L3** → Custom Agent: `zero-trust-security-auditor` (`firebase-security-rules-auditor`, `slsa-sigstore-release-sentinel`)
+- **FinOps & Cloud SRE (< 0.015 USD/MAU)** → Custom Agent: `finops-sre-sentinel` (`sre-finops-auditor`, `bq-dry-run-optimizer`)
+- **Tribunal Arquitectónico Pre-Merge (`/ship`)** → Custom Agent: `consilium-romano-tribunal` (`scripts/consilium_romano_tribunal.py`)
+- **Grounding Académico & NotebookLM** → Script: `scripts/auto_university_rag_sync.py` & `scripts/generate_notebook_dossiers.py`
 
 ---
 
-## 2. Matriz de Especialización por Proyecto
+## 2. Catálogo de Custom Agents y Gobernanza de Tokens (Antigravity 2.0)
 
-### A. `corp-spring-boot-starter` & `pctMultiMicroservices` (Java 25 / Spring Boot 4.1 / Go 1.26)
-* Delega en la skill `corp-go-high-throughput-expert` y las de backend Java.
+Ubicación: [`.agents/agents.yaml`](file:///home/jaruiz/Desarrollo/.agents/agents.yaml) y [`.agents/definitions/`](file:///home/jaruiz/Desarrollo/.agents/definitions/).
 
-### B. `SaaSRegantes` (Cloud Run / Firestore / BigQuery / React Multi-Tenant)
-* Delega en las skills de arquitectura cloud-native.
-
-### C. `AppViajes` (Flutter / Movilidad H3 / OSRM)
-* Delega en la skill `corp-flutter-mobility-expert`.
-
-### D. `Verticales y Core Engines`
-* **Grounded Javadoc Obligatorio**: `@see docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md`, `@see docs/formacion_ecosistema/BIBLIOGRAFIA_ACADEMICA.md` y `@see docs/formacion_ecosistema/METODO_FEYNMAN_GUIA_PEDAGOGICA.md`.
+| Custom Agent ID | Modelo Preferido | Presupuesto Tokens | Ámbito de Herramientas & MCPs |
+| :--- | :--- | :--- | :--- |
+| `java-spring-expert` | Gemini 3.7 Flash | 120,000 | Filesystem, `codebase-memory-mcp`, `sqlite-mcp-server` |
+| `go-gopher-expert` | Gemini 3.7 Flash | 100,000 | Filesystem, `gopls-mcp-server`, `codebase-memory-mcp` |
+| `frontend-wizard` | Gemini 3.7 Flash | 100,000 | Filesystem, `chrome-devtools-mcp`, `visualization` |
+| `mobile-mobility-expert` | Gemini 3.7 Flash | 100,000 | Filesystem, `dart-mcp-server`, `sqlite-mcp-server` |
+| `unified-twin-architect` | Gemini 3.7 Pro | 150,000 | Filesystem, `sqlite-mcp-server`, `visualization` |
+| `zero-trust-security-auditor` | Gemini 3.7 Flash | 100,000 | Filesystem, `firebase-mcp-server`, `codebase-memory-mcp` |
+| `consilium-romano-tribunal` | Gemini 3.7 Pro | 120,000 | Filesystem, `sqlite-mcp-server`, `codebase-memory-mcp` |
+| `finops-sre-sentinel` | Gemini 3.7 Flash | 90,000 | Filesystem, `bigquery`, `google-cloud-monitoring`, `cloudrun` |
 
 ---
 
-## 3. Reglas de Orquestación, MCPs y los 3 Meta-Bucles
+## 3. Arquitectura de Hooks de Entorno (Antigravity Hooks 2.0)
+
+Ubicación: [`.agents/hooks.json`](file:///home/jaruiz/Desarrollo/.agents/hooks.json) y [`scripts/hooks/`](file:///home/jaruiz/Desarrollo/scripts/hooks/).
+
+1. **`pre_tool_call` (`scripts/hooks/pre_tool_hook.py`)**:
+   - **AST Domain Gatekeeper**: Bloqueo automático e inmediato de frameworks/anotaciones (`@Entity`, `@Service`, Spring, Hibernate, Mockito) en `domain/`.
+   - **Command Safety Filter**: Bloqueo de comandos destructivos (`rm -rf /`, `mkfs`, fork-bombs).
+   - **BigQuery Safety Check**: Bloqueo de queries sin filtro forzoso de partición (`_PARTITIONDATE`).
+   - **Zero-PII Enforcer**: Bloqueo de logging de credenciales o tokens en claro.
+2. **`post_tool_call` (`scripts/hooks/post_tool_hook.py`)**:
+   - **Telemetría Instantánea**: Inserción en `simulations_telemetry.db` (tabla `agent_tool_telemetry`).
+   - **Auto-Formatting & Linting**: Aseguramiento de saltos de línea y estructura limpia post-edición.
+3. **`on_session_start` / `on_session_finish` (`scripts/hooks/session_lifecycle_hook.py`)**:
+   - Resumen FinOps de la sesión, cómputo de costes y generación de atestación criptográfica SLSA L3.
+
+---
+
+## 4. Reglas de Orquestación, MCPs y los 3 Meta-Bucles
 
 1. **No Chaperones & Lean Dispatch**: Los subagentes son ejecutados de forma directa sin metapersonas intermedias, adoptando skills hiper-especializadas bajo demanda.
 2. **Review Fan-Out y Senatus Consultum (`/ship`)**:
@@ -49,7 +63,7 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
    - **Rúbrica Feynman & Citas Fundacionales**: Toda resolución del tribunal debe contrastarse contra las 49 fuentes primarias (Shannon, Lamport, Raft, Codd, Hoare, Drepper) y garantizar la ausencia de jerga defensiva.
 3. **Integración Profunda con Servidores MCP**:
    - `codebase-memory-mcp`: Grafo de conocimiento y trazabilidad de dependencias entre componentes.
-   - `sqlite-mcp-server`: Registro de auditorías y proveniencia en `simulations_telemetry.db` (tablas `consilium_romano_audits`, `paper_ingestion_catalog` y `university_knowledge_nodes`).
+   - `sqlite-mcp-server`: Registro de auditorías y proveniencia en `simulations_telemetry.db` (tablas `consilium_romano_audits`, `agent_tool_telemetry`, `agent_session_summaries`, `university_knowledge_nodes`).
    - `docker-mcp-server`: Gestión de contenedores y emuladores locales.
 4. **Los 3 Meta-Bucles de Ejecución**:
    - **Meta-Bucle 1 (Code & Build)**: AST Gatekeeper + AOT Leyden CDS + Zero-Mockito TDD + SLSA L3 Cosign pre-merge.

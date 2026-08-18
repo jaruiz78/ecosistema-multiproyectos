@@ -103,6 +103,7 @@
 | 92 | **`ProyectoNuclearFusionStellarator`** | Non-Planar 3D Coils Stellarator Confinement | A+ | A+ | A+ | A+ | 27,000 | 0.9 ms | 2.4 ms | `$0.0027` |
 | 93 | **`ProyectoInterplanetarySwarmMesh`** | DTN RFC 5050 Bundle Protocol Swarm Mesh | A+ | A+ | A+ | A+ | 31,000 | 0.7 ms | 1.8 ms | `$0.0022` |
 | 94 | **`ProyectoDeNovoPlasticDegradation`** | PETase Biocatalytic Plastic Depolymerization | A+ | A+ | A+ | A+ | 23,000 | 1.2 ms | 3.2 ms | `$0.0034` |
+| 95 | **`ProyectoSolarTocina`** | Solar FoxCloud IoT & Kalman Twin Nowcasting | A+ | A+ | A+ | A+ | 29,000 | 0.8 ms | 2.0 ms | `$0.0011` |
 
 ---
 

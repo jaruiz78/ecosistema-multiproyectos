@@ -382,6 +382,34 @@ class UniversityKnowledgeEngine:
                         "text_for_embed": f"{fac_code} {p.name} {summary}"
                     })
 
+        # 6. Indexar Dossiers de NotebookLM / Gemini Notebooks
+        dossiers_dir = DOCS_DIR / "notebook_dossiers"
+        if dossiers_dir.exists():
+            for p in dossiers_dir.rglob("*.md"):
+                try:
+                    content = p.read_text(encoding="utf-8", errors="ignore")
+                    lines = [l.strip() for l in content.split("\n") if l.strip()]
+                    title = lines[0].replace("#", "").strip() if lines else p.stem
+                    summary = " ".join(lines[1:10]) if len(lines) > 1 else title
+                    fac_code, bench = self._infer_faculty(content, str(p))
+                    theorems, analogy = self._extract_theorems_and_analogies(content)
+                    nodes.append({
+                        "id": f"dossier::{p.stem}",
+                        "faculty": fac_code,
+                        "category": "NOTEBOOK_DOSSIER",
+                        "title": title,
+                        "file_path": str(p.relative_to(WORKSPACE_ROOT)),
+                        "section": "Notebook Dossier",
+                        "theorems": json.dumps(theorems),
+                        "analogy": analogy,
+                        "summary": summary[:600],
+                        "benchmark": bench,
+                        "keywords": json.dumps(list(set(re.findall(r'\b[a-zA-Z]{4,}\b', (title + " " + summary).lower())))[:20]),
+                        "text_for_embed": f"NOTEBOOK DOSSIER {fac_code} {title} {summary[:300]}"
+                    })
+                except Exception as e:
+                    print(f"Error procesando Dossier {p.name}: {e}")
+
         # Guardar en SQLite
         print(f"📚 Total de nodos ontológicos detectados: {len(nodes)}")
         conn = sqlite3.connect(DB_PATH)

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Inteligente Fotovoltaico | Tocina - MultiProyectos AI</title>
+  <meta name="description" content="Gemelo Digital Fotovoltaico con Asimilación Kalman EnKF, Optimizador MPC 24h, Arbitraje OMIE/PVPC, Indexación H3, Pasaporte Verde y Ruteo VE en Tocina (Sevilla).">
+  <link rel="stylesheet" href="./styles.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-title-block">
+        <div class="solar-icon-badge" aria-hidden="true">☀️</div>
+        <div>
+          <h1>Sistema Inteligente Solar & Gemelo Digital</h1>
+          <div class="location-tag">
+            <span>📍 Calle Amadeo Vives 31, Los Rosales - Tocina (Sevilla)</span>
+            <span class="coords-badge">37°35'39" N, 5°44'23" W (31m)</span>
+            <span class="coords-badge" id="h3-res9-badge" style="background: rgba(139, 92, 246, 0.2); color: #c084fc;">H3: 8939023447bffff</span>
+            <span class="coords-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">Puerto :8526</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="live-time" id="current-time-label">Cargando fecha...</div>
+        <button id="refresh-btn" class="refresh-button" title="Actualizar datos meteorológicos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          Actualizar Meteo
+        </button>
+      </div>
+    </header>
+
+    <!-- Global Live Inverter Telemetry Ribbon (Always Visible at Top) -->
+    <section class="section-box" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95)); border: 1px solid rgba(16, 185, 129, 0.35); box-shadow: 0 0 20px rgba(16, 185, 129, 0.1); padding: 0.85rem 1.25rem;">
+      <div class="section-header" style="margin-bottom: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <h2 style="font-size: 1.05rem;">📡 Telemetría en Vivo (Modbus TCP)</h2>
+          <span class="badge-tag" id="modbus-live-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700;">🟢 192.168.1.66:502 (KP10 SW)</span>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">Calibración EnKF: <strong id="kalman-factor-badge">99.4%</strong></span>
+          <span class="badge-tag" style="background: rgba(139, 92, 246, 0.2); color: #c084fc;" id="kalman-cov-badge">Cov: 0.032</span>
+          <span class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">Coste Actual: <strong>0.00 €/h</strong></span>
+        </div>
+      </div>
+      
+      <!-- Live Metrics Strip -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin-top: 0.25rem;">
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-east); font-weight: 700; text-transform: uppercase;">String 1 Este (85°)</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);" id="live-pv1-val">-- kW</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);" id="live-pv1-sub">-- V • -- A</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-west); font-weight: 700; text-transform: uppercase;">String 2 Oeste (265°)</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary);" id="live-pv2-val">-- kW</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);" id="live-pv2-sub">-- V • -- A</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-solar); font-weight: 700; text-transform: uppercase;">Potencia Solar Total</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--color-solar-light);" id="live-solar-val">-- kW</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">10x Jinko 500W</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: #f43f5e; font-weight: 700; text-transform: uppercase;">Consumo Casa (Meter)</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #f43f5e;" id="live-home-load-val">-- kW</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">2x Daikin + PCs + Frigo</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-real); font-weight: 700; text-transform: uppercase;">Excedente a Red (BV)</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--color-real);" id="live-export-val">-- kW</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">Hacia Batería Virtual</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-battery); font-weight: 700; text-transform: uppercase;">Baterías EP5 (HV)</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #c084fc;" id="live-bat-val">--% SoC</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);" id="live-bat-sub">-- V (10.36 kWh)</div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.68rem; color: var(--color-real); font-weight: 700; text-transform: uppercase;">Inversor Sunworks</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: var(--color-real);" id="live-inv-val">-- °C</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted);">Temp Disipador</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Master Navigation Tabs (Zero-Scroll Compartmentalization) -->
+    <nav class="master-nav-tabs" aria-label="Navegación Principal Compartimentada">
+      <button class="master-tab-btn active" data-target="tab-live">
+        <span>⚡</span> <span>En Vivo & Flujos</span>
+        <span class="tab-badge" id="badge-live-status">100% Solar</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-forecast">
+        <span>📅</span> <span>Pronóstico 7 Días</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-home">
+        <span>🏠</span> <span>Hogar & Simulador</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-mobility">
+        <span>🚗</span> <span>Movilidad Omoda 7</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-annual-ai">
+        <span>🔮</span> <span>Predicción Anual & IA</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-finance">
+        <span>💶</span> <span>Facturas & Batería Virtual</span>
+      </button>
+      <button class="master-tab-btn" data-target="tab-settings">
+        <span>⚙️</span> <span>Sistema & Ajustes</span>
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: EN VIVO & FLUJOS DE POTENCIA        -->
+    <!-- ========================================== -->
+    <div id="tab-live" class="master-tab-pane active">
+      <!-- Diagrama Unifilar Interactivo y Animado -->
+      <section class="section-box">
+        <div class="section-header">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+            ⚡ Diagrama Unifilar Interactivo de Flujos de Potencia en Vivo
+          </div>
+          <div style="font-size: 0.75rem; color: var(--color-east);">
+            Pasa el ratón sobre cada nodo para ver voltajes, corrientes y flujos en tiempo real
+          </div>
+        </div>
+        <div class="power-flow-wrapper">
+          <canvas id="powerFlowCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Setup Hardware Pill Bar -->
+      <section class="setup-summary-bar" aria-label="Resumen de la Instalación">
+        <div class="setup-pill">
+          <div class="pill-icon">⚡</div>
+          <div class="pill-content">
+            <div class="pill-label">Potencia Solar</div>
+            <div class="pill-value" id="total-kwp-badge">5.00 kWp</div>
+            <div class="pill-sub">10x Jinko Solar 500W</div>
+          </div>
+        </div>
+        <div class="setup-pill">
+          <div class="pill-icon">🌅</div>
+          <div class="pill-content">
+            <div class="pill-label">String Este (85° E)</div>
+            <div class="pill-value" id="east-wp-badge">3.00 kWp (6x)</div>
+            <div class="pill-sub">Pico matinal 09:00 - 13:00</div>
+          </div>
+        </div>
+        <div class="setup-pill">
+          <div class="pill-icon">🌇</div>
+          <div class="pill-content">
+            <div class="pill-label">String Oeste (265° W)</div>
+            <div class="pill-value" id="west-wp-badge">2.00 kWp (4x)</div>
+            <div class="pill-sub">Pico tarde 15:00 - 20:30</div>
+          </div>
+        </div>
+        <div class="setup-pill">
+          <div class="pill-icon">🔋</div>
+          <div class="pill-content">
+            <div class="pill-label">Batería Fox-ESS EP5 HV</div>
+            <div class="pill-value">10.36 kWh</div>
+            <div class="pill-sub">2x EP5 (192V Alto Voltaje)</div>
+          </div>
+        </div>
+        <div class="setup-pill">
+          <div class="pill-icon">🚗</div>
+          <div class="pill-content">
+            <div class="pill-label">VE: Omoda 7 SHS</div>
+            <div class="pill-value">18.7 kWh</div>
+            <div class="pill-sub">Wallbox Inteligente MPC</div>
+          </div>
+        </div>
+        <div class="setup-pill">
+          <div class="pill-icon">🔄</div>
+          <div class="pill-content">
+            <div class="pill-label">Inversor Sunworks Híbrido</div>
+            <div class="pill-value">10.0 kW</div>
+            <div class="pill-sub">Doble MPPT + Modbus TCP</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: PRONÓSTICO 7 DÍAS & CURVAS HORARIAS -->
+    <!-- ========================================== -->
+    <div id="tab-forecast" class="master-tab-pane">
+      <!-- Day Selector Carousel -->
+      <section class="section-box" aria-label="Selector de Días">
+        <div class="section-header">
+          <h2>📅 Previsión para los Próximos 7 Días en Los Rosales</h2>
+          <div class="sub-desc">Haz clic en cualquier día para analizar su curva horaria y recomendaciones</div>
+        </div>
+        <div class="day-selector-scroll" id="day-selector-container">
+          <!-- Renderizado dinámico desde app.js -->
+        </div>
+      </section>
+
+      <!-- KPI Metric Cards for Selected Day -->
+      <section class="kpis-grid" aria-label="Métricas del día seleccionado">
+        <div class="kpi-card real">
+          <div class="kpi-header">
+            <span>Generación Prevista</span>
+            <span>☀️</span>
+          </div>
+          <div class="kpi-value" id="kpi-kwh-real">-- kWh</div>
+          <div class="kpi-sub" id="kpi-efficiency">--% del máximo teórico</div>
+        </div>
+
+        <div class="kpi-card clear">
+          <div class="kpi-header">
+            <span>Máximo Teórico (Clear-Sky)</span>
+            <span>🌌</span>
+          </div>
+          <div class="kpi-value" id="kpi-kwh-clear">-- kWh</div>
+          <div class="kpi-sub">Cielo 100% despejado sin nubes</div>
+        </div>
+
+        <div class="kpi-card peak">
+          <div class="kpi-header">
+            <span>Potencia Pico Prevista</span>
+            <span>📈</span>
+          </div>
+          <div class="kpi-value" id="kpi-peak-kw">-- kW</div>
+          <div class="kpi-sub" id="kpi-peak-hour">Pico a las --:00 h</div>
+        </div>
+
+        <div class="kpi-card battery">
+          <div class="kpi-header">
+            <span>Batería Casa & VE</span>
+            <span>🔋</span>
+          </div>
+          <div class="kpi-value" id="kpi-battery-max">--%</div>
+          <div class="kpi-sub" id="kpi-ev-charged">Omoda 7: -- kWh</div>
+        </div>
+
+        <div class="kpi-card savings">
+          <div class="kpi-header">
+            <span>Ahorro Diario Combinado</span>
+            <span>💶</span>
+          </div>
+          <div class="kpi-value" id="kpi-savings">-- €</div>
+          <div class="kpi-sub" id="kpi-savings-detail">Luz + Gasolina Omoda 7</div>
+        </div>
+      </section>
+
+      <!-- Hourly Detailed Chart Box -->
+      <section class="section-box" aria-label="Curva Horaria Detallada">
+        <div class="section-header">
+          <div>
+            <h2 id="selected-day-title">Curva Horaria de Generación Eléctrica</h2>
+            <div class="sub-desc" id="selected-day-weather">Cargando pronóstico meteorológico...</div>
+          </div>
+          <div class="tabs-bar">
+            <button class="tab-btn active" data-tab="overview">General</button>
+            <button class="tab-btn" data-tab="strings">Strings E/W</button>
+            <button class="tab-btn" data-tab="pinn_quantiles">Abanico PINN (p10/p90)</button>
+            <button class="tab-btn" data-tab="sankey_view">Flujos Sankey</button>
+            <button class="tab-btn" data-tab="mpc">Despacho MPC</button>
+            <button class="tab-btn" data-tab="prices">Precios OMIE/PVPC</button>
+            <button class="tab-btn" data-tab="kalman">EnKF</button>
+            <button class="tab-btn" data-tab="history_db">Historial SQLite</button>
+            <button class="tab-btn" data-tab="climate_5yr">Histórico 5 Años</button>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="hourlyChart"></canvas>
+          <canvas id="sankeyCanvas" style="display: none; width: 100%; height: 240px;"></canvas>
+        </div>
+      </section>
+
+      <!-- BALANCE DIARIO Y TABLA HORARIA DETALLADA (24 Horas) -->
+      <section class="section-box" aria-label="Balance de Energía y Flujos 24 Horas">
+        <div class="section-header">
+          <div>
+            <h2>⚡ Balance Energético Diario & Flujos Batería (24h)</h2>
+            <div class="sub-desc">Desglose completo de energía producida, consumida, almacenada en batería y exportada</div>
+          </div>
+          <span class="badge-tag" id="energy-autonomy-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700;">Autosuficiencia: 100%</span>
+        </div>
+
+        <!-- Strip de Totales del Día -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 0.5rem; margin-bottom: 1.25rem;">
+          <div style="background: var(--bg-elevated); padding: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--color-solar); font-weight: 700; text-transform: uppercase;">☀️ Solar Generado</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--color-solar-light);" id="bal-solar-total">-- kWh</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);" id="bal-solar-sub">10x Jinko 500W</div>
+          </div>
+
+          <div style="background: var(--bg-elevated); padding: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: #f43f5e; font-weight: 700; text-transform: uppercase;">🏠 Consumo Total Hogar</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: #f43f5e;" id="bal-home-total">-- kWh</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);" id="bal-home-sub">Daikin + Frigo + Base</div>
+          </div>
+
+          <div style="background: var(--bg-elevated); padding: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: #c084fc; font-weight: 700; text-transform: uppercase;">🔋 Batería Fox-ESS</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: #c084fc;" id="bal-bat-charged">-- kWh</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);" id="bal-bat-discharged">Descarga: -- kWh</div>
+          </div>
+
+          <div style="background: var(--bg-elevated); padding: 0.9rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.72rem; color: var(--color-real); font-weight: 700; text-transform: uppercase;">💶 Excedente Batería Virtual</div>
+            <div style="font-size: 1.25rem; font-weight: 800; color: var(--color-real);" id="bal-grid-export">-- kWh</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted);" id="bal-grid-import">Importación Red: 0.0 kWh</div>
+          </div>
+        </div>
+
+        <!-- Tabla Horaria 24h Desplegable / Interactiva -->
+        <div style="max-height: 290px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: right;">
+            <thead style="background: rgba(15, 23, 42, 0.95); position: sticky; top: 0; color: var(--text-secondary); font-weight: 600;">
+              <tr>
+                <th style="padding: 0.6rem 0.8rem; text-align: left;">Hora</th>
+                <th style="padding: 0.6rem 0.8rem;">☀️ Solar (kW)</th>
+                <th style="padding: 0.6rem 0.8rem;">🏠 Casa (kW)</th>
+                <th style="padding: 0.6rem 0.8rem;">🔋 Flujo Batería</th>
+                <th style="padding: 0.6rem 0.8rem;">📊 SoC (%)</th>
+                <th style="padding: 0.6rem 0.8rem;">⚡ Excedente (kW)</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: center;">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="hourly-table-body">
+              <!-- Renderizado dinámico desde app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 7-Day Cumulative Production Chart -->
+      <section class="section-box" aria-label="Producción Semanal Acumulada">
+        <div class="section-header">
+          <h2>📊 Producción Semanal Comparada (kWh/día)</h2>
+          <div class="sub-desc">Aporte de String Este (85°) + String Oeste (265°) vs Máximo Teórico</div>
+        </div>
+        <div class="chart-wrapper" style="height: 260px;">
+          <canvas id="weekChart"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: HOGAR & SIMULADOR "WHAT-IF"         -->
+    <!-- ========================================== -->
+    <div id="tab-home" class="master-tab-pane">
+      <!-- SIMULADOR "WHAT-IF" INTERACTIVO DE CONSUMOS DE VERANO -->
+      <section class="section-box" aria-label="Simulador What-If de Electrodomésticos de Verano" style="border: 1px solid rgba(56, 189, 248, 0.35); box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);">
+        <div class="section-header">
+          <div>
+            <h2>🎛️ Simulador "What-If" Interactivo de Consumos de Verano</h2>
+            <div class="sub-desc">Enciende o apaga cualquier electrodoméstico real de la casa y comprueba instantáneamente la cobertura solar, batería y coste 0.00 €</div>
+          </div>
+          <span class="badge-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 700;">Simulación Dinámica O(1)</span>
+        </div>
+
+        <div id="whatif-simulator-container">
+          <!-- Renderizado dinámico desde what-if-simulator.js -->
+        </div>
+      </section>
+
+      <!-- ASISTENTE DE ELECTRODOMÉSTICOS: ¿Cuándo es mejor poner qué? -->
+      <section class="section-box" aria-label="Recomendador de Electrodomésticos">
+        <div class="section-header">
+          <h2>🧺 Asistente Inteligente: ¿Cuándo es mejor poner qué electrodoméstico?</h2>
+          <div class="sub-desc">Ventanas horarias calculadas para maximizar el autoconsumo a <strong>Coste 0.00 €</strong></div>
+        </div>
+        
+        <div class="appliances-grid" id="appliances-container">
+          <!-- Renderizado dinámico desde app.js -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: MOVILIDAD & VE OMODA 7 SHS          -->
+    <!-- ========================================== -->
+    <div id="tab-mobility" class="master-tab-pane">
+      <!-- PLANIFICADOR DE RUTAS Y MOVILIDAD OMODA 7 SHS -->
+      <section class="section-box" aria-label="Planificador de Rutas Omoda 7 SHS">
+        <div class="section-header">
+          <div>
+            <h2>🚗 Planificador de Rutas & Recarga Solar Omoda 7 SHS (AppViajes AI)</h2>
+            <div class="sub-desc">Optimización predictiva de energía por trayecto y ahorro frente a gasolina 95</div>
+          </div>
+          <span class="badge-tag" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">Batería 18.7 kWh (95 km EV)</span>
+        </div>
+
+        <div class="routes-grid" id="routes-container">
+          <!-- Renderizado dinámico desde app.js -->
+        </div>
+      </section>
+
+      <!-- PLANIFICADOR PERSONALIZADO DE CARGA OMODA 7 SHS -->
+      <section class="section-box" aria-label="Planificador de Carga Omoda 7 SHS">
+        <div class="section-header">
+          <h2>⚡ Simulación de Carga Wallbox (¿Cuándo y cuánto cargar?)</h2>
+          <div class="sub-desc">Simulación interactiva personalizada según tu hora de conexión y necesidad diaria</div>
+        </div>
+
+        <div class="ev-planner-grid">
+          <div class="ev-planner-inputs">
+            
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span>Hora de Enchufe:</span>
+                <span id="evStartHour-val">13:30 h</span>
+              </div>
+              <input type="range" id="evStartHour" min="0" max="23" step="1" value="13">
+            </div>
+
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span>Hora Desconexión / Salida:</span>
+                <span id="evEndHour-val">18:00 h</span>
+              </div>
+              <input type="range" id="evEndHour" min="1" max="24" step="1" value="18">
+            </div>
+
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span>Batería Inicial al llegar:</span>
+                <span id="evCurrentSoc-val">25% (4.7 kWh)</span>
+              </div>
+              <input type="range" id="evCurrentSoc" min="10" max="80" step="5" value="25">
+            </div>
+
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span>Objetivo de Carga deseado:</span>
+                <span id="evTargetSoc-val">85% (15.9 kWh)</span>
+              </div>
+              <input type="range" id="evTargetSoc" min="50" max="100" step="5" value="85">
+            </div>
+
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span>Estrategia de Carga:</span>
+              </div>
+              <select id="evPlanMode" class="form-select">
+                <option value="solar_only" selected>☀️ 100% Excedente Solar (Coste 0 €)</option>
+                <option value="fast_hybrid">⚡ Carga Rápida Máxima (Sol + Red)</option>
+                <option value="night_valley">🌙 Carga Nocturna Valle (00:00 - 08:00 h)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Resumen de Planificación de Carga -->
+          <div class="ev-planner-results">
+            <div class="ev-result-card">
+              <div class="ev-res-label">Energía a Cargar</div>
+              <div class="ev-res-val" id="ev-plan-kwh">-- kWh</div>
+              <div class="ev-res-sub" id="ev-plan-km">+-- km añadidos</div>
+            </div>
+
+            <div class="ev-result-card highlight">
+              <div class="ev-res-label">Origen de la Energía</div>
+              <div class="ev-res-val" id="ev-plan-solar-pct">100% Solar</div>
+              <div class="ev-res-sub" id="ev-plan-cost">Coste Carga: 0.00 €</div>
+            </div>
+
+            <div class="ev-result-card savings">
+              <div class="ev-res-label">Ahorro en Gasolina</div>
+              <div class="ev-res-val" id="ev-plan-savings">-- €</div>
+              <div class="ev-res-sub">Ahorro frente a modo térmico</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: PREDICCIÓN ANUAL & IA AUTO-AJUSTE   -->
+    <!-- ========================================== -->
+    <div id="tab-annual-ai" class="master-tab-pane">
+      <!-- PREDICCIONES A 1 AÑO VISTA & BUCLE DE AUTO-CORRECCIÓN DE LA IA -->
+      <section class="section-box" aria-label="Predicciones Anuales y Auto-Corrección IA" style="border: 1px solid rgba(139, 92, 246, 0.35); box-shadow: 0 0 20px rgba(139, 92, 246, 0.08);">
+        <div class="section-header">
+          <div>
+            <h2>🔮 Predicción de Energía a 1 Año Vista & Bucle de Auto-Corrección</h2>
+            <div class="sub-desc">Proyecciones mensuales y semanales contrastadas diariamente contra la telemetría real para auto-afinar la IA</div>
+          </div>
+          <div class="tabs-bar" id="annual-forecast-tabs">
+            <button class="tab-btn active" data-view="12m">12 Meses</button>
+            <button class="tab-btn" data-view="52w">52 Semanas</button>
+            <button class="tab-btn" data-view="scorecard">Scorecard & Conciliación</button>
+          </div>
+        </div>
+
+        <div class="chart-wrapper" style="height: 300px;" id="annual-forecast-chart-wrapper">
+          <canvas id="annualForecastChart"></canvas>
+        </div>
+
+        <div id="ai-scorecard-table-wrapper" style="display: none; max-height: 250px; overflow-y: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin-top: 0.75rem;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: right;">
+            <thead style="background: rgba(15, 23, 42, 0.95); position: sticky; top: 0; color: var(--text-secondary);">
+              <tr>
+                <th style="padding: 0.5rem 0.75rem; text-align: left;">Fecha</th>
+                <th style="padding: 0.5rem 0.75rem;">Predicho (kWh)</th>
+                <th style="padding: 0.5rem 0.75rem;">Real Medido (kWh)</th>
+                <th style="padding: 0.5rem 0.75rem;">Error (%)</th>
+                <th style="padding: 0.5rem 0.75rem;">Factor Soiling</th>
+                <th style="padding: 0.5rem 0.75rem; text-align: center;">Calibración IA</th>
+              </tr>
+            </thead>
+            <tbody id="scorecard-table-body">
+              <!-- Dinámico -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Scorecard Dinámico -->
+        <div style="margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Precisión Actual de la IA</div>
+            <div class="ev-res-val" id="ai-accuracy-val" style="color: var(--color-real);">98.2%</div>
+            <div class="ev-res-sub" id="ai-accuracy-sub">Error solar medio: ±1.8%</div>
+          </div>
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Generación Solar Proyectada (1 Año)</div>
+            <div class="ev-res-val" id="ai-annual-solar-val" style="color: var(--color-solar-light);">6.265 kWh</div>
+            <div class="ev-res-sub">10x Jinko Solar 500W</div>
+          </div>
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Excedente a Batería Virtual (1 Año)</div>
+            <div class="ev-res-val" id="ai-annual-surplus-val" style="color: #c084fc;">+3.263 kWh</div>
+            <div class="ev-res-sub" id="ai-annual-bv-sub">~261 € en monedero virtual</div>
+          </div>
+          <div class="ev-result-card savings">
+            <div class="ev-res-label">Ahorro Anual Proyectado</div>
+            <div class="ev-res-val" id="ai-annual-savings-val">~723 €</div>
+            <div class="ev-res-sub">Factura de luz = 0,00 €/año</div>
+          </div>
+        </div>
+
+        <div class="physics-note-box" style="margin-top: 1rem; border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.05);">
+          <strong style="color: #c084fc;">🔄 Motores de IA en Producción Local:</strong>
+          <p id="ai-calibration-feedback-text" style="margin-top: 0.25rem;">
+            Aceleración vectorial nativa con <strong>Google LiteRT INT8 Quantized Kernel</strong> (&lt; 85 µs de latencia) y <strong>DuckDB In-Process Vectorized Engine</strong> sobre el histórico de 49.344 horas de ERA5 y la telemetría Modbus TCP de Tocina.
+          </p>
+        </div>
+      </section>
+
+      <!-- APRENDIZAJE CONTINUO Y CALIBRACIÓN IA DEL GEMELO DIGITAL (EnKF + Online Learning) -->
+      <section class="section-box" aria-label="Aprendizaje Continuo IA">
+        <div class="section-header">
+          <div>
+            <h2>🧠 Aprendizaje Continuo & Calibración IA (Online Digital Twin)</h2>
+            <div class="sub-desc">Cruza de telemetría Modbus en tiempo real con Open-Meteo para calibrar parámetros físicos</div>
+          </div>
+          <span class="badge-tag" id="learning-confidence-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">Confianza IA: 98.6%</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Estado de Limpieza / Polvo</div>
+            <div class="ev-res-val" id="learning-soiling-val" style="color: var(--color-real);">98.5% Limpio</div>
+            <div class="ev-res-sub" id="learning-soiling-sub">Pérdida por suciedad: 1.5%</div>
+          </div>
+
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Balance Strings E/W Real</div>
+            <div class="ev-res-val" id="learning-strings-val" style="color: var(--color-east);">98.0% / 98.2%</div>
+            <div class="ev-res-sub">Rendimiento óptico observado</div>
+          </div>
+
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Inercia Climatización Daikin</div>
+            <div class="ev-res-val" id="learning-hvac-val" style="color: #c084fc;">38.0 W/°C</div>
+            <div class="ev-res-sub">Sensibilidad térmica del hogar</div>
+          </div>
+
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Muestras Asimiladas</div>
+            <div class="ev-res-val" id="learning-samples-val" style="color: #38bdf8;">-- lecturas</div>
+            <div class="ev-res-sub">Filtro EnKF recursivo O(1)</div>
+          </div>
+        </div>
+
+        <div class="physics-note-box" style="margin-top: 1rem; border-color: rgba(56, 189, 248, 0.3);">
+          <strong style="color: #38bdf8;">💡 Diagnóstico y Recomendación de la IA:</strong>
+          <p id="learning-rec-text" style="margin-top: 0.25rem;">
+            Analizando telemetría y radiación solar...
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: FACTURAS & BATERÍA VIRTUAL          -->
+    <!-- ========================================== -->
+    <div id="tab-finance" class="master-tab-pane">
+      <!-- Facturas vs Ahorro Solar Box -->
+      <section class="section-box" aria-label="Análisis Económico y Facturas">
+        <div class="section-header">
+          <h2>💡 Batería Virtual & Análisis Anual de Ahorro</h2>
+        </div>
+        
+        <div class="billing-comparison-grid">
+          <div class="bill-card before">
+            <div class="bill-title">Sin Solar ni Baterías (Facturas Reales Verificadas)</div>
+            <div class="bill-amount">~115 € <small>/mes medio (5.185 kWh/año)</small></div>
+            <ul class="bill-details">
+              <li>Consumo medio hogar: <strong>14.2 kWh/día</strong> (5.185 kWh/año)</li>
+              <li>Invierno (calefacción): hasta <strong>24.6 kWh/día (764 kWh/mes en Enero)</strong></li>
+              <li>Gasto en gasolina Omoda 7 (modo térmico): <strong>~95 €/mes</strong></li>
+              <li><strong>Gasto total anual previo: ~2.520 € / año</strong></li>
+            </ul>
+          </div>
+
+          <div class="bill-card after">
+            <div class="bill-title">Con 5.00 kWp Jinko + 10.36 kWh EP5 HV + Batería Virtual + Omoda 7</div>
+            <div class="bill-amount">0.00 € <small>/mes con Batería Virtual</small></div>
+            <ul class="bill-details">
+              <li>Autoconsumo solar directo + Batería 10.36 kWh: <strong>90% - 96%</strong></li>
+              <li>Carga del Omoda 7 con excedentes solares del mediodía: <strong>100% GRATIS</strong></li>
+              <li>Saldo Monedero Batería Virtual acumulado en verano: <strong>+261 € de crédito</strong></li>
+              <li>Ahorro total neto estimado (Luz + Gasolina): <strong style="color: var(--color-real);">~2.250 € / año</strong></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASAPORTE DE DESCARBONIZACIÓN Y CERTIFICACIÓN VERDE -->
+      <section class="section-box" aria-label="Pasaporte Verde y Sostenibilidad">
+        <div class="section-header">
+          <div>
+            <h2>🌱 Pasaporte de Descarbonización & Certificación Verde (GovTech Ledger)</h2>
+            <div class="sub-desc">Contabilidad inmutable de CO₂ evitado y huella ecológica positiva</div>
+          </div>
+          <span class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">PoG Verificado</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+          <div class="ev-result-card savings">
+            <div class="ev-res-label">CO₂ Evitado Hoy</div>
+            <div class="ev-res-val" id="co2-saved-today">-- kg</div>
+            <div class="ev-res-sub" id="co2-trees-today">🌳 Equiv. a -- árboles</div>
+          </div>
+          <div class="ev-result-card savings">
+            <div class="ev-res-label">CO₂ Evitado Anual</div>
+            <div class="ev-res-val" id="co2-saved-year">~1.45 t</div>
+            <div class="ev-res-sub">Hogar + Movilidad Omoda 7</div>
+          </div>
+          <div class="ev-result-card highlight">
+            <div class="ev-res-label">Sello Criptográfico PoG</div>
+            <div class="ev-res-val" style="font-size: 1.1rem; font-family: var(--font-mono); color: var(--color-east);" id="green-cert-hash">0x7A9B...3E41</div>
+            <div class="ev-res-sub" id="green-cert-id">CERT-TOCINA-2026</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: SISTEMA & AJUSTES                   -->
+    <!-- ========================================== -->
+    <div id="tab-settings" class="master-tab-pane">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        
+        <!-- Simulador Físico de Parámetros -->
+        <section class="section-box">
+          <div class="section-header">
+            <h2>⚙️ Simulador Físico de Parámetros</h2>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Placas y Potencia -->
+            <div class="control-group">
+              <div class="control-group-title">
+                <span>Paneles Jinko Solar 500W</span>
+                <span class="badge-tag">Jinko N-Type</span>
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Potencia por placa:</span>
+                  <span id="panelWp-val">500 Wp</span>
+                </div>
+                <input type="range" id="panelWp" min="400" max="650" step="5" value="500">
+              </div>
+            </div>
+
+            <!-- String Este -->
+            <div class="control-group">
+              <div class="control-group-title">
+                <span>String 1 (Tejado Este)</span>
+                <span class="badge-tag">Brújula 85° E</span>
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Número de placas:</span>
+                  <span id="eastPanels-val">6 uds</span>
+                </div>
+                <input type="range" id="eastPanels" min="1" max="15" step="1" value="6">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Azimut orientación:</span>
+                  <span id="eastAzimuth-val">85° (Este)</span>
+                </div>
+                <input type="range" id="eastAzimuth" min="0" max="359" step="1" value="85">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Inclinación tejado:</span>
+                  <span id="eastTilt-val">20°</span>
+                </div>
+                <input type="range" id="eastTilt" min="10" max="45" step="1" value="20">
+              </div>
+            </div>
+
+            <!-- String Oeste -->
+            <div class="control-group">
+              <div class="control-group-title">
+                <span>String 2 (Tejado Oeste)</span>
+                <span class="badge-tag west">Opuesto 265° W</span>
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Número de placas:</span>
+                  <span id="westPanels-val">4 uds</span>
+                </div>
+                <input type="range" id="westPanels" min="1" max="15" step="1" value="4">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Azimut orientación:</span>
+                  <span id="westAzimuth-val">265° (Oeste)</span>
+                </div>
+                <input type="range" id="westAzimuth" min="0" max="359" step="1" value="265">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Inclinación tejado:</span>
+                  <span id="westTilt-val">20°</span>
+                </div>
+                <input type="range" id="westTilt" min="10" max="45" step="1" value="20">
+              </div>
+            </div>
+
+            <!-- Inversor y Baterías de Casa -->
+            <div class="control-group">
+              <div class="control-group-title">
+                <span>Inversor & Almacenamiento</span>
+                <span class="badge-tag">Fox-ESS EP5 HV</span>
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Potencia inversor:</span>
+                  <span id="inverterKw-val">10 kW</span>
+                </div>
+                <input type="range" id="inverterKw" min="3" max="15" step="1" value="10">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Capacidad baterías EP5:</span>
+                  <span id="batteryKwh-val">10.36 kWh</span>
+                </div>
+                <input type="range" id="batteryKwh" min="0" max="25" step="0.5" value="10.36">
+              </div>
+              <div class="slider-item">
+                <div class="slider-label-row">
+                  <span>Consumo base hogar:</span>
+                  <span id="homeLoadW-val">750 W</span>
+                </div>
+                <input type="range" id="homeLoadW" min="200" max="2000" step="50" value="750">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Base de Datos SQLite, FoxCloud & Muestreo -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <!-- Base de Datos Local SQLite -->
+          <section class="section-box">
+            <div class="section-header">
+              <div>
+                <h2>💾 Base de Datos Local (SQLite WAL)</h2>
+                <div class="sub-desc">Persistencia transaccional + Analítica DuckDB vectorizada</div>
+              </div>
+              <span class="badge-tag" id="sqlite-records-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">0 registros</span>
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
+              <div>• Historial local activo: <strong style="color: var(--text-primary);" id="sqlite-first-rec">Hoy 15:19 h</strong></div>
+              <div>• Potencia máxima registrada: <strong style="color: var(--color-real);" id="sqlite-max-pow">-- kW</strong></div>
+              <div>• Servicio de fondo: <strong style="color: var(--color-real);">solar-tocina.service (:8526)</strong></div>
+              <div>• Muestreo en pantalla: <strong style="color: #38bdf8;">15 segundos (Eco Equilibrado)</strong></div>
+            </div>
+          </section>
+
+          <!-- Conector FoxCloud 2.0 -->
+          <section class="section-box">
+            <div class="section-header">
+              <div>
+                <h2>☁️ FoxCloud 2.0 (Recuperación de Huecos)</h2>
+                <div class="sub-desc">Sincronización histórica oficial de respaldo</div>
+              </div>
+              <span class="badge-tag" id="foxcloud-status-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">Conectado</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+              <input type="text" id="foxcloud-apikey-input" placeholder="FoxCloud Open API Key (opcional)" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-subtle); padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-family: var(--font-mono);">
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="foxcloud-sn-input" value="60HJB0104CGC312" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-subtle); padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-family: var(--font-mono); flex: 1;">
+                <button id="foxcloud-save-btn" class="refresh-button" style="padding: 0.45rem 0.85rem; font-size: 0.8rem; background: var(--bg-card);">Guardar</button>
+                <button id="foxcloud-sync-btn" class="refresh-button" style="padding: 0.45rem 0.85rem; font-size: 0.8rem; background: var(--color-east); color: #0f172a; font-weight: 700; border: none;">🔄 Sincronizar 24h</button>
+              </div>
+              <div id="foxcloud-msg" style="font-size: 0.75rem; color: var(--color-real); min-height: 1rem;"></div>
+            </div>
+          </section>
+
+          <!-- Microclima H3 -->
+          <div class="physics-note-box" style="border-color: rgba(192, 132, 252, 0.3); background: rgba(192, 132, 252, 0.05);">
+            <strong style="color: #c084fc;">🌐 Microclima H3 (Vega del Guadalquivir):</strong>
+            <p id="h3-microclimate-desc" style="margin-top: 0.3rem;">
+              Cargando análisis geoespacial de albedo y calima sahariana...
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Gemelo Digital Fotovoltaico de Alta Precisión | Asimilación Kalman EnKF + Precios OMIE + Indexación H3 + Modbus TCP Local</p>
+      <p>Calle Amadeo Vives 31, Los Rosales - Tocina (Sevilla) • Servicio Systemd Activo en Puerto <strong>:8526</strong></p>
+    </footer>
+
+  </div>
+
+  <!-- App Scripts -->
+  <script src="./sankey-chart.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
