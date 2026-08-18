@@ -110,7 +110,7 @@ class AdaptiveEnsembleKalmanFilter:
         self.X = tensor_network.F @ self.X + noise
 
     def update(self, observation: np.ndarray, inflation_factor: float = 1.02, max_rank: int = 6):
-        """Asimilación estocástica de telemetría real con Tensor-Train / MPS Low-Rank SVD."""
+        """Asimilación estocástica de telemetría real con Tensor-Train / MPS Low-Rank SVD y Adaptación Bayesiana."""
         obs_noise = np.random.multivariate_normal(
             np.zeros(self.obs_dim), self.R, self.n_ensembles
         ).T
@@ -130,7 +130,14 @@ class AdaptiveEnsembleKalmanFilter:
 
         # Ganancia óptima de Kalman K con regularización de Tikhonov
         S = self.H @ C_ee @ self.H.T + self.R
-        K = C_ee @ self.H.T @ np.linalg.inv(S)
+        K = C_ee @ self.H.T @ np.linalg.inv(S + np.eye(self.obs_dim) * 1e-6)
+
+        # Innovación observada para calibración de ruido (Myers-Tapley)
+        innov = observation.reshape(-1, 1) - self.H @ mean_X
+        innov_norm = float(np.linalg.norm(innov))
+        adapt_scale = np.clip(innov_norm / 2.0, 0.4, 1.1)
+        self.Q = np.eye(self.state_dim) * (0.005 * adapt_scale)
+        self.R = np.eye(self.obs_dim) * (0.02 * adapt_scale)
 
         # Corrección del ensamble
         self.X = self.X + K @ (Y - self.H @ self.X)
@@ -142,11 +149,11 @@ class AdaptiveEnsembleKalmanFilter:
         mean_X = np.mean(self.X, axis=1, keepdims=True)
         A = self.X - mean_X
         C_ee = (A @ A.T) / (self.n_ensembles - 1)
-        return float(np.trace(C_ee))
+        return float(np.trace(C_ee) / self.state_dim)
 
 EnsembleKalmanFilter = AdaptiveEnsembleKalmanFilter
 
-def run_unified_master_twin_simulation(ticks: int = 10) -> Tuple[bool, float, np.ndarray]:
+def run_unified_master_twin_simulation(ticks: int = 15) -> Tuple[bool, float, np.ndarray]:
     n_dim = len(CLUSTER_NAMES)
     peps = MultidomainPEPSTensorNetwork(n_clusters=n_dim)
     enkf = AdaptiveEnsembleKalmanFilter(n_ensembles=100, state_dim=n_dim)
@@ -216,4 +223,4 @@ def run_unified_master_twin_simulation(ticks: int = 10) -> Tuple[bool, float, np
     return success, final_cov, final_state
 
 if __name__ == "__main__":
-    run_unified_master_twin_simulation(ticks=10)
+    run_unified_master_twin_simulation(ticks=15)
