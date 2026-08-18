@@ -74,6 +74,7 @@
         <module>apps/ProyectoBioAgriTrace</module>
         <module>apps/ProyectoBiodiversityGenomicBank</module>
         <module>apps/ProyectoBiotecnologia</module>
+        <module>apps/ProyectoBlueCarbonOceans</module>
         <module>apps/ProyectoCaminoSantiagoXacobeo</module>
         <module>apps/ProyectoCarbonDirectAirCapture</module>
         <module>apps/ProyectoCarbonLedger</module>
@@ -119,6 +120,7 @@
         <module>apps/ProyectoMaritime</module>
         <module>apps/ProyectoMaritimeAutonomousFleet</module>
         <module>apps/ProyectoMiceConferenceTwin</module>
+        <module>apps/ProyectoNeuroSpatialLLM</module>
         <module>apps/ProyectoNuclearFusionStellarator</module>
         <module>apps/ProyectoParquesNacionalesNatura2000</module>
         <module>apps/ProyectoPharmaColdChain</module>
@@ -128,6 +130,7 @@
         <module>apps/ProyectoPresaTwinSCADA</module>
         <module>apps/ProyectoQuantumMaterialsGraphene</module>
         <module>apps/ProyectoQuantumResistantRWA</module>
+        <module>apps/ProyectoQuantumSatelliteSAR</module>
         <module>apps/ProyectoQuantumSatelliteSync</module>
         <module>apps/ProyectoQuantumSecureBanking</module>
         <module>apps/ProyectoRedParadoresTwin</module>

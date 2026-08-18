@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoNeuroSpatialLLM Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoNeuroSpatialLLM
+channels:
+  proyectoneurospatialllmEvents:
+    address: corp-proyectoneurospatialllm-events
+    messages:
+      SpatialGeoPromptTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

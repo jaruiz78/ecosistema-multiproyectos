@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumSatelliteSAR API
+  description: Plataforma de Interferometria SAR Cuantica para Auscultacion Milimetrica de Presas y Acuiferos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantumsatellitesar
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantumsatellitesar/{id}:
+    get:
+      summary: Obtener InSarDisplacementTrackNode por Identificador
+      operationId: getInSarDisplacementTrackNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: InSarDisplacementTrackNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InSarDisplacementTrackNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    InSarDisplacementTrackNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

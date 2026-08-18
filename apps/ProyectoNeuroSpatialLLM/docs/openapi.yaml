@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoNeuroSpatialLLM API
+  description: Modelo Fundacional Geoespacial H3 con Razonamiento Multi-Agente y Memoria Espacio-Temporal
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoneurospatialllm
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoneurospatialllm/{id}:
+    get:
+      summary: Obtener SpatialGeoPromptToken por Identificador
+      operationId: getSpatialGeoPromptTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SpatialGeoPromptToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpatialGeoPromptToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SpatialGeoPromptToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
