@@ -86,6 +86,30 @@ def main():
         ["python3", "scripts/finops/myerson_energy_aware_scaler.py"]
     ))
     
+    # 6. Motor Universal de Ingesta y Destilación Feynman (MarkItDown & Crawl4AI)
+    results.append(run_step(
+        "6. Ingesta Universal Multiformato & Destilación Feynman (MarkItDown/Crawl4AI)",
+        ["python3", "scripts/ingest_and_distill_papers_feynman.py", "--test-mode"]
+    ))
+
+    # 7. Cliente de Ingesta Resiliente Anti-Bot (curl-impersonate & Scrapling)
+    results.append(run_step(
+        "7. Cliente de Ingesta Anti-Bot & Extractor Adaptativo (curl-impersonate/Scrapling)",
+        ["python3", "scripts/security/anti_bot_evasion_client.py", "--self-test"]
+    ))
+
+    # 8. Verificador Agéntico de Interfaces Web (Browser-Use & Playwright)
+    results.append(run_step(
+        "8. Verificador Agéntico de Viajes de Usuario E2E (Browser-Use/Playwright)",
+        ["python3", "scripts/verification/agentic_browser_journey_verifier.py", "--self-test"]
+    ))
+
+    # 9. Runner de Telemetría Móvil (scrcpy & ADB)
+    results.append(run_step(
+        "9. Runner de Pruebas y Telemetría Móvil AppViajes (scrcpy/ADB Headless)",
+        ["python3", "scripts/verification/mobile_scrcpy_test_runner.py", "--self-test"]
+    ))
+    
     # Resumen
     total_passed = sum(1 for r in results if r["success"])
     total_steps = len(results)

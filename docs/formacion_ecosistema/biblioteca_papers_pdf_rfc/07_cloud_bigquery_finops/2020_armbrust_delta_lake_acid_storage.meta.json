@@ -1,0 +1,16 @@
+{
+  "title": "Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores",
+  "authors": [
+    "Michael Armbrust",
+    "Tathagata Das",
+    "Liang-Chi Hsieh",
+    "Sameer Paranjpye",
+    "Xiao Li",
+    "Ali Ghodsi",
+    "Matei Zaharia"
+  ],
+  "year": 2020,
+  "institution": "Databricks / Stanford / VLDB 2020",
+  "faculty": "07_cloud_bigquery_finops",
+  "url": null
+}

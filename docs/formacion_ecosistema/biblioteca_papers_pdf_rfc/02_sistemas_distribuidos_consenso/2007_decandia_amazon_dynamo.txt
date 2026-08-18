@@ -1,0 +1,11 @@
+TITLE: Dynamo: Amazon's Highly Available Key-value Store
+AUTHORS: Giuseppe DeCandia et al. (Amazon) - SOSP 2007
+
+CORE ARCHITECTURAL MECHANISMS:
+1. Partitioning & Replication:
+   - Consistent Hashing with virtual nodes (tokens) distributed on a ring.
+2. High Availability for Writes (Always Writable):
+   - Sloppy Quorum (R + W > N) and Hinted Handoff for handling temporary node failures.
+3. Conflict Resolution:
+   - Vector Clocks for tracking causality across concurrent writes.
+   - Read-repair and background anti-entropy using Merkle Trees.

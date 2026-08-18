@@ -1,11 +1,11 @@
 {
-  "title": "Go Execution Tracer v2 & Work-Stealing Runtime Internals (Go 1.25)",
+  "title": "Flight Recording with Go Execution Tracer v2",
   "authors": [
     "Michael Knyszek",
-    "Felix Geisendörfer"
+    "Austin Clements"
   ],
   "year": 2024,
-  "institution": "Google Go Team",
+  "institution": "Google Go Runtime Team",
   "faculty": "04_concurrencia_go_csp",
   "url": null
 }

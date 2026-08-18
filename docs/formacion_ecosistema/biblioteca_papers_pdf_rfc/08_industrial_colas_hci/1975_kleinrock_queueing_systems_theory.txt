@@ -1,0 +1,11 @@
+TITLE: Queueing Systems: Theory
+AUTHOR: Leonard Kleinrock (UCLA / Internet Pioneer)
+
+FIRST PRINCIPLES:
+1. Little's Law:
+   L = \lambda * W (Average items in system = Arrival rate * Average waiting time).
+   - Independent of arrival distribution or service discipline.
+2. M/M/1 Queue Saturation:
+   Average delay W = 1 / (\mu - \lambda).
+   - As utilization ho = \lambda / \mu approaches 1.0 (100%), delay diverges to infinity.
+   - Operating systems must throttle load at 75-80% utilization to avoid latency explosions.

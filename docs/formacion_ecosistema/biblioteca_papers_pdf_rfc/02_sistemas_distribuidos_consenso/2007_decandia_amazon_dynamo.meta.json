@@ -1,0 +1,18 @@
+{
+  "title": "Dynamo: Amazon's Highly Available Key-value Store",
+  "authors": [
+    "Giuseppe DeCandia",
+    "Deniz Hastorun",
+    "Madan Jampani",
+    "Gaurav Kakulapati",
+    "Avinash Lakshman",
+    "Alex Pilchin",
+    "Swaminathan Sivasubramanian",
+    "Peter Vosshall",
+    "Werner Vogels"
+  ],
+  "year": 2007,
+  "institution": "Amazon.com / SOSP '07",
+  "faculty": "02_sistemas_distribuidos_consenso",
+  "url": null
+}

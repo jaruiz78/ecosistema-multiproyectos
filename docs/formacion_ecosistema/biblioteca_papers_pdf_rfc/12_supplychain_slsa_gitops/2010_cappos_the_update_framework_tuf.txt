@@ -1,0 +1,11 @@
+TITLE: The Update Framework (TUF)
+AUTHORS: Justin Cappos et al. (NYU / CNCF Graduated Project)
+
+FIRST PRINCIPLES:
+1. Compromise-Resilient Software Distribution:
+   Protects against repository compromise, key theft, replay attacks, and rollback attacks.
+2. Separation of Signing Roles:
+   - Root role: Delegator of trust (offline cold keys).
+   - Targets role: Validates package integrity and hashes.
+   - Snapshot role: Prevents mix-and-match attacks across versions.
+   - Timestamp role: Prevents replay and freeze attacks.

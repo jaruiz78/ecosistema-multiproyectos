@@ -1,9 +1,8 @@
 {
-  "title": "Sound Null Safety: Static and Runtime Guarantees in Dart 3",
+  "title": "Dart Sound Null Safety: Formal Operational Semantics",
   "authors": [
-    "Leaf Petersen",
     "Bob Nystrom",
-    "Erik Ernst"
+    "Leaf Petersen"
   ],
   "year": 2023,
   "institution": "Google Dart Team",

@@ -1,0 +1,10 @@
+{
+  "title": "Communicating Sequential Processes (CSP Book)",
+  "authors": [
+    "C. A. R. Hoare"
+  ],
+  "year": 1985,
+  "institution": "Oxford University Computing Laboratory / Prentice Hall",
+  "faculty": "04_concurrencia_go_csp",
+  "url": null
+}

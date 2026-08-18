@@ -1,0 +1,13 @@
+TITLE: Structure and Interpretation of Computer Programs (SICP)
+AUTHORS: Harold Abelson, Gerald Jay Sussman with Julie Sussman (MIT)
+
+FIRST PRINCIPLES & FEYNMAN ESSENCE:
+1. The Elements of Programming:
+   Programs are executed by computational processes. Complex systems are built by combining:
+   - Primitive expressions (atomic values)
+   - Means of combination (building compound elements)
+   - Means of abstraction (naming compound elements and treating them as units)
+2. Data Abstraction & Invariants:
+   A data abstraction creates a boundary between how a compound data object is used and how it is constructed from primitive pieces.
+3. Metalinguistic Abstraction:
+   When facing a complex problem, create a new domain-specific language (DSL) tailored to the problem space.

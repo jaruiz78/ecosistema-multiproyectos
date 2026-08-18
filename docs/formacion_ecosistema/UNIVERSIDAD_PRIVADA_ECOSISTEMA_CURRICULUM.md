@@ -45,17 +45,20 @@ mindmap
 
 ---
 
-#### 🏛️ FACULTAD I: INGENIERÍA DE SOFTWARE, TEORÍA DE TIPOS & ARQUITECTURA (CMU / Stanford)
+#### 🏛️ FACULTAD I: INGENIERÍA DE SOFTWARE, TEORÍA DE TIPOS & ARQUITECTURA (CMU / Stanford / MIT)
 1. **Arquitectura Hexagonal y Aislamiento DDD Puro**: Principio de Inversión de Dependencias (DIP), Puertos y Adaptadores. Capa `domain/` 100% aislada de anotaciones de frameworks (Zero-Mockito).
-2. **Modelado en Java 25**: Records inmutables, `sealed interfaces` para tipos de suma algebraicos y constructores compactos \(\mathcal{O}(1)\).
-3. **Ciclo SDLC de 6 Fases y Doubt-Driven Development**: `DEFINE` → `PLAN` → `BUILD` → `VERIFY` → `REVIEW` → `SHIP`.
+2. **Abstracción y Metalingüística (SICP - Abelson & Sussman)**: Combinación, abstracción e invariantes de datos (*Structure and Interpretation of Computer Programs*).
+3. **Teoría de Tipos y Seguridad Formal (TAPL - Pierce)**: Teorema de Type Safety (Progreso + Preservación), `sealed interfaces` y records inmutables en Java 25.
+4. **Ciclo SDLC de 6 Fases y Doubt-Driven Development**: `DEFINE` → `PLAN` → `BUILD` → `VERIFY` → `REVIEW` → `SHIP`.
 
 ---
 
-#### 🌐 FACULTAD II: SISTEMAS DISTRIBUIDOS, CONSENSO & TLA+ (MIT 6.5840 / UC Berkeley)
+#### 🌐 FACULTAD II: SISTEMAS DISTRIBUIDOS, CONSENSO & TLA+ (MIT 6.5840 / UC Berkeley / CMU)
 1. **Modelos de Fallos, Causalidad y Relojes Lógicos**: Relación "happened-before" de Lamport, Relojes Vectoriales y Concurrencia causal.
-2. **Consenso Distribuido**: Algoritmos Raft, Paxos, EPaxos y tolerancia a fallos bizantinos (BFT). Teorema FLP y PACELC.
-3. **Especificación en TLA+/PlusCal**: Verificación de invariantes de seguridad (*Safety*) y vivacidad (*Liveness*) con TLC Model Checker.
+2. **Consenso Distribuido & Quórums**: Algoritmos Raft Extended (Ongaro & Ousterhout), Paxos Made Simple (Lamport), EPaxos y teorema FLP.
+3. **Almacenamiento Altamente Disponible (Amazon Dynamo)**: Consistent Hashing, Vector Clocks, Sloppy Quorums y Hinted Handoff.
+4. **Bases de Datos Globalmente Distribuidas (Google Spanner & F1)**: TrueTime API con incertidumbre acotada \(\epsilon < 7\text{ms}\), External Consistency y 2PC sobre Paxos.
+5. **Especificación Formal en TLA+/PlusCal**: Verificación de invariantes de seguridad (*Safety*) y vivacidad (*Liveness*) con TLC Model Checker.
 
 ---
 
@@ -87,27 +90,27 @@ mindmap
 ---
 
 #### 🤖 FACULTAD VI: IA HÍBRIDA, EDGE AI & METAPROGRAMACIÓN AGÉNTICA (MIT / Stanford)
-1. **Edge AI con LiteRT & Computación Neuromórfica (SNN)**: Inferencia local INT8 confinada off-heap y modelos Leaky Integrate-and-Fire (LIF) en tiempo discreto (`core-neuromorphic-spiking`).
+1. **Edge AI con LiteRT & FlashAttention (Dao et al.)**: Inferencia local INT8 confinada off-heap y atención con IO-Awareness evitando materialización $O(N^2)$ en memoria HBM.
 2. **Razonamiento Neuro-Simbólico & Model Checking LTL**: Fusión de LLMs probabilísticos con verificadores deductivos formales de Lógica Temporal Lineal (`core-symbolic-verifier`).
 3. **Geometría Hiperbólica de Poincaré**: Proyección conforme en discos y espacios hiperboloides de Lorentz para taxonomías complejas (`core-hyperbolic-embeddings`).
 4. **Subastas Estocásticas y Compatibilidad de Incentivos (VCG)**: Mecanismos Strategy-Proof y equilibrios de Stackelberg (`core-stochastic-game-auctions`).
 5. **Consenso Bizantino Asíncrono (aBFT) & DAG-Tangle**: Tolerancia a fallos bizantinos arbitrarios \(f < n/3\) sin líder central (`core-asynchronous-byzantine-consensus`).
-6. **Metaprogramación Agéntica (Semantic Loop)**: Orquestación masiva de código multi-repositorio guiada por *Toyota Kata* (Límite de 3 auto-reparaciones).
+6. **Metaprogramación Agéntica & Web Scraping (Crawl4AI & MarkItDown)**: Ingesta limpia a Markdown sin costes de API y orquestación masiva guiada por *Toyota Kata*.
 7. **Tribunal Adversario (Consilium Romano 3.0)**: Oposición dialéctica de modelos locales (Inquisidor, Censor Morum, Praetor FinOps) para erradicar el sesgo de confirmación.
 
 ---
 
 #### ☁️ FACULTAD VII: CLOUD-NATIVE, BIG DATA, eBPF, RDMA, ENCLAVES & QKD (Google Cloud / Linux Foundation)
 1. **BigQuery Capacitor & FinOps**: Particionado forzoso (`_PARTITIONDATE` / `_PARTITIONTIME`) y coste $< 0.005\text{ USD/MAU/mes}$.
-2. **Observabilidad Kernel-Space con eBPF**: Captura de eventos de red y sockets sin sobrecarga en la JVM (`corp-ebpf-telemetry-starter`).
-3. **Transferencia Directa de Memoria RDMA/RoCE**: Latencias inferiores a \(5\ \mu\text{s}\) sin copias en TCP/IP (`corp-rdma-direct-memory-starter`).
-4. **Malla de Actores Virtuales con Afinidad Espacial**: Actores ligeros gobernados por celdas H3 (`corp-distributed-actor-mesh-starter`).
-5. **Atestación Confidencial ZK-STARK**: Pruebas criptográficas de conocimiento cero sobre estados cifrados (`corp-homomorphic-zk-attestation-starter`).
-6. **Enclaves Seguros de Hardware SGX/SEV**: Aislamiento en memoria cifrada de hardware y atestación remota (`corp-confidential-enclave-sgx-starter`).
-7. **Malla de Eventos DAG sin Líder**: Event-mesh escalable de latencia sub-milisegundo (`corp-hyperscale-dag-eventmesh-starter`).
-8. **Distribución Cuántica de Claves (QKD)**: Transporte seguro de claves BB84 con validación QBER (`corp-quantum-key-distribution-starter`).
-9. **Plugins Aislados en WebAssembly (WASM)**: Sandboxing hermético para extensiones corporativas seguras (`corp-mesh-wasm-plugin-starter`).
-10. **Datos Sintéticos con Cópulas Arquimedianas**: Modelado de dependencias estocásticas con garantías $(\epsilon, \delta)$-DP (`corp-synthetic-data-copula-starter`).
+2. **Almacenamiento ACID sobre Cloud Storage (Delta Lake - Armbrust et al.)**: Registro de transacciones append-only y data skipping con Z-Ordering.
+3. **Observabilidad Kernel-Space con eBPF**: Captura de eventos de red y sockets sin sobrecarga en la JVM (`corp-ebpf-telemetry-starter`).
+4. **Transferencia Directa de Memoria RDMA/RoCE**: Latencias inferiores a \(5\ \mu\text{s}\) sin copias en TCP/IP (`corp-rdma-direct-memory-starter`).
+5. **Malla de Actores Virtuales con Afinidad Espacial**: Actores ligeros gobernados por celdas H3 (`corp-distributed-actor-mesh-starter`).
+6. **Atestación Confidencial ZK-STARK**: Pruebas criptográficas de conocimiento cero sobre estados cifrados (`corp-homomorphic-zk-attestation-starter`).
+7. **Enclaves Seguros de Hardware SGX/SEV**: Aislamiento en memoria cifrada de hardware y atestación remota (`corp-confidential-enclave-sgx-starter`).
+8. **Malla de Eventos DAG sin Líder**: Event-mesh escalable de latencia sub-milisegundo (`corp-hyperscale-dag-eventmesh-starter`).
+9. **Distribución Cuántica de Claves (QKD)**: Transporte seguro de claves BB84 con validación QBER (`corp-quantum-key-distribution-starter`).
+10. **Plugins Aislados en WebAssembly (WASM)**: Sandboxing hermético para extensiones corporativas seguras (`corp-mesh-wasm-plugin-starter`).
 
 ---
 
@@ -117,38 +120,40 @@ mindmap
 
 ---
 
-#### 🏭 FACULTAD VIII: INGENIERÍA INDUSTRIAL, COLAS & HCI (Georgia Tech / Purdue)
-1. **Teoría de Colas y Ley de Little**: Relación \(L = \lambda W\), modelos \(M/M/1\) y \(M/G/1\) para dimensionamiento de carga.
+#### 🏭 FACULTAD VIII: INGENIERÍA INDUSTRIAL, COLAS & HCI (Georgia Tech / Purdue / UCLA)
+1. **Teoría de Colas y Ley de Little (Kleinrock & Little)**: Relación \(L = \lambda W\), modelos \(M/M/1\) y saturación de buffers al 80% de utilización.
 2. **Lean Manufacturing & Six Sigma**: Eliminación de las 7 Mudas en software y calidad de \(6\sigma\) (DPMO `< 3.4`).
-3. **Ergonomía Cognitiva & Ley de Fitts**: Optimización de Core Web Vitals (INP `< 200ms`, LCP `< 2.5s`, CLS `< 0.1`).
+3. **Ergonomía Cognitiva & Ley de Fitts**: 10 Heurísticas de Usabilidad de Nielsen y optimización de Core Web Vitals (INP `< 200ms`, LCP `< 2.5s`, CLS `< 0.1`).
 
 ---
 
 #### 🗺️ FACULTAD IX: INGENIERÍA GEOESPACIAL & MOVILIDAD (Uber Engineering / KIT)
 1. **Indexación Espacial Discreta H3**: Proyección icosaédrica, métrica de vecindad uniforme y representación `uint64`.
-2. **Ruteo de Ultra-Baja Latencia OSRM**: Jerarquías de Contracción (CH) y planificación de rutas personalizadas (MLD/CRP) en \(< 2\text{ ms}\).
+2. **Ruteo de Ultra-Baja Latencia OSRM & Contraction Hierarchies (Geisberger et al.)**: Búsqueda bidireccional ascendente y cálculo de rutas óptimas en \(< 1\text{ ms}\).
 3. **Despacho Bipartito & Surge Pricing**: Emparejamiento máximo Kuhn-Munkres y tarificación dinámica sigmoide.
 
 ---
 
 #### 💳 FACULTAD X: FINTECH, PAGOS & SAGAS (Stanford / Stripe)
 1. **Stripe Connect & Fondos en Custodia (Escrow)**: Retención transaccional, Destination Charges y liquidación celular multi-tenant.
-2. **Patrón Sagas & Transactional Outbox**: Consistencia eventual sin 2PC, compensabilidad y claves de idempotencia.
-3. **FinOps & Reconciliación Automatizada**: Unit Economics estrictos ($< 0.015\text{ USD/MAU/mes}$) y detección de fugas contables.
+2. **Patrón Sagas & Transactional Outbox (García-Molina)**: Consistencia eventual sin 2PC, compensabilidad y claves de idempotencia.
+3. **Control de Tráfico y Rate Limiting (RFC 4115 / RFC 2697)**: Algoritmo Single-Rate Two-Color Token Bucket.
+4. **FinOps & Reconciliación Automatizada**: Unit Economics estrictos ($< 0.015\text{ USD/MAU/mes}$) y detección de fugas contables.
 
 ---
 
 #### 🔐 FACULTAD XI: IDENTIDAD, CRIPTOGRAFÍA & ZERO-TRUST (BeyondCorp / NIST)
-1. **Arquitectura Zero-Trust BeyondCorp**: Perímetro definido por software, validación contextual continua y mTLS TLS 1.3.
-2. **Protocolo OIDC, JWT, JWKS & Patrón BFF**: Verificación asimétrica en memoria \(\mathcal{O}(1)\) y protección contra robo de sesión.
+1. **Arquitectura Zero-Trust BeyondCorp (Google / NIST SP 800-207)**: Acceso contextual sin red privilegiada, mTLS TLS 1.3 y verificación continua por dispositivo y usuario.
+2. **Protocolo OIDC, JWT, JWKS & BCP (RFC 7519 / RFC 8725)**: Verificación asimétrica en memoria \(\mathcal{O}(1)\) y prevención de vulnerabilidades de firma.
 3. **Aislamiento Celular en Firestore**: Reglas de Seguridad (RLS) en el Edge basadas en Custom Claims de tenant.
 
 ---
 
-#### 📦 FACULTAD XII: SEGURIDAD DE CADENA DE SUMINISTRO & GITOPS (OpenSSF / CNCF)
+#### 📦 FACULTAD XII: SEGURIDAD DE CADENA DE SUMINISTRO & GITOPS (OpenSSF / CNCF / NYU)
 1. **Nivel de Madurez SLSA L3/L4 & SBOM CycloneDX**: Inventario formal de dependencias y builds reproducibles herméticos.
-2. **Firmas Criptográficas Cosign & Sigstore**: Inmutabilidad de contenedores OCI respaldada por log de transparencia Rekor.
-3. **Reconciliación Declarativa GitOps con ArgoCD**: Bucle de control automatizado (*Self-Healing*) sin modificaciones manuales en clúster.
+2. **Compromise-Resilient Software Distribution (TUF - Cappos et al.)**: Separación de roles criptográficos (Root, Targets, Snapshot, Timestamp).
+3. **Firmas Criptográficas Cosign & Sigstore**: Inmutabilidad de contenedores OCI respaldada por log de transparencia Rekor.
+4. **Reconciliación Declarativa GitOps con ArgoCD**: Bucle de control automatizado (*Self-Healing*) sin modificaciones manuales en clúster.
 
 ---
 

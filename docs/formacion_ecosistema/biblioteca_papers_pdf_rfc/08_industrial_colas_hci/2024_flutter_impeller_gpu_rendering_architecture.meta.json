@@ -1,10 +1,11 @@
 {
-  "title": "Impeller: Next-Generation GPU Rendering Architecture for Flutter",
+  "title": "Flutter Impeller: Next-Generation GPU Rendering Architecture",
   "authors": [
-    "Flutter Engine Team"
+    "Michael Goderbauer",
+    "Dan Field"
   ],
   "year": 2024,
-  "institution": "Google Flutter Engineering",
+  "institution": "Google Flutter Team",
   "faculty": "08_industrial_colas_hci",
   "url": null
 }

@@ -1,0 +1,10 @@
+TITLE: Spanner: Google's Globally-Distributed Database
+AUTHORS: James C. Corbett, Jeffrey Dean, Sanjay Ghemawat et al. (Google) - OSDI 2012
+
+KEY INNOVATIONS:
+1. TrueTime API:
+   - Exposes clock uncertainty explicitly as [earliest, latest] with bounded epsilon (< 7ms) using GPS and Atomic Clocks.
+2. External Consistency (Linearizability of Transactions):
+   - If transaction T2 starts after transaction T1 commits, then T2's commit timestamp is strictly greater than T1's.
+3. Multi-Version Concurrency Control (MVCC) & 2PC over Paxos:
+   - Lock-free read-only transactions at past timestamps without blocking writes.

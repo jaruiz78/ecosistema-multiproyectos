@@ -1,10 +1,10 @@
 {
-  "title": "Supply-chain Levels for Software Artifacts (SLSA) v1.0 Specification",
+  "title": "SLSA: Supply-chain Levels for Software Artifacts v1.0",
   "authors": [
-    "SLSA Steering Committee"
+    "OpenSSF SLSA Steering Committee"
   ],
   "year": 2023,
   "institution": "Open Source Security Foundation (OpenSSF) / Linux Foundation",
   "faculty": "12_supplychain_slsa_gitops",
-  "summary": ""
+  "url": null
 }

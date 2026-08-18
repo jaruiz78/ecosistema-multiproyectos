@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoFusionNuclearMHD API
+  description: Control magnetohidrodinámico (MHD) predictivo en reactores de fusión nuclear y micro-redes de potencia
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectofusionnuclearmhd
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectofusionnuclearmhd/{id}:
+    get:
+      summary: Obtener PlasmaConfinementZone por Identificador
+      operationId: getPlasmaConfinementZoneById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PlasmaConfinementZone recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlasmaConfinementZone'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PlasmaConfinementZone:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

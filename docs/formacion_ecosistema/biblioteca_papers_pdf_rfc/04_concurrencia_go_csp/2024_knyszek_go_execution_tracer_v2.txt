@@ -1,10 +1,7 @@
-TITLE: Go Execution Tracer v2 & Runtime Internals (Go 1.25)
-AUTHORS: Michael Knyszek, Felix Geisendörfer (Google Go Team)
+TITLE: Flight Recording with Go Execution Tracer v2
+AUTHORS: Michael Knyszek (Google / Go 1.22/1.23/1.24/1.25)
 
-KEY MECHANISMS:
-1. Low-Overhead Flight Recorder Tracing (< 1% CPU overhead):
-   Enables continuous production runtime tracing of goroutines (G), OS threads (M), and logical processors (P).
-2. Work-Stealing Optimization:
-   64-element local run queues per P, global queue lock bypass, and lock-free stealing from sibling P queues.
-3. Greenkeeper / Concurrent GC Pacer:
-   Dynamically tunes GC trigger frequency based on memory allocation rate to guarantee low latency.
+FIRST PRINCIPLES:
+1. Ultra Low-Overhead Event Tracing (< 1% CPU overhead).
+2. Per-M Thread-Local Trace Buffers:
+   Eliminates global lock contention during Goroutine scheduling events.

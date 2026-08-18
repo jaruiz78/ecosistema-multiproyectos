@@ -1,0 +1,12 @@
+TITLE: Types and Programming Languages (TAPL)
+AUTHOR: Benjamin C. Pierce (UPenn)
+
+FIRST PRINCIPLES:
+1. Type Systems Definition:
+   A type system is a tractable syntactic method for proving the absence of certain program behaviors by classifying phrases according to the kinds of values they compute.
+2. Type Safety Theorem:
+   Type Safety = Progress + Preservation (Subject Reduction).
+   - Progress: A well-typed term is either a value or can take a step of evaluation.
+   - Preservation: If a well-typed term steps to another term, the new term has the same type.
+3. Application to PCT Architecture:
+   Use Java Records, Sealed Interfaces, and Rust/Go algebraic data types to enforce invariants at compile-time (Zero Runtime Faults).

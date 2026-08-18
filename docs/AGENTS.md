@@ -10,13 +10,13 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
   > *Nota de Armonización SDLC*: Las skills canónicas de `GEMINI.md` (`test-driven-development`, `code-review-and-quality`) definen el marco metodológico general de 6 fases, mientras que las skills especializadas del ecosistema (`zero-mockito-tdd-engineer`, `consilium_romano_architect`) implementan las reglas estrictas de dominio puro sin mocks y el tribunal dialéctico pre-merge.
 - **Creación de Nuevo Proyecto / Vertical** → Script: `scripts/scaffolding/create_enterprise_project.py`
 - **Verificación Formal y Demostración de Teoremas** → `formal_verification_architect` (Lean 4, Z3 SMT, Interpretación Abstracta)
-- **Ingesta Masiva y Streaming ETL** → `streaming_etl_architect` → `sre_finops_auditor`
+- **Ingesta Masiva, Web Scraping & Streaming ETL** → `web-scraping-and-ingestion-engineer` → `streaming_etl_architect` → `sre_finops_auditor`
 - **Compilación AOT & Leyden CDS** → `leyden-aot-build-master`
 - **Diseño de APIs (REST / gRPC)** → `api-and-interface-design`
-- **Trabajo de UI / Dashboard / PWA** → `frontend-ui-engineering` → `browser-testing-with-devtools`
+- **Trabajo de UI / Dashboard / PWA / Browser-Use** → `frontend-ui-engineering` → `browser-testing-with-devtools` → `web-scraping-and-ingestion-engineer`
 - **Bugs, infracciones o tracebacks** → `debugging-and-error-recovery` (Auto-fix: `scripts/consilium_romano_tribunal.py --auto-fix`)
 - **Simulación y Gemelo Digital** → `digital-twin-enkf-orchestrator` → `simulation-telemetry-sqlite-analyzer`
-- **Base de Conocimiento y Grounding** → Script: `scripts/auto_university_rag_sync.py`
+- **Base de Conocimiento y Grounding (Crawl4AI & MarkItDown)** → Script: `scripts/auto_university_rag_sync.py` → `web-scraping-and-ingestion-engineer`
 - **Documentación & ADRs** → `adr-knowledge-graph-curator` (`codebase-memory-mcp`)
 - **Auditoría Pre-Merge & Senatus Consultum (`/ship`)** → `scripts/consilium_romano_tribunal.py` (`@deepseek-r1`, `@qwen2.5-coder`, `@gemma3:4b`)
 - **Seguridad, SLSA L3 y Firmas Cosign** → `slsa-sigstore-release-sentinel`

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCislunarSpaceLogistics API
+  description: Navegación cinemática y logística en puntos de libración Lagrange L1/L2 y órbitas cislunares
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocislunarspacelogistics
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocislunarspacelogistics/{id}:
+    get:
+      summary: Obtener LagrangeTrajectoryNode por Identificador
+      operationId: getLagrangeTrajectoryNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LagrangeTrajectoryNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LagrangeTrajectoryNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    LagrangeTrajectoryNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

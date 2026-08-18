@@ -1,0 +1,8 @@
+TITLE: Delta Lake: High-Performance ACID Table Storage over Cloud Object Stores
+AUTHORS: Michael Armbrust, Matei Zaharia et al. (Databricks / Stanford)
+
+FIRST PRINCIPLES:
+1. Transaction Log (ACID on S3/GCS):
+   Maintains an append-only JSON/Parquet transaction log (_delta_log), providing Serializable ACID guarantees on top of eventually consistent object storage.
+2. Data Skipping & Z-Ordering:
+   Indexes min/max column values per file to eliminate 90%+ of cloud I/O during SQL query evaluation.

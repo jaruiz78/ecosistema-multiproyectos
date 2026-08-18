@@ -1,0 +1,13 @@
+TITLE: BeyondCorp: A New Approach to Enterprise Security
+AUTHORS: Rory Ward, Betsy Beyer (Google)
+
+FIRST PRINCIPLES:
+1. No Privileged Internal Network:
+   Access to resources does not depend on network location (office vs coffee shop).
+2. Context-Aware Dynamic Authorization:
+   Every single request is authenticated, authorized, and encrypted based on:
+   - Device state and inventory certificate (mTLS)
+   - User identity (OIDC/SAML + MFA)
+   - Real-time risk posture and trust tier
+3. Zero-Trust Access Proxy:
+   All enterprise applications are placed behind an authenticating reverse proxy.

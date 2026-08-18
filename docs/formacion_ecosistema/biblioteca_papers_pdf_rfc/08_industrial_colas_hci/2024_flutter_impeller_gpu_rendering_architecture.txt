@@ -1,10 +1,8 @@
-TITLE: Impeller: Next-Generation GPU Rendering Architecture for Flutter
-AUTHORS: Google Flutter Engine Team
+TITLE: Flutter Impeller GPU Rendering Architecture
+AUTHORS: Google Flutter Engine Team (2024/2025)
 
-FIRST PRINCIPLES & GPU MECHANICS:
-1. Why Impeller Replaced Skia:
-   Skia relied on dynamic Just-In-Time (JIT) shader compilation at runtime, causing severe frame drops (jank) during first-time UI rendering.
-2. Ahead-of-Time (AOT) Shaders:
-   Impeller pre-compiles all Vulkan and Metal shading language (MSL) shaders during application build time.
-3. Decoupled Render Tree:
-   Uses modern Explicit GPU APIs (Vulkan / Metal) with explicit state tracking, multithreaded command buffer recording, and guaranteed 60-120 FPS without thermal throttling.
+FIRST PRINCIPLES:
+1. Ahead-of-Time (AOT) Shader Compilation:
+   Completely eliminates runtime shader compilation jank.
+2. Modern GPU APIs (Vulkan, Metal):
+   Multi-threaded command buffer encoding directly targeting mobile GPUs.

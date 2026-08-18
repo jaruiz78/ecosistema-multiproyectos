@@ -1,0 +1,8 @@
+TITLE: Fast Routing in Road Networks with Contraction Hierarchies
+AUTHORS: Robert Geisberger, Peter Sanders et al. (KIT)
+
+FIRST PRINCIPLES:
+1. Node Contraction & Shortcuts:
+   Iteratively removes nodes in order of importance, inserting shortcut edges between remaining neighbors to preserve shortest path distances.
+2. Bidirectional Upward Search:
+   Query executes Dijkstra search exploring only upwards in node rank, yielding optimal route calculation in < 1 millisecond on continental road graphs.

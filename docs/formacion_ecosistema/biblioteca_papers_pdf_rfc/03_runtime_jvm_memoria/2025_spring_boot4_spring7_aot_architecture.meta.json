@@ -1,12 +1,12 @@
 {
-  "title": "Spring Framework 7 & Spring Boot 4.0: Native Ahead-of-Time and Virtual Thread Architecture",
+  "title": "Spring Boot 4.0 & Spring Framework 7: Native AOT Engine",
   "authors": [
     "Juergen Hoeller",
     "Stephane Nicoll",
-    "Phil Webb"
+    "Sebastien Deleuze"
   ],
   "year": 2025,
-  "institution": "Broadcom / Spring Engineering",
+  "institution": "Broadcom / Spring",
   "faculty": "03_runtime_jvm_memoria",
   "url": null
 }

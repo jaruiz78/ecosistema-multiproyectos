@@ -1,0 +1,10 @@
+TITLE: FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness
+AUTHORS: Tri Dao, Christopher Re et al. (Stanford University)
+
+FIRST PRINCIPLES:
+1. The IO-Awareness Principle:
+   GPU computation is memory-bound (HBM access vs SRAM on-chip cache). Standard attention computes and writes the full N x N attention matrix to HBM ($O(N^2)$ memory reads/writes).
+2. Tiling Algorithm:
+   Loads blocks of Q, K, V into fast GPU SRAM, computes softmax incrementally using online normalization, and never materializes the full $N 	imes N$ matrix to HBM.
+3. Result:
+   - Exact (no approximation), 2-4x speedup, $O(N)$ memory footprint.

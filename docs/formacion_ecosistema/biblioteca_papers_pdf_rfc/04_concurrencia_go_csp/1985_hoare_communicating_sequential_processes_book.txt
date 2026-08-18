@@ -1,0 +1,12 @@
+TITLE: Communicating Sequential Processes (CSP)
+AUTHOR: C. A. R. Hoare (1985)
+INSTITUTION: Oxford University
+
+FIRST PRINCIPLES:
+1. Do not communicate by sharing memory; instead, share memory by communicating.
+2. Primitives:
+   - Processes: Independent execution units with private state.
+   - Channels: Synchronous or buffered message passing conduits.
+   - Alternation (select): Non-deterministic choice among available communication events.
+3. Absence of Deadlocks & Starvation:
+   - Formal mathematical algebra for proving concurrent safety without locks.

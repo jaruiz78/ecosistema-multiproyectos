@@ -1,0 +1,11 @@
+{
+  "title": "Structure and Interpretation of Computer Programs (SICP)",
+  "authors": [
+    "Harold Abelson",
+    "Gerald Jay Sussman"
+  ],
+  "year": 1996,
+  "institution": "MIT Press / MIT CSAIL",
+  "faculty": "01_software_eng_ddd_tipos",
+  "url": "https://mitpress.mit.edu/sicp/"
+}

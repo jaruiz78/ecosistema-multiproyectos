@@ -1,0 +1,8 @@
+TITLE: F1: A Distributed SQL Database That Scales
+AUTHORS: Jeff Shute et al. (Google) - VLDB 2013
+
+FIRST PRINCIPLES:
+1. Hybrid RDBMS + NoSQL Architecture:
+   Built on top of Spanner for consistency and replication, providing a full SQL query engine and distributed query optimization.
+2. Hierarchical Schemas:
+   Interleaves child rows inside parent rows in physical storage, turning foreign key joins into zero-cost sequential memory reads.
