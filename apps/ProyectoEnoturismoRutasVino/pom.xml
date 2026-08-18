@@ -15,7 +15,7 @@
     <artifactId>proyectoenoturismorutasvino</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoEnoturismoRutasVino</name>
-    <description>Microservicio Vertical Especializado en EnoturismoRutasVino para el Ecosistema Corporativo.</description>
+    <description>Plataforma de viticultura de precisión, fenología predictiva y reservas enoturísticas</description>
 
     <properties>
         <java.version>25</java.version>

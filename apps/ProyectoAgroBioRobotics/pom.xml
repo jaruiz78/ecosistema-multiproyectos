@@ -15,7 +15,7 @@
     <artifactId>proyectoagrobiorobotics</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoAgroBioRobotics</name>
-    <description>Microservicio Vertical Especializado en AgroBioRobotics para el Ecosistema Corporativo.</description>
+    <description>Coordinación y gestión de enjambres de robots agrícolas autónomos y control biológico</description>
 
     <properties>
         <java.version>25</java.version>

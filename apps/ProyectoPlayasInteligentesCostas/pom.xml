@@ -15,7 +15,7 @@
     <artifactId>proyectoplayasinteligentescostas</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoPlayasInteligentesCostas</name>
-    <description>Microservicio Vertical Especializado en PlayasInteligentesCostas para el Ecosistema Corporativo.</description>
+    <description>Plataforma de monitorización de calidad de aguas de baño, corrientes y aforos en playas inteligentes</description>
 
     <properties>
         <java.version>25</java.version>

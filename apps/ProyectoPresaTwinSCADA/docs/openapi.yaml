@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPresaTwinSCADA API
+  description: Gemelo digital de presas, control de aliviaderos y laminación predictiva de avenidas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectopresatwinscada
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectopresatwinscada/{id}:
+    get:
+      summary: Obtener DamTelemetrySensorNode por Identificador
+      operationId: getDamTelemetrySensorNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DamTelemetrySensorNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DamTelemetrySensorNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DamTelemetrySensorNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

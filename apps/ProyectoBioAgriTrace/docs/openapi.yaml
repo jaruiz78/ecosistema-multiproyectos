@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoBioAgriTrace API
+  description: Plataforma genómica y trazabilidad de biofertilizantes para cultivos de alta resiliencia
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectobioagritrace
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectobioagritrace/{id}:
+    get:
+      summary: Obtener BioAgriGenomicSample por Identificador
+      operationId: getBioAgriGenomicSampleById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BioAgriGenomicSample recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BioAgriGenomicSample'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BioAgriGenomicSample:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

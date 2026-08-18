@@ -15,7 +15,7 @@
     <artifactId>proyectoredparadorestwin</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoRedParadoresTwin</name>
-    <description>Microservicio Vertical Especializado en RedParadoresTwin para el Ecosistema Corporativo.</description>
+    <description>Gemelo digital de red hotelera histórica, gestión circular y certificación de huella de carbono</description>
 
     <properties>
         <java.version>25</java.version>

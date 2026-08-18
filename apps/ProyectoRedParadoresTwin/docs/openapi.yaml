@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoRedParadoresTwin API
+  description: Gemelo digital de red hotelera histórica, gestión circular y certificación de huella de carbono
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoredparadorestwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoredparadorestwin/{id}:
+    get:
+      summary: Obtener ParadorRoomNightStay por Identificador
+      operationId: getParadorRoomNightStayById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ParadorRoomNightStay recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParadorRoomNightStay'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ParadorRoomNightStay:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

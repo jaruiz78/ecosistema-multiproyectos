@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoAgroBioRobotics
-* **Entidad Dominio**: AgroBioRobotics
-* **Descripción**: Microservicio Vertical Especializado en AgroBioRobotics para el Ecosistema Corporativo.
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: AgriRobotSwarmAgent
+* **Descripción**: Coordinación y gestión de enjambres de robots agrícolas autónomos y control biológico
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

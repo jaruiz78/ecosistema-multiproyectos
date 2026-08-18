@@ -15,7 +15,7 @@
     <artifactId>proyectogreenhydrogendesal</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoGreenHydrogenDesal</name>
-    <description>Microservicio Vertical Especializado en GreenHydrogenDesal para el Ecosistema Corporativo.</description>
+    <description>Desalinización sostenible por ósmosis inversa acoplada a producción de hidrógeno verde costero</description>
 
     <properties>
         <java.version>25</java.version>

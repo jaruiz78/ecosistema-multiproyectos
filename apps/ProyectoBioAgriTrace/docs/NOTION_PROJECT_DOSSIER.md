@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoBioAgriTrace
-* **Entidad Dominio**: BioAgriTrace
-* **Descripción**: Microservicio Vertical Especializado en BioAgriTrace para el Ecosistema Corporativo.
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: BioAgriGenomicSample
+* **Descripción**: Plataforma genómica y trazabilidad de biofertilizantes para cultivos de alta resiliencia
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

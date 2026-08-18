@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoRedParadoresTwin
-* **Entidad Dominio**: RedParadoresTwin
-* **Descripción**: Microservicio Vertical Especializado en RedParadoresTwin para el Ecosistema Corporativo.
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: ParadorRoomNightStay
+* **Descripción**: Gemelo digital de red hotelera histórica, gestión circular y certificación de huella de carbono
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

@@ -1,0 +1,39 @@
+package com.corp.proyectopresatwinscada.infrastructure.adapter.in.web;
+
+import com.corp.proyectopresatwinscada.domain.model.DamTelemetrySensorNode;
+import com.corp.proyectopresatwinscada.domain.port.in.ManageDamTelemetrySensorNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectopresatwinscada")
+public class DamTelemetrySensorNodeRestController {
+
+    private final ManageDamTelemetrySensorNodeUseCase useCase;
+
+    public DamTelemetrySensorNodeRestController(ManageDamTelemetrySensorNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<DamTelemetrySensorNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        DamTelemetrySensorNode created = useCase.createDamTelemetrySensorNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectopresatwinscada/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DamTelemetrySensorNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findDamTelemetrySensorNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

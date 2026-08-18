@@ -2,9 +2,9 @@
 
 ## 1. Visión y Resumen Ejecutivo
 * **Nombre**: ProyectoPlayasInteligentesCostas
-* **Entidad Dominio**: PlayasInteligentesCostas
-* **Descripción**: Microservicio Vertical Especializado en PlayasInteligentesCostas para el Ecosistema Corporativo.
-* **Arquitectura**: Java 25 LTS / Spring Boot 4.1 / Cloud Run / Multi-Tenant RLS
+* **Entidad Dominio**: BeachSectorSafetyZone
+* **Descripción**: Plataforma de monitorización de calidad de aguas de baño, corrientes y aforos en playas inteligentes
+* **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat
 * **Backend**: Java 25 (Project Loom Virtual Threads & Records).

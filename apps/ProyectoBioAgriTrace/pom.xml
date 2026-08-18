@@ -15,7 +15,7 @@
     <artifactId>proyectobioagritrace</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ProyectoBioAgriTrace</name>
-    <description>Microservicio Vertical Especializado en BioAgriTrace para el Ecosistema Corporativo.</description>
+    <description>Plataforma genómica y trazabilidad de biofertilizantes para cultivos de alta resiliencia</description>
 
     <properties>
         <java.version>25</java.version>
