@@ -1,0 +1,39 @@
+package com.corp.proyectodeepspacesolarsailmission.infrastructure.adapter.in.web;
+
+import com.corp.proyectodeepspacesolarsailmission.domain.model.SolarSailAttitudeVectorNode;
+import com.corp.proyectodeepspacesolarsailmission.domain.port.in.ManageSolarSailAttitudeVectorNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectodeepspacesolarsailmission")
+public class SolarSailAttitudeVectorNodeRestController {
+
+    private final ManageSolarSailAttitudeVectorNodeUseCase useCase;
+
+    public SolarSailAttitudeVectorNodeRestController(ManageSolarSailAttitudeVectorNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<SolarSailAttitudeVectorNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        SolarSailAttitudeVectorNode created = useCase.createSolarSailAttitudeVectorNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectodeepspacesolarsailmission/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SolarSailAttitudeVectorNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findSolarSailAttitudeVectorNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

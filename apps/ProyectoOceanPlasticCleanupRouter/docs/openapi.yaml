@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOceanPlasticCleanupRouter API
+  description: Modelizacion Lagrangiana de Microplasticos Marinos y Ruteo de Barcos de Limpieza
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectooceanplasticcleanuprouter
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectooceanplasticcleanuprouter/{id}:
+    get:
+      summary: Obtener MicroplasticDensityConcentrationNode por Identificador
+      operationId: getMicroplasticDensityConcentrationNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MicroplasticDensityConcentrationNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MicroplasticDensityConcentrationNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MicroplasticDensityConcentrationNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDeepSeaBenthicEcosystems API
+  description: Proteccion y Cartografia de Ecosistemas Benticos Abisales y Ventilas Hidrotermales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodeepseabenthicecosystems
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodeepseabenthicecosystems/{id}:
+    get:
+      summary: Obtener HydrothermalVentBenthicZoneNode por Identificador
+      operationId: getHydrothermalVentBenthicZoneNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HydrothermalVentBenthicZoneNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HydrothermalVentBenthicZoneNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HydrothermalVentBenthicZoneNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

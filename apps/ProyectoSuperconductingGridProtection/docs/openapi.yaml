@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSuperconductingGridProtection API
+  description: Proteccion de Redes Electricas de Alta Tension con Limitadores Superconductores (HTS-FCL)
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectosuperconductinggridprotection
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectosuperconductinggridprotection/{id}:
+    get:
+      summary: Obtener HtsFaultCurrentLimiterNode por Identificador
+      operationId: getHtsFaultCurrentLimiterNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HtsFaultCurrentLimiterNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HtsFaultCurrentLimiterNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HtsFaultCurrentLimiterNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

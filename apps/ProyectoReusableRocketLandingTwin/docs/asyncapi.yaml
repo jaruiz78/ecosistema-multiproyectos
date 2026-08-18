@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoReusableRocketLandingTwin Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoReusableRocketLandingTwin
+channels:
+  proyectoreusablerocketlandingtwinEvents:
+    address: corp-proyectoreusablerocketlandingtwin-events
+    messages:
+      RocketRetroLandingTrajectoryNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

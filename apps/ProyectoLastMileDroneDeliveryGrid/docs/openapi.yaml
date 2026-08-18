@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoLastMileDroneDeliveryGrid API
+  description: Red de Reparto de Ultima Milla con Drones y Geovallado Dinamico en Tiempo Real
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectolastmiledronedeliverygrid
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectolastmiledronedeliverygrid/{id}:
+    get:
+      summary: Obtener DroneDeliveryAirspaceVolumeToken por Identificador
+      operationId: getDroneDeliveryAirspaceVolumeTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DroneDeliveryAirspaceVolumeToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DroneDeliveryAirspaceVolumeToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DroneDeliveryAirspaceVolumeToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

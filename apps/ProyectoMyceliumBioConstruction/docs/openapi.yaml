@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoMyceliumBioConstruction API
+  description: Materiales de Construccion Circulares y Aislantes Termicos basados en Micelio
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectomyceliumbioconstruction
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectomyceliumbioconstruction/{id}:
+    get:
+      summary: Obtener MyceliumCompositeStructuralBatch por Identificador
+      operationId: getMyceliumCompositeStructuralBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MyceliumCompositeStructuralBatch recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyceliumCompositeStructuralBatch'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MyceliumCompositeStructuralBatch:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

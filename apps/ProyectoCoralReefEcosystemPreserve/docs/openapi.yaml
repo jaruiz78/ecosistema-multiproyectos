@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCoralReefEcosystemPreserve API
+  description: Proteccion de Arrecifes de Coral y Mitigacion de Blanqueamiento por Estres Termico
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocoralreefecosystempreserve
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocoralreefecosystempreserve/{id}:
+    get:
+      summary: Obtener CoralBleachingDegreeWeekNode por Identificador
+      operationId: getCoralBleachingDegreeWeekNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CoralBleachingDegreeWeekNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoralBleachingDegreeWeekNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CoralBleachingDegreeWeekNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

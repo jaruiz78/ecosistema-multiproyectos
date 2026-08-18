@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoNeuromorphicEdgeSNN API
+  description: Red Neuronal Neuromorfica por Pulsos para Inferencia de Ultra-Bajo Consumo en Drones
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoneuromorphicedgesnn
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoneuromorphicedgesnn/{id}:
+    get:
+      summary: Obtener NeuromorphicSpikeEventNode por Identificador
+      operationId: getNeuromorphicSpikeEventNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: NeuromorphicSpikeEventNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeuromorphicSpikeEventNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    NeuromorphicSpikeEventNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

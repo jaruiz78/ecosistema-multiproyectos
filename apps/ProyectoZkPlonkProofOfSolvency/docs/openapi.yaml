@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoZkPlonkProofOfSolvency API
+  description: Auditoria de Solvencia y Reservas Financieras Institucionales mediante ZK-PLONK
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectozkplonkproofofsolvency
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectozkplonkproofofsolvency/{id}:
+    get:
+      summary: Obtener PlonkProofOfSolvencyAuditToken por Identificador
+      operationId: getPlonkProofOfSolvencyAuditTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PlonkProofOfSolvencyAuditToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlonkProofOfSolvencyAuditToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PlonkProofOfSolvencyAuditToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

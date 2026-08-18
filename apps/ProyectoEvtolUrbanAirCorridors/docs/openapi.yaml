@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEvtolUrbanAirCorridors API
+  description: Gestion de Espacio Aereo Urbano y Ruteo 4D Seguro para Taxis Aereos eVTOL
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoevtolurbanaircorridors
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoevtolurbanaircorridors/{id}:
+    get:
+      summary: Obtener EvtolFlightTrajectorySlotToken por Identificador
+      operationId: getEvtolFlightTrajectorySlotTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EvtolFlightTrajectorySlotToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvtolFlightTrajectorySlotToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EvtolFlightTrajectorySlotToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

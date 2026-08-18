@@ -1,0 +1,39 @@
+package com.corp.proyectotruckplatooninghighwaycorridor.infrastructure.adapter.in.web;
+
+import com.corp.proyectotruckplatooninghighwaycorridor.domain.model.TruckPlatoonVehicleLeaderNode;
+import com.corp.proyectotruckplatooninghighwaycorridor.domain.port.in.ManageTruckPlatoonVehicleLeaderNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectotruckplatooninghighwaycorridor")
+public class TruckPlatoonVehicleLeaderNodeRestController {
+
+    private final ManageTruckPlatoonVehicleLeaderNodeUseCase useCase;
+
+    public TruckPlatoonVehicleLeaderNodeRestController(ManageTruckPlatoonVehicleLeaderNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<TruckPlatoonVehicleLeaderNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        TruckPlatoonVehicleLeaderNode created = useCase.createTruckPlatoonVehicleLeaderNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectotruckplatooninghighwaycorridor/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TruckPlatoonVehicleLeaderNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findTruckPlatoonVehicleLeaderNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPrecisionBioFermentationTwin API
+  description: Gemelo Digital de Biorreactores Industriales para Produccion de Proteinas Recombinantes
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoprecisionbiofermentationtwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoprecisionbiofermentationtwin/{id}:
+    get:
+      summary: Obtener FermentationBioreactorVesselNode por Identificador
+      operationId: getFermentationBioreactorVesselNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: FermentationBioreactorVesselNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FermentationBioreactorVesselNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    FermentationBioreactorVesselNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

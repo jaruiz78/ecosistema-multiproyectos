@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoLiquidHydrogenLogistics API
+  description: Logistica y Almacenamiento Criogenico de Hidrogeno Liquido a 20 Kelvin
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoliquidhydrogenlogistics
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoliquidhydrogenlogistics/{id}:
+    get:
+      summary: Obtener CryoHydrogenTankTelemetryNode por Identificador
+      operationId: getCryoHydrogenTankTelemetryNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CryoHydrogenTankTelemetryNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryoHydrogenTankTelemetryNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CryoHydrogenTankTelemetryNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

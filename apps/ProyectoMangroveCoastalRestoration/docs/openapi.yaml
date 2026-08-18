@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoMangroveCoastalRestoration API
+  description: Restauracion Ecologica de Manglares y Cuantificacion de Creditos de Carbono Costero
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectomangrovecoastalrestoration
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectomangrovecoastalrestoration/{id}:
+    get:
+      summary: Obtener MangroveWetlandBiomassCellNode por Identificador
+      operationId: getMangroveWetlandBiomassCellNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MangroveWetlandBiomassCellNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MangroveWetlandBiomassCellNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MangroveWetlandBiomassCellNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

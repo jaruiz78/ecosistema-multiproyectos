@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCoastalSurgeFloodDefense API
+  description: Defensa Costera y Prediccion de Inundaciones por Mareas de Tormenta Huracanada
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocoastalsurgeflooddefense
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocoastalsurgeflooddefense/{id}:
+    get:
+      summary: Obtener StormSurgeElevationForecastNode por Identificador
+      operationId: getStormSurgeElevationForecastNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: StormSurgeElevationForecastNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StormSurgeElevationForecastNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    StormSurgeElevationForecastNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

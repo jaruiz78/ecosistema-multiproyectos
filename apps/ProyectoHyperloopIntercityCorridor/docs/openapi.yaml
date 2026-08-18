@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoHyperloopIntercityCorridor API
+  description: Corredores Ferroviarios de Vacio Hyperloop a Velocidades Transonicas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectohyperloopintercitycorridor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectohyperloopintercitycorridor/{id}:
+    get:
+      summary: Obtener HyperloopPodTelemetryTelemetryNode por Identificador
+      operationId: getHyperloopPodTelemetryTelemetryNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HyperloopPodTelemetryTelemetryNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HyperloopPodTelemetryTelemetryNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HyperloopPodTelemetryTelemetryNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

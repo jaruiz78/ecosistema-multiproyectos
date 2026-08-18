@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOrganOnAChipPharmaScreen API
+  description: Plataforma Organ-on-a-Chip para Cribado Farmacologico sin Ensayos en Animales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoorganonachippharmascreen
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoorganonachippharmascreen/{id}:
+    get:
+      summary: Obtener MicrofluidicPerfusionChannelNode por Identificador
+      operationId: getMicrofluidicPerfusionChannelNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MicrofluidicPerfusionChannelNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MicrofluidicPerfusionChannelNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MicrofluidicPerfusionChannelNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

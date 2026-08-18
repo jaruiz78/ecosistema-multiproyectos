@@ -1,0 +1,39 @@
+package com.corp.proyectooceanplasticcleanuprouter.infrastructure.adapter.in.web;
+
+import com.corp.proyectooceanplasticcleanuprouter.domain.model.MicroplasticDensityConcentrationNode;
+import com.corp.proyectooceanplasticcleanuprouter.domain.port.in.ManageMicroplasticDensityConcentrationNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectooceanplasticcleanuprouter")
+public class MicroplasticDensityConcentrationNodeRestController {
+
+    private final ManageMicroplasticDensityConcentrationNodeUseCase useCase;
+
+    public MicroplasticDensityConcentrationNodeRestController(ManageMicroplasticDensityConcentrationNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<MicroplasticDensityConcentrationNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        MicroplasticDensityConcentrationNode created = useCase.createMicroplasticDensityConcentrationNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectooceanplasticcleanuprouter/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MicroplasticDensityConcentrationNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findMicroplasticDensityConcentrationNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

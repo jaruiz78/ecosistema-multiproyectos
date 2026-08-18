@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAutonomousVerticalFarming API
+  description: Granjas Verticales Urbanas Autonomas con Fotobiologia LED de Espectro Variable
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoautonomousverticalfarming
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoautonomousverticalfarming/{id}:
+    get:
+      summary: Obtener VerticalFarmCanopyGrowthNode por Identificador
+      operationId: getVerticalFarmCanopyGrowthNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: VerticalFarmCanopyGrowthNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerticalFarmCanopyGrowthNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    VerticalFarmCanopyGrowthNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

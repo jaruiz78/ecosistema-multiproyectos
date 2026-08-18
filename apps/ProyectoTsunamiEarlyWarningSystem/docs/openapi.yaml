@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoTsunamiEarlyWarningSystem API
+  description: Sistema de Alerta Temprana de Tsunamis Oceanicos y Auscultacion por Boyas DART
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectotsunamiearlywarningsystem
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectotsunamiearlywarningsystem/{id}:
+    get:
+      summary: Obtener TsunamiWaveformPressureSensorNode por Identificador
+      operationId: getTsunamiWaveformPressureSensorNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TsunamiWaveformPressureSensorNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsunamiWaveformPressureSensorNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    TsunamiWaveformPressureSensorNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

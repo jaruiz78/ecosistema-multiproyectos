@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPlantElectromeStressAlert API
+  description: Biosensorica Electrofisiologica Vegetal para Deteccion Temprana de Plagas y Estres
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoplantelectromestressalert
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoplantelectromestressalert/{id}:
+    get:
+      summary: Obtener PlantBiopotentialSpikeNode por Identificador
+      operationId: getPlantBiopotentialSpikeNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PlantBiopotentialSpikeNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlantBiopotentialSpikeNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PlantBiopotentialSpikeNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

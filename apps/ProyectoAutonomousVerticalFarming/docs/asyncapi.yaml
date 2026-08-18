@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoAutonomousVerticalFarming Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoAutonomousVerticalFarming
+channels:
+  proyectoautonomousverticalfarmingEvents:
+    address: corp-proyectoautonomousverticalfarming-events
+    messages:
+      VerticalFarmCanopyGrowthNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

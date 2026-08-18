@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEuDigitalProductPassport API
+  description: Pasaporte Digital de Producto Europeo (DPP) para Trazabilidad de Economia Circular
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoeudigitalproductpassport
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoeudigitalproductpassport/{id}:
+    get:
+      summary: Obtener DigitalProductPassportRecordToken por Identificador
+      operationId: getDigitalProductPassportRecordTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DigitalProductPassportRecordToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalProductPassportRecordToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DigitalProductPassportRecordToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

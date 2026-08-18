@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoNeuralBciAccessibilityControl API
+  description: Interfaces Cerebro-Computador (BCI) para Accesibilidad Universal y Neuro-Turismo
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoneuralbciaccessibilitycontrol
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoneuralbciaccessibilitycontrol/{id}:
+    get:
+      summary: Obtener BciNeuralMotorIntentEventNode por Identificador
+      operationId: getBciNeuralMotorIntentEventNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BciNeuralMotorIntentEventNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BciNeuralMotorIntentEventNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BciNeuralMotorIntentEventNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

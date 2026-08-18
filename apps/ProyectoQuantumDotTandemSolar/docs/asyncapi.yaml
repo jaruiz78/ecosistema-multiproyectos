@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoQuantumDotTandemSolar Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoQuantumDotTandemSolar
+channels:
+  proyectoquantumdottandemsolarEvents:
+    address: corp-proyectoquantumdottandemsolar-events
+    messages:
+      QuantumDotSolarCellBatchUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEpigeneticBioAgeMonitor API
+  description: Monitorizacion Epigenetica de Metilacion de ADN y Reloj Biologico de Longevidad
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoepigeneticbioagemonitor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoepigeneticbioagemonitor/{id}:
+    get:
+      summary: Obtener CpgMethylationProfileNode por Identificador
+      operationId: getCpgMethylationProfileNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CpgMethylationProfileNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CpgMethylationProfileNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CpgMethylationProfileNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

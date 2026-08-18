@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoIonPropulsionOrbitalManeuver API
+  description: Propulsion Ionica de Efecto Hall para Mantenimiento de Orbita y Remocion Satelital
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoionpropulsionorbitalmaneuver
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoionpropulsionorbitalmaneuver/{id}:
+    get:
+      summary: Obtener IonThrusterManeuverPlanToken por Identificador
+      operationId: getIonThrusterManeuverPlanTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: IonThrusterManeuverPlanToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IonThrusterManeuverPlanToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    IonThrusterManeuverPlanToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

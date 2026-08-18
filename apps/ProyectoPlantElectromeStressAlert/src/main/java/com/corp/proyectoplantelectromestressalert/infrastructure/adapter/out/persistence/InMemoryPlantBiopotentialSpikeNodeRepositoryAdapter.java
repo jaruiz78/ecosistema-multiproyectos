@@ -1,0 +1,30 @@
+package com.corp.proyectoplantelectromestressalert.infrastructure.adapter.out.persistence;
+
+import com.corp.proyectoplantelectromestressalert.domain.model.PlantBiopotentialSpikeNode;
+import com.corp.proyectoplantelectromestressalert.domain.port.out.PlantBiopotentialSpikeNodeRepositoryPort;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+@Repository
+public class InMemoryPlantBiopotentialSpikeNodeRepositoryAdapter implements PlantBiopotentialSpikeNodeRepositoryPort {
+
+    private final ConcurrentMap<String, PlantBiopotentialSpikeNode> storage = new ConcurrentHashMap<>();
+
+    @Override
+    public PlantBiopotentialSpikeNode save(PlantBiopotentialSpikeNode entity) {
+        storage.put(entity.id(), entity);
+        return entity;
+    }
+
+    @Override
+    public Optional<PlantBiopotentialSpikeNode> findById(String id, String tenantId) {
+        PlantBiopotentialSpikeNode entity = storage.get(id);
+        if (entity != null && entity.tenantId().equals(tenantId)) {
+            return Optional.of(entity);
+        }
+        return Optional.empty();
+    }
+}

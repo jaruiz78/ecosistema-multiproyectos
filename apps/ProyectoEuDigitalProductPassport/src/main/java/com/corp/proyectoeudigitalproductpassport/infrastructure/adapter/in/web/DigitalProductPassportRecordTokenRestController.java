@@ -1,0 +1,39 @@
+package com.corp.proyectoeudigitalproductpassport.infrastructure.adapter.in.web;
+
+import com.corp.proyectoeudigitalproductpassport.domain.model.DigitalProductPassportRecordToken;
+import com.corp.proyectoeudigitalproductpassport.domain.port.in.ManageDigitalProductPassportRecordTokenUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectoeudigitalproductpassport")
+public class DigitalProductPassportRecordTokenRestController {
+
+    private final ManageDigitalProductPassportRecordTokenUseCase useCase;
+
+    public DigitalProductPassportRecordTokenRestController(ManageDigitalProductPassportRecordTokenUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<DigitalProductPassportRecordToken> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        DigitalProductPassportRecordToken created = useCase.createDigitalProductPassportRecordToken(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectoeudigitalproductpassport/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DigitalProductPassportRecordToken> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findDigitalProductPassportRecordTokenById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

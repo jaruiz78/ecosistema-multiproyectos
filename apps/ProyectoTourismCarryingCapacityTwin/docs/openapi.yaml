@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoTourismCarryingCapacityTwin API
+  description: Gemelo Digital de Capacidad de Carga Ecologica y Gestion de Sobreturismo en Destinos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectotourismcarryingcapacitytwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectotourismcarryingcapacitytwin/{id}:
+    get:
+      summary: Obtener EcologicalCarryingCapacityAlertNode por Identificador
+      operationId: getEcologicalCarryingCapacityAlertNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EcologicalCarryingCapacityAlertNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EcologicalCarryingCapacityAlertNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EcologicalCarryingCapacityAlertNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

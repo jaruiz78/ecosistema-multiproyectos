@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSubseaFiberSeismicMonitor API
+  description: Monitorizacion Sismica Marina mediante Deteccion Acustica Distribuida (DAS) en Fibra
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectosubseafiberseismicmonitor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectosubseafiberseismicmonitor/{id}:
+    get:
+      summary: Obtener FiberOpticRayleighAcousticNode por Identificador
+      operationId: getFiberOpticRayleighAcousticNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: FiberOpticRayleighAcousticNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiberOpticRayleighAcousticNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    FiberOpticRayleighAcousticNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

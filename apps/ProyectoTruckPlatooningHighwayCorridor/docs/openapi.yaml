@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoTruckPlatooningHighwayCorridor API
+  description: Pelotones Autonomos de Camiones de Mercancias con Comunicacion V2V CACC
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectotruckplatooninghighwaycorridor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectotruckplatooninghighwaycorridor/{id}:
+    get:
+      summary: Obtener TruckPlatoonVehicleLeaderNode por Identificador
+      operationId: getTruckPlatoonVehicleLeaderNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TruckPlatoonVehicleLeaderNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TruckPlatoonVehicleLeaderNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    TruckPlatoonVehicleLeaderNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
