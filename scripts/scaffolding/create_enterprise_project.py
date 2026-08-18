@@ -570,8 +570,9 @@ spec:
         autoscaling.knative.dev/maxScale: "10"
         run.googleapis.com/execution-environment: gen2
         run.googleapis.com/cpu-throttling: "true"
+        run.googleapis.com/startup-cpu-boost: "true"
     spec:
-      containerConcurrency: 80
+      containerConcurrency: 250
       timeoutSeconds: 15
       containers:
         - image: europe-west1-docker.pkg.dev/${{PROJECT_ID}}/corp-docker-repo/{pkg_name}:latest
