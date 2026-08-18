@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCarbonLedger API
+  description: API Corporativa de Alta Precisión para ProyectoCarbonLedger (Ecosistema MultiProyectos)
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Entorno Local de Desarrollo (0.00 EUR)
+  - url: https://proyecto-carbon-ledger-prod-ew1.a.run.app
+    description: Entorno de Producción Cloud Run (GCP)
+paths:
+  /api/v1/health:
+    get:
+      summary: Health check y telemetría AOT
+      responses:
+        '200':
+          description: OK

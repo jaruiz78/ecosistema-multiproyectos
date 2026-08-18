@@ -1,0 +1,18 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoHidrogeno Event Stream
+  version: 1.0.0
+  description: Transmisión de eventos reactivos y telemetría para ProyectoHidrogeno
+channels:
+  telemetryEvents:
+    address: 'corp.proyectohidrogeno.events'
+    messages:
+      telemetryMessage:
+        payload:
+          type: object
+          properties:
+            tenantId:
+              type: string
+            timestamp:
+              type: string
+              format: date-time

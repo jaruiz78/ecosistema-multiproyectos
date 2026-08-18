@@ -15,138 +15,143 @@
     <modules>
         <!-- Librerías Core y Starter -->
         <module>corp-spring-boot-starter</module>
-        
+
         <!-- Proyectos Legacy / SaaS -->
         <module>SaaSRegantes</module>
-        
-        <!-- Primitivas Core & Módulos Matemáticos -->
+
+        <!-- Módulos Core Algorítmicos -->
         <module>core/core-agent-swarm</module>
         <module>core/core-ai-rag-engine</module>
-        <module>core/core-geogrid-h3</module>
-        <module>core/core-govtech-ledger</module>
-        <module>core/core-pinn-solver</module>
-        <module>core/core-nonlinear-mpc</module>
-        <module>core/core-tensor-peps-network</module>
         <module>core/core-alert-aggregator</module>
-        <module>core/core-graph-neural-matcher</module>
-        <module>core/core-sync-mesh</module>
-        <module>core/core-game-theory-optimizer</module>
-        <module>core/core-stochastic-pde</module>
-        <module>core/core-lie-group-robotics</module>
-        <module>core/core-wasserstein-transport</module>
-        <module>core/core-neuromorphic-spiking</module>
-        <module>core/core-symbolic-verifier</module>
-        <module>core/core-hyperbolic-embeddings</module>
-        <module>core/core-digital-law-contract</module>
-        <module>core/core-topological-data-analysis</module>
-        <module>core/core-stochastic-game-auctions</module>
-        <module>core/core-thermodynamic-exergy</module>
-        <module>core/core-quantum-approximate-qaoa</module>
-        <module>core/core-matrix-product-states</module>
         <module>core/core-asynchronous-byzantine-consensus</module>
-        <module>core/core-hyperspectral-remote-sensing</module>
-        <module>core/core-synthetic-biology-gene-circuit</module>
-        <module>core/core-lattice-boltzmann-fluid</module>
-        <module>core/core-semidefinite-programming-sos</module>
+        <module>core/core-causal-inference</module>
+        <module>core/core-digital-law-contract</module>
+        <module>core/core-federated-privacy</module>
+        <module>core/core-formal-verification</module>
+        <module>core/core-game-theory-optimizer</module>
+        <module>core/core-geogrid-h3</module>
         <module>core/core-geometric-deep-learning-se3</module>
+        <module>core/core-govtech-ledger</module>
+        <module>core/core-graph-neural-matcher</module>
+        <module>core/core-hyperbolic-embeddings</module>
+        <module>core/core-hyperspectral-remote-sensing</module>
+        <module>core/core-interstellar-mesh</module>
+        <module>core/core-kalman-twin</module>
+        <module>core/core-lattice-boltzmann-fluid</module>
+        <module>core/core-lie-group-robotics</module>
+        <module>core/core-matrix-product-states</module>
+        <module>core/core-mpc-control</module>
+        <module>core/core-neuromorphic-spiking</module>
+        <module>core/core-nonlinear-mpc</module>
+        <module>core/core-pinn-solver</module>
+        <module>core/core-quantum-approximate-qaoa</module>
+        <module>core/core-quantum-mesh</module>
+        <module>core/core-semidefinite-programming-sos</module>
+        <module>core/core-spatial-h3-3d</module>
+        <module>core/core-stochastic-game-auctions</module>
+        <module>core/core-stochastic-pde</module>
+        <module>core/core-symbolic-verifier</module>
+        <module>core/core-sync-mesh</module>
+        <module>core/core-synthetic-biology-gene-circuit</module>
+        <module>core/core-tensor-peps-network</module>
+        <module>core/core-thermodynamic-exergy</module>
+        <module>core/core-topological-data-analysis</module>
+        <module>core/core-wasserstein-transport</module>
+        <module>core/core-zkp-privacy</module>
 
-        <!-- Verticales Apps Consolidados & Fundacionales -->
+        <!-- Verticales Apps del Ecosistema MultiProyectos -->
         <module>apps/JobsSearch</module>
-        <module>apps/ProyectoB2G</module>
-        <module>apps/ProyectoCircular</module>
-        <module>apps/ProyectoDefensa</module>
-        <module>apps/ProyectoEnergia</module>
-        <module>apps/ProyectoLogistica</module>
-        <module>apps/ProyectoTokenRWA</module>
-        <module>apps/ProyectoVPP</module>
-        <module>apps/ProyectoAgua</module>
-        <module>apps/ProyectoCatastrofes</module>
-        <module>apps/ProyectoGeneralista</module>
-        <module>apps/ProyectoSalud</module>
-        <module>apps/ProyectoV2G</module>
-        <module>apps/ProyectoMaritime</module>
+        <module>apps/ProyectoAgriFoodColdChainTrace</module>
         <module>apps/ProyectoAgroBioRobotics</module>
-        <module>apps/ProyectoBioAgriTrace</module>
-        <module>apps/ProyectoBiotecnologia</module>
-        <module>apps/ProyectoDualAirDefense</module>
-        <module>apps/ProyectoQuantumSatelliteSync</module>
-        <module>apps/ProyectoSmartAgriSupplyChain</module>
-        <module>apps/ProyectoSmartWaterDesal</module>
-        <module>apps/ProyectoSyntheticBiologyFoundry</module>
-        
-        <!-- Nuevos Verticales Fase 1 (Sostenibilidad, Logística Frío, VPP, B2G, Presas) -->
-        <module>apps/ProyectoCarbonLedger</module>
-        <module>apps/ProyectoFleetColdChain</module>
         <module>apps/ProyectoAgroEnergyVPP</module>
-        <module>apps/ProyectoGovProcureMatch</module>
-        <module>apps/ProyectoPresaTwinSCADA</module>
-
-        <!-- Nuevos Verticales Fase 2 (TravelTech & Turismo Inteligente) -->
-        <module>apps/ProyectoSmartDestinationDTI</module>
-        <module>apps/ProyectoHotelTwinRevPAR</module>
-        <module>apps/ProyectoEcoTourismPassport</module>
-        <module>apps/ProyectoSeamlessIntermodalHub</module>
-        <module>apps/ProyectoRegenerativeExperience</module>
-
-        <!-- Nuevos Verticales Fase 3 (Pharma, Minerales Críticos, Emergencias, Ciberseguridad OT, H2 Desalación) -->
-        <module>apps/ProyectoPharmaColdChain</module>
+        <module>apps/ProyectoAgroWaterAI</module>
+        <module>apps/ProyectoAgua</module>
+        <module>apps/ProyectoAirlineInterlineBaggage</module>
+        <module>apps/ProyectoAirportTouristIntermodal</module>
+        <module>apps/ProyectoAstroturismoStarlight</module>
+        <module>apps/ProyectoAutonomousShippingCorridor</module>
+        <module>apps/ProyectoB2G</module>
+        <module>apps/ProyectoBioAgriTrace</module>
+        <module>apps/ProyectoBiodiversityGenomicBank</module>
+        <module>apps/ProyectoBiotecnologia</module>
+        <module>apps/ProyectoCaminoSantiagoXacobeo</module>
+        <module>apps/ProyectoCarbonDirectAirCapture</module>
+        <module>apps/ProyectoCarbonLedger</module>
+        <module>apps/ProyectoCascoHistoricoCrowd</module>
+        <module>apps/ProyectoCatastrofes</module>
+        <module>apps/ProyectoCircular</module>
+        <module>apps/ProyectoCircularTextileDPP</module>
+        <module>apps/ProyectoCislunarSpaceLogistics</module>
+        <module>apps/ProyectoClinicalOmicsMultiTenant</module>
+        <module>apps/ProyectoClinicalTrialsZK</module>
         <module>apps/ProyectoCriticalMineralsMRV</module>
-        <module>apps/ProyectoEmergencyGeoGrid</module>
-        <module>apps/ProyectoZeroTrustOTMesh</module>
-        <module>apps/ProyectoGreenHydrogenDesal</module>
-
-        <!-- Verticales Independientes Ciclos Evolutivos 1 al 10 (2026-2031) -->
-        <module>apps/ProyectoPortTwinAutonomous</module>
+        <module>apps/ProyectoCriticalSupplyRisk</module>
+        <module>apps/ProyectoDeNovoPlasticDegradation</module>
+        <module>apps/ProyectoDefensa</module>
+        <module>apps/ProyectoDiputacionTurismoRural</module>
         <module>apps/ProyectoDroneAirspace</module>
         <module>apps/ProyectoDroneAirspaceUSpace</module>
-        <module>apps/ProyectoHidrogeno</module>
-        <module>apps/ProyectoSubSurfaceGeoTwin</module>
-        <module>apps/ProyectoCircularTextileDPP</module>
-        <module>apps/ProyectoSoilBioCarbonTwin</module>
-        <module>apps/ProyectoIndustrialMicrogridMPC</module>
-        <module>apps/ProyectoClinicalTrialsZK</module>
-        <module>apps/ProyectoSmartStreetLightingV2G</module>
-        <module>apps/ProyectoTaxComplianceLedger</module>
-        <module>apps/ProyectoQuantumResistantRWA</module>
-
-        <!-- Verticales Turismo Global e Intermodalidad -->
-        <module>apps/ProyectoGlobalCruiseMRV</module>
-        <module>apps/ProyectoAirportTouristIntermodal</module>
-        <module>apps/ProyectoMiceConferenceTwin</module>
-        <module>apps/ProyectoHeritageDigitalTwin3D</module>
-        <module>apps/ProyectoAirlineInterlineBaggage</module>
-
-        <!-- Verticales Turismo Español (Municipal, Provincial & Autonómico) -->
-        <module>apps/ProyectoSegitturDtiStandard</module>
-        <module>apps/ProyectoDiputacionTurismoRural</module>
-        <module>apps/ProyectoCaminoSantiagoXacobeo</module>
-        <module>apps/ProyectoPlayasInteligentesCostas</module>
-        <module>apps/ProyectoRedParadoresTwin</module>
-        <module>apps/ProyectoParquesNacionalesNatura2000</module>
+        <module>apps/ProyectoDualAirDefense</module>
+        <module>apps/ProyectoEcoTourismPassport</module>
         <module>apps/ProyectoEcotasaSoberanaTax</module>
+        <module>apps/ProyectoEmergencyGeoGrid</module>
+        <module>apps/ProyectoEmergencyGeogridCrisis</module>
+        <module>apps/ProyectoEnergia</module>
         <module>apps/ProyectoEnoturismoRutasVino</module>
-        <module>apps/ProyectoCascoHistoricoCrowd</module>
         <module>apps/ProyectoFiestasInteresTuristico</module>
-        <module>apps/ProyectoTurismoTermalBalnearios</module>
-        <module>apps/ProyectoAstroturismoStarlight</module>
-        <module>apps/ProyectoRutasSenderismoGR</module>
-        
-        <!-- Nuevos Verticales Estratégicos & DeepTech Ciclo 2026-2032 -->
-        <module>apps/ProyectoSmartGridStorageVPP</module>
-        <module>apps/ProyectoCriticalSupplyRisk</module>
-        <module>apps/ProyectoSpaceTrafficCoordination</module>
-        <module>apps/ProyectoClinicalOmicsMultiTenant</module>
+        <module>apps/ProyectoFleetColdChain</module>
+        <module>apps/ProyectoFusionNuclearMHD</module>
         <module>apps/ProyectoFusionPowerGrid</module>
-        <module>apps/ProyectoCarbonDirectAirCapture</module>
-        <module>apps/ProyectoAutonomousShippingCorridor</module>
-        <module>apps/ProyectoBiodiversityGenomicBank</module>
-        <module>apps/ProyectoQuantumMaterialsGraphene</module>
-        <module>apps/ProyectoStratosphericAerosolGeoengineering</module>
-        <module>apps/ProyectoCislunarSpaceLogistics</module>
-        <module>apps/ProyectoSyntheticEnzymeBioFoundry</module>
-        <module>apps/ProyectoNuclearFusionStellarator</module>
+        <module>apps/ProyectoGeneralista</module>
+        <module>apps/ProyectoGlobalCruiseMRV</module>
+        <module>apps/ProyectoGovProcureMatch</module>
+        <module>apps/ProyectoGreenHydrogenDesal</module>
+        <module>apps/ProyectoHealthFederatedClinical</module>
+        <module>apps/ProyectoHeritageDigitalTwin3D</module>
+        <module>apps/ProyectoHidrogeno</module>
+        <module>apps/ProyectoHotelTwinRevPAR</module>
+        <module>apps/ProyectoInclusiveAccessibleTourism</module>
+        <module>apps/ProyectoIndustrialMicrogridMPC</module>
         <module>apps/ProyectoInterplanetarySwarmMesh</module>
-        <module>apps/ProyectoDeNovoPlasticDegradation</module>
+        <module>apps/ProyectoLogistica</module>
+        <module>apps/ProyectoMaritime</module>
+        <module>apps/ProyectoMaritimeAutonomousFleet</module>
+        <module>apps/ProyectoMiceConferenceTwin</module>
+        <module>apps/ProyectoNuclearFusionStellarator</module>
+        <module>apps/ProyectoParquesNacionalesNatura2000</module>
+        <module>apps/ProyectoPharmaColdChain</module>
+        <module>apps/ProyectoPlayasInteligentesCostas</module>
+        <module>apps/ProyectoPortTwinAutonomous</module>
+        <module>apps/ProyectoPrecisionSoilRegen</module>
+        <module>apps/ProyectoPresaTwinSCADA</module>
+        <module>apps/ProyectoQuantumMaterialsGraphene</module>
+        <module>apps/ProyectoQuantumResistantRWA</module>
+        <module>apps/ProyectoQuantumSatelliteSync</module>
+        <module>apps/ProyectoQuantumSecureBanking</module>
+        <module>apps/ProyectoRedParadoresTwin</module>
+        <module>apps/ProyectoRegenerativeExperience</module>
+        <module>apps/ProyectoRutasSenderismoGR</module>
+        <module>apps/ProyectoSalud</module>
+        <module>apps/ProyectoSeamlessIntermodalHub</module>
+        <module>apps/ProyectoSegitturDtiStandard</module>
+        <module>apps/ProyectoSmartAgriSupplyChain</module>
+        <module>apps/ProyectoSmartDestinationDTI</module>
+        <module>apps/ProyectoSmartGridStorageVPP</module>
+        <module>apps/ProyectoSmartStreetLightingV2G</module>
+        <module>apps/ProyectoSmartWaterDesal</module>
+        <module>apps/ProyectoSoilBioCarbonTwin</module>
+        <module>apps/ProyectoSpaceTrafficCoordination</module>
+        <module>apps/ProyectoStratosphericAerosolGeoengineering</module>
+        <module>apps/ProyectoStratosphericSAI</module>
+        <module>apps/ProyectoSubSurfaceGeoTwin</module>
+        <module>apps/ProyectoSyntheticBiologyFoundry</module>
+        <module>apps/ProyectoSyntheticEnzymeBioFoundry</module>
+        <module>apps/ProyectoTaxComplianceLedger</module>
+        <module>apps/ProyectoTokenRWA</module>
+        <module>apps/ProyectoTurismoTermalBalnearios</module>
+        <module>apps/ProyectoV2G</module>
+        <module>apps/ProyectoVPP</module>
+        <module>apps/ProyectoZeroTrustOTMesh</module>
     </modules>
 
 </project>
