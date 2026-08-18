@@ -115,6 +115,7 @@
         <module>apps/ProyectoCoastalSurgeFloodDefense</module>
         <module>apps/ProyectoConcentratedLiquidityAmm</module>
         <module>apps/ProyectoConfidentialDataCleanRoom</module>
+        <module>apps/ProyectoContextCacheAiOrchestrator</module>
         <module>apps/ProyectoCoralReefEcosystemPreserve</module>
         <module>apps/ProyectoCrisprBaseEditingTherapy</module>
         <module>apps/ProyectoCrisprPrimeGeneTherapy</module>
@@ -166,6 +167,7 @@
         <module>apps/ProyectoFusionNuclearMHD</module>
         <module>apps/ProyectoFusionPlasmaTokamakTwin</module>
         <module>apps/ProyectoFusionPowerGrid</module>
+        <module>apps/ProyectoGcpZeroCostPubSubBatcher</module>
         <module>apps/ProyectoGeneralista</module>
         <module>apps/ProyectoGeothermalLithiumExtraction</module>
         <module>apps/ProyectoGlacierMeltIceCapMonitor</module>
@@ -197,6 +199,7 @@
         <module>apps/ProyectoLightningFlashNowcastingGrid</module>
         <module>apps/ProyectoLiquidHydrogenLogistics</module>
         <module>apps/ProyectoLiquidMetalSoftElectronics</module>
+        <module>apps/ProyectoLiteRtEdgeInferenceHub</module>
         <module>apps/ProyectoLogistica</module>
         <module>apps/ProyectoLunarGatewayOrbitStation</module>
         <module>apps/ProyectoLunarOxygenIsruPlant</module>

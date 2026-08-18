@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoContextCacheAiOrchestrator API
+  description: Orquestador de Cache de Contexto en AI Studio y Enrutamiento Adaptativo de Inferencia
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocontextcacheaiorchestrator
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocontextcacheaiorchestrator/{id}:
+    get:
+      summary: Obtener AiContextCacheSessionToken por Identificador
+      operationId: getAiContextCacheSessionTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AiContextCacheSessionToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiContextCacheSessionToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AiContextCacheSessionToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

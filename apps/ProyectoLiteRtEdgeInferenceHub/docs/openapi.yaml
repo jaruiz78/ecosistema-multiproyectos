@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoLiteRtEdgeInferenceHub API
+  description: Hub de Inferencia Edge con Modelos LiteRT INT8 Cuantizados On-Device y en Memoria Directa
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectolitertedgeinferencehub
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectolitertedgeinferencehub/{id}:
+    get:
+      summary: Obtener LiteRtQuantizedModelExecutionNode por Identificador
+      operationId: getLiteRtQuantizedModelExecutionNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LiteRtQuantizedModelExecutionNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiteRtQuantizedModelExecutionNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    LiteRtQuantizedModelExecutionNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

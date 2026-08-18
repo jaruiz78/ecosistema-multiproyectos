@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoGcpZeroCostPubSubBatcher API
+  description: Agrupador Micro-Batching de Eventos PubSub con Compresion Snappy y Prevencion de Sobrecostes
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectogcpzerocostpubsubbatcher
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectogcpzerocostpubsubbatcher/{id}:
+    get:
+      summary: Obtener PubSubSnappyCompressedBatchNode por Identificador
+      operationId: getPubSubSnappyCompressedBatchNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PubSubSnappyCompressedBatchNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PubSubSnappyCompressedBatchNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PubSubSnappyCompressedBatchNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
