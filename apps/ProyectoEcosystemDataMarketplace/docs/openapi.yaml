@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEcosystemDataMarketplace API
+  description: Mercado Soberano de Datos Federados e Intercambio Seguro con ZKP y Gaia-X
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoecosystemdatamarketplace
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoecosystemdatamarketplace/{id}:
+    get:
+      summary: Obtener DataAssetContractToken por Identificador
+      operationId: getDataAssetContractTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DataAssetContractToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAssetContractToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DataAssetContractToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

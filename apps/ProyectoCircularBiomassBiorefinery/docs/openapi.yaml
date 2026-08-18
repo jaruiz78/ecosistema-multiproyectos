@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCircularBiomassBiorefinery API
+  description: Biorrefineria Circular de Biomasa y Valorizacion de Residuos Agricolas y Hoteleros
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocircularbiomassbiorefinery
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocircularbiomassbiorefinery/{id}:
+    get:
+      summary: Obtener BiomassFeedstockBatch por Identificador
+      operationId: getBiomassFeedstockBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BiomassFeedstockBatch recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BiomassFeedstockBatch'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BiomassFeedstockBatch:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

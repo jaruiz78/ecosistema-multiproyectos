@@ -80,6 +80,7 @@
         <module>apps/ProyectoCascoHistoricoCrowd</module>
         <module>apps/ProyectoCatastrofes</module>
         <module>apps/ProyectoCircular</module>
+        <module>apps/ProyectoCircularBiomassBiorefinery</module>
         <module>apps/ProyectoCircularTextileDPP</module>
         <module>apps/ProyectoCislunarSpaceLogistics</module>
         <module>apps/ProyectoClinicalOmicsMultiTenant</module>
@@ -93,6 +94,7 @@
         <module>apps/ProyectoDroneAirspaceUSpace</module>
         <module>apps/ProyectoDualAirDefense</module>
         <module>apps/ProyectoEcoTourismPassport</module>
+        <module>apps/ProyectoEcosystemDataMarketplace</module>
         <module>apps/ProyectoEcotasaSoberanaTax</module>
         <module>apps/ProyectoEmergencyGeoGrid</module>
         <module>apps/ProyectoEmergencyGeogridCrisis</module>
@@ -149,6 +151,7 @@
         <module>apps/ProyectoTaxComplianceLedger</module>
         <module>apps/ProyectoTokenRWA</module>
         <module>apps/ProyectoTurismoTermalBalnearios</module>
+        <module>apps/ProyectoUrbanEnergyMobilityNexus</module>
         <module>apps/ProyectoV2G</module>
         <module>apps/ProyectoVPP</module>
         <module>apps/ProyectoZeroTrustOTMesh</module>
