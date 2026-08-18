@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOrthogonalRibosomePolymers API
+  description: Sintesis de Biopolimeros con Aminoacidos Sinteticos No Canonicos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoorthogonalribosomepolymers
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoorthogonalribosomepolymers/{id}:
+    get:
+      summary: Obtener UnnaturalAminoAcidIncorporationToken por Identificador
+      operationId: getUnnaturalAminoAcidIncorporationTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: UnnaturalAminoAcidIncorporationToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnnaturalAminoAcidIncorporationToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    UnnaturalAminoAcidIncorporationToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

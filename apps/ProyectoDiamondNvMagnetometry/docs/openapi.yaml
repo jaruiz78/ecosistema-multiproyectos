@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDiamondNvMagnetometry API
+  description: Magnetometria Cuantica de Alta Resolucion para Diagnostico Geofisico y Medico
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodiamondnvmagnetometry
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodiamondnvmagnetometry/{id}:
+    get:
+      summary: Obtener DiamondNvMagnetometerNode por Identificador
+      operationId: getDiamondNvMagnetometerNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DiamondNvMagnetometerNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiamondNvMagnetometerNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DiamondNvMagnetometerNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

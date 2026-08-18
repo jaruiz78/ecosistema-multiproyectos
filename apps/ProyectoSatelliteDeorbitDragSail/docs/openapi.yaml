@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSatelliteDeorbitDragSail API
+  description: Velas Aerodinamicas de Desorbitado Limpio al Final de Vida Util
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectosatellitedeorbitdragsail
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectosatellitedeorbitdragsail/{id}:
+    get:
+      summary: Obtener DragSailAreaToMassRatioNode por Identificador
+      operationId: getDragSailAreaToMassRatioNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DragSailAreaToMassRatioNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DragSailAreaToMassRatioNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DragSailAreaToMassRatioNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

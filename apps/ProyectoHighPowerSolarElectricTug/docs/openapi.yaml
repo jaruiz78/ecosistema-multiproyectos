@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoHighPowerSolarElectricTug API
+  description: Remolcadores Espaciales de Propulsiion Solar Electrica para Transferencia Orbital
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectohighpowersolarelectrictug
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectohighpowersolarelectrictug/{id}:
+    get:
+      summary: Obtener SepXenonMassFlowThrustNode por Identificador
+      operationId: getSepXenonMassFlowThrustNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SepXenonMassFlowThrustNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SepXenonMassFlowThrustNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SepXenonMassFlowThrustNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

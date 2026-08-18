@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoMycorrhizalNetworkAgronomy API
+  description: Biofertilizacion por Dinamica de Transporte en Redes de Micorrizas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectomycorrhizalnetworkagronomy
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectomycorrhizalnetworkagronomy/{id}:
+    get:
+      summary: Obtener HyphalNutrientFluxTranslocationNode por Identificador
+      operationId: getHyphalNutrientFluxTranslocationNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HyphalNutrientFluxTranslocationNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HyphalNutrientFluxTranslocationNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HyphalNutrientFluxTranslocationNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

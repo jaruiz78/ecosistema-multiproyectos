@@ -1,0 +1,39 @@
+package com.corp.proyectorivermorphodynamicsbasintwin.infrastructure.adapter.in.web;
+
+import com.corp.proyectorivermorphodynamicsbasintwin.domain.model.BedloadSedimentTransportRateNode;
+import com.corp.proyectorivermorphodynamicsbasintwin.domain.port.in.ManageBedloadSedimentTransportRateNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectorivermorphodynamicsbasintwin")
+public class BedloadSedimentTransportRateNodeRestController {
+
+    private final ManageBedloadSedimentTransportRateNodeUseCase useCase;
+
+    public BedloadSedimentTransportRateNodeRestController(ManageBedloadSedimentTransportRateNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<BedloadSedimentTransportRateNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        BedloadSedimentTransportRateNode created = useCase.createBedloadSedimentTransportRateNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectorivermorphodynamicsbasintwin/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BedloadSedimentTransportRateNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findBedloadSedimentTransportRateNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

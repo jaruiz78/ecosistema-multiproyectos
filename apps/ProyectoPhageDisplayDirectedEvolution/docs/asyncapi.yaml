@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoPhageDisplayDirectedEvolution Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoPhageDisplayDirectedEvolution
+channels:
+  proyectophagedisplaydirectedevolutionEvents:
+    address: corp-proyectophagedisplaydirectedevolution-events
+    messages:
+      PhageDisplayAffinityEnrichmentTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

@@ -1,0 +1,39 @@
+package com.corp.proyectoicecorepaleoclimatearchive.infrastructure.adapter.in.web;
+
+import com.corp.proyectoicecorepaleoclimatearchive.domain.model.IsotopicDeltaO18TemperatureProfileToken;
+import com.corp.proyectoicecorepaleoclimatearchive.domain.port.in.ManageIsotopicDeltaO18TemperatureProfileTokenUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectoicecorepaleoclimatearchive")
+public class IsotopicDeltaO18TemperatureProfileTokenRestController {
+
+    private final ManageIsotopicDeltaO18TemperatureProfileTokenUseCase useCase;
+
+    public IsotopicDeltaO18TemperatureProfileTokenRestController(ManageIsotopicDeltaO18TemperatureProfileTokenUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<IsotopicDeltaO18TemperatureProfileToken> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        IsotopicDeltaO18TemperatureProfileToken created = useCase.createIsotopicDeltaO18TemperatureProfileToken(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectoicecorepaleoclimatearchive/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<IsotopicDeltaO18TemperatureProfileToken> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findIsotopicDeltaO18TemperatureProfileTokenById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

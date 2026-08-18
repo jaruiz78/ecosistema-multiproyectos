@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoMicrobialElectrosynthesisBiofuel API
+  description: Conversion Bioelectroquimica de CO2 en Precursores Quimicos Verdes
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectomicrobialelectrosynthesisbiofuel
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectomicrobialelectrosynthesisbiofuel/{id}:
+    get:
+      summary: Obtener CathodeBiofilmElectronUptakeNode por Identificador
+      operationId: getCathodeBiofilmElectronUptakeNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CathodeBiofilmElectronUptakeNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CathodeBiofilmElectronUptakeNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CathodeBiofilmElectronUptakeNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

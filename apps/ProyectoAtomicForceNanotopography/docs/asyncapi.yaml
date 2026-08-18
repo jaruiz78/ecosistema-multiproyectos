@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoAtomicForceNanotopography Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoAtomicForceNanotopography
+channels:
+  proyectoatomicforcenanotopographyEvents:
+    address: corp-proyectoatomicforcenanotopography-events
+    messages:
+      AfmCantileverDeflectionScanNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

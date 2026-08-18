@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoRiverMorphodynamicsBasinTwin Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoRiverMorphodynamicsBasinTwin
+channels:
+  proyectorivermorphodynamicsbasintwinEvents:
+    address: corp-proyectorivermorphodynamicsbasintwin-events
+    messages:
+      BedloadSedimentTransportRateNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

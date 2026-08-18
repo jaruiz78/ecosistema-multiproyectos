@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCloudAlbedoMicrophysicsTwin API
+  description: Microfisica de Nubes y Modulacion de Albedo para Resiliencia Climatica
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocloudalbedomicrophysicstwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocloudalbedomicrophysicstwin/{id}:
+    get:
+      summary: Obtener CcnSupersaturationActivationCurveNode por Identificador
+      operationId: getCcnSupersaturationActivationCurveNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CcnSupersaturationActivationCurveNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CcnSupersaturationActivationCurveNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CcnSupersaturationActivationCurveNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

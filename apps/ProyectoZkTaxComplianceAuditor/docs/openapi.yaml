@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoZkTaxComplianceAuditor API
+  description: Cumplimiento Tributario Automatizado Soberano con Pruebas ZK
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectozktaxcomplianceauditor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectozktaxcomplianceauditor/{id}:
+    get:
+      summary: Obtener ZkTaxComplianceCertificateToken por Identificador
+      operationId: getZkTaxComplianceCertificateTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ZkTaxComplianceCertificateToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZkTaxComplianceCertificateToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ZkTaxComplianceCertificateToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

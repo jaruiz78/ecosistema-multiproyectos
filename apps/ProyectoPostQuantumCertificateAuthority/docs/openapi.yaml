@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPostQuantumCertificateAuthority API
+  description: Autoridad Certificadora PKI Hibrida Post-Cuantica NIST
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectopostquantumcertificateauthority
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectopostquantumcertificateauthority/{id}:
+    get:
+      summary: Obtener PqHybridX509CertificateToken por Identificador
+      operationId: getPqHybridX509CertificateTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PqHybridX509CertificateToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqHybridX509CertificateToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PqHybridX509CertificateToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

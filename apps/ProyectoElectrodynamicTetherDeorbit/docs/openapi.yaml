@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoElectrodynamicTetherDeorbit API
+  description: Desorbitado Pasivo de Satelites mediante Cables Electro-Dinamicos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoelectrodynamictetherdeorbit
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoelectrodynamictetherdeorbit/{id}:
+    get:
+      summary: Obtener TetherLorentzDragForceDeorbitNode por Identificador
+      operationId: getTetherLorentzDragForceDeorbitNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TetherLorentzDragForceDeorbitNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TetherLorentzDragForceDeorbitNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    TetherLorentzDragForceDeorbitNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

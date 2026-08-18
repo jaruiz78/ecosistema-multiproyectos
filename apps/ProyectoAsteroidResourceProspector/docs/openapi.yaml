@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAsteroidResourceProspector API
+  description: Prospeccion de Recursos Mineros y Agua en Asteroides Cercanos (NEO)
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoasteroidresourceprospector
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoasteroidresourceprospector/{id}:
+    get:
+      summary: Obtener AsteroidMineralAbundanceScoreToken por Identificador
+      operationId: getAsteroidMineralAbundanceScoreTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AsteroidMineralAbundanceScoreToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsteroidMineralAbundanceScoreToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AsteroidMineralAbundanceScoreToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoParametricWeatherInsurance API
+  description: Seguros Parametricos Climatologicos con Liquidacion Instantanea para Regantes
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoparametricweatherinsurance
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoparametricweatherinsurance/{id}:
+    get:
+      summary: Obtener ParametricInsurancePolicyPayoutToken por Identificador
+      operationId: getParametricInsurancePolicyPayoutTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ParametricInsurancePolicyPayoutToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametricInsurancePolicyPayoutToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ParametricInsurancePolicyPayoutToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

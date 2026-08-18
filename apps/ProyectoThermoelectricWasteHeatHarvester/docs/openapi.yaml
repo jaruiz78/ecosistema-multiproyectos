@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoThermoelectricWasteHeatHarvester API
+  description: Generacion Electrica por Aprovechamiento de Calor Residual Industrial
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectothermoelectricwasteheatharvester
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectothermoelectricwasteheatharvester/{id}:
+    get:
+      summary: Obtener SeebeckThermalGradientModuleNode por Identificador
+      operationId: getSeebeckThermalGradientModuleNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SeebeckThermalGradientModuleNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeebeckThermalGradientModuleNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SeebeckThermalGradientModuleNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

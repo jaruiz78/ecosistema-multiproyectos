@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEidas2DigitalIdentityWallet API
+  description: Billetera Soberana Europea eIDAS 2.0 para Ciudadanos y Empresas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoeidas2digitalidentitywallet
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoeidas2digitalidentitywallet/{id}:
+    get:
+      summary: Obtener VerifiableCredentialStatusListToken por Identificador
+      operationId: getVerifiableCredentialStatusListTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: VerifiableCredentialStatusListToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiableCredentialStatusListToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    VerifiableCredentialStatusListToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

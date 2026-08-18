@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoIceCorePaleoclimateArchive API
+  description: Modelado Paleoclimatico de Hielo Polar para Calibracion de Modelos Climaticos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoicecorepaleoclimatearchive
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoicecorepaleoclimatearchive/{id}:
+    get:
+      summary: Obtener IsotopicDeltaO18TemperatureProfileToken por Identificador
+      operationId: getIsotopicDeltaO18TemperatureProfileTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: IsotopicDeltaO18TemperatureProfileToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IsotopicDeltaO18TemperatureProfileToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    IsotopicDeltaO18TemperatureProfileToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

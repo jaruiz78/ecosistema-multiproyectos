@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoNeuralModelIpProtection API
+  description: Proteccion de Propiedad Intelectual y Trazabilidad de Pesos de IA
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoneuralmodelipprotection
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoneuralmodelipprotection/{id}:
+    get:
+      summary: Obtener ModelTensorWatermarkSignatureToken por Identificador
+      operationId: getModelTensorWatermarkSignatureTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ModelTensorWatermarkSignatureToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelTensorWatermarkSignatureToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ModelTensorWatermarkSignatureToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

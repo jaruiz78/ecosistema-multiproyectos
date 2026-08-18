@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoElectronicBillOfLadingEpcis API
+  description: Conocimientos de Embarque Maritimo y Aduanero Digitales eBL
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoelectronicbillofladingepcis
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoelectronicbillofladingepcis/{id}:
+    get:
+      summary: Obtener EpcisShippingEventRecordToken por Identificador
+      operationId: getEpcisShippingEventRecordTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EpcisShippingEventRecordToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EpcisShippingEventRecordToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EpcisShippingEventRecordToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

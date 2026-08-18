@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoWildfireSmokeHealthAlert API
+  description: Pronostico de Dispersion de Humo de Incendios y Salud Publica
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectowildfiresmokehealthalert
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectowildfiresmokehealthalert/{id}:
+    get:
+      summary: Obtener SmokePlumePm25ConcentrationGridNode por Identificador
+      operationId: getSmokePlumePm25ConcentrationGridNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SmokePlumePm25ConcentrationGridNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmokePlumePm25ConcentrationGridNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SmokePlumePm25ConcentrationGridNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoStratosphericTelecomBalloons API
+  description: Constelaciones de Globos Estratosfericos para Cobertura Telecom en Zonas Rurales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectostratospherictelecomballoons
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectostratospherictelecomballoons/{id}:
+    get:
+      summary: Obtener StratosphericStationKeepingTrajectoryNode por Identificador
+      operationId: getStratosphericStationKeepingTrajectoryNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: StratosphericStationKeepingTrajectoryNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StratosphericStationKeepingTrajectoryNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    StratosphericStationKeepingTrajectoryNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

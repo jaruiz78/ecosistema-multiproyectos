@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAcousticMetamaterialShield API
+  description: Aislamiento Acustico e Insonorizacion de Infraestructuras Criticas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoacousticmetamaterialshield
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoacousticmetamaterialshield/{id}:
+    get:
+      summary: Obtener AcousticScatteringCancellationNode por Identificador
+      operationId: getAcousticScatteringCancellationNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AcousticScatteringCancellationNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcousticScatteringCancellationNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AcousticScatteringCancellationNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

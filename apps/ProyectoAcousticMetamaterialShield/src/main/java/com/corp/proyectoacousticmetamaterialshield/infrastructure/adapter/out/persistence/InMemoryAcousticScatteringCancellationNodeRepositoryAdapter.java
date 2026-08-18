@@ -1,0 +1,30 @@
+package com.corp.proyectoacousticmetamaterialshield.infrastructure.adapter.out.persistence;
+
+import com.corp.proyectoacousticmetamaterialshield.domain.model.AcousticScatteringCancellationNode;
+import com.corp.proyectoacousticmetamaterialshield.domain.port.out.AcousticScatteringCancellationNodeRepositoryPort;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+@Repository
+public class InMemoryAcousticScatteringCancellationNodeRepositoryAdapter implements AcousticScatteringCancellationNodeRepositoryPort {
+
+    private final ConcurrentMap<String, AcousticScatteringCancellationNode> storage = new ConcurrentHashMap<>();
+
+    @Override
+    public AcousticScatteringCancellationNode save(AcousticScatteringCancellationNode entity) {
+        storage.put(entity.id(), entity);
+        return entity;
+    }
+
+    @Override
+    public Optional<AcousticScatteringCancellationNode> findById(String id, String tenantId) {
+        AcousticScatteringCancellationNode entity = storage.get(id);
+        if (entity != null && entity.tenantId().equals(tenantId)) {
+            return Optional.of(entity);
+        }
+        return Optional.empty();
+    }
+}

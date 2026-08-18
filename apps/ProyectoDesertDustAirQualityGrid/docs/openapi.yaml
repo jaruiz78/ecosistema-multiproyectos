@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDesertDustAirQualityGrid API
+  description: Pronostico de Calimas y Tormentas de Polvo Desertico para Sector Solar
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodesertdustairqualitygrid
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodesertdustairqualitygrid/{id}:
+    get:
+      summary: Obtener MineralDustAerosolOpticalDepthNode por Identificador
+      operationId: getMineralDustAerosolOpticalDepthNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MineralDustAerosolOpticalDepthNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MineralDustAerosolOpticalDepthNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MineralDustAerosolOpticalDepthNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

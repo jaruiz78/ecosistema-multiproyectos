@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoLightningFlashNowcastingGrid API
+  description: Nowcasting de Rayos y Proteccion de Parques Eolicos y Solares
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectolightningflashnowcastinggrid
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectolightningflashnowcastinggrid/{id}:
+    get:
+      summary: Obtener LightningFlashRateDensityNode por Identificador
+      operationId: getLightningFlashRateDensityNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LightningFlashRateDensityNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LightningFlashRateDensityNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    LightningFlashRateDensityNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

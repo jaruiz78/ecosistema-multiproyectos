@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCellFreeProteinBiomanufacturing API
+  description: Biomanufactura Descentralizada Portatil de Enzimas y Proteinas CFPS
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocellfreeproteinbiomanufacturing
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocellfreeproteinbiomanufacturing/{id}:
+    get:
+      summary: Obtener CfpsReactionYieldBatchToken por Identificador
+      operationId: getCfpsReactionYieldBatchTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CfpsReactionYieldBatchToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CfpsReactionYieldBatchToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CfpsReactionYieldBatchToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

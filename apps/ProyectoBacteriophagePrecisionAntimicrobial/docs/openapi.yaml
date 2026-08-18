@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoBacteriophagePrecisionAntimicrobial API
+  description: Antimicrobianos Enzimaticos de Precision basados en Endolisinas de Fagos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectobacteriophageprecisionantimicrobial
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectobacteriophageprecisionantimicrobial/{id}:
+    get:
+      summary: Obtener EndolysinLyticActivityScoreToken por Identificador
+      operationId: getEndolysinLyticActivityScoreTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EndolysinLyticActivityScoreToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndolysinLyticActivityScoreToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EndolysinLyticActivityScoreToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCrisprBaseEditingTherapy API
+  description: Edicion de Bases Nucleotidicas de Precision para Mejora de Cultivos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocrisprbaseeditingtherapy
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocrisprbaseeditingtherapy/{id}:
+    get:
+      summary: Obtener BaseEditorTransitionEfficiencyToken por Identificador
+      operationId: getBaseEditorTransitionEfficiencyTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BaseEditorTransitionEfficiencyToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseEditorTransitionEfficiencyToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BaseEditorTransitionEfficiencyToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

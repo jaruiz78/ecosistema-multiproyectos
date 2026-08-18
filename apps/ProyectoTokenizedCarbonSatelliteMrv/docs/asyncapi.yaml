@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoTokenizedCarbonSatelliteMrv Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoTokenizedCarbonSatelliteMrv
+channels:
+  proyectotokenizedcarbonsatellitemrvEvents:
+    address: corp-proyectotokenizedcarbonsatellitemrv-events
+    messages:
+      VerifiedCarbonSequestrationCreditTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

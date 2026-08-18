@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoMicrobialElectrosynthesisBiofuel Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoMicrobialElectrosynthesisBiofuel
+channels:
+  proyectomicrobialelectrosynthesisbiofuelEvents:
+    address: corp-proyectomicrobialelectrosynthesisbiofuel-events
+    messages:
+      CathodeBiofilmElectronUptakeNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

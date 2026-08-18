@@ -1,0 +1,30 @@
+package com.corp.proyectolunaroxygenisruplant.infrastructure.adapter.out.persistence;
+
+import com.corp.proyectolunaroxygenisruplant.domain.model.RegolithOxygenExtractionRateYieldToken;
+import com.corp.proyectolunaroxygenisruplant.domain.port.out.RegolithOxygenExtractionRateYieldTokenRepositoryPort;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+@Repository
+public class InMemoryRegolithOxygenExtractionRateYieldTokenRepositoryAdapter implements RegolithOxygenExtractionRateYieldTokenRepositoryPort {
+
+    private final ConcurrentMap<String, RegolithOxygenExtractionRateYieldToken> storage = new ConcurrentHashMap<>();
+
+    @Override
+    public RegolithOxygenExtractionRateYieldToken save(RegolithOxygenExtractionRateYieldToken entity) {
+        storage.put(entity.id(), entity);
+        return entity;
+    }
+
+    @Override
+    public Optional<RegolithOxygenExtractionRateYieldToken> findById(String id, String tenantId) {
+        RegolithOxygenExtractionRateYieldToken entity = storage.get(id);
+        if (entity != null && entity.tenantId().equals(tenantId)) {
+            return Optional.of(entity);
+        }
+        return Optional.empty();
+    }
+}

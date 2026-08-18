@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOmniPlanetaryHyperTwin API
+  description: Gemelo Digital Planetario 14.0 que Orquesta 512 Clusters Industriales Globales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoomniplanetaryhypertwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoomniplanetaryhypertwin/{id}:
+    get:
+      summary: Obtener HyperPlanetaryTensorNexusNode por Identificador
+      operationId: getHyperPlanetaryTensorNexusNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HyperPlanetaryTensorNexusNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HyperPlanetaryTensorNexusNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HyperPlanetaryTensorNexusNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOpticalSatelliteGroundStation API
+  description: Estaciones Terrenas Opticas con Optica Adaptativa para Enlaces Satelitales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoopticalsatellitegroundstation
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoopticalsatellitegroundstation/{id}:
+    get:
+      summary: Obtener StrehlRatioWavefrontCorrectionNode por Identificador
+      operationId: getStrehlRatioWavefrontCorrectionNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: StrehlRatioWavefrontCorrectionNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrehlRatioWavefrontCorrectionNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    StrehlRatioWavefrontCorrectionNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSpaceWeatherGridDefense API
+  description: Defensa de Redes Electricas frente a Tormentas Geomagneticas Solares
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectospaceweathergriddefense
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectospaceweathergriddefense/{id}:
+    get:
+      summary: Obtener GicTransformerNeutralCurrentAlertNode por Identificador
+      operationId: getGicTransformerNeutralCurrentAlertNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: GicTransformerNeutralCurrentAlertNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GicTransformerNeutralCurrentAlertNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    GicTransformerNeutralCurrentAlertNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

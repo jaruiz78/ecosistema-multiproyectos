@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEuCbamCarbonCompliance API
+  description: Cumplimiento y Certificacion Arancelaria de Carbono CBAM Europea
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoeucbamcarboncompliance
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoeucbamcarboncompliance/{id}:
+    get:
+      summary: Obtener CbamEmbeddedEmissionsDeclarationToken por Identificador
+      operationId: getCbamEmbeddedEmissionsDeclarationTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CbamEmbeddedEmissionsDeclarationToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CbamEmbeddedEmissionsDeclarationToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CbamEmbeddedEmissionsDeclarationToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

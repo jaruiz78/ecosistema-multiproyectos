@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoHydrogenFuelCellLongRangeDrone Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoHydrogenFuelCellLongRangeDrone
+channels:
+  proyectohydrogenfuelcelllongrangedroneEvents:
+    address: corp-proyectohydrogenfuelcelllongrangedrone-events
+    messages:
+      PemFuelCellStackEfficiencyNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

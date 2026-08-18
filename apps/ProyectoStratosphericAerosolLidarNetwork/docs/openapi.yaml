@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoStratosphericAerosolLidarNetwork API
+  description: Red de Lidar Estratosferico para Monitorizacion de Aerosoles y Clima
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectostratosphericaerosollidarnetwork
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectostratosphericaerosollidarnetwork/{id}:
+    get:
+      summary: Obtener AerosolBackscatterExtinctionProfileNode por Identificador
+      operationId: getAerosolBackscatterExtinctionProfileNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AerosolBackscatterExtinctionProfileNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AerosolBackscatterExtinctionProfileNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AerosolBackscatterExtinctionProfileNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

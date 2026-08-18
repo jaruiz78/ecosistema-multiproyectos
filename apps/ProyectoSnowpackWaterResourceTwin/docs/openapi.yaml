@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSnowpackWaterResourceTwin API
+  description: Prediccion de Recursos Hidricos Nocionales y Caudal de Deshielo
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectosnowpackwaterresourcetwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectosnowpackwaterresourcetwin/{id}:
+    get:
+      summary: Obtener SnowWaterEquivalentMeltRunoffNode por Identificador
+      operationId: getSnowWaterEquivalentMeltRunoffNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SnowWaterEquivalentMeltRunoffNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnowWaterEquivalentMeltRunoffNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SnowWaterEquivalentMeltRunoffNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

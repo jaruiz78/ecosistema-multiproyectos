@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoOmniPlanetaryHyperTwin Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoOmniPlanetaryHyperTwin
+channels:
+  proyectoomniplanetaryhypertwinEvents:
+    address: corp-proyectoomniplanetaryhypertwin-events
+    messages:
+      HyperPlanetaryTensorNexusNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

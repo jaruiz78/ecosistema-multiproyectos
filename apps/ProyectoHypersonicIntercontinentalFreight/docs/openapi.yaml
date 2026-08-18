@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoHypersonicIntercontinentalFreight API
+  description: Transporte de Mercancias Intercontinental Hipersonico con Motores Scramjet
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectohypersonicintercontinentalfreight
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectohypersonicintercontinentalfreight/{id}:
+    get:
+      summary: Obtener ScramjetCombustionPressureRatioNode por Identificador
+      operationId: getScramjetCombustionPressureRatioNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ScramjetCombustionPressureRatioNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScramjetCombustionPressureRatioNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ScramjetCombustionPressureRatioNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

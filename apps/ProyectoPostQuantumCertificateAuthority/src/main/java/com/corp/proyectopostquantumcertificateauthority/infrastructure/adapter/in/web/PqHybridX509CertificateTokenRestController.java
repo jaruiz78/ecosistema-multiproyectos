@@ -1,0 +1,39 @@
+package com.corp.proyectopostquantumcertificateauthority.infrastructure.adapter.in.web;
+
+import com.corp.proyectopostquantumcertificateauthority.domain.model.PqHybridX509CertificateToken;
+import com.corp.proyectopostquantumcertificateauthority.domain.port.in.ManagePqHybridX509CertificateTokenUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectopostquantumcertificateauthority")
+public class PqHybridX509CertificateTokenRestController {
+
+    private final ManagePqHybridX509CertificateTokenUseCase useCase;
+
+    public PqHybridX509CertificateTokenRestController(ManagePqHybridX509CertificateTokenUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<PqHybridX509CertificateToken> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        PqHybridX509CertificateToken created = useCase.createPqHybridX509CertificateToken(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectopostquantumcertificateauthority/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PqHybridX509CertificateToken> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findPqHybridX509CertificateTokenById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

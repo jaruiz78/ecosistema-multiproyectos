@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoStemCellOrganTissueBioprinting API
+  description: Bioimpresion 3D de Tejidos Humanos Vivos para Medicina Regenerativa
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectostemcellorgantissuebioprinting
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectostemcellorgantissuebioprinting/{id}:
+    get:
+      summary: Obtener BioinkScaffoldPerfusionGridNode por Identificador
+      operationId: getBioinkScaffoldPerfusionGridNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BioinkScaffoldPerfusionGridNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BioinkScaffoldPerfusionGridNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BioinkScaffoldPerfusionGridNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

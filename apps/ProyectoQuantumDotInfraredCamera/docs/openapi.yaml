@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumDotInfraredCamera API
+  description: Camaras Multiespectrales Infrarrojas de Puntos Cuanticos para Drones Agricolas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantumdotinfraredcamera
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantumdotinfraredcamera/{id}:
+    get:
+      summary: Obtener QdipInfraredPixelMatrixBatch por Identificador
+      operationId: getQdipInfraredPixelMatrixBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: QdipInfraredPixelMatrixBatch recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QdipInfraredPixelMatrixBatch'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    QdipInfraredPixelMatrixBatch:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

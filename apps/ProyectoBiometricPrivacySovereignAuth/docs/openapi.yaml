@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoBiometricPrivacySovereignAuth API
+  description: Autenticacion Biometrica Soberana Cifrada Homomorficamente
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectobiometricprivacysovereignauth
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectobiometricprivacysovereignauth/{id}:
+    get:
+      summary: Obtener EncryptedBiometricVectorDistanceNode por Identificador
+      operationId: getEncryptedBiometricVectorDistanceNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EncryptedBiometricVectorDistanceNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptedBiometricVectorDistanceNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EncryptedBiometricVectorDistanceNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

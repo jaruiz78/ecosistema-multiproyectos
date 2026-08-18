@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoOpticalSatelliteGroundStation Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoOpticalSatelliteGroundStation
+channels:
+  proyectoopticalsatellitegroundstationEvents:
+    address: corp-proyectoopticalsatellitegroundstation-events
+    messages:
+      StrehlRatioWavefrontCorrectionNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

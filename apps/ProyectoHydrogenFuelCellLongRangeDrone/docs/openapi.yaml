@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoHydrogenFuelCellLongRangeDrone API
+  description: Drones de Vigilancia Forestal y Costera de Gran Autonomia con Pila de Hidrogeno
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectohydrogenfuelcelllongrangedrone
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectohydrogenfuelcelllongrangedrone/{id}:
+    get:
+      summary: Obtener PemFuelCellStackEfficiencyNode por Identificador
+      operationId: getPemFuelCellStackEfficiencyNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PemFuelCellStackEfficiencyNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PemFuelCellStackEfficiencyNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PemFuelCellStackEfficiencyNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPlasmonicSurfaceBiosensors API
+  description: Deteccion Molecular Ultra-Sensible mediante Biometria Plasmonica SPR
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoplasmonicsurfacebiosensors
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoplasmonicsurfacebiosensors/{id}:
+    get:
+      summary: Obtener PlasmonicResonanceShiftToken por Identificador
+      operationId: getPlasmonicResonanceShiftTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PlasmonicResonanceShiftToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlasmonicResonanceShiftToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PlasmonicResonanceShiftToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

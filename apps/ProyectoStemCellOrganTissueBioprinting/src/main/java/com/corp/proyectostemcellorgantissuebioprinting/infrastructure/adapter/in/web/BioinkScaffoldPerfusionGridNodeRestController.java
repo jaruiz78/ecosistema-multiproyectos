@@ -1,0 +1,39 @@
+package com.corp.proyectostemcellorgantissuebioprinting.infrastructure.adapter.in.web;
+
+import com.corp.proyectostemcellorgantissuebioprinting.domain.model.BioinkScaffoldPerfusionGridNode;
+import com.corp.proyectostemcellorgantissuebioprinting.domain.port.in.ManageBioinkScaffoldPerfusionGridNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectostemcellorgantissuebioprinting")
+public class BioinkScaffoldPerfusionGridNodeRestController {
+
+    private final ManageBioinkScaffoldPerfusionGridNodeUseCase useCase;
+
+    public BioinkScaffoldPerfusionGridNodeRestController(ManageBioinkScaffoldPerfusionGridNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<BioinkScaffoldPerfusionGridNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        BioinkScaffoldPerfusionGridNode created = useCase.createBioinkScaffoldPerfusionGridNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectostemcellorgantissuebioprinting/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BioinkScaffoldPerfusionGridNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findBioinkScaffoldPerfusionGridNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

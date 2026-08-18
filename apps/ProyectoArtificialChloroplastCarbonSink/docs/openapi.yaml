@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoArtificialChloroplastCarbonSink API
+  description: Fotosintesis Artificial y Cloroplastos Sinteticos de Alto Rendimiento
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoartificialchloroplastcarbonsink
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoartificialchloroplastcarbonsink/{id}:
+    get:
+      summary: Obtener SyntheticThylakoidEfficiencyToken por Identificador
+      operationId: getSyntheticThylakoidEfficiencyTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SyntheticThylakoidEfficiencyToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyntheticThylakoidEfficiencyToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SyntheticThylakoidEfficiencyToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

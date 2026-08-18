@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoConcentratedLiquidityAmm Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoConcentratedLiquidityAmm
+channels:
+  proyectoconcentratedliquidityammEvents:
+    address: corp-proyectoconcentratedliquidityamm-events
+    messages:
+      AmmLiquidityPoolPositionNodeUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

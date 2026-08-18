@@ -1,0 +1,39 @@
+package com.corp.proyectoatomicforcenanotopography.infrastructure.adapter.in.web;
+
+import com.corp.proyectoatomicforcenanotopography.domain.model.AfmCantileverDeflectionScanNode;
+import com.corp.proyectoatomicforcenanotopography.domain.port.in.ManageAfmCantileverDeflectionScanNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectoatomicforcenanotopography")
+public class AfmCantileverDeflectionScanNodeRestController {
+
+    private final ManageAfmCantileverDeflectionScanNodeUseCase useCase;
+
+    public AfmCantileverDeflectionScanNodeRestController(ManageAfmCantileverDeflectionScanNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<AfmCantileverDeflectionScanNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        AfmCantileverDeflectionScanNode created = useCase.createAfmCantileverDeflectionScanNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectoatomicforcenanotopography/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AfmCantileverDeflectionScanNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findAfmCantileverDeflectionScanNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

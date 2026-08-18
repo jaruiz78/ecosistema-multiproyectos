@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoZkTaxComplianceAuditor Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoZkTaxComplianceAuditor
+channels:
+  proyectozktaxcomplianceauditorEvents:
+    address: corp-proyectozktaxcomplianceauditor-events
+    messages:
+      ZkTaxComplianceCertificateTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

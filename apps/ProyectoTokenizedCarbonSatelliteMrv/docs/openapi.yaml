@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoTokenizedCarbonSatelliteMrv API
+  description: Emision y Liquidacion de Creditos de Carbono Tokenizados con Auditoria Satelital
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectotokenizedcarbonsatellitemrv
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectotokenizedcarbonsatellitemrv/{id}:
+    get:
+      summary: Obtener VerifiedCarbonSequestrationCreditToken por Identificador
+      operationId: getVerifiedCarbonSequestrationCreditTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: VerifiedCarbonSequestrationCreditToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifiedCarbonSequestrationCreditToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    VerifiedCarbonSequestrationCreditToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

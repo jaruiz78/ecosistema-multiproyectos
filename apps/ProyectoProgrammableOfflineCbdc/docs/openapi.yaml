@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoProgrammableOfflineCbdc API
+  description: CBDC Programable con Pagos Offline Seguros y Liquidacion Inmediata
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoprogrammableofflinecbdc
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoprogrammableofflinecbdc/{id}:
+    get:
+      summary: Obtener OfflineCbdcSpendProofToken por Identificador
+      operationId: getOfflineCbdcSpendProofTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OfflineCbdcSpendProofToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfflineCbdcSpendProofToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    OfflineCbdcSpendProofToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoGroundwater3dAquiferModel API
+  description: Simulacion Hidrogeologica 3D de Flujo en Acuiferos y Balance Hidrico
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectogroundwater3daquifermodel
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectogroundwater3daquifermodel/{id}:
+    get:
+      summary: Obtener AquiferHydraulicHeadPiezometerNode por Identificador
+      operationId: getAquiferHydraulicHeadPiezometerNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AquiferHydraulicHeadPiezometerNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AquiferHydraulicHeadPiezometerNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    AquiferHydraulicHeadPiezometerNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

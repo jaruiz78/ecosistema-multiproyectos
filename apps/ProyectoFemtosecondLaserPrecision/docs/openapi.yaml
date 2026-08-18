@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoFemtosecondLaserPrecision API
+  description: Fabricacion de Ultra-Precision mediante Ablacion Laser de Femtosegundos
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectofemtosecondlaserprecision
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectofemtosecondlaserprecision/{id}:
+    get:
+      summary: Obtener LaserAblationPulseProfileToken por Identificador
+      operationId: getLaserAblationPulseProfileTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LaserAblationPulseProfileToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaserAblationPulseProfileToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    LaserAblationPulseProfileToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

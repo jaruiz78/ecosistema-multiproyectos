@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOrbitalRefuelingCryoStation API
+  description: Estaciones Orbitales de Reabastecimiento de Propelente Criogenico
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoorbitalrefuelingcryostation
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoorbitalrefuelingcryostation/{id}:
+    get:
+      summary: Obtener CryogenicTransferMassBoiloffToken por Identificador
+      operationId: getCryogenicTransferMassBoiloffTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CryogenicTransferMassBoiloffToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryogenicTransferMassBoiloffToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CryogenicTransferMassBoiloffToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

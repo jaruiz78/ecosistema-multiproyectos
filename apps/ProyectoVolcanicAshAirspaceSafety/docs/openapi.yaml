@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoVolcanicAshAirspaceSafety API
+  description: Seguridad del Espacio Aereo frente a Nubes de Ceniza Volcanica
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectovolcanicashairspacesafety
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectovolcanicashairspacesafety/{id}:
+    get:
+      summary: Obtener VolcanicAshConcentrationFlightLevelNode por Identificador
+      operationId: getVolcanicAshConcentrationFlightLevelNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: VolcanicAshConcentrationFlightLevelNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolcanicAshConcentrationFlightLevelNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    VolcanicAshConcentrationFlightLevelNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

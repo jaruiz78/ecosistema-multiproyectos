@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPhytoremediationSoilClean API
+  description: Fitorremediacion Botanica y Descontaminacion de Suelos Agricolas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectophytoremediationsoilclean
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectophytoremediationsoilclean/{id}:
+    get:
+      summary: Obtener HeavyMetalBioaccumulationFactorNode por Identificador
+      operationId: getHeavyMetalBioaccumulationFactorNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: HeavyMetalBioaccumulationFactorNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HeavyMetalBioaccumulationFactorNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    HeavyMetalBioaccumulationFactorNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

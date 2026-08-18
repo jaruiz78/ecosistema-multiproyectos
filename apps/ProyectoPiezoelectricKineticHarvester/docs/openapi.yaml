@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPiezoelectricKineticHarvester API
+  description: Autonomica Energetica de Sensores IoT mediante Cosecha Piezoelectrica
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectopiezoelectrickineticharvester
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectopiezoelectrickineticharvester/{id}:
+    get:
+      summary: Obtener PiezoelectricCantileverBeamNode por Identificador
+      operationId: getPiezoelectricCantileverBeamNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PiezoelectricCantileverBeamNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PiezoelectricCantileverBeamNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PiezoelectricCantileverBeamNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

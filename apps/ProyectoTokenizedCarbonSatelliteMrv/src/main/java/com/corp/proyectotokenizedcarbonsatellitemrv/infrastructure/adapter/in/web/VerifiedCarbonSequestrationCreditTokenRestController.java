@@ -1,0 +1,39 @@
+package com.corp.proyectotokenizedcarbonsatellitemrv.infrastructure.adapter.in.web;
+
+import com.corp.proyectotokenizedcarbonsatellitemrv.domain.model.VerifiedCarbonSequestrationCreditToken;
+import com.corp.proyectotokenizedcarbonsatellitemrv.domain.port.in.ManageVerifiedCarbonSequestrationCreditTokenUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectotokenizedcarbonsatellitemrv")
+public class VerifiedCarbonSequestrationCreditTokenRestController {
+
+    private final ManageVerifiedCarbonSequestrationCreditTokenUseCase useCase;
+
+    public VerifiedCarbonSequestrationCreditTokenRestController(ManageVerifiedCarbonSequestrationCreditTokenUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<VerifiedCarbonSequestrationCreditToken> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        VerifiedCarbonSequestrationCreditToken created = useCase.createVerifiedCarbonSequestrationCreditToken(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectotokenizedcarbonsatellitemrv/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VerifiedCarbonSequestrationCreditToken> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findVerifiedCarbonSequestrationCreditTokenById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

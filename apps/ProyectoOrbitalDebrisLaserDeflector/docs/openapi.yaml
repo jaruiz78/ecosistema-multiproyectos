@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOrbitalDebrisLaserDeflector API
+  description: Desviacion Orbital Activa de Basura Espacial mediante Laser Terrestre
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoorbitaldebrislaserdeflector
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoorbitaldebrislaserdeflector/{id}:
+    get:
+      summary: Obtener LaserAblationImpulseDeltaVToken por Identificador
+      operationId: getLaserAblationImpulseDeltaVTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LaserAblationImpulseDeltaVToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaserAblationImpulseDeltaVToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    LaserAblationImpulseDeltaVToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

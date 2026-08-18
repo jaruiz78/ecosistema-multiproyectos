@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoNeuralModelIpProtection Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoNeuralModelIpProtection
+channels:
+  proyectoneuralmodelipprotectionEvents:
+    address: corp-proyectoneuralmodelipprotection-events
+    messages:
+      ModelTensorWatermarkSignatureTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

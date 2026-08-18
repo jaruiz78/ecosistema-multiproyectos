@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoFractionalRealEstateRwa API
+  description: Registro Notarial Soberano de Activos Inmobiliarios Fraccionados
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectofractionalrealestaterwa
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectofractionalrealestaterwa/{id}:
+    get:
+      summary: Obtener RealEstateNotarizedTitleToken por Identificador
+      operationId: getRealEstateNotarizedTitleTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: RealEstateNotarizedTitleToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealEstateNotarizedTitleToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    RealEstateNotarizedTitleToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

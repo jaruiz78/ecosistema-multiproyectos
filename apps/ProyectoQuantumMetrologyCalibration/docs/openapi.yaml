@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumMetrologyCalibration API
+  description: Calibracion Metrologica Cuantica Primaria de Alta Precision
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantummetrologycalibration
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantummetrologycalibration/{id}:
+    get:
+      summary: Obtener QuantumHallPlateauResistanceToken por Identificador
+      operationId: getQuantumHallPlateauResistanceTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: QuantumHallPlateauResistanceToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantumHallPlateauResistanceToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    QuantumHallPlateauResistanceToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

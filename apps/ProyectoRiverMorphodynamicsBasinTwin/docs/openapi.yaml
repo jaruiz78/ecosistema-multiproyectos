@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoRiverMorphodynamicsBasinTwin API
+  description: Morfodinamica Fluvial y Gestion de Sedimentos en Embalses
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectorivermorphodynamicsbasintwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectorivermorphodynamicsbasintwin/{id}:
+    get:
+      summary: Obtener BedloadSedimentTransportRateNode por Identificador
+      operationId: getBedloadSedimentTransportRateNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BedloadSedimentTransportRateNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BedloadSedimentTransportRateNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BedloadSedimentTransportRateNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

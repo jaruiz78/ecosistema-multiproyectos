@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCgraSpatialAccelerator API
+  description: Aceleradores Espaciales CGRA para Inferencia Tensorial de Baja Potencia
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocgraspatialaccelerator
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocgraspatialaccelerator/{id}:
+    get:
+      summary: Obtener CgraComputeMeshTileNode por Identificador
+      operationId: getCgraComputeMeshTileNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CgraComputeMeshTileNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CgraComputeMeshTileNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    CgraComputeMeshTileNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

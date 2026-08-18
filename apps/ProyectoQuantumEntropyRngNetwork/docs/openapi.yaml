@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumEntropyRngNetwork API
+  description: Red de Entropia Cuantica Pura y Generacion QRNG para Criptografia Post-Cuantica
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantumentropyrngnetwork
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantumentropyrngnetwork/{id}:
+    get:
+      summary: Obtener QrngEntropySourceBlockToken por Identificador
+      operationId: getQrngEntropySourceBlockTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: QrngEntropySourceBlockToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrngEntropySourceBlockToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    QrngEntropySourceBlockToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
