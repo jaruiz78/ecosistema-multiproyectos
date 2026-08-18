@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAgriFoodColdChainTrace API
+  description: Trazabilidad de frío, atmósfera controlada y liquidación Escrow para cooperativas agroalimentarias
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoagrifoodcoldchaintrace
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoagrifoodcoldchaintrace/{id}:
+    get:
+      summary: Obtener ColdChainShipmentBatch por Identificador
+      operationId: getColdChainShipmentBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ColdChainShipmentBatch recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColdChainShipmentBatch'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ColdChainShipmentBatch:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

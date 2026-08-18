@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoSmartDestinationDTI
+# 🏛️ NOTION DOSSIER: ProyectoAgriFoodColdChainTrace
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoSmartDestinationDTI
-* **Entidad Dominio**: DestinationCapacityZone
-* **Descripción**: Gestor territorial DTI, control de aforos peatonales, playas inteligentes y saturación urbana
+* **Nombre**: ProyectoAgriFoodColdChainTrace
+* **Entidad Dominio**: ColdChainShipmentBatch
+* **Descripción**: Trazabilidad de frío, atmósfera controlada y liquidación Escrow para cooperativas agroalimentarias
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

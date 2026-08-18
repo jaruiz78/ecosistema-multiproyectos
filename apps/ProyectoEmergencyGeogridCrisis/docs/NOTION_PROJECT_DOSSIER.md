@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoSmartDestinationDTI
+# 🏛️ NOTION DOSSIER: ProyectoEmergencyGeogridCrisis
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoSmartDestinationDTI
-* **Entidad Dominio**: DestinationCapacityZone
-* **Descripción**: Gestor territorial DTI, control de aforos peatonales, playas inteligentes y saturación urbana
+* **Nombre**: ProyectoEmergencyGeogridCrisis
+* **Entidad Dominio**: EmergencyEvacuationZone
+* **Descripción**: Sistema de alerta temprana, simulación de escorrentías DANA y evacuación resiliente en mallas H3
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

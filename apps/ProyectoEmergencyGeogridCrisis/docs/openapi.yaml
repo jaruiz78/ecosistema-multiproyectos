@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoEmergencyGeogridCrisis API
+  description: Sistema de alerta temprana, simulación de escorrentías DANA y evacuación resiliente en mallas H3
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoemergencygeogridcrisis
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoemergencygeogridcrisis/{id}:
+    get:
+      summary: Obtener EmergencyEvacuationZone por Identificador
+      operationId: getEmergencyEvacuationZoneById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EmergencyEvacuationZone recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyEvacuationZone'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EmergencyEvacuationZone:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

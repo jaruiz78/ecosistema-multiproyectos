@@ -1,9 +1,9 @@
-# 🏛️ NOTION DOSSIER: ProyectoSmartDestinationDTI
+# 🏛️ NOTION DOSSIER: ProyectoPrecisionSoilRegen
 
 ## 1. Visión y Resumen Ejecutivo
-* **Nombre**: ProyectoSmartDestinationDTI
-* **Entidad Dominio**: DestinationCapacityZone
-* **Descripción**: Gestor territorial DTI, control de aforos peatonales, playas inteligentes y saturación urbana
+* **Nombre**: ProyectoPrecisionSoilRegen
+* **Entidad Dominio**: SoilCarbonMeasurement
+* **Descripción**: Monitoreo microbiológico, NDVI y secuestro de carbono orgánico en suelos agrícolas (MRV)
 * **Arquitectura**: Java 25 LTS / Spring Boot 4.0 / Cloud Run / Multi-Tenant RLS
 
 ## 2. Pila Tecnológica & Moat

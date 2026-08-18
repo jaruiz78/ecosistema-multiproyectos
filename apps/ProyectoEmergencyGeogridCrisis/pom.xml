@@ -11,11 +11,11 @@
         <relativePath>../../corp-spring-boot-starter/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.corp.proyectosmartdestinationdti</groupId>
-    <artifactId>proyectosmartdestinationdti</artifactId>
+    <groupId>com.corp.proyectoemergencygeogridcrisis</groupId>
+    <artifactId>proyectoemergencygeogridcrisis</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>ProyectoSmartDestinationDTI</name>
-    <description>Gestor territorial DTI, control de aforos peatonales, playas inteligentes y saturación urbana</description>
+    <name>ProyectoEmergencyGeogridCrisis</name>
+    <description>Sistema de alerta temprana, simulación de escorrentías DANA y evacuación resiliente en mallas H3</description>
 
     <properties>
         <java.version>25</java.version>

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSmartDestinationDTI API
+  description: Gestor territorial DTI, control de aforos peatonales, playas inteligentes y saturación urbana
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectosmartdestinationdti
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectosmartdestinationdti/{id}:
+    get:
+      summary: Obtener DestinationCapacityZone por Identificador
+      operationId: getDestinationCapacityZoneById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DestinationCapacityZone recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DestinationCapacityZone'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DestinationCapacityZone:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string
