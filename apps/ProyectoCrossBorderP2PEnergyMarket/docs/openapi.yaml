@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoCrossBorderP2PEnergyMarket API
+  description: Mercado Energetico Transfronterizo P2P con Liquidaciones Instantaneas ZK-Rollup
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectocrossborderp2penergymarket
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectocrossborderp2penergymarket/{id}:
+    get:
+      summary: Obtener P2PEnergySettlementBatchToken por Identificador
+      operationId: getP2PEnergySettlementBatchTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: P2PEnergySettlementBatchToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/P2PEnergySettlementBatchToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    P2PEnergySettlementBatchToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoWildfireFrontPredictor API
+  description: Prediccion de Frentes de Fuego Forestal y Dinamica Piroconvectiva con H3
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectowildfirefrontpredictor
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectowildfirefrontpredictor/{id}:
+    get:
+      summary: Obtener WildfirePropagationFrontNode por Identificador
+      operationId: getWildfirePropagationFrontNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: WildfirePropagationFrontNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WildfirePropagationFrontNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    WildfirePropagationFrontNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

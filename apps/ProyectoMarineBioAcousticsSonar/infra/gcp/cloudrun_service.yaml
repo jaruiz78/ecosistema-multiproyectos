@@ -1,0 +1,25 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: proyectomarinebioacousticssonar-service
+  annotations:
+    run.googleapis.com/launch-stage: GA
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/cpu-throttling: "true"
+        run.googleapis.com/startup-cpu-boost: "true"
+    spec:
+      containerConcurrency: 250
+      timeoutSeconds: 15
+      containers:
+        - image: europe-west1-docker.pkg.dev/${PROJECT_ID}/corp-docker-repo/proyectomarinebioacousticssonar:latest
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "256Mi"

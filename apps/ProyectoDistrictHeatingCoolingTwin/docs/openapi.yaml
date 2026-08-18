@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDistrictHeatingCoolingTwin API
+  description: Gemelo Digital de Redes Termicas Urbanas de 5a Generacion (5GDHC) para Paradores y Ciudades
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodistrictheatingcoolingtwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodistrictheatingcoolingtwin/{id}:
+    get:
+      summary: Obtener DistrictThermalSubstationNode por Identificador
+      operationId: getDistrictThermalSubstationNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: DistrictThermalSubstationNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistrictThermalSubstationNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    DistrictThermalSubstationNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

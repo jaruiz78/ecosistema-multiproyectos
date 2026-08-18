@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoGrapheneDesalCleanWater Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoGrapheneDesalCleanWater
+channels:
+  proyectographenedesalcleanwaterEvents:
+    address: corp-proyectographenedesalcleanwater-events
+    messages:
+      GrapheneNanoporeMembraneBatchUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

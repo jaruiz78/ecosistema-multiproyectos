@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoQuantumGravimetryAquifer API
+  description: Auscultacion Gravimetrica Cuantica de Acuiferos Profundos y Cuerpos de Agua Subterranea
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoquantumgravimetryaquifer
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoquantumgravimetryaquifer/{id}:
+    get:
+      summary: Obtener GravimetricSubsurfaceDensityNode por Identificador
+      operationId: getGravimetricSubsurfaceDensityNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: GravimetricSubsurfaceDensityNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GravimetricSubsurfaceDensityNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    GravimetricSubsurfaceDensityNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

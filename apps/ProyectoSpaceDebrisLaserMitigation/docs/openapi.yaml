@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSpaceDebrisLaserMitigation API
+  description: Seguimiento Laser y Mitigacion de Basura Espacial en Orbitas LEO/GEO
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectospacedebrislasermitigation
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectospacedebrislasermitigation/{id}:
+    get:
+      summary: Obtener SpaceDebrisConjunctionTrackToken por Identificador
+      operationId: getSpaceDebrisConjunctionTrackTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SpaceDebrisConjunctionTrackToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceDebrisConjunctionTrackToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SpaceDebrisConjunctionTrackToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

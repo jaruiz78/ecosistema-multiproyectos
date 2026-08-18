@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDeNovoProteinEnzymeDesign API
+  description: Diseno Computacional De Novo de Enzimas y Biocatalizadores para Biorrefinerias
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodenovoproteinenzymedesign
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodenovoproteinenzymedesign/{id}:
+    get:
+      summary: Obtener EnzymaticBiocatalystDesignToken por Identificador
+      operationId: getEnzymaticBiocatalystDesignTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: EnzymaticBiocatalystDesignToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnzymaticBiocatalystDesignToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    EnzymaticBiocatalystDesignToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

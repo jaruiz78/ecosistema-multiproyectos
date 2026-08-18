@@ -1,0 +1,17 @@
+asyncapi: 3.0.0
+info:
+  title: ProyectoCrossBorderP2PEnergyMarket Event Mesh
+  version: 1.0.0
+  description: Publicación y suscripción de eventos para ProyectoCrossBorderP2PEnergyMarket
+channels:
+  proyectocrossborderp2penergymarketEvents:
+    address: corp-proyectocrossborderp2penergymarket-events
+    messages:
+      P2PEnergySettlementBatchTokenUpdated:
+        payload:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: integer

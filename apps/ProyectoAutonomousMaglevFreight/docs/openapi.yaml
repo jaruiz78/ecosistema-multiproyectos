@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAutonomousMaglevFreight API
+  description: Corredores Ferroviarios Autonomos de Mercancias por Levitacion Magnetica Maglev
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoautonomousmaglevfreight
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoautonomousmaglevfreight/{id}:
+    get:
+      summary: Obtener MaglevFreightTrainTrackNode por Identificador
+      operationId: getMaglevFreightTrainTrackNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MaglevFreightTrainTrackNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaglevFreightTrainTrackNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    MaglevFreightTrainTrackNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

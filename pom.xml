@@ -64,13 +64,16 @@
         <module>apps/ProyectoAgriFoodColdChainTrace</module>
         <module>apps/ProyectoAgroBioRobotics</module>
         <module>apps/ProyectoAgroEnergyVPP</module>
+        <module>apps/ProyectoAgroPollinatorDroneSwarm</module>
         <module>apps/ProyectoAgroWaterAI</module>
         <module>apps/ProyectoAgua</module>
         <module>apps/ProyectoAirlineInterlineBaggage</module>
         <module>apps/ProyectoAirportTouristIntermodal</module>
         <module>apps/ProyectoAstroturismoStarlight</module>
+        <module>apps/ProyectoAutonomousMaglevFreight</module>
         <module>apps/ProyectoAutonomousShippingCorridor</module>
         <module>apps/ProyectoB2G</module>
+        <module>apps/ProyectoBasaltCarbonMineralizationDAC</module>
         <module>apps/ProyectoBioAgriTrace</module>
         <module>apps/ProyectoBiodiversityGenomicBank</module>
         <module>apps/ProyectoBiotecnologia</module>
@@ -88,9 +91,15 @@
         <module>apps/ProyectoClinicalTrialsZK</module>
         <module>apps/ProyectoCriticalMineralsMRV</module>
         <module>apps/ProyectoCriticalSupplyRisk</module>
+        <module>apps/ProyectoCrossBorderP2PEnergyMarket</module>
+        <module>apps/ProyectoCryoAgriFoodLogistics</module>
         <module>apps/ProyectoDeNovoPlasticDegradation</module>
+        <module>apps/ProyectoDeNovoProteinEnzymeDesign</module>
+        <module>apps/ProyectoDecentralizedClinicalBioLogistics</module>
+        <module>apps/ProyectoDeepGeothermalEnergyTwin</module>
         <module>apps/ProyectoDefensa</module>
         <module>apps/ProyectoDiputacionTurismoRural</module>
+        <module>apps/ProyectoDistrictHeatingCoolingTwin</module>
         <module>apps/ProyectoDroneAirspace</module>
         <module>apps/ProyectoDroneAirspaceUSpace</module>
         <module>apps/ProyectoDualAirDefense</module>
@@ -108,20 +117,25 @@
         <module>apps/ProyectoGeneralista</module>
         <module>apps/ProyectoGlobalCruiseMRV</module>
         <module>apps/ProyectoGovProcureMatch</module>
+        <module>apps/ProyectoGrapheneDesalCleanWater</module>
         <module>apps/ProyectoGreenHydrogenDesal</module>
+        <module>apps/ProyectoHapticCulturalTelepresence</module>
         <module>apps/ProyectoHealthFederatedClinical</module>
         <module>apps/ProyectoHeritageDigitalTwin3D</module>
         <module>apps/ProyectoHidrogeno</module>
         <module>apps/ProyectoHotelTwinRevPAR</module>
+        <module>apps/ProyectoHydrodynamicDamFloodRouting</module>
         <module>apps/ProyectoInclusiveAccessibleTourism</module>
         <module>apps/ProyectoIndustrialMicrogridMPC</module>
         <module>apps/ProyectoInterplanetarySwarmMesh</module>
         <module>apps/ProyectoLogistica</module>
+        <module>apps/ProyectoMarineBioAcousticsSonar</module>
         <module>apps/ProyectoMaritime</module>
         <module>apps/ProyectoMaritimeAutonomousFleet</module>
         <module>apps/ProyectoMiceConferenceTwin</module>
         <module>apps/ProyectoNeuroSpatialLLM</module>
         <module>apps/ProyectoNuclearFusionStellarator</module>
+        <module>apps/ProyectoOmniSystemicPlanetaryTwin</module>
         <module>apps/ProyectoParquesNacionalesNatura2000</module>
         <module>apps/ProyectoPharmaColdChain</module>
         <module>apps/ProyectoPlayasInteligentesCostas</module>
@@ -129,6 +143,8 @@
         <module>apps/ProyectoPostQuantumSovereignIdentity</module>
         <module>apps/ProyectoPrecisionSoilRegen</module>
         <module>apps/ProyectoPresaTwinSCADA</module>
+        <module>apps/ProyectoQuantumGravimetryAquifer</module>
+        <module>apps/ProyectoQuantumIntermodalRouter</module>
         <module>apps/ProyectoQuantumMaterialsGraphene</module>
         <module>apps/ProyectoQuantumResistantRWA</module>
         <module>apps/ProyectoQuantumSatelliteSAR</module>
@@ -146,6 +162,9 @@
         <module>apps/ProyectoSmartStreetLightingV2G</module>
         <module>apps/ProyectoSmartWaterDesal</module>
         <module>apps/ProyectoSoilBioCarbonTwin</module>
+        <module>apps/ProyectoSpaceAgriRegenerativeHabitat</module>
+        <module>apps/ProyectoSpaceDebrisLaserMitigation</module>
+        <module>apps/ProyectoSpaceISLTelecommunications</module>
         <module>apps/ProyectoSpaceTrafficCoordination</module>
         <module>apps/ProyectoStratosphericAerosolGeoengineering</module>
         <module>apps/ProyectoStratosphericSAI</module>
@@ -159,6 +178,7 @@
         <module>apps/ProyectoUrbanEnergyMobilityNexus</module>
         <module>apps/ProyectoV2G</module>
         <module>apps/ProyectoVPP</module>
+        <module>apps/ProyectoWildfireFrontPredictor</module>
         <module>apps/ProyectoZeroTrustOTMesh</module>
     </modules>
 

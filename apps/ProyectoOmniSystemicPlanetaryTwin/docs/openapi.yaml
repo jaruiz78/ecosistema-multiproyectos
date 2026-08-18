@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoOmniSystemicPlanetaryTwin API
+  description: Gemelo Digital Planetario Omni-Sistemico y Orquestador Maestro de 128 Clusters Industriales
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoomnisystemicplanetarytwin
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoomnisystemicplanetarytwin/{id}:
+    get:
+      summary: Obtener PlanetaryTensorsNexusNode por Identificador
+      operationId: getPlanetaryTensorsNexusNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PlanetaryTensorsNexusNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanetaryTensorsNexusNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PlanetaryTensorsNexusNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

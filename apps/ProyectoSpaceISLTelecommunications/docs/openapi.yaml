@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoSpaceISLTelecommunications API
+  description: Red de Malla Satelital LEO con Enlaces Opticos Laser Inter-Satelite (ISL)
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectospaceisltelecommunications
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectospaceisltelecommunications/{id}:
+    get:
+      summary: Obtener SpaceSatelliteIslNode por Identificador
+      operationId: getSpaceSatelliteIslNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SpaceSatelliteIslNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceSatelliteIslNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SpaceSatelliteIslNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

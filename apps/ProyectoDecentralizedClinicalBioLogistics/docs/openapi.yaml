@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoDecentralizedClinicalBioLogistics API
+  description: Ensayos Clinicos Descentralizados y Trazabilidad Fria Segura de Biopsias y Muestras
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectodecentralizedclinicalbiologistics
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectodecentralizedclinicalbiologistics/{id}:
+    get:
+      summary: Obtener ClinicalTrialBioSampleToken por Identificador
+      operationId: getClinicalTrialBioSampleTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ClinicalTrialBioSampleToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClinicalTrialBioSampleToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    ClinicalTrialBioSampleToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

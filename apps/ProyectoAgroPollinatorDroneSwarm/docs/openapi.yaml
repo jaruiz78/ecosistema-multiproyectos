@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoAgroPollinatorDroneSwarm API
+  description: Monitorizacion Bioacustica de Polinizadores y Enjambres de Micro-Drones Agricolas
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectoagropollinatordroneswarm
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectoagropollinatordroneswarm/{id}:
+    get:
+      summary: Obtener PollinatorSwarmDensityNode por Identificador
+      operationId: getPollinatorSwarmDensityNodeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PollinatorSwarmDensityNode recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollinatorSwarmDensityNode'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    PollinatorSwarmDensityNode:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

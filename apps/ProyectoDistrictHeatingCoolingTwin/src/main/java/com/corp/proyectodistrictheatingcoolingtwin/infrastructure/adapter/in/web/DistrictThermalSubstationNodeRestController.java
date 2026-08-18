@@ -1,0 +1,39 @@
+package com.corp.proyectodistrictheatingcoolingtwin.infrastructure.adapter.in.web;
+
+import com.corp.proyectodistrictheatingcoolingtwin.domain.model.DistrictThermalSubstationNode;
+import com.corp.proyectodistrictheatingcoolingtwin.domain.port.in.ManageDistrictThermalSubstationNodeUseCase;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+
+@RestController
+@RequestMapping("/api/v1/tenants/{tenantId}/proyectodistrictheatingcoolingtwin")
+public class DistrictThermalSubstationNodeRestController {
+
+    private final ManageDistrictThermalSubstationNodeUseCase useCase;
+
+    public DistrictThermalSubstationNodeRestController(ManageDistrictThermalSubstationNodeUseCase useCase) {
+        this.useCase = useCase;
+    }
+
+    public record CreateRequest(String title, double value) {}
+
+    @PostMapping
+    public ResponseEntity<DistrictThermalSubstationNode> create(
+            @PathVariable String tenantId,
+            @RequestBody CreateRequest request) {
+        DistrictThermalSubstationNode created = useCase.createDistrictThermalSubstationNode(tenantId, request.title(), request.value());
+        return ResponseEntity.created(URI.create("/api/v1/tenants/" + tenantId + "/proyectodistrictheatingcoolingtwin/" + created.id()))
+                .body(created);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DistrictThermalSubstationNode> getById(
+            @PathVariable String tenantId,
+            @PathVariable String id) {
+        return useCase.findDistrictThermalSubstationNodeById(id, tenantId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+}

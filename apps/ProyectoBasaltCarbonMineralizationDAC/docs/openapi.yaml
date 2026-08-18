@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoBasaltCarbonMineralizationDAC API
+  description: Captura Directa de Aire (DAC) y Mineralizacion In-Situ de Carbono en Formaciones de Basalto
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectobasaltcarbonmineralizationdac
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectobasaltcarbonmineralizationdac/{id}:
+    get:
+      summary: Obtener BasaltCarbonSequestrationWellToken por Identificador
+      operationId: getBasaltCarbonSequestrationWellTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: BasaltCarbonSequestrationWellToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasaltCarbonSequestrationWellToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    BasaltCarbonSequestrationWellToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

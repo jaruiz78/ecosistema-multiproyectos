@@ -1,0 +1,23 @@
+# cloudbuild.yaml - Pipeline SLSA L3 & Cosign para ProyectoBasaltCarbonMineralizationDAC
+steps:
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - '--destination=europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectobasaltcarbonmineralizationdac:$SHORT_SHA'
+      - '--cache=true'
+      - '--dockerfile=Dockerfile'
+
+  - name: 'anchore/syft:latest'
+    args:
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectobasaltcarbonmineralizationdac:$SHORT_SHA'
+      - '-o'
+      - 'cyclonedx-json'
+      - '--file'
+      - 'sbom.json'
+
+  - name: 'gcr.io/projectsigstore/cosign:latest'
+    env:
+      - 'COSIGN_EXPERIMENTAL=1'
+    args:
+      - 'sign'
+      - '--yes'
+      - 'europe-west1-docker.pkg.dev/$PROJECT_ID/ecosystem-repo/proyectobasaltcarbonmineralizationdac:$SHORT_SHA'
