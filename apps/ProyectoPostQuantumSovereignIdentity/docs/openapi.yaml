@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: ProyectoPostQuantumSovereignIdentity API
+  description: Identidad Soberana Descentralizada Post-Cuantica eIDAS 2.0 y W3C DID con ML-DSA
+  version: 1.0.0
+servers:
+  - url: https://api.corp.internal/proyectopostquantumsovereignidentity
+    description: Cloud Run Enterprise Endpoint
+paths:
+  /api/v1/proyectopostquantumsovereignidentity/{id}:
+    get:
+      summary: Obtener SovereignDidCredentialToken por Identificador
+      operationId: getSovereignDidCredentialTokenById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SovereignDidCredentialToken recuperado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SovereignDidCredentialToken'
+        '404':
+          description: No encontrado
+components:
+  schemas:
+    SovereignDidCredentialToken:
+      type: object
+      required:
+        - id
+        - tenantId
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        status:
+          type: string

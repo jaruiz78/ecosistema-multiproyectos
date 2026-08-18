@@ -126,6 +126,7 @@
         <module>apps/ProyectoPharmaColdChain</module>
         <module>apps/ProyectoPlayasInteligentesCostas</module>
         <module>apps/ProyectoPortTwinAutonomous</module>
+        <module>apps/ProyectoPostQuantumSovereignIdentity</module>
         <module>apps/ProyectoPrecisionSoilRegen</module>
         <module>apps/ProyectoPresaTwinSCADA</module>
         <module>apps/ProyectoQuantumMaterialsGraphene</module>
@@ -151,6 +152,7 @@
         <module>apps/ProyectoSubSurfaceGeoTwin</module>
         <module>apps/ProyectoSyntheticBiologyFoundry</module>
         <module>apps/ProyectoSyntheticEnzymeBioFoundry</module>
+        <module>apps/ProyectoSyntheticMicrobiomeRegen</module>
         <module>apps/ProyectoTaxComplianceLedger</module>
         <module>apps/ProyectoTokenRWA</module>
         <module>apps/ProyectoTurismoTermalBalnearios</module>
