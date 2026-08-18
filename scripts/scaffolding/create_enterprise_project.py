@@ -274,7 +274,7 @@ public class InMemory{entity_name}RepositoryAdapter implements {entity_name}Repo
 """
     (infra_persistence_dir / f"InMemory{entity_name}RepositoryAdapter.java").write_text(persistence_adapter_code, encoding="utf-8")
 
-    # 7. Unit Tests (Hermetic Zero-Mockito)
+    # 7. Unit Tests (Zero-Mockito / Domain TDD)
     (src_test_java / "domain").mkdir(parents=True, exist_ok=True)
     domain_test_code = f"""package com.corp.{pkg_name}.domain;
 
@@ -287,14 +287,10 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Test de Dominio Puro (Zero-Mockito Policy).
- * Verifica invariantes y comportamiento de {entity_name} sin dependencias externas.
- */
 class {entity_name}DomainTest {{
 
     @Test
-    @DisplayName("Debe instanciar correctamente la entidad de dominio con datos válidos")
+    @DisplayName("Debe instanciar la entidad correctamente cumpliendo invariantes de dominio")
     void shouldCreateValidEntity() {{
         {entity_name} entity = new {entity_name}(
             "item-001",
@@ -326,6 +322,53 @@ class {entity_name}DomainTest {{
 }}
 """
     (src_test_java / "domain" / f"{entity_name}DomainTest.java").write_text(domain_test_code, encoding="utf-8")
+
+    # 7.1. Property-Based Testing (1.000 Invariantes Pseudo-Aleatorias)
+    property_test_code = f"""package com.corp.{pkg_name}.domain;
+
+import com.corp.{pkg_name}.domain.model.{entity_name};
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+import java.util.Random;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+class {entity_name}PropertyBasedTest {{
+
+    @Test
+    @DisplayName("Property Test: Para todo valor >= 0 la entidad es inmutable y válida (1.000 iteraciones)")
+    void propertyTestValidValues() {{
+        Random rng = new Random(2026);
+        for (int i = 0; i < 1_000; i++) {{
+            double val = rng.nextDouble() * 100_000.0;
+            String id = "id-" + i;
+            String tenant = "tenant-" + (i % 10);
+            
+            {entity_name} entity = new {entity_name}(id, tenant, "Desc " + i, val, "ACTIVE", Instant.now());
+            assertThat(entity.id()).isEqualTo(id);
+            assertThat(entity.tenantId()).isEqualTo(tenant);
+            assertThat(entity.value()).isEqualTo(val);
+        }}
+    }}
+
+    @Test
+    @DisplayName("Property Test: Para todo valor < 0 se garantiza rechazo con IllegalArgumentException (1.000 iteraciones)")
+    void propertyTestNegativeValues() {{
+        Random rng = new Random(2026);
+        for (int i = 0; i < 1_000; i++) {{
+            double negVal = -(rng.nextDouble() * 10_000.0 + 0.001);
+            String id = "err-" + i;
+            
+            assertThatThrownBy(() -> new {entity_name}(id, "tenant-test", "Invalid", negVal, "ACTIVE", Instant.now()))
+                .isInstanceOf(IllegalArgumentException.class);
+        }}
+    }}
+}}
+"""
+    (src_test_java / "domain" / f"{entity_name}PropertyBasedTest.java").write_text(property_test_code, encoding="utf-8")
 
     # 8. Multi-Stage Dockerfile (Java 25 LTS / Distroless)
     dockerfile_content = f"""# syntax=docker/dockerfile:1.4

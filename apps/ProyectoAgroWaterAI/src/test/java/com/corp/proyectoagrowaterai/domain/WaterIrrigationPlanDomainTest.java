@@ -9,14 +9,10 @@ import java.time.Instant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Test de Dominio Puro (Zero-Mockito Policy).
- * Verifica invariantes y comportamiento de WaterIrrigationPlan sin dependencias externas.
- */
 class WaterIrrigationPlanDomainTest {
 
     @Test
-    @DisplayName("Debe instanciar correctamente la entidad de dominio con datos válidos")
+    @DisplayName("Debe instanciar la entidad correctamente cumpliendo invariantes de dominio")
     void shouldCreateValidEntity() {
         WaterIrrigationPlan entity = new WaterIrrigationPlan(
             "item-001",
