@@ -7,6 +7,7 @@ import os
 import json
 import time
 from datetime import datetime
+from contextlib import contextmanager
 
 DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DB_PATH = os.path.join(DB_DIR, "telemetry_history.db")
@@ -14,15 +15,22 @@ CONFIG_PATH = os.path.join(DB_DIR, "foxcloud_config.json")
 
 os.makedirs(DB_DIR, exist_ok=True)
 
+@contextmanager
 def get_db():
-    conn = sqlite3.connect(DB_PATH, timeout=10.0)
+    conn = sqlite3.connect(DB_PATH, timeout=15.0)
     conn.execute("PRAGMA journal_mode = WAL;")
     conn.execute("PRAGMA synchronous = NORMAL;")
     conn.execute("PRAGMA cache_size = -2000;")
     conn.execute("PRAGMA temp_store = MEMORY;")
     conn.execute("PRAGMA mmap_size = 30000000;")
     conn.row_factory = sqlite3.Row
-    return conn
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
 
 def init_db():
     with get_db() as conn:
@@ -150,6 +158,40 @@ def get_recent_history(limit=500):
         """, (limit,))
         rows = [dict(r) for r in cursor.fetchall()]
         return rows
+
+def get_today_hourly_telemetry(date_str=None):
+    """Devuelve la producción y consumos reales medidos agrupados por hora para el día en curso (0..23)"""
+    now = datetime.now()
+    if not date_str:
+        date_str = now.strftime('%Y-%m-%d')
+    current_hour = now.hour
+    current_minute = now.minute
+
+    with get_db() as conn:
+        cursor = conn.execute("""
+            SELECT 
+                CAST(SUBSTR(timestamp, 12, 2) AS INTEGER) as hour,
+                ROUND(AVG(solar_total_kw), 3) as avg_solar_kw,
+                ROUND(MAX(solar_total_kw), 3) as max_solar_kw,
+                ROUND(AVG(pv1_power_w) / 1000.0, 3) as avg_pv1_kw,
+                ROUND(AVG(pv2_power_w) / 1000.0, 3) as avg_pv2_kw,
+                ROUND(AVG(grid_ac_power_kw), 3) as avg_grid_kw,
+                ROUND(AVG(grid_ac_power_kw), 3) as avg_home_kw,
+                ROUND(AVG(battery_soc_percent), 1) as avg_battery_soc,
+                ROUND(AVG(inverter_temp_c), 1) as avg_inverter_temp,
+                COUNT(*) as sample_count
+            FROM inverter_telemetry_history
+            WHERE timestamp LIKE ?
+            GROUP BY CAST(SUBSTR(timestamp, 12, 2) AS INTEGER)
+            ORDER BY hour ASC
+        """, (f"{date_str}%",))
+        rows = [dict(r) for r in cursor.fetchall()]
+        return {
+            "date": date_str,
+            "current_hour": current_hour,
+            "current_minute": current_minute,
+            "hourly": rows
+        }
 
 def get_history_stats():
     """Devuelve estadísticas de la base de datos local"""

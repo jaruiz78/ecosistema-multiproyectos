@@ -1,0 +1,41 @@
+{
+  "name": "Solar Tocina | Planta Fotovoltaica & Gemelo Digital",
+  "short_name": "Solar Tocina",
+  "description": "Sistema Inteligente de Monitorización Solar, Baterías Fox-ESS y Gemelo Digital en Los Rosales - Tocina",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0284c7",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "En Vivo & Flujos",
+      "url": "/#tab-live",
+      "description": "Ver telemetría y flujos de potencia en tiempo real"
+    },
+    {
+      "name": "Pronóstico Solar",
+      "url": "/#tab-forecast",
+      "description": "Consultar previsión de 7 días y horas de hoy"
+    },
+    {
+      "name": "Histórico & Auditoría",
+      "url": "/#tab-analytics",
+      "description": "Auditoría de generación y autoconsumo"
+    }
+  ]
+}

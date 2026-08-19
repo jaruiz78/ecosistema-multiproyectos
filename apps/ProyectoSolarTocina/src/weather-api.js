@@ -98,6 +98,7 @@ export class WeatherApiClient {
 
     return {
       source: 'Open-Meteo Solar API (Live)',
+      cacheMeta: data._cache_meta || null,
       location: {
         name: 'Los Rosales - Tocina, Sevilla',
         address: 'Calle Amadeo Vives 31',

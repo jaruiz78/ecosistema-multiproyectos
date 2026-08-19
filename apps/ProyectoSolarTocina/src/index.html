@@ -5,9 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema Inteligente Fotovoltaico | Tocina - MultiProyectos AI</title>
   <meta name="description" content="Gemelo Digital Fotovoltaico con Asimilación Kalman EnKF, Optimizador MPC 24h, Arbitraje OMIE/PVPC, Indexación H3, Pasaporte Verde y Ruteo VE en Tocina (Sevilla).">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="stylesheet" href="./styles.css">
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Marked.js (Markdown) Local -->
+  <script src="./vendor/marked.min.js"></script>
+  <!-- KaTeX (LaTeX) Local -->
+  <link rel="stylesheet" href="./vendor/katex.min.css">
+  <script src="./vendor/katex.min.js"></script>
+  <!-- Mermaid (Flowcharts & Diagrams) Local -->
+  <script src="./vendor/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        themeVariables: {
+          darkMode: true,
+          background: '#0f172a',
+          primaryColor: '#1e293b',
+          primaryTextColor: '#f8fafc',
+          primaryBorderColor: '#38bdf8',
+          lineColor: '#60a5fa',
+          secondaryColor: '#10b981',
+          tertiaryColor: '#c084fc'
+        }
+      });
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -28,7 +58,19 @@
       </div>
       <div class="header-actions">
         <div class="live-time" id="current-time-label">Cargando fecha...</div>
-        <button id="refresh-btn" class="refresh-button" title="Actualizar datos meteorológicos">
+        <div class="meteo-sync-badge" id="meteo-sync-badge" title="Sincronización meteorológica Open-Meteo cada 3 horas (Automático)" style="display: flex; align-items: center; gap: 0.45rem; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 999px; padding: 0.35rem 0.75rem; font-size: 0.73rem; color: var(--text-secondary);">
+          <span style="color: #38bdf8;">📡 Meteo:</span>
+          <span id="meteo-last-sync-time" style="color: #f8fafc; font-weight: 700;">--:--</span>
+          <span style="color: #64748b;">•</span>
+          <span id="meteo-next-sync-time" style="color: #94a3b8;">Próx: --:-- (Auto)</span>
+        </div>
+        <button id="btn-kiosk-mode" class="refresh-button" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);" title="Pantalla completa para tablet de pared o TV">
+          🖥️ Modo Kiosko / Pared
+        </button>
+        <button id="btn-install-pwa" class="refresh-button" style="display: none; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);" title="Instalar como aplicación en tu móvil">
+          📲 Instalar App
+        </button>
+        <button id="refresh-btn" class="refresh-button" title="Forzar sincronización meteorológica manual ahora">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="23 4 23 10 17 10"></polyline>
             <polyline points="1 20 1 14 7 14"></polyline>
@@ -120,6 +162,9 @@
       <button class="master-tab-btn" data-target="tab-finance">
         <span>💶</span> <span>Facturas & Batería Virtual</span>
       </button>
+      <button class="master-tab-btn" data-target="tab-analytics">
+        <span>📊</span> <span>Histórico & Auditoría</span>
+      </button>
       <button class="master-tab-btn" data-target="tab-settings">
         <span>⚙️</span> <span>Sistema & Ajustes</span>
       </button>
@@ -141,6 +186,62 @@
         </div>
         <div class="power-flow-wrapper">
           <canvas id="powerFlowCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Semáforo Inteligente de Carga Omoda 7 SHS (100% Solar) -->
+      <section class="section-box" id="omoda-traffic-light-section" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9)); border: 1px solid rgba(56, 189, 248, 0.35); box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-top: 0.85rem; padding: 1rem 1.25rem;">
+        <div class="section-header" style="margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.3rem;">🚗</span>
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 800; margin: 0; color: #f8fafc;">Semáforo Inteligente de Carga • Omoda 7 SHS</h3>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Recomendación física y económica en tiempo real para carga 100% solar / excedente</div>
+            </div>
+          </div>
+          <div id="omoda-traffic-badge" class="badge-tag" style="font-size: 0.82rem; font-weight: 800; padding: 0.35rem 0.85rem; border-radius: 999px; background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444;">
+            🔴 NO RECOMENDADO CARGAR AHORA
+          </div>
+        </div>
+
+        <!-- Traffic Light Visual & Metrics Grid -->
+        <div style="display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: center;">
+          <!-- 3-Lamp Traffic Light Graphic -->
+          <div style="background: rgba(0, 0, 0, 0.6); padding: 0.6rem 0.5rem; border-radius: 20px; border: 2px solid #334155; display: flex; flex-direction: column; gap: 0.5rem; width: 44px; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);">
+            <div id="light-red" class="traffic-light-lamp red" style="width: 24px; height: 24px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 14px #ef4444; transition: all 0.3s ease;"></div>
+            <div id="light-amber" class="traffic-light-lamp amber" style="width: 24px; height: 24px; border-radius: 50%; background: #334155; opacity: 0.25; transition: all 0.3s ease;"></div>
+            <div id="light-green" class="traffic-light-lamp green" style="width: 24px; height: 24px; border-radius: 50%; background: #334155; opacity: 0.25; transition: all 0.3s ease;"></div>
+          </div>
+
+          <!-- Dynamic Info Content -->
+          <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+            <div style="font-size: 0.95rem; font-weight: 700; color: #f8fafc;" id="omoda-traffic-verdict-title">
+              Generación solar insuficiente en este instante
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;" id="omoda-traffic-verdict-desc">
+              Con la producción solar actual (0.2 kW) y la batería de la casa al 42%, enchufar el vehículo ahora consumiría de la red eléctrica pagando tarifa.
+            </div>
+
+            <!-- Live Micro-KPI Strip -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 0.25rem;">
+              <div style="background: rgba(0,0,0,0.35); padding: 0.45rem 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Excedente Solar Neto</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #38bdf8;" id="omoda-traffic-surplus-val">0.00 kW</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.35); padding: 0.45rem 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Fracción Solar Hoy</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #10b981;" id="omoda-traffic-solar-pct">0% Solar</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.35); padding: 0.45rem 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Potencia Aconsejada</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #fbbf24;" id="omoda-traffic-pwr-val">0.0 kW (Off)</div>
+              </div>
+              <div style="background: rgba(0,0,0,0.35); padding: 0.45rem 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Mejor Ventana Hoy</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: #c084fc;" id="omoda-traffic-window-val">11:30 - 16:30 h</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -353,12 +454,21 @@
           <canvas id="weekChart"></canvas>
         </div>
       </section>
+
+      <!-- MONITOR ÓPTICO DE LIMPIEZA & CALIMA -->
+      <div id="soiling-detector-container"></div>
     </div>
 
     <!-- ========================================== -->
     <!-- TAB 3: HOGAR & SIMULADOR "WHAT-IF"         -->
     <!-- ========================================== -->
     <div id="tab-home" class="master-tab-pane">
+      
+      <!-- CUADRO DE DIÁLOGO / ASISTENTE CONSULTOR SOLAR IA -->
+      <section id="solar-dialog-container" aria-label="Cuadro de Diálogo Consultor Solar IA">
+        <!-- Renderizado dinámico desde solar-dialog-assistant.js -->
+      </section>
+
       <!-- SIMULADOR "WHAT-IF" INTERACTIVO DE CONSUMOS DE VERANO -->
       <section class="section-box" aria-label="Simulador What-If de Electrodomésticos de Verano" style="border: 1px solid rgba(56, 189, 248, 0.35); box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);">
         <div class="section-header">
@@ -372,6 +482,11 @@
         <div id="whatif-simulator-container">
           <!-- Renderizado dinámico desde what-if-simulator.js -->
         </div>
+      </section>
+
+      <!-- OPTIMIZADOR TÉRMICO DAIKIN PRE-COOLING (MODELO RC) -->
+      <section id="thermal-precooling-container" aria-label="Optimizador Térmico Daikin Pre-cooling">
+        <!-- Renderizado dinámico desde thermal-precooling-engine.js -->
       </section>
 
       <!-- ASISTENTE DE ELECTRODOMÉSTICOS: ¿Cuándo es mejor poner qué? -->
@@ -391,6 +506,11 @@
     <!-- TAB 4: MOVILIDAD & VE OMODA 7 SHS          -->
     <!-- ========================================== -->
     <div id="tab-mobility" class="master-tab-pane">
+      <!-- SINCRONIZADOR DE RUTAS APPVIAJES -->
+      <section id="mobility-sync-container" aria-label="Sincronizador Rutas AppViajes">
+        <!-- Renderizado dinámico desde mobility-sync-appviajes.js -->
+      </section>
+
       <!-- PLANIFICADOR DE RUTAS Y MOVILIDAD OMODA 7 SHS -->
       <section class="section-box" aria-label="Planificador de Rutas Omoda 7 SHS">
         <div class="section-header">
@@ -601,12 +721,23 @@
           </p>
         </div>
       </section>
+
+      <!-- PASAPORTE DE ENERGÍA VERDE CRIPTOGRÁFICO -->
+      <section id="green-passport-crypto-container" aria-label="Pasaporte Verde Criptográfico">
+        <!-- Renderizado dinámico desde green-passport-crypto.js -->
+      </section>
     </div>
 
     <!-- ========================================== -->
     <!-- TAB 6: FACTURAS & BATERÍA VIRTUAL          -->
     <!-- ========================================== -->
     <div id="tab-finance" class="master-tab-pane">
+      
+      <!-- COMPARADOR DE CONTRATOS Y BATERÍA VIRTUAL -->
+      <section id="tariff-comparator-container" aria-label="Comparador de Contratos de la Luz">
+        <!-- Renderizado dinámico desde tariff-contract-comparator.js -->
+      </section>
+
       <!-- Facturas vs Ahorro Solar Box -->
       <section class="section-box" aria-label="Análisis Económico y Facturas">
         <div class="section-header">
@@ -835,9 +966,22 @@
             </p>
           </div>
 
+          <!-- ASISTENTE BOT DE TELEGRAM -->
+          <div id="telegram-bot-container"></div>
+
+          <!-- COPIAS DE SEGURIDAD & ARCHIVO SQLITE -->
+          <div id="backup-manager-container"></div>
+
         </div>
 
       </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: HISTÓRICO & AUDITORÍA ENERGÉTICA    -->
+    <!-- ========================================== -->
+    <div id="tab-analytics" class="master-tab-pane">
+      <div id="historical-analytics-container"></div>
     </div>
 
     <!-- Footer -->

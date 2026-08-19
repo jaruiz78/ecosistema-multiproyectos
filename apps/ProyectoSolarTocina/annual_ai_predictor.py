@@ -10,12 +10,35 @@ import json
 import sqlite3
 import math
 from datetime import datetime, timedelta, date
+from contextlib import contextmanager
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "weather_cache.db")
 TELEMETRY_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "telemetry_history.db")
 
+@contextmanager
+def get_telemetry_db():
+    conn = sqlite3.connect(TELEMETRY_DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+@contextmanager
+def get_weather_db():
+    conn = sqlite3.connect(DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
 def init_ai_prediction_schema():
-    with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+    with get_telemetry_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS ai_forecast_vs_actual (
                 date TEXT PRIMARY KEY,
@@ -63,7 +86,7 @@ class AnnualAiPredictor:
 
     def load_historical_hyperparameters(self):
         self.params = {}
-        with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+        with get_telemetry_db() as conn:
             cur = conn.cursor()
             cur.execute("SELECT param_key, param_value FROM ai_model_hyperparameters")
             for k, v in cur.fetchall():
@@ -78,7 +101,7 @@ class AnnualAiPredictor:
         monthly_forecast = []
         
         # Consultar medias históricas 2021-2026 por mes
-        with sqlite3.connect(DB_PATH) as conn:
+        with get_weather_db() as conn:
             cur = conn.cursor()
             cur.execute("""
                 SELECT 
@@ -212,7 +235,7 @@ class AnnualAiPredictor:
         
         # Obtener valores reales de hoy desde SQLite si no se pasan
         if today_solar_kwh is None:
-            with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+            with get_telemetry_db() as conn:
                 cur = conn.cursor()
                 cur.execute("""
                     SELECT 
@@ -243,7 +266,7 @@ class AnnualAiPredictor:
             self.params["soiling_factor"] = new_soiling
             
             # Guardar actualización
-            with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+            with get_telemetry_db() as conn:
                 conn.execute("""
                     UPDATE ai_model_hyperparameters 
                     SET param_value = ?, last_updated = ? 
@@ -252,7 +275,7 @@ class AnnualAiPredictor:
                 conn.commit()
 
         # Guardar en histórico de conciliación
-        with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+        with get_telemetry_db() as conn:
             conn.execute("""
                 INSERT OR REPLACE INTO ai_forecast_vs_actual 
                 (date, predicted_solar_kwh, actual_solar_kwh, predicted_home_kwh, actual_home_kwh, solar_error_pct, home_error_pct, ai_correction_factor, updated_at)
@@ -284,7 +307,7 @@ class AnnualAiPredictor:
 
     def get_accuracy_history(self, limit=30):
         """Devuelve el historial de conciliaciones pasadas (Predicho vs Real) para la UI"""
-        with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+        with get_telemetry_db() as conn:
             conn.row_factory = sqlite3.Row
             cur = conn.cursor()
             cur.execute("""

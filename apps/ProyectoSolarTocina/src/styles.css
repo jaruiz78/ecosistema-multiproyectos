@@ -870,8 +870,8 @@ footer {
 /* Master Navigation Tabs (Zero-Scroll Compartmentalization) */
 .master-nav-tabs {
   display: flex;
-  gap: 0.4rem;
-  overflow-x: auto;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   background: rgba(19, 29, 46, 0.92);
   padding: 0.4rem;
   border-radius: var(--radius-lg);
@@ -881,27 +881,26 @@ footer {
   top: 0.75rem;
   z-index: 100;
   backdrop-filter: blur(16px);
-  scrollbar-width: none;
-}
-
-.master-nav-tabs::-webkit-scrollbar {
-  display: none;
 }
 
 .master-tab-btn {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.6rem 1.05rem;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.65rem;
+  flex: 1 1 calc(12.5% - 0.35rem);
+  min-width: 130px;
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
 }
 
 .master-tab-btn:hover {

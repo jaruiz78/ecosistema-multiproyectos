@@ -15,13 +15,25 @@ import sqlite3
 import math
 import time
 from datetime import datetime, timezone
+from contextlib import contextmanager
 
 WORKSPACE_ROOT = "/home/jaruiz/Desarrollo"
 ECOSYSTEM_DB_PATH = os.path.join(WORKSPACE_ROOT, "simulations_telemetry.db")
 LOCAL_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "telemetry_history.db")
 
+@contextmanager
+def get_ecosystem_db():
+    conn = sqlite3.connect(ECOSYSTEM_DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
 def init_ecosystem_table():
-    with sqlite3.connect(ECOSYSTEM_DB_PATH) as conn:
+    with get_ecosystem_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS proyectosolartocina_simulations (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +65,7 @@ def sync_telemetry_to_ecosystem(samples_count=50):
     now = datetime.now(timezone.utc)
     epoch_base = int(now.timestamp())
     
-    with sqlite3.connect(ECOSYSTEM_DB_PATH) as conn:
+    with get_ecosystem_db() as conn:
         cursor = conn.cursor()
         for i in range(samples_count):
             epoch = epoch_base - (samples_count - i) * 60

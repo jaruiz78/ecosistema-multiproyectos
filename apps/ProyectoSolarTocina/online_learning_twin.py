@@ -16,11 +16,23 @@ import math
 import json
 import os
 from datetime import datetime, timezone
+from contextlib import contextmanager
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "telemetry_history.db")
 
+@contextmanager
+def get_db():
+    conn = sqlite3.connect(DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
 def init_learning_db():
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS system_learned_intelligence (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -106,7 +118,7 @@ class OnlineLearningTwin:
 
     def _persist_learning_record(self):
         summary = self.get_summary()
-        with sqlite3.connect(DB_PATH) as conn:
+        with get_db() as conn:
             conn.execute("""
                 INSERT INTO system_learned_intelligence
                 (soiling_factor, east_optical_yield, west_optical_yield, thermal_coeff_observed,

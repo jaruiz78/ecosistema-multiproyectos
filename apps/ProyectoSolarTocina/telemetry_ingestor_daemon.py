@@ -15,9 +15,32 @@ import os
 import json
 from collections import deque
 from datetime import datetime, date, timedelta
+from contextlib import contextmanager
 
 TELEMETRY_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "telemetry_history.db")
 SIM_TELEMETRY_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "data", "simulations_telemetry.db")
+
+@contextmanager
+def get_db():
+    conn = sqlite3.connect(TELEMETRY_DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+@contextmanager
+def get_sim_db():
+    conn = sqlite3.connect(SIM_TELEMETRY_DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
 
 class TelemetryIngestorDaemon:
     def __init__(self, max_buffer_size=120):
@@ -40,7 +63,7 @@ class TelemetryIngestorDaemon:
         if not samples_to_write:
             return 0
 
-        with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+        with get_db() as conn:
             cur = conn.cursor()
             cur.executemany("""
                 INSERT INTO inverter_telemetry_history (
@@ -73,7 +96,7 @@ class TelemetryIngestorDaemon:
         if target_date_str is None:
             target_date_str = (date.today() - timedelta(days=1)).isoformat()
             
-        with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+        with get_db() as conn:
             cur = conn.cursor()
             # Calcular energía solar real integrada (Riemann sum en horas)
             cur.execute("""
@@ -116,7 +139,7 @@ class TelemetryIngestorDaemon:
         # Inyectar nodo RAG en simulations_telemetry.db si existe
         if os.path.exists(SIM_TELEMETRY_DB_PATH):
             try:
-                with sqlite3.connect(SIM_TELEMETRY_DB_PATH) as sim_conn:
+                with get_sim_db() as sim_conn:
                     sim_conn.execute("""
                         CREATE TABLE IF NOT EXISTS inverter_daily_reconciliation_nodes (
                             date TEXT PRIMARY KEY,

@@ -6,11 +6,11 @@
 export class VirtualBatteryManager {
   constructor(config = {}) {
     this.config = {
-      feedInPriceEurKwh: config.feedInPriceEurKwh || 0.08, // Compensación excedentes
-      gridImportPriceEurKwh: config.gridImportPriceEurKwh || 0.12, // Compra media
-      fixedPowerCostMonthEur: config.fixedPowerCostMonthEur || 26.50, // Término de potencia 4.6 kW + contador + bono social
+      feedInPriceEurKwh: config.feedInPriceEurKwh || 0.072600, // Compensación excedentes Naturgy (0.06 €/kWh + IVA)
+      gridImportPriceEurKwh: config.gridImportPriceEurKwh || 0.093991, // Compra Valle Naturgy Noche Luz (con imp)
+      fixedPowerCostMonthEur: config.fixedPowerCostMonthEur || 32.40, // Término potencia 4.6 kW (P1+P2) + bono social
       ivaRate: 0.21,
-      ieeRate: 0.05113
+      ieeRate: 0.051127
     };
 
     // Perfil mensual de consumo histórico (kWh/mes) derivado de las 5 facturas reales

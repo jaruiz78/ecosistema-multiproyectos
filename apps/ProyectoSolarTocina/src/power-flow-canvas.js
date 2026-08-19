@@ -63,61 +63,61 @@ export class PowerFlowCanvas {
     this.nodes = {
       solar: {
         id: 'solar',
-        label: '☀️ Paneles Jinko',
+        label: '☀️ Paneles',
         sub: '10x 500W (5.0 kWp)',
         x: w * 0.16,
         y: h * 0.26,
-        radius: 34,
+        radius: 38,
         color: '#f59e0b',
         glow: 'rgba(245, 158, 11, 0.4)'
       },
       inverter: {
         id: 'inverter',
-        label: '⚡ Inversor Sunworks',
+        label: '⚡ Sunworks',
         sub: '10 kW Híbrido (KP10)',
         x: w * 0.50,
         y: h * 0.50,
-        radius: 40,
+        radius: 42,
         color: '#38bdf8',
         glow: 'rgba(56, 189, 248, 0.4)'
       },
       battery: {
         id: 'battery',
-        label: '🔋 Batería Fox-ESS',
+        label: '🔋 Fox-ESS',
         sub: 'EP5 HV (10.36 kWh)',
         x: w * 0.16,
         y: h * 0.74,
-        radius: 34,
+        radius: 38,
         color: '#c084fc',
         glow: 'rgba(192, 132, 252, 0.4)'
       },
       home: {
         id: 'home',
-        label: '🏠 Hogar (Verano)',
-        sub: 'Daikin, Midea, PCs',
+        label: '🏠 Vivienda',
+        sub: 'Daikin, Frigo, PCs',
         x: w * 0.84,
         y: h * 0.26,
-        radius: 34,
+        radius: 38,
         color: '#10b981',
         glow: 'rgba(16, 185, 129, 0.4)'
       },
       grid: {
         id: 'grid',
-        label: '🌐 Batería Virtual',
-        sub: 'Red Excedentes BV',
+        label: '🌐 Red (BV)',
+        sub: 'Batería Virtual',
         x: w * 0.84,
         y: h * 0.74,
-        radius: 34,
+        radius: 38,
         color: '#06b6d4',
         glow: 'rgba(6, 182, 212, 0.4)'
       },
       ev: {
         id: 'ev',
-        label: '🚗 Omoda 7 SHS',
+        label: '🚗 Omoda 7',
         sub: 'PHEV 18.7 kWh',
         x: w * 0.50,
         y: h * 0.90,
-        radius: 26,
+        radius: 30,
         color: '#ec4899',
         glow: 'rgba(236, 72, 153, 0.4)'
       }
@@ -160,18 +160,28 @@ export class PowerFlowCanvas {
     }
     if (telemetry.grid) {
       this.state.gridExportW = telemetry.grid.grid_export_w || 0;
-      this.state.homeLoadW = telemetry.grid.home_load_w || 850;
-      this.state.gridImportW = Math.max(0, this.state.homeLoadW - this.state.solarW);
+      this.state.gridImportW = telemetry.grid.grid_import_w || 0;
+      this.state.homeLoadW = telemetry.grid.home_load_w || 220;
     }
     if (telemetry.battery) {
-      this.state.batSoc = telemetry.battery.soc_percent || 100;
-      this.state.batVoltage = telemetry.battery.voltage_v || 192.0;
-      // Balance implícito de batería
-      const net = this.state.solarW - this.state.homeLoadW - this.state.gridExportW;
-      this.state.batPowerW = net;
+      this.state.batSoc = telemetry.battery.soc_percent !== undefined ? telemetry.battery.soc_percent : 42;
+      this.state.batVoltage = telemetry.battery.voltage_v || 196.0;
+      this.state.batPowerW = telemetry.battery.power_w !== undefined ? telemetry.battery.power_w : 0;
     }
     if (telemetry.inverter) {
-      this.state.invTemp = telemetry.inverter.temperature_c || 42.0;
+      this.state.invTemp = telemetry.inverter.temperature_c || 35.0;
+    }
+    if (telemetry.ev_status) {
+      this.state.evChargeW = telemetry.ev_status.is_charging ? (telemetry.ev_status.ev_power_w || 3000) : 0;
+      this.state.evSoc = telemetry.ev_status.current_soc_pct;
+      this.state.evKm = telemetry.ev_status.ev_range_km;
+      this.state.evIsCharging = telemetry.ev_status.is_charging;
+    } else if (telemetry.grid && telemetry.grid.home_load_w >= 1800) {
+      this.state.evChargeW = Math.max(0, telemetry.grid.home_load_w - 320);
+      this.state.evIsCharging = true;
+    } else {
+      this.state.evChargeW = 0;
+      this.state.evIsCharging = false;
     }
   }
 
@@ -220,9 +230,10 @@ export class PowerFlowCanvas {
     }
 
     // 3. Flujo Batería <-> Inversor
-    if (Math.abs(this.state.batPowerW) > 50) {
-      const isCharging = this.state.batPowerW > 0;
-      const speed = 0.4 + (Math.abs(this.state.batPowerW) / 3000) * 1.2;
+    if (Math.abs(this.state.batPowerW) > 30 || (this.state.homeLoadW > this.state.solarW && this.state.batSoc > 10)) {
+      const isCharging = this.state.solarW > this.state.homeLoadW;
+      const flowW = Math.abs(this.state.batPowerW) || Math.abs(this.state.homeLoadW - this.state.solarW);
+      const speed = 0.4 + (flowW / 3000) * 1.2;
       if (Math.random() < 0.4) {
         this.particles.push({
           from: isCharging ? this.nodes.inverter : this.nodes.battery,
@@ -317,18 +328,28 @@ export class PowerFlowCanvas {
   drawConnections() {
     const ctx = this.ctx;
     const pairs = [
-      [this.nodes.solar, this.nodes.inverter],
-      [this.nodes.inverter, this.nodes.battery],
-      [this.nodes.inverter, this.nodes.home],
-      [this.nodes.inverter, this.nodes.grid],
-      [this.nodes.inverter, this.nodes.ev]
+      [this.nodes.solar, this.nodes.inverter, this.state.solarW > 20],
+      [this.nodes.inverter, this.nodes.battery, Math.abs(this.state.batPowerW) > 30],
+      [this.nodes.inverter, this.nodes.home, this.state.homeLoadW > 20],
+      [this.nodes.inverter, this.nodes.grid, this.state.gridExportW > 50 || this.state.gridImportW > 50],
+      [this.nodes.inverter, this.nodes.ev, this.state.evChargeW > 100]
     ];
 
-    ctx.lineWidth = 2.5;
-    pairs.forEach(([from, to]) => {
+    pairs.forEach(([from, to, isActive]) => {
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-      ctx.setLineDash([4, 4]);
+      if (isActive && to === this.nodes.ev) {
+        ctx.lineWidth = 3.5;
+        ctx.strokeStyle = 'rgba(236, 72, 153, 0.85)'; // Neón rosa activo para Omoda 7
+        ctx.setLineDash([]);
+      } else if (isActive) {
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+        ctx.setLineDash([]);
+      } else {
+        ctx.lineWidth = 2.0;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.10)';
+        ctx.setLineDash([4, 4]);
+      }
       ctx.moveTo(from.x, from.y);
       ctx.lineTo(to.x, to.y);
       ctx.stroke();
@@ -360,6 +381,12 @@ export class PowerFlowCanvas {
       const node = this.nodes[key];
       const isHovered = this.hoveredNode && this.hoveredNode.id === node.id;
 
+      // Actualizar halo dinámico según estado activo
+      if (node.id === 'ev') {
+        const isCharging = this.state.evChargeW > 100;
+        node.glow = isCharging ? 'rgba(236, 72, 153, 0.85)' : 'rgba(236, 72, 153, 0.25)';
+      }
+
       ctx.save();
 
       // Halo resplandor
@@ -367,7 +394,7 @@ export class PowerFlowCanvas {
       ctx.arc(node.x, node.y, node.radius + (isHovered ? 6 : 2), 0, Math.PI * 2);
       ctx.fillStyle = node.glow;
       ctx.shadowColor = node.color;
-      ctx.shadowBlur = isHovered ? 20 : 12;
+      ctx.shadowBlur = isHovered ? 20 : (node.id === 'ev' && this.state.evChargeW > 100 ? 18 : 12);
       ctx.fill();
 
       // Círculo principal
@@ -375,7 +402,7 @@ export class PowerFlowCanvas {
       ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
       ctx.fillStyle = '#1e293b';
       ctx.strokeStyle = node.color;
-      ctx.lineWidth = isHovered ? 3 : 2;
+      ctx.lineWidth = isHovered || (node.id === 'ev' && this.state.evChargeW > 100) ? 3 : 2;
       ctx.fill();
       ctx.stroke();
 
@@ -389,10 +416,10 @@ export class PowerFlowCanvas {
       let dynamicVal = '';
       if (node.id === 'solar') dynamicVal = `${(this.state.solarW / 1000).toFixed(2)} kW`;
       if (node.id === 'inverter') dynamicVal = `${this.state.invTemp}°C • OK`;
-      if (node.id === 'battery') dynamicVal = `${this.state.batSoc}% (${this.state.batVoltage}V)`;
+      if (node.id === 'battery') dynamicVal = `${this.state.batSoc}% SoC`;
       if (node.id === 'home') dynamicVal = `${(this.state.homeLoadW / 1000).toFixed(2)} kW`;
-      if (node.id === 'grid') dynamicVal = this.state.gridExportW > 0 ? `+${(this.state.gridExportW / 1000).toFixed(2)} kW` : '0.0 kW';
-      if (node.id === 'ev') dynamicVal = this.state.evChargeW > 0 ? `${(this.state.evChargeW / 1000).toFixed(2)} kW` : '95 km EV';
+      if (node.id === 'grid') dynamicVal = this.state.gridExportW > 0 ? `+${(this.state.gridExportW / 1000).toFixed(2)} kW` : (this.state.gridImportW > 0 ? `-${(this.state.gridImportW / 1000).toFixed(2)} kW` : '0.0 kW');
+      if (node.id === 'ev') dynamicVal = this.state.evChargeW > 100 ? `+${(this.state.evChargeW / 1000).toFixed(2)} kW (${this.state.evSoc || 18}%)` : `${this.state.evSoc || 18}% SoC`;
 
       ctx.fillStyle = node.color;
       ctx.font = '800 10px monospace';

@@ -14,7 +14,8 @@ import time
 import threading
 from datetime import datetime
 
-from telemetry_db import save_telemetry_record, get_recent_history, get_history_stats
+from telemetry_db import save_telemetry_record, get_recent_history, get_history_stats, get_today_hourly_telemetry
+from historical_analytics_service import get_multidimensional_history
 from foxcloud_sync import save_foxcloud_credentials, get_foxcloud_credentials, sync_historical_gaps
 from weather_broker import (
     get_weather_forecast,
@@ -28,6 +29,10 @@ from pinn_solar_model import pinn_solar_engine
 from telemetry_ingestor_daemon import telemetry_daemon
 from litert_solar_kernel import litert_engine
 from duckdb_analytics_engine import duckdb_engine
+from telegram_bot_service import TelegramBotService
+from daikin_controller import DaikinController
+from soiling_detector import SoilingDetector
+from backup_manager import BackupManager
 
 PORT = 8526
 DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
@@ -63,44 +68,57 @@ def close_modbus_socket():
         _modbus_socket = None
 
 def read_inverter_modbus_telemetry():
-    """Lee registros de telemetría en tiempo real desde el inversor reutilizando socket persistente (Zero-Allocation)"""
+    """Lee registros de telemetría en tiempo real desde el inversor Sunworks KP10 / Fox-ESS"""
     with _modbus_socket_lock:
-        s = get_or_create_modbus_socket()
-        if not s:
-            return {
-                "online": False,
-                "ip": INVERTER_IP,
-                "error": "No connection to inverter Modbus TCP",
-                "timestamp": datetime.now().isoformat()
-            }
+        s = None
         try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(2.0)
+            s.connect((INVERTER_IP, INVERTER_PORT))
             req = struct.pack(">HHHBBHH", 1, 0, 6, INVERTER_UNIT_ID, 3, 31000, 30)
             s.sendall(req)
             resp = s.recv(1024)
+            s.close()
+            s = None
+
             if resp and len(resp) >= 9:
                 data = resp[9:]
-                regs = [struct.unpack(">H", data[i:i+2])[0] for i in range(0, len(data), 2)]
+                u_regs = [struct.unpack(">H", data[i:i+2])[0] for i in range(0, len(data), 2)]
+                s_regs = [struct.unpack(">h", data[i:i+2])[0] for i in range(0, len(data), 2)]
                 
-                pv1_v = regs[0] / 10.0
-                pv1_a = regs[1] / 10.0
-                pv1_w = regs[2]
+                pv1_v = u_regs[0] / 10.0
+                pv1_a = u_regs[1] / 10.0
+                pv1_w = float(u_regs[2])
                 
-                pv2_v = regs[3] / 10.0
-                pv2_a = regs[4] / 10.0
-                pv2_w = regs[5]
+                pv2_v = u_regs[3] / 10.0
+                pv2_a = u_regs[4] / 10.0
+                pv2_w = float(u_regs[5])
                 
-                grid_v = regs[6] / 10.0
-                grid_a = regs[7] / 10.0
-                ac_power_w = regs[8]
-                grid_hz = regs[9] / 100.0
+                solar_total_w = pv1_w + pv2_w
+                
+                grid_v = u_regs[6] / 10.0
+                grid_a = u_regs[7] / 10.0
+                ac_power_w = float(u_regs[8])
+                grid_hz = u_regs[9] / 100.0
 
-                # Registros del Smart Meter (Chint/Eastron)
-                grid_export_w = regs[14] if len(regs) > 14 else max(0, ac_power_w - 1000)
-                home_load_w = regs[16] if len(regs) > 16 else max(0, ac_power_w - grid_export_w)
+                # Registros del Smart Meter en Reg 31014 (Signed int16)
+                raw_meter_w = float(s_regs[14]) if len(s_regs) > 14 else 0.0
+                if raw_meter_w > 0:
+                    grid_export_w = raw_meter_w
+                    grid_import_w = 0.0
+                else:
+                    grid_export_w = 0.0
+                    grid_import_w = abs(raw_meter_w)
+
+                # Reg 31016: Consumo de la casa (Home Load Power)
+                home_load_w = float(u_regs[16]) if len(u_regs) > 16 else max(0.0, solar_total_w - grid_export_w + grid_import_w)
                 
-                bat_v = regs[20] / 10.0 if len(regs) > 20 else 0
-                bat_soc = regs[24] if len(regs) > 24 else 100
-                inv_temp = regs[23] / 10.0 if len(regs) > 23 else 0
+                # Baterías Fox-ESS EP5
+                bat_v = float(u_regs[20]) / 10.0 if len(u_regs) > 20 else 0.0
+                bat_a = float(s_regs[21]) / 10.0 if len(s_regs) > 21 else 0.0
+                bat_power_w = float(s_regs[22]) if len(s_regs) > 22 else 0.0
+                bat_soc = float(u_regs[24]) if len(u_regs) > 24 else 42.0
+                inv_temp = float(u_regs[18]) / 10.0 if len(u_regs) > 18 else 35.0
                 
                 return {
                     "online": True,
@@ -109,24 +127,51 @@ def read_inverter_modbus_telemetry():
                     "timestamp": datetime.now().isoformat(),
                     "pv1_east": { "voltage_v": pv1_v, "current_a": pv1_a, "power_w": pv1_w, "power_kw": round(pv1_w / 1000.0, 3) },
                     "pv2_west": { "voltage_v": pv2_v, "current_a": pv2_a, "power_w": pv2_w, "power_kw": round(pv2_w / 1000.0, 3) },
-                    "solar_total_w": pv1_w + pv2_w,
-                    "solar_total_kw": round((pv1_w + pv2_w) / 1000.0, 3),
+                    "solar_total_w": solar_total_w,
+                    "solar_total_kw": round(solar_total_w / 1000.0, 3),
                     "grid": { 
                         "voltage_v": grid_v, 
                         "current_a": grid_a, 
                         "ac_power_w": ac_power_w, 
                         "ac_power_kw": round(ac_power_w / 1000.0, 3), 
                         "freq_hz": grid_hz,
+                        "meter_power_w": raw_meter_w,
                         "grid_export_w": grid_export_w,
                         "grid_export_kw": round(grid_export_w / 1000.0, 3),
+                        "grid_import_w": grid_import_w,
+                        "grid_import_kw": round(grid_import_w / 1000.0, 3),
                         "home_load_w": home_load_w,
                         "home_load_kw": round(home_load_w / 1000.0, 3)
                     },
-                    "battery": { "voltage_v": bat_v, "soc_percent": bat_soc, "nominal_kwh": 10.36 },
+                    "battery": { 
+                        "voltage_v": bat_v, 
+                        "current_a": bat_a,
+                        "power_w": bat_power_w,
+                        "soc_percent": bat_soc, 
+                        "nominal_kwh": 10.36 
+                    },
                     "inverter": { "temperature_c": inv_temp }
                 }
+                try:
+                    from ev_smart_charge_tracker import ev_tracker
+                    inverter_cache_modbus["ev_status"] = ev_tracker.process_telemetry_sample(
+                        home_load_w, solar_total_w, bat_power_w, grid_import_w
+                    )
+                except Exception:
+                    pass
+                return inverter_cache_modbus
+            return {
+                "online": False,
+                "ip": INVERTER_IP,
+                "error": "Respuesta Modbus vacía o corta",
+                "timestamp": datetime.now().isoformat()
+            }
         except Exception as e:
-            close_modbus_socket()
+            if s:
+                try:
+                    s.close()
+                except Exception:
+                    pass
             return {
                 "online": False,
                 "ip": INVERTER_IP,
@@ -143,6 +188,19 @@ def set_active_sampling_interval(sec):
 
 def get_active_sampling_interval():
     return _active_sampling_interval
+
+daikin_controller = DaikinController(telemetry_getter=read_inverter_modbus_telemetry)
+soiling_detector = SoilingDetector()
+backup_manager = BackupManager()
+
+def get_forecast_summary_for_bot():
+    return {"kwh_day": 29.3, "kwh_clear": 32.08}
+
+telegram_bot = TelegramBotService(
+    telemetry_getter=read_inverter_modbus_telemetry,
+    forecast_getter=get_forecast_summary_for_bot
+)
+telegram_bot.start()
 
 def background_telemetry_recorder():
     """
@@ -161,6 +219,16 @@ def background_telemetry_recorder():
         try:
             telemetry = read_inverter_modbus_telemetry()
             if telemetry and telemetry.get("online"):
+                # Inferencia automática de carga de vehículo
+                home_w = telemetry.get("grid", {}).get("home_load_w", 0.0)
+                solar_w = telemetry.get("solar_total_w", 0.0)
+                bat_power_w = telemetry.get("battery", {}).get("power_w", 0.0)
+                grid_import_w = telemetry.get("grid", {}).get("grid_import_w", 0.0)
+                
+                from ev_smart_charge_tracker import ev_tracker
+                ev_status = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
+                telemetry["ev_status"] = ev_status
+
                 save_telemetry_record(telemetry, source="modbus_local")
                 learning_engine.update_with_sample(telemetry)
                 CustomHandler.broadcast_sse("telemetry", telemetry)
@@ -226,6 +294,9 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                     cls.sse_clients.remove(dead)
 
     def do_GET(self):
+        if self.path in ('/', ''):
+            self.path = '/index.html'
+
         if self.path == '/api/stream':
             self.send_response(200)
             self.send_header('Content-Type', 'text/event-stream')
@@ -255,6 +326,15 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
         elif self.path == '/api/telemetry':
             telemetry = read_inverter_modbus_telemetry()
+            try:
+                from ev_smart_charge_tracker import ev_tracker
+                home_w = telemetry.get("grid", {}).get("home_load_w", 0.0)
+                solar_w = telemetry.get("solar_total_w", 0.0)
+                bat_power_w = telemetry.get("battery", {}).get("power_w", 0.0)
+                grid_import_w = telemetry.get("grid", {}).get("grid_import_w", 0.0)
+                telemetry["ev_status"] = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
+            except Exception:
+                pass
             self._send_json(telemetry)
             return
 
@@ -268,9 +348,72 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json(history)
             return
 
+        elif self.path == '/api/history/today-hourly':
+            today_hourly = get_today_hourly_telemetry()
+            self._send_json(today_hourly)
+            return
+
+        elif self.path.startswith('/api/history/analytics'):
+            import urllib.parse
+            parsed = urllib.parse.urlparse(self.path)
+            query = urllib.parse.parse_qs(parsed.query)
+            granularity = query.get('granularity', ['month'])[0]
+            year = int(query.get('year', [datetime.now().year])[0])
+            month = int(query.get('month', [datetime.now().month])[0])
+            date_str = query.get('date', [datetime.now().strftime('%Y-%m-%d')])[0]
+
+            analytics = get_multidimensional_history(granularity=granularity, year=year, month=month, date_str=date_str)
+            self._send_json(analytics)
+            return
+
         elif self.path == '/api/history/stats':
             stats = get_history_stats()
             self._send_json(stats)
+            return
+
+        elif self.path == '/api/history/climate-backtest':
+            from historical_climate_backtest import fetch_and_compute_climate_backtest, DATA_PATH
+            import json, os
+            if os.path.exists(DATA_PATH):
+                with open(DATA_PATH, 'r', encoding='utf-8') as f:
+                    study = json.load(f)
+            else:
+                study = fetch_and_compute_climate_backtest()
+            self._send_json(study)
+            return
+
+        elif self.path == '/api/nilm/live-breakdown':
+            from nilm_disaggregator import disaggregate_home_load
+            data = read_inverter_modbus_telemetry()
+            load_w = data.get('grid', {}).get('home_load_kw', 0.23) * 1000.0
+            breakdown = disaggregate_home_load(load_w)
+            self._send_json(breakdown)
+            return
+
+        elif self.path == '/api/appliances/recent-tags':
+            from appliance_tagger_service import appliance_tagger
+            self._send_json({"events": appliance_tagger.get_recent_events()})
+            return
+
+        elif self.path == '/api/contracts/history':
+            from contract_tariff_engine import tariff_engine
+            self._send_json({"contracts": tariff_engine.get_all_contracts()})
+            return
+
+        elif self.path == '/api/contracts/active':
+            from contract_tariff_engine import tariff_engine
+            self._send_json({"active_contract": tariff_engine.get_active_contract()})
+            return
+
+        elif self.path == '/api/mobility/omoda7/status':
+            from ev_smart_charge_tracker import ev_tracker
+            data = read_inverter_modbus_telemetry()
+            home_w = data.get("grid", {}).get("home_load_w", 0.0)
+            solar_w = data.get("solar_total_w", 0.0)
+            bat_power_w = data.get("battery", {}).get("power_w", 0.0)
+            grid_import_w = data.get("grid", {}).get("grid_import_w", 0.0)
+            ev_status = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
+            self._send_json(ev_status)
             return
 
         elif self.path.startswith('/api/weather/forecast'):
@@ -468,6 +611,29 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
+        elif self.path == '/api/telegram/config':
+            self._send_json(telegram_bot.config)
+            return
+
+        elif self.path == '/api/daikin/status':
+            self._send_json(daikin_controller.get_full_system_status())
+            return
+
+        elif self.path == '/api/soiling/status':
+            try:
+                t = read_inverter_modbus_telemetry()
+                pv1_w = t.get('pv1_west', {}).get('power_w', 0) if 'pv1_west' in t else t.get('pv1_east', {}).get('power_w', 0)
+                pv2_w = t.get('pv2_east', {}).get('power_w', 0) if 'pv2_east' in t else t.get('pv2_west', {}).get('power_w', 0)
+                res = soiling_detector.analyze_strings(pv1_w, pv2_w)
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/backup/list':
+            self._send_json({"backups": backup_manager.list_backups()})
+            return
+
         return super().do_GET()
 
     def do_POST(self):
@@ -479,6 +645,91 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 sec = float(data.get('seconds', 15.0))
                 applied = set_active_sampling_interval(sec)
                 self._send_json({ "success": True, "applied_interval_seconds": applied })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/telegram/config':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                telegram_bot.save_config(data)
+                self._send_json({ "success": True, "config": telegram_bot.config })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/telegram/test':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8') if content_len > 0 else '{}'
+            try:
+                data = json.loads(body) if body else {}
+                chat_id = data.get('chat_id')
+                msg = (
+                    "🚀 <b>¡Prueba de Notificación Telegram Exitosa!</b>\n\n"
+                    "Tu asistente solar de Los Rosales (Tocina) está correctamente configurado y listo para enviarte resúmenes diarios, balance energético y alertas de excedente."
+                )
+                ok, err = telegram_bot.send_raw_telegram_message(msg, chat_id=chat_id)
+                self._send_json({ "success": ok, "message": err })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/daikin/scan':
+            try:
+                units = daikin_controller.scan_network_for_units()
+                self._send_json({ "found": units, "status": daikin_controller.get_full_system_status() })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/daikin/control':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                unit_id = data.get('unit_id', 'daikin_salon')
+                power_on = bool(data.get('power_on', True))
+                stemp = float(data.get('target_temp_c', 24.0))
+                mode = data.get('mode', 'cool')
+                ok, msg = daikin_controller.set_unit_control(unit_id, power_on, stemp, mode)
+                self._send_json({ "success": ok, "message": msg, "status": daikin_controller.get_full_system_status() })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/appliances/tag-event':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                text = data.get('text', '')
+                from appliance_tagger_service import appliance_tagger
+                appliance_tagger.telemetry_getter = read_inverter_modbus_telemetry
+                res = appliance_tagger.parse_and_process_instruction(text)
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({ "status": "error", "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/mobility/omoda7/set-soc':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                soc = float(data.get("soc_percent", 17.0))
+                from ev_smart_charge_tracker import ev_tracker
+                ev_tracker.set_start_soc(soc)
+                self._send_json({"status": "success", "new_soc_percent": soc})
+            except Exception as e:
+                self._send_json({"status": "error", "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/backup/create':
+            try:
+                ok, res = backup_manager.create_backup()
+                self._send_json({ "success": ok, "backup": res if ok else None, "error": res if not ok else None })
             except Exception as e:
                 self._send_json({ "success": False, "error": str(e) }, 500)
             return

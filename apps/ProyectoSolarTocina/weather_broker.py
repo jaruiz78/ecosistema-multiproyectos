@@ -15,13 +15,25 @@ import urllib.parse
 from datetime import datetime, timezone
 import threading
 import time
+from contextlib import contextmanager
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "weather_cache.db")
 CACHE_TTL_SECONDS = 1800  # 30 minutos
 
+@contextmanager
+def get_weather_db():
+    conn = sqlite3.connect(DB_PATH, timeout=15.0)
+    try:
+        yield conn
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
 def init_weather_db():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_weather_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS weather_forecast_cache (
                 cache_key TEXT PRIMARY KEY,
@@ -102,21 +114,23 @@ def get_weather_forecast(lat=37.5942, lon=-5.7397, days=7, force_refresh=False):
     now = datetime.now(timezone.utc)
     
     if not force_refresh:
-        with sqlite3.connect(DB_PATH) as conn:
+        with get_weather_db() as conn:
             cur = conn.cursor()
             cur.execute("""
-                SELECT payload_json, expires_at FROM weather_forecast_cache
+                SELECT payload_json, fetched_at, expires_at FROM weather_forecast_cache
                 WHERE cache_key = ?
             """, (cache_key,))
             row = cur.fetchone()
             if row:
-                payload_json, expires_at_str = row
+                payload_json, fetched_at_str, expires_at_str = row
                 expires_at = datetime.fromisoformat(expires_at_str)
                 if now < expires_at:
                     data = json.loads(payload_json)
                     data["_cache_meta"] = {
                         "cached": True,
                         "source": "Local SQLite Weather Broker (O(1))",
+                        "fetched_at": fetched_at_str,
+                        "expires_at": expires_at_str,
                         "expires_in_seconds": int((expires_at - now).total_seconds())
                     }
                     return data
@@ -127,7 +141,7 @@ def get_weather_forecast(lat=37.5942, lon=-5.7397, days=7, force_refresh=False):
         expires_at = datetime.fromtimestamp(now.timestamp() + CACHE_TTL_SECONDS, tz=timezone.utc)
         payload_str = json.dumps(data)
 
-        with sqlite3.connect(DB_PATH) as conn:
+        with get_weather_db() as conn:
             conn.execute("""
                 INSERT OR REPLACE INTO weather_forecast_cache
                 (cache_key, latitude, longitude, days, fetched_at, expires_at, payload_json)
@@ -153,14 +167,17 @@ def get_weather_forecast(lat=37.5942, lon=-5.7397, days=7, force_refresh=False):
 
         data["_cache_meta"] = {
             "cached": False,
-            "source": "Open-Meteo Live (Refreshed and Cached)",
+            "source": "Open-Meteo API (Live Sync)",
+            "fetched_at": now.isoformat(),
+            "expires_at": expires_at.isoformat(),
             "expires_in_seconds": CACHE_TTL_SECONDS
         }
+
         return data
 
     except Exception as e:
         # Fallback de emergencia a última caché conocida (aunque haya expirado)
-        with sqlite3.connect(DB_PATH) as conn:
+        with get_weather_db() as conn:
             cur = conn.cursor()
             cur.execute("""
                 SELECT payload_json FROM weather_forecast_cache
@@ -180,7 +197,7 @@ def get_weather_forecast(lat=37.5942, lon=-5.7397, days=7, force_refresh=False):
 
 def get_climate_historical_5yr_summary():
     """Devuelve estadísticas y series históricas anuales de los últimos 5 años (2021-2026)"""
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_weather_db() as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute("""
@@ -210,7 +227,7 @@ def get_climate_historical_5yr_summary():
 
 def get_monthly_climate_breakdown(year=None):
     """Devuelve el desglose climático mes a mes para entrenamiento IA y predicciones"""
-    with sqlite3.connect(DB_PATH) as conn:
+    with get_weather_db() as conn:
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         query = "SELECT * FROM v_monthly_climate_summary"
