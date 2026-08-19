@@ -385,3 +385,56 @@ python3 /home/jaruiz/Desarrollo/apps/ProyectoSolarTocina/valley_charge_scheduler
 # 6. Validar sintaxis de todos los componentes JavaScript
 node --check /home/jaruiz/Desarrollo/apps/ProyectoSolarTocina/src/*.js
 ```
+
+---
+
+## 14. Manual Bioclimático de Eficiencia Estacional, Gestión Pasiva de Persianas y Climatización Daikin
+
+La vivienda unifamiliar en **C/ Amadeo Vives 31, Tocina (Sevilla)** dispone de una orientación privilegiada Este-Oeste (**89° E en fachada principal a calle / 269° O en patio trasero**) que permite una gestión bioclimática de muy alta eficiencia combinando masa térmica, persianas exteriores y las 2 máquinas Daikin Inverter.
+
+```mermaid
+flowchart TD
+    subgraph Verano["☀️ Protocolo Verano (Mayo a Septiembre)"]
+        v1["07:00–08:30 h: Ventilación Matinal Rápida (Calle <-> Patio a 20–22 °C)"]
+        v2["08:30–13:30 h: Persianas Fachada Este al 80% (Bloqueo sol matinal)"]
+        v3["12:30–16:30 h: Pre-Cooling Solar Daikin a 22 °C (Coste 0.00 € con sol directo)"]
+        v4["14:00–21:00 h: Persianas Fachada Oeste al 90% (Protección radiación de tarde)"]
+        v5["23:00–07:30 h: Free-Cooling Nocturno Chimenea (Disipación forjados a coste 0)"]
+    end
+
+    subgraph Invierno["❄️ Protocolo Invierno (Noviembre a Febrero)"]
+        i1["09:30–13:30 h: Persianas Fachada Este al 100% Arriba (Captación solar pasiva +3.2 kWh)"]
+        i2["12:00–16:00 h: Pre-Heating Solar Daikin a 22.5 °C (COP ~4.2 y Lamas a 60° al suelo)"]
+        i3["14:00–14:15 h: Ventilación Higiénica Corta (Momento más cálido de 16–19 °C)"]
+        i4["18:30–09:00 h: Persianas al 100% Abajo en toda la casa (Cámara aislante -30% pérdidas)"]
+        i5["02:00–06:00 h: Carga Nocturna Valle P3 al 100% de Fox-ESS en días de temporal"]
+    end
+```
+
+### 14.1. Cronograma Diario de Persianas y Sombra según Azimut
+1. **Fachada Este (89° E - Calle Principal)**:
+   * **Verano**: Bajar persianas al **\(80\%\)** antes de las **08:30 h** para evitar que la radiación solar directa caliente los cristales y marcos. Subir al **\(100\%\)** a partir de las **22:30 h** para permitir el tiro de ventilación nocturna.
+   * **Invierno**: Subir persianas al **\(100\%\)** de **09:30 a 13:30 h** para que el sol bajo de invierno penetre profundamente en suelos y paredes, aportando hasta **\(+3{,}2\text{ kWh}\) térmicos gratuitos diarios**.
+2. **Fachada Oeste (269° O - Patio Trasero)**:
+   * **Verano**: Bajar persianas al **\(90\%\)** de **14:00 a 21:00 h** para repeler el sol abrasador de la tarde sevillana sobre la fachada del patio.
+   * **Invierno**: Subir persianas de **13:30 a 17:30 h** para captar las últimas horas de sol templado antes de la caída de la noche.
+
+---
+
+### 14.2. Estrategia de Climatización Inteligente Daikin (Salón 35 m² & Dormitorio 16 m²)
+* **Pre-Cooling Solar Estival (12:30 a 16:30 h)**:
+  * El inversor genera entre **\(3{,}0\text{ y }4{,}5\text{ kW}\)** en las horas centrales. 
+  * Activar los Daikin a **\(21\text{--}23\text{ °C}\)** con **\(100\%\) de energía solar directa a Coste \(0{,}00\text{ €}\)**. 
+  * Los forjados y muros absorben frigorías. A partir de las **18:00 h**, subir la consigna a **\(25{,}5\text{--}26\text{ °C}\)** en modo crucero (\(180\text{--}240\text{ W}\)) o usar ventiladores de techo (\(35\text{ W}\)), preservando la batería Fox-ESS intacta para la noche.
+* **Pre-Heating Solar Invernal (12:00 a 16:00 h)**:
+  * El coeficiente de rendimiento (\(\text{COP}\)) del Daikin alcanza su máximo (**\(\approx 4{,}2\)**) durante las horas más cálidas del día (\(16\text{--}18\text{ °C}\) exterior).
+  * Calentar la vivienda a **\(22{,}5\text{--}23\text{ °C}\)** a mediodía con energía solar directa.
+  * **Ajuste de Lamas Deflectoras**: Colocar las lamas apuntando **\(60\text{°}\) hacia el suelo** para contrarrestar la estratificación térmica del aire caliente. A las **18:30 h**, bajar la consigna a **\(20\text{ °C}\)**.
+
+---
+
+### 14.3. Desplazamiento de Cargas y Erradicación del Consumo Fantasma
+1. **Lavadora / Lavavajillas**: Programar siempre entre las **11:30 y las 14:30 h** para que el calentamiento del agua por resistencia (\(2.000\text{ W}\)) se cubra íntegramente con el pico de producción de los paneles solares.
+2. **Frigorífico**: Separar \(5\text{ cm}\) de la pared y ajustar consignas a **\(+4\text{ °C}\) en refrigerador y \(-18\text{ °C}\) en congelador** (ahorro del \(12\%\) en compresor).
+3. **Standby Basal**: Apagar zonas de teletrabajo de **23:00 a 07:30 h** mediante regletas con corte automático, reduciendo el consumo nocturno de \(200\text{ W}\) a \(85\text{ W}\) (**\(-1.000\text{ kWh/año}\)**).
+

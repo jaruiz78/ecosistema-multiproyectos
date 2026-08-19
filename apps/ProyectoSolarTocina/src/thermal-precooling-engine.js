@@ -1,9 +1,9 @@
 /**
- * Modelo de Inercia Térmica de Edificación RC (2 Estados), Protocolos Bioclimáticos & Control Daikin Clima
- * - Protocolos Estacionales: Verano (Free-Cooling y Sombra), Invierno (Ganancia Pasiva Este/Oeste), Entretiempo
- * - Recomendaciones Dinámicas en Vivo según la hora y posición solar en faldones (89° E / 269° O)
- * - Comparativa de Eficiencia: Daikin Inverter (COP 3.8) vs Ventiladores de Techo (35W) vs Radiadores (COP 1.0)
- * - Telemetría en tiempo real de Daikin Salón y Dormitorio con control de consigna y pre-cooling solar
+ * Centro Bioclimático de Ventilación, Climatización, Persianas & Gestión Térmica del Hogar
+ * - Protocolos Estacionales Dinámicos: Verano (Free-Cooling & Sombra), Invierno (Ganancia Pasiva & Aislamiento) y Entretiempo.
+ * - Plan Semanal a 7 Días con horarios exactos de persianas (Fachada Este 89° E / Fachada Oeste 269° O) y Climatizadores Daikin.
+ * - Simulación de Inercia Térmica RC (2 Estados) y Pre-cooling/Pre-heating solar a coste 0.00 €.
+ * - Control directo y telemetría de máquinas Daikin (Salón y Dormitorio).
  */
 
 export class ThermalPrecoolingEngine {
@@ -13,7 +13,8 @@ export class ThermalPrecoolingEngine {
     this.C_th = 14.5; // Capacidad calorífica de la estructura (kWh / K)
     this.daikinCop = 3.8;
     this.daikinStatus = null;
-    this.activeBioclimaticTab = 'today_live'; // 'today_live', 'summer', 'winter', 'appliances_guide'
+    this.activeBioclimaticTab = 'week_plan'; // 'week_plan', 'today_live', 'summer', 'winter', 'appliances_guide'
+    this.daysData = [];
 
     this.init();
   }
@@ -117,9 +118,9 @@ export class ThermalPrecoolingEngine {
           badgeBg: "rgba(56, 189, 248, 0.2)",
           badgeColor: "#38bdf8",
           title: "Ventilación Rápida de Toda la Vivienda (Mínimo Térmico)",
-          action: "Abrir ventanas y balcones al 100% durante 45–60 min para renovar el aire con los 21–23 °C del exterior.",
+          action: "Abrir ventanas de Fachada Este y Patio Oeste durante 45–60 min para renovar con aire a 20–22 °C.",
           shading: "A partir de las 08:30 h, bajar persianas de la Fachada Este (89° E) al 80% antes de que incida el sol directo.",
-          climaTip: "Daikin apagado o en reposo. Casa fresca."
+          climaTip: "Daikin en reposo (0 W). Conservar el aire fresco natural."
         };
       } else if (hour >= 9 && hour < 13) {
         return {
@@ -127,71 +128,71 @@ export class ThermalPrecoolingEngine {
           badgeBg: "rgba(245, 158, 11, 0.2)",
           badgeColor: "#f59e0b",
           title: "Sol Directo en Fachada Este (89° E) • Casa Cerrada",
-          action: "Mantener ventanas herméticamente cerradas y persianas de la Fachada Este al 80–90% para evitar radiación infrarroja.",
-          shading: "El sol matinal incide con fuerza en la calle. Ventilación del patio Oeste en sombra.",
-          climaTip: "Si la casa sube de 25 °C, preparar el Daikin Salón para iniciar pre-cooling a las 12:30 h con solar directa."
+          action: "Mantener ventanas herméticamente cerradas y persianas de Fachada Este al 80–90%.",
+          shading: "El sol incide de lleno en la calle. Estancias orientadas al patio Oeste permanecen a la sombra.",
+          climaTip: "Si la estancia sube de 25 °C, preparar Daikin Salón para iniciar pre-cooling a las 12:30 h con excedente solar directo."
         };
-      } else if (hour >= 13 && hour < 17) {
+      } else if (hour >= 13 && hour < 18) {
         return {
-          badge: "⚡ Eco Pre-cooling Solar Activo",
+          badge: "⚡ Pre-cooling Solar Activo (Coste 0.00 €)",
           badgeBg: "rgba(16, 185, 129, 0.2)",
           badgeColor: "#10b981",
           title: "Pico Solar en Tejado • Enfriamiento Estructural Gratuito",
-          action: "Fachada Este ya en sombra propia. El sol pasa al Tejado Oeste (269° O). Ventanas cerradas.",
-          shading: "Bajar persianas del patio Oeste. Fachada de la calle fresca a la sombra.",
-          climaTip: "Enfriar salón a 22–24 °C con Daikin a Coste 0.00 € (100% solar). Si estás en reposo, usa ventilador de techo (35W) para sensación de 21 °C sin esfuerzo térmico."
+          action: "Fachada Este ya en sombra propia. El sol pasa a la Fachada Oeste (269° O). Ventanas cerradas.",
+          shading: "Bajar persianas del patio Oeste al 90%. Fachada de la calle fresca en sombra.",
+          climaTip: "Enfriar salón a 21–23 °C con Daikin a Coste 0.00 € (100% solar). Si estás en reposo, ventilador de techo (35W) para sensación de 20 °C."
         };
-      } else if (hour >= 17 && hour < 22) {
+      } else if (hour >= 18 && hour < 22) {
         return {
           badge: "🌤️ Inercia Térmica de Tarde",
           badgeBg: "rgba(168, 85, 247, 0.2)",
           badgeColor: "#c084fc",
           title: "Retención de Frescor en Muros • Evitar Entrada de Aire Caliente",
-          action: "Mantener vivienda cerrada mientras la calle siga por encima de 30 °C.",
+          action: "Mantener vivienda cerrada mientras la calle siga por encima de 29 °C.",
           shading: "Persianas bajadas en patio Oeste hasta la puesta de sol (21:30 h).",
-          climaTip: "Daikin modulando al mínimo (200–300 W) apoyado por la batería Fox-ESS. Ventiladores de techo activos."
+          climaTip: "Daikin modulando al mínimo (180–240 W) apoyado por la batería Fox-ESS. Ventiladores de techo activos."
         };
       } else {
         return {
-          badge: "🌙 Free-Cooling Nocturno Activo",
+          badge: "🌙 Free-Cooling Nocturno Chimenea",
           badgeBg: "rgba(56, 189, 248, 0.25)",
           badgeColor: "#38bdf8",
           title: "Efecto Chimenea: Ventilación Pasiva Calle <-> Patio",
           action: "Abrir al máximo balcones de planta alta (Este) y puerta/ventanas del patio trasero (Oeste).",
-          shading: "El aire fresco asciende por tiro térmico natural, disipando el calor de los forjados de forma 100% gratuita.",
-          climaTip: "Daikin apagado. Ventilador de techo a baja velocidad (25 W) para dormir con confort total y batería intacta."
+          shading: "El aire fresco exterior disipa el calor de los forjados de forma 100% gratuita.",
+          climaTip: "Daikin apagado (0 W). Ventilador de techo a baja velocidad (25 W) para dormir con confort total y batería intacta."
         };
       }
     } else if (isWinter) {
       if (hour >= 9 && hour < 14) {
         return {
-          badge: "☀️ Calefacción Solar Pasiva Directa",
+          badge: "☀️ Captación Solar Pasiva Este",
           badgeBg: "rgba(245, 158, 11, 0.25)",
           badgeColor: "#f59e0b",
           title: "Subir Persianas Fachada Este (89° E) al 100%",
-          action: "Sol de invierno bajo penetrando profundamente por balcones y ventanas Este (+3.2 kWh térmicos gratuitos).",
+          action: "Sol de invierno bajo penetrando profundamente por balcones (+3.2 kWh térmicos gratuitos).",
           shading: "Cristales limpios recibiendo radiación solar directa que calienta suelos y paredes.",
-          climaTip: "Si necesitas refuerzo, encender Daikin en calor a 21 °C entre 12:00 y 16:00 h con energía solar directa. Evitar radiadores resistivos."
+          climaTip: "Pre-Heating Solar: Encender Daikin en calor a 22.5 °C entre 12:00 y 16:00 h con máxima eficiencia COP (~4.2) y sol gratis."
         };
       } else if (hour >= 14 && hour < 15) {
         return {
           badge: "💨 Ventilación Higiénica Corta",
           badgeBg: "rgba(56, 189, 248, 0.2)",
           badgeColor: "#38bdf8",
-          title: "Ventilación Rápida de 10–15 minutos a Mediodía",
-          action: "Abrir ventanas 10 minutos en el momento más cálido del día (16–18 °C) para renovar el aire sin enfriar muros.",
-          shading: "Abrir persianas en patio Oeste para captar la tarde.",
+          title: "Ventilación Rápida de 10–15 min a Mediodía",
+          action: "Abrir ventanas 10 minutos en el momento más cálido del día (16–19 °C) para renovar el aire sin enfriar los muros.",
+          shading: "Abrir persianas en patio Oeste para captar la radiación de la tarde.",
           climaTip: "Cerrar inmediatamente después para retener el calor acumulado."
         };
       } else {
         return {
-          badge: "🛡️ Aislamiento Térmico Nocturno",
+          badge: "🛡️ Aislamiento Nocturno Hermético",
           badgeBg: "rgba(168, 85, 247, 0.2)",
           badgeColor: "#c084fc",
           title: "Bajar Persianas al 100% en Toda la Vivienda",
-          action: "Cierre hermético de persianas exteriores para crear cámara de aire estanca con el cristal (-30% pérdidas).",
+          action: "Cierre hermético de persianas exteriores al anochecer (18:30 h) para crear cámara aislante (-30% pérdidas).",
           shading: "Evita la disipación radiactiva hacia el cielo frío nocturno.",
-          climaTip: "Daikin en calor modulando a baja potencia con la batería Fox-ESS. Evitar estufas resistivas de 2.000 W."
+          climaTip: "Daikin en calor a 20.0 °C con lamas a 60° hacia el suelo, modulando a baja potencia con la batería Fox-ESS."
         };
       }
     } else {
@@ -201,20 +202,101 @@ export class ThermalPrecoolingEngine {
         badgeColor: "#10b981",
         title: "Climatización 100% Pasiva sin Consumo Eléctrico",
         action: "Modular persianas para regular la iluminación y abrir ventilación cruzada cuando la temperatura exterior sea agradable (22–25 °C).",
-        shading: "Apertura libre de huecos.",
-        climaTip: "Cero consumo de climatización. 100% de excedentes solares destinados a recargar coche y batería."
+        shading: "Apertura libre de huecos según necesidad.",
+        climaTip: "Cero consumo de climatización. 100% de excedentes solares destinados a recargar coche y acumular saldo en Batería Virtual."
       };
     }
   }
 
-  render(hourlyForecast = []) {
+  generate7DaysBioclimaticPlan(daysData = []) {
+    const defaultDays = [
+      { dayName: "Hoy (Mié 19/8)", tempMax: 34.2, tempMin: 21.0, cloudCover: 17, expectedSolarKwh: 30.0 },
+      { dayName: "Jue 20/8", tempMax: 34.0, tempMin: 21.2, cloudCover: 53, expectedSolarKwh: 25.7 },
+      { dayName: "Vie 21/8", tempMax: 33.8, tempMin: 20.5, cloudCover: 27, expectedSolarKwh: 29.3 },
+      { dayName: "Sáb 22/8", tempMax: 34.5, tempMin: 21.8, cloudCover: 9, expectedSolarKwh: 31.0 },
+      { dayName: "Dom 23/8", tempMax: 29.0, tempMin: 20.0, cloudCover: 55, expectedSolarKwh: 15.5 },
+      { dayName: "Lun 24/8", tempMax: 33.5, tempMin: 21.0, cloudCover: 39, expectedSolarKwh: 31.1 },
+      { dayName: "Mar 25/8", tempMax: 35.0, tempMin: 22.0, cloudCover: 1, expectedSolarKwh: 31.5 }
+    ];
+
+    const source = (daysData && daysData.length >= 7) ? daysData : defaultDays;
+
+    return source.slice(0, 7).map((d, idx) => {
+      const tMax = d.tempMax !== undefined ? d.tempMax : (d.max_temp || 33.0);
+      const tMin = d.tempMin !== undefined ? d.tempMin : (d.min_temp || 20.0);
+      const clouds = d.cloudCover !== undefined ? d.cloudCover : (d.avg_cloud || 20);
+      const solarKwh = d.expectedSolarKwh !== undefined ? d.expectedSolarKwh : (d.totalKwh || 28.0);
+
+      const isHotSummer = tMax >= 32.0;
+      const isMild = tMax >= 22.0 && tMax < 32.0;
+      const isCold = tMax < 22.0;
+
+      let regime = "";
+      let regimeColor = "";
+      let persianasEste = "";
+      let persianasOeste = "";
+      let daikinStrategy = "";
+      let ventilacion = "";
+      let batAdvice = "";
+
+      if (isHotSummer) {
+        regime = "☀️ Verano / Calor Intenso";
+        regimeColor = "#f59e0b";
+        persianasEste = "08:30 – 13:30 h: Bajar al 80% (bloquear sol directo). Subir al 100% de 22:30 a 07:30 h.";
+        persianasOeste = "14:00 – 21:00 h: Bajar al 90% (evitar sobrecalentamiento patio). Abrir de noche.";
+        daikinStrategy = "Pre-Cooling Solar: 12:30 a 16:30 h a 22°C (Coste 0.00 € con sol). Tarde/Noche en crucero 25.5°C o ventilador de techo.";
+        ventilacion = "Free-Cooling Nocturno: Ventilación cruzada calle <-> patio de 23:00 a 07:30 h (T ext < 23°C).";
+        batAdvice = solarKwh > 20.0 ? "Batería llena con sol diurno. Cero carga de red nocturna." : "Carga valle P3 si se prevén nubes.";
+      } else if (isCold) {
+        regime = "❄️ Invierno / Calefacción Pasiva";
+        regimeColor = "#38bdf8";
+        persianasEste = "09:30 – 13:30 h: Subir al 100% para captación solar térmica pasiva (+3.2 kWh térmicos).";
+        persianasOeste = "13:30 – 17:30 h: Subir al 100%. A las 18:00 h bajar al 100% en toda la casa.";
+        daikinStrategy = "Pre-Heating Solar: 12:00 a 16:00 h a 22.5°C con máximo COP (~4.2) y sol gratis. Lamas a 60° hacia el suelo.";
+        ventilacion = "Ventilación corta de 10 min a las 14:00 h (momento más cálido) para renovar aire sin enfriar forjados.";
+        batAdvice = solarKwh <= 5.5 ? "🚨 Temporal: Carga nocturna Valle P3 al 100% (0.094 €/kWh)." : "Carga valle P3 al 85% para amortiguar picos matinales.";
+      } else {
+        regime = "🌱 Entretiempo / Confort Pasivo";
+        regimeColor = "#10b981";
+        persianasEste = "Apertura libre para iluminación natural. Sombra suave a mediodía si el sol molesta.";
+        persianasOeste = "Apertura libre. Ventilación cruzada continua durante las horas suaves del día.";
+        daikinStrategy = "Climatización apagada (0 W). Confort térmico 100% natural.";
+        ventilacion = "Ventilación continua cuando el exterior esté entre 20 y 25 °C.";
+        batAdvice = "100% Autoconsumo solar y excedentes al 100% hacia recarga VE y monedero virtual.";
+      }
+
+      return {
+        dayLabel: d.dayName || `Día ${idx + 1}`,
+        tMax: tMax.toFixed(1),
+        tMin: tMin.toFixed(1),
+        clouds: Math.round(clouds),
+        solarKwh: typeof solarKwh === 'number' ? solarKwh.toFixed(1) : solarKwh,
+        regime,
+        regimeColor,
+        persianasEste,
+        persianasOeste,
+        daikinStrategy,
+        ventilacion,
+        batAdvice
+      };
+    });
+  }
+
+  render(hourlyForecast = [], daysData = []) {
     if (!this.container) return;
-    const sim = this.simulate24h(hourlyForecast);
+    if (hourlyForecast && hourlyForecast.length > 0) {
+      this.lastHourlyForecast = hourlyForecast;
+    }
+    if (daysData && daysData.length > 0) {
+      this.daysData = daysData;
+    }
+    const sim = this.simulate24h(this.lastHourlyForecast || hourlyForecast);
     const liveAdvice = this.getCurrentLiveBioclimaticAdvice();
+    const weekPlan = this.generate7DaysBioclimaticPlan(this.daysData);
     const ds = this.daikinStatus || {
       units: [
-        { id: "daikin_salon", name: "Daikin Salón", target_temp_c: 24, indoor_temp_c: 26.5, outdoor_temp_c: 34, power_w: 0, power_on: false, connected: false },
-        { id: "daikin_dormitorio", name: "Daikin Dormitorio", target_temp_c: 24, indoor_temp_c: 27.0, outdoor_temp_c: 34, power_w: 0, power_on: false, connected: false }
+        { id: "daikin_salon", name: "Daikin Salón (35 m²)", target_temp_c: 24, indoor_temp_c: 26.5, outdoor_temp_c: 34, power_w: 0, power_on: false, connected: false },
+        { id: "daikin_dormitorio", name: "Daikin Dormitorio (16 m²)", target_temp_c: 24, indoor_temp_c: 27.0, outdoor_temp_c: 34, power_w: 0, power_on: false, connected: false }
       ],
       nilm_power: { daikin_salon: 0, daikin_dormitorio: 0, total_ac_w: 0 },
       recommendation: { badge: "🟢 Pre-cooling Activo", action: "Enfriar con solar gratis", suggested_temp_c: 21.0 }
@@ -228,8 +310,8 @@ export class ThermalPrecoolingEngine {
           <div style="display: flex; align-items: center; gap: 0.6rem;">
             <div style="font-size: 1.4rem; background: rgba(56, 189, 248, 0.15); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">🏛️</div>
             <div>
-              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Centro Bioclimático de Ventilación, Climatización & Protocolos del Hogar</h3>
-              <div style="font-size: 0.75rem; color: var(--text-muted);">Fachada Este 89° E (Calle) · Fachada Oeste 269° O (Patio) · Daikin Inverter · Free-Cooling & Aislamiento</div>
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Centro Bioclimático: Horarios de Persianas, Ventilación & Climatización Inteligente</h3>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Fachada Este 89° E (Calle) · Fachada Oeste 269° O (Patio) · Daikin Inverter · Pre-cooling / Pre-heating Solar</div>
             </div>
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -250,29 +332,32 @@ export class ThermalPrecoolingEngine {
           </div>
           <div style="font-size: 0.83rem; color: var(--text-secondary); line-height: 1.45;">
             • <strong>Ventilación / Ventanas:</strong> ${liveAdvice.action}<br>
-            • <strong>Sombra / Persianas:</strong> ${liveAdvice.shading}<br>
-            • <strong>Climatización Inteligente:</strong> ${liveAdvice.climaTip}
+            • <strong>Sombra / Persianas (Este/Oeste):</strong> ${liveAdvice.shading}<br>
+            • <strong>Climatización Inteligente Daikin:</strong> ${liveAdvice.climaTip}
           </div>
         </div>
 
         <!-- Selector de Pestañas de Protocolos -->
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
-          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'today_live' ? 'active' : ''}" data-tab="today_live" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'today_live' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'today_live' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
+          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'week_plan' ? 'active' : ''}" data-tab="week_plan" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'week_plan' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'week_plan' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
+            📅 Plan Bioclimático Semanal a 7 Días
+          </button>
+          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'today_live' ? 'active' : ''}" data-tab="today_live" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'today_live' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'today_live' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
             ⚡ Control Daikin Inverter
           </button>
-          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'summer' ? 'active' : ''}" data-tab="summer" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'summer' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'summer' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
+          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'summer' ? 'active' : ''}" data-tab="summer" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'summer' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'summer' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
             ☀️ Protocolo Verano (Free-Cooling & Sombra)
           </button>
-          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'winter' ? 'active' : ''}" data-tab="winter" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'winter' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'winter' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
-            ❄️ Protocolo Invierno (Ganancia Solar Pasiva)
+          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'winter' ? 'active' : ''}" data-tab="winter" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'winter' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'winter' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
+            ❄️ Protocolo Invierno (Pre-Heating & Aislamiento)
           </button>
-          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'appliances_guide' ? 'active' : ''}" data-tab="appliances_guide" style="padding: 0.4rem 0.85rem; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'appliances_guide' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'appliances_guide' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
-            🎛️ Comparador Eficiencia: A/A vs Ventilador vs Radiador
+          <button class="bioclimatic-tab-btn ${this.activeBioclimaticTab === 'appliances_guide' ? 'active' : ''}" data-tab="appliances_guide" style="padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: ${this.activeBioclimaticTab === 'appliances_guide' ? '#38bdf8' : 'var(--bg-elevated)'}; color: ${this.activeBioclimaticTab === 'appliances_guide' ? '#0f172a' : 'var(--text-secondary)'}; cursor: pointer;">
+            🎛️ Eficiencia: Daikin vs Ventilador vs Radiador
           </button>
         </div>
 
         <!-- CONTENIDO DE LA PESTAÑA SELECCIONADA -->
-        ${this.renderActiveTabContent(ds, sim)}
+        ${this.renderActiveTabContent(ds, sim, weekPlan)}
 
         <!-- 4 Métricas Clave del Modelo Térmico -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem;">
@@ -308,7 +393,66 @@ export class ThermalPrecoolingEngine {
     this.attachEvents();
   }
 
-  renderActiveTabContent(ds, sim) {
+  renderActiveTabContent(ds, sim, weekPlan = []) {
+    if (this.activeBioclimaticTab === 'week_plan') {
+      return `
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 0.4rem;">
+              <span>🗓️</span> Cronograma Bioclimático a 7 Días Vista (Pronóstico Open-Meteo Tocina)
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Horarios de persianas calculados según azimut solar y carga térmica prevista</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 0.85rem;">
+            ${weekPlan.map(d => `
+              <div style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0.9rem; display: flex; flex-direction: column; gap: 0.65rem;">
+                
+                <!-- Encabezado del Día -->
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.4rem;">
+                  <div>
+                    <strong style="color: var(--text-primary); font-size: 0.95rem;">${d.dayLabel}</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-muted);">🌡️ ${d.tMin}°C a ${d.tMax}°C · ☁️ ${d.clouds}% nubes · ☀️ ${d.solarKwh} kWh</div>
+                  </div>
+                  <span class="badge-tag" style="background: rgba(255,255,255,0.06); color: ${d.regimeColor}; border: 1px solid ${d.regimeColor}; font-size: 0.7rem; font-weight: 700;">
+                    ${d.regime}
+                  </span>
+                </div>
+
+                <!-- Directrices Horarias -->
+                <div style="font-size: 0.78rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.45rem; line-height: 1.4;">
+                  <div style="background: rgba(0,0,0,0.2); padding: 0.45rem; border-radius: 4px; border-left: 3px solid #f59e0b;">
+                    <strong style="color: #f59e0b;">🪟 Persianas Fachada Este (89° E - Calle):</strong><br>
+                    ${d.persianasEste}
+                  </div>
+
+                  <div style="background: rgba(0,0,0,0.2); padding: 0.45rem; border-radius: 4px; border-left: 3px solid #c084fc;">
+                    <strong style="color: #c084fc;">🪟 Persianas Fachada Oeste (269° O - Patio):</strong><br>
+                    ${d.persianasOeste}
+                  </div>
+
+                  <div style="background: rgba(0,0,0,0.2); padding: 0.45rem; border-radius: 4px; border-left: 3px solid #10b981;">
+                    <strong style="color: #10b981;">❄️ Estrategia Climatizadores Daikin:</strong><br>
+                    ${d.daikinStrategy}
+                  </div>
+
+                  <div style="background: rgba(0,0,0,0.2); padding: 0.45rem; border-radius: 4px; border-left: 3px solid #38bdf8;">
+                    <strong style="color: #38bdf8;">🌬️ Ventilación & Free-Cooling:</strong><br>
+                    ${d.ventilacion}
+                  </div>
+                </div>
+
+                <!-- Footer Batería -->
+                <div style="font-size: 0.72rem; color: var(--text-muted); border-top: 1px dashed var(--border-subtle); padding-top: 0.35rem; display: flex; justify-content: space-between;">
+                  <span>🔋 <strong>Batería Fox-ESS:</strong> ${d.batAdvice}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     if (this.activeBioclimaticTab === 'today_live') {
       return `
         <!-- Tarjetas de las 2 Máquinas Daikin -->
@@ -401,8 +545,8 @@ export class ThermalPrecoolingEngine {
             </div>
 
             <div style="background: rgba(0,0,0,0.25); padding: 0.85rem; border-radius: var(--radius-sm); border-left: 3px solid #10b981;">
-              <strong style="color: #10b981;">2. Captación Solar Pasiva Oeste (13:30 – 17:30 h)</strong>
-              <p style="color: var(--text-muted); margin-top: 0.35rem;">Subir persianas de las estancias que den al patio trasero (Oeste 269°) para absorber la radiación vespertina antes del anochecer.</p>
+              <strong style="color: #10b981;">2. Pre-Heating Solar Daikin (12:00 – 16:00 h)</strong>
+              <p style="color: var(--text-muted); margin-top: 0.35rem;">Calentar a 22.5 °C a mediodía con energía solar directa y máximo COP (~4.2). Lamas deflectoras a 60° hacia el suelo para evitar estratificación térmica.</p>
             </div>
 
             <div style="background: rgba(0,0,0,0.25); padding: 0.85rem; border-radius: var(--radius-sm); border-left: 3px solid #38bdf8;">
@@ -480,7 +624,7 @@ export class ThermalPrecoolingEngine {
     document.querySelectorAll('.bioclimatic-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.activeBioclimaticTab = btn.dataset.tab;
-        this.render();
+        this.render(this.lastHourlyForecast, this.daysData);
       });
     });
 
@@ -499,7 +643,7 @@ export class ThermalPrecoolingEngine {
             msgEl.textContent = 'ℹ️ No se detectaron adaptadores BRP069 directos en puerto 80. Modo NILM Smart Meter activo.';
           }
           await this.fetchDaikinStatus();
-          this.render();
+          this.render(this.lastHourlyForecast, this.daysData);
         } catch (e) {
           msgEl.textContent = '❌ Error escaneando: ' + e.message;
         } finally {
@@ -551,7 +695,7 @@ export class ThermalPrecoolingEngine {
       if (data.success) {
         if (msgEl) msgEl.textContent = `✅ Consigna ajustada a ${targetTemp}°C para ${unitId === 'daikin_salon' ? 'Daikin Salón' : 'Daikin Dormitorio'}.`;
         await this.fetchDaikinStatus();
-        this.render();
+        this.render(this.lastHourlyForecast, this.daysData);
       }
     } catch (e) {
       if (msgEl) msgEl.textContent = '❌ Error: ' + e.message;

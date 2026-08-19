@@ -992,7 +992,7 @@ class SolarApp {
   renderNewConsiliumModules() {
     const selectedDay = this.daysData[this.selectedDayIndex] || this.daysData[0];
     if (this.thermalPrecooling && selectedDay && selectedDay.hourly) {
-      this.thermalPrecooling.render(selectedDay.hourly);
+      this.thermalPrecooling.render(selectedDay.hourly, this.daysData);
     }
     if (this.tariffComparator) {
       this.tariffComparator.render();
