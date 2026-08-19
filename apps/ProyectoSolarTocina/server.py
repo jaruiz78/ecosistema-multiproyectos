@@ -240,6 +240,18 @@ def background_telemetry_recorder():
             if (now - last_compact_check).total_seconds() > 86400:
                 last_compact_check = now
                 compact_and_prune_history(retention_days=7)
+
+            # 3. Guardián de Despacho Automático Valle (Force Time Use / Self-Use)
+            try:
+                from valley_charge_scheduler import valley_scheduler
+                cfg = valley_scheduler.get_config()
+                if cfg.get("auto_enabled"):
+                    bat_soc = telemetry.get("battery", {}).get("soc_percent", 50.0) if telemetry else 50.0
+                    home_w = telemetry.get("grid", {}).get("home_load_w", 650.0) if telemetry else 650.0
+                    grid_w = telemetry.get("grid", {}).get("grid_import_w", 0.0) if telemetry else 0.0
+                    valley_scheduler.check_and_execute_auto_valley_dispatch(bat_soc, home_w, grid_w)
+            except Exception:
+                pass
         except Exception as e:
             pass
 
@@ -427,6 +439,45 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             grid_import_w = data.get("grid", {}).get("grid_import_w", 0.0)
             ev_status = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
             self._send_json(ev_status)
+            return
+
+        elif self.path == '/api/ai/retrain-twin':
+            from retrain_digital_twin import retrain_digital_twin_model
+            result = retrain_digital_twin_model()
+            self._send_json(result)
+            return
+
+        elif self.path == '/api/market/omie-today-tomorrow':
+            from omie_pvpc_broker import get_market_prices_today_tomorrow
+            prices = get_market_prices_today_tomorrow()
+            self._send_json(prices)
+            return
+
+        elif self.path == '/api/battery/soh-diagnostic':
+            from battery_health_soh_engine import battery_diagnostic_engine
+            diag = battery_diagnostic_engine.evaluate_system_health()
+            self._send_json(diag)
+            return
+
+        elif self.path.startswith('/api/finance/icp-optimizer'):
+            from icp_power_optimizer import analyze_contracted_power
+            res = analyze_contracted_power(4.60)
+            self._send_json(res)
+            return
+
+        elif self.path == '/api/battery/valley-charge-status':
+            from valley_charge_scheduler import valley_scheduler
+            res = valley_scheduler.evaluate_forecast_and_recommendation()
+            self._send_json(res)
+            return
+
+        elif self.path == '/api/battery/safety-guardian-live':
+            from valley_charge_scheduler import valley_scheduler
+            telemetry = read_inverter_modbus_telemetry()
+            home_w = telemetry.get('grid', {}).get('home_load_w', 650.0)
+            grid_import_w = telemetry.get('grid', {}).get('grid_import_w', 0.0)
+            guard = valley_scheduler.evaluate_live_safety_override(home_w, grid_import_w)
+            self._send_json(guard)
             return
 
         elif self.path.startswith('/api/weather/forecast'):
@@ -708,6 +759,38 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 mode = data.get('mode', 'cool')
                 ok, msg = daikin_controller.set_unit_control(unit_id, power_on, stemp, mode)
                 self._send_json({ "success": ok, "message": msg, "status": daikin_controller.get_full_system_status() })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/battery/valley-charge-config':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                from valley_charge_scheduler import valley_scheduler
+                cfg = valley_scheduler.update_config(
+                    auto_enabled=data.get('auto_enabled'),
+                    target_soc_pct=data.get('target_soc_pct'),
+                    start_hour=data.get('start_hour'),
+                    end_hour=data.get('end_hour'),
+                    charge_power_w=data.get('charge_power_w')
+                )
+                self._send_json({ "success": True, "config": cfg })
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/battery/valley-charge-execute':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8') if content_len > 0 else '{}'
+            try:
+                data = json.loads(body) if body else {}
+                from valley_charge_scheduler import valley_scheduler
+                mode = data.get('mode', 'force_time_use')
+                target_soc = int(data.get('target_soc_pct', 85))
+                res = valley_scheduler.execute_modbus_work_mode_switch(mode=mode, target_soc=target_soc)
+                self._send_json(res)
             except Exception as e:
                 self._send_json({ "success": False, "error": str(e) }, 500)
             return

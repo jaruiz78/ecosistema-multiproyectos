@@ -1,0 +1,37 @@
+{
+  "units": [
+    {
+      "id": "daikin_salon",
+      "name": "Daikin Salón",
+      "ip": "",
+      "port": 80,
+      "connected": false,
+      "power_on": true,
+      "target_temp_c": 24.0,
+      "indoor_temp_c": 26.5,
+      "outdoor_temp_c": 34.0,
+      "mode": "cool",
+      "power_w": 3798,
+      "protocol": "auto_detect"
+    },
+    {
+      "id": "daikin_dormitorio",
+      "name": "Daikin Dormitorio",
+      "ip": "",
+      "port": 80,
+      "connected": false,
+      "power_on": false,
+      "target_temp_c": 24.0,
+      "indoor_temp_c": 27.0,
+      "outdoor_temp_c": 34.0,
+      "mode": "cool",
+      "power_w": 2532,
+      "protocol": "auto_detect"
+    }
+  ],
+  "auto_precooling_enabled": true,
+  "precooling_min_surplus_kw": 2.0,
+  "precooling_min_battery_soc": 85,
+  "standby_base_load_w": 280,
+  "last_scan_timestamp": ""
+}

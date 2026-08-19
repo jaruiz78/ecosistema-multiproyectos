@@ -18,7 +18,7 @@ import time
 from contextlib import contextmanager
 
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "weather_cache.db")
-CACHE_TTL_SECONDS = 1800  # 30 minutos
+CACHE_TTL_SECONDS = 900  # 15 minutos de resolución óptima
 
 @contextmanager
 def get_weather_db():
@@ -66,10 +66,26 @@ def get_cache_key(lat, lon, days):
     return f"{round(lat, 4)}_{round(lon, 4)}_{days}"
 
 def fetch_open_meteo_live(lat=37.5942, lon=-5.7397, days=7):
-    """Llamada directa optimizada a Open-Meteo Solar Forecast API"""
+    """Llamada directa optimizada a Open-Meteo Solar Forecast API con resolución de 15 minutos y altitud local"""
     params = urllib.parse.urlencode({
         "latitude": str(lat),
         "longitude": str(lon),
+        "elevation": "31",
+        "minutely_15": ",".join([
+            "temperature_2m",
+            "relative_humidity_2m",
+            "apparent_temperature",
+            "precipitation_probability",
+            "cloud_cover",
+            "wind_speed_10m",
+            "wind_direction_10m",
+            "direct_normal_irradiance",
+            "diffuse_radiation",
+            "shortwave_radiation",
+            "direct_radiation",
+            "is_day",
+            "sunshine_duration"
+        ]),
         "hourly": ",".join([
             "temperature_2m",
             "relative_humidity_2m",
@@ -77,6 +93,8 @@ def fetch_open_meteo_live(lat=37.5942, lon=-5.7397, days=7):
             "precipitation_probability",
             "weather_code",
             "cloud_cover",
+            "wind_speed_10m",
+            "surface_pressure",
             "direct_normal_irradiance_instant",
             "diffuse_radiation_instant",
             "shortwave_radiation_instant",

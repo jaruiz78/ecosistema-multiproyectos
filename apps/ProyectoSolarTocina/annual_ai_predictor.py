@@ -73,7 +73,7 @@ def init_ai_prediction_schema():
             conn.execute("""
                 INSERT OR IGNORE INTO ai_model_hyperparameters (param_key, param_value, confidence_score, last_updated)
                 VALUES (?, ?, ?, ?)
-            """, (k, v, c, datetime.utcnow().isoformat()))
+            """, (k, v, c, datetime.now().isoformat()))
         conn.commit()
 
 init_ai_prediction_schema()
@@ -271,7 +271,7 @@ class AnnualAiPredictor:
                     UPDATE ai_model_hyperparameters 
                     SET param_value = ?, last_updated = ? 
                     WHERE param_key = 'soiling_factor'
-                """, (new_soiling, datetime.utcnow().isoformat()))
+                """, (new_soiling, datetime.now().isoformat()))
                 conn.commit()
 
         # Guardar en histórico de conciliación
@@ -289,7 +289,7 @@ class AnnualAiPredictor:
                 solar_err_pct,
                 home_err_pct,
                 self.params.get("soiling_factor", 0.97),
-                datetime.utcnow().isoformat()
+                datetime.now().isoformat()
             ))
             conn.commit()
 

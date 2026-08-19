@@ -29,7 +29,7 @@ export class VirtualBatteryManager {
       650.00  // Dic (Invierno)
     ];
 
-    // Generación solar mensual esperada (kWh/mes) para 5.45 kWp en Tocina
+    // Generación solar mensual esperada (kWh/mes) para 5.00 kWp (10x Jinko 500W) en Tocina
     this.expectedMonthlySolarKwh = [
       460, // Ene
       540, // Feb

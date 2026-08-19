@@ -167,6 +167,7 @@ export class PowerFlowCanvas {
       this.state.batSoc = telemetry.battery.soc_percent !== undefined ? telemetry.battery.soc_percent : 42;
       this.state.batVoltage = telemetry.battery.voltage_v || 196.0;
       this.state.batPowerW = telemetry.battery.power_w !== undefined ? telemetry.battery.power_w : 0;
+      this.state.batEtaInfo = telemetry.batEtaInfo || null;
     }
     if (telemetry.inverter) {
       this.state.invTemp = telemetry.inverter.temperature_c || 35.0;
@@ -416,7 +417,15 @@ export class PowerFlowCanvas {
       let dynamicVal = '';
       if (node.id === 'solar') dynamicVal = `${(this.state.solarW / 1000).toFixed(2)} kW`;
       if (node.id === 'inverter') dynamicVal = `${this.state.invTemp}°C • OK`;
-      if (node.id === 'battery') dynamicVal = `${this.state.batSoc}% SoC`;
+      if (node.id === 'battery') {
+        if (this.state.batSoc >= 99) {
+          dynamicVal = '100% (Llena)';
+        } else if (this.state.batEtaInfo && this.state.batEtaInfo.isCharging) {
+          dynamicVal = `${this.state.batSoc}% (${this.state.batEtaInfo.etaTimeStr})`;
+        } else {
+          dynamicVal = `${this.state.batSoc}% SoC`;
+        }
+      }
       if (node.id === 'home') dynamicVal = `${(this.state.homeLoadW / 1000).toFixed(2)} kW`;
       if (node.id === 'grid') dynamicVal = this.state.gridExportW > 0 ? `+${(this.state.gridExportW / 1000).toFixed(2)} kW` : (this.state.gridImportW > 0 ? `-${(this.state.gridImportW / 1000).toFixed(2)} kW` : '0.0 kW');
       if (node.id === 'ev') dynamicVal = this.state.evChargeW > 100 ? `+${(this.state.evChargeW / 1000).toFixed(2)} kW (${this.state.evSoc || 18}%)` : `${this.state.evSoc || 18}% SoC`;
@@ -447,11 +456,14 @@ export class PowerFlowCanvas {
         `• Temperatura: ${this.state.invTemp} °C`
       ];
     } else if (node.id === 'battery') {
+      const etaStr = this.state.batEtaInfo ? (this.state.batEtaInfo.isCharging ? `100% a las ${this.state.batEtaInfo.etaTimeStr} (en ${this.state.batEtaInfo.timeRemainingStr})` : (this.state.batEtaInfo.isFull ? '100% Llena (Autonomía >48h)' : `Autonomía ~${this.state.batEtaInfo.autonomyHours}`)) : 'Calculando...';
+      const energyNeeded = this.state.batEtaInfo ? `${this.state.batEtaInfo.energyNeededKwh} kWh` : '-- kWh';
       lines = [
-        `• Modelo: 2x Fox-ESS EP5 High Voltage`,
-        `• Capacidad: 10.36 kWh nominal`,
+        `• Modelo: 2x Fox-ESS EP5 High Voltage (10.36 kWh)`,
         `• Estado de Carga (SoC): ${this.state.batSoc} %`,
-        `• Tensión de Pack: ${this.state.batVoltage} V`
+        `• Tensión de Pack: ${this.state.batVoltage} V`,
+        `• Estimación Carga 100%: ${etaStr}`,
+        `• Energía Restante p/ 100%: ${energyNeeded}`
       ];
     } else if (node.id === 'home') {
       lines = [

@@ -1,53 +1,42 @@
-# Monitor & Predictor Solar Fotovoltaico Este-Oeste (Tocina, Sevilla)
-
-Aplicación web interactiva para visualizar en tiempo real el **máximo teórico (Clear-Sky)** y la **generación horaria real prevista para los próximos 7-14 días** con base en predicciones meteorológicas oficiales de Open-Meteo.
-
----
-
-## 📍 Configuración de la Instalación
-
-* **Ubicación**: Calle Amadeo Vives 31, Los Rosales - Tocina (Sevilla)
-  * **Coordenadas**: `37°35'39" N, 5°44'23" W` (`37.5942, -5.7397`)
-  * **Altitud**: 31 m
-* **Generador Fotovoltaico (Dual String Este-Oeste)**:
-  * **String 1 (Este)**: 6 paneles @ Azimut **85° E** (máximo matinal 09:00 - 13:00)
-  * **String 2 (Oeste)**: 4 paneles @ Azimut **265° W** (máximo vespertino 15:00 - 20:30)
-  * **Potencia Total Pico**: ~5.00 kWp (a 500 Wp/panel, configurable de 400 a 650 Wp)
-* **Inversor Híbrido**: 10.0 kW (doble MPPT)
-* **Baterías**: 10.0 kWh (2 módulos Fox-ESS LiFePO4 de 5.0 kWh c/u)
+# ☀️ Ecosistema Solar Tocina & Gemelo Digital Fotovoltaico
+### Plataforma de Alta Concurrencia, Telemetría Modbus TCP e Inteligencia Artificial
+**Ubicación:** C/ Amadeo Vives 31, Los Rosales - Tocina (Sevilla) · `37°35′39″ N, 5°44′23″ O` (Altitud 31 m, H3: `8939023447bffff`)  
+**Hardware:** 10x Jinko 500W TOPCon (6 Este / 4 Oeste) · Inversor Sunworks KP10 SW (10 kW) · 2x Fox-ESS EP5 HV (10.36 kWh) · Omoda 7 SHS (18.7 kWh) · 2x Daikin Inverter · ICP 4.60 kW
 
 ---
 
-## 🚀 Cómo Iniciar la Aplicación Web
+## 🚀 Inicio Rápido
 
-### Opción 1: Con Python (Recomendado)
+El servidor local opera como un servicio autónomo en el puerto **`8526`**:
+
 ```bash
+# Iniciar servidor local
 cd /home/jaruiz/Desarrollo/apps/ProyectoSolarTocina
-python3 server.py
+python3 server.py 8526
 ```
-Abre en tu navegador: [http://localhost:8080](http://localhost:8080)
 
-### Opción 2: Abrir directamente `index.html`
-Puedes abrir el archivo [`src/index.html`](file:///home/jaruiz/Desarrollo/apps/ProyectoSolarTocina/src/index.html) en Chrome, Firefox o Safari.
+Acceder en el navegador: **[http://localhost:8526](http://localhost:8526)**
 
 ---
 
-## 📊 Características y Funcionalidades
+## 📑 Documentación Completa
 
-1. **Curva Horaria Detallada**:
-   * Curva Máxima Teórica en cielo despejado (*Clear-Sky Model*).
-   * Curva de Generación Real Prevista hora a hora según la meteorología (DNI, DHI, nubosidad, temperatura).
-   * Desglose independiente de la potencia generada por el **String Este (85°)** frente al **String Oeste (265°)**.
-   * Simulación del estado de carga (**SOC %**) de las dos baterías Fox-ESS (10 kWh).
-2. **Previsión a 7 Días**:
-   * Tarjetas diarias interactivas (kWh generados, % de eficiencia frente al máximo teórico, nubosidad y temperatura).
-   * Al pulsar sobre cualquier día de la semana, se desglosa su curva horaria al instante.
-3. **Simulador Paramétrico en Tiempo Real**:
-   * Ajuste de potencia unitaria por placa (Wp).
-   * Ajuste de número de placas por tejado (Este / Oeste).
-   * Ajuste del azimut e inclinación del tejado.
-   * Modificación de la capacidad de baterías y consumo base del hogar.
-4. **Cálculo Físico-Meteorológico Riguroso**:
-   * Algoritmo astronómico de posición solar (NOAA / Meeus) en $O(1)$.
-   * Descomposición de irradiancia en plano inclinado (*Plane of Array* - POA).
-   * Factor de pérdida por temperatura ambiente de Sevilla ($\gamma_{temp} \approx -0.35\%/^\circ\text{C}$).
+* 📘 **[Documentación Maestra del Ecosistema](file:///home/jaruiz/Desarrollo/apps/ProyectoSolarTocina/docs/DOCUMENTACION_MAESTRA_ECOSISTEMA_SOLAR_TOCINA.md)**: Especificaciones físicas, fórmulas del modelo PINN, arquitectura de software, endpoints y manual de mantenimiento.
+* 🛠️ **[Guía de Hardware, Automatización y Sensores](file:///home/jaruiz/Desarrollo/apps/ProyectoSolarTocina/docs/GUIA_AUTOMATIZACION_HARDWARE_Y_SENSORES.md)**: Conexión WiFi Daikin (Faikin/IR), Wallbox Omoda 7, Carga en horas valle P3 y sondas microclimáticas.
+
+---
+
+## ⚡ Capacidades Principales
+
+1. **Telemetría Modbus TCP en Vivo (192.168.1.66:502)**:
+   * Lectura en tiempo real cada 3 segundos de voltajes, corrientes, potencia solar total, estado de carga de baterías Fox-ESS y Smart Meter.
+2. **Diagrama Unifilar Interactivo & Modo Kiosko**:
+   * Visualización gráfica de flujos de potencia, minutero dinámico de carga al 100% de batería (ETA) y modo adaptativo Día/Noche.
+3. **Gemelo Digital PINN & Filtro de Kalman EnKF**:
+   * Desglose bifásico de tejados Este (89°) vs Oeste (269°) calibrado con \(R^2 = 0{,}998\) y error \(\text{MAPE} = 0{,}50\%\).
+4. **Guardián de Seguridad Anti-Cortes ICP**:
+   * Prioridad absoluta al suministro doméstico: modulación de carga en \(<500\text{ ms}\) para garantizar que nunca se dispare el contador contratado (4.60 kW).
+5. **Programador de Carga Valle Nocturna (P3)**:
+   * Evaluación diaria de días deficitarios y conmutación automática o manual de modos de trabajo en el inversor.
+6. **Precios de Mercado OMIE / ESIOS REE & Diagnóstico SOH**:
+   * Ingesta a las 20:15 h de los precios horarios del día siguiente y monitorización de salud (\(\text{SOH} = 99{,}99\%\), \(R_i = 34{,}5\text{ m}\Omega\)).

@@ -12,8 +12,8 @@
 export class SolarEngine {
   constructor(config = {}) {
     this.config = {
-      lat: config.lat || 37.5942, // Tocina, Sevilla
-      lon: config.lon || -5.7397,
+      lat: config.lat || 37.59417, // Tocina, Sevilla (37°35′39″ N)
+      lon: config.lon || -5.73972, // (5°44′23″ O)
       altitude: config.altitude || 31,
       
       // Paneles Oficiales: JINKO SOLAR 500W
@@ -24,14 +24,14 @@ export class SolarEngine {
       noct: config.noct || 45,
       albedo: config.albedo || 0.20,
       
-      // String 1 (Este - 85°)
+      // String 1 (Este - 89°)
       stringEastPanels: config.stringEastPanels !== undefined ? config.stringEastPanels : 6, // 3.00 kWp
-      stringEastAzimuth: config.stringEastAzimuth || 85,
+      stringEastAzimuth: config.stringEastAzimuth || 89,
       stringEastTilt: config.stringEastTilt || 20,
 
-      // String 2 (Oeste - 265°)
+      // String 2 (Oeste - 269°)
       stringWestPanels: config.stringWestPanels !== undefined ? config.stringWestPanels : 4, // 2.00 kWp
-      stringWestAzimuth: config.stringWestAzimuth || 265,
+      stringWestAzimuth: config.stringWestAzimuth || 269,
       stringWestTilt: config.stringWestTilt || 20,
 
       // Inversor: SUNWORKS / FOX-ESS Híbrido 10 kW

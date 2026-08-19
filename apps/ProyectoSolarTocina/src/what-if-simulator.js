@@ -160,6 +160,75 @@ export class WhatIfSimulator {
         solar_thermal_acs: true,
         omoda7_ev_charge: false
       };
+    } else if (presetName === 'breakfast_routine') {
+      // 08:00 - 09:00 Desayuno + Teletrabajo
+      this.activeStates = {
+        daikin_salon: false,
+        daikin_bedroom: false,
+        midea_fridge: true,
+        beko_washer: false,
+        fagor_dishwasher: false,
+        teka_oven: false,
+        cecofry_airfryer: false,
+        grunkel_toaster: true,
+        coffee_maker: true,
+        digital_microwave: false,
+        superser_dryer: false,
+        telework_laptops: true,
+        wife_study_station: false,
+        user_study_overtime: false,
+        living_tv: false,
+        taurus_fan: false,
+        home_lights_wifi: true,
+        solar_thermal_acs: true,
+        omoda7_ev_charge: false
+      };
+    } else if (presetName === 'dual_study_telework') {
+      // Teletrabajo Usuario + Estudios Mujer
+      this.activeStates = {
+        daikin_salon: true,
+        daikin_bedroom: false,
+        midea_fridge: true,
+        beko_washer: false,
+        fagor_dishwasher: false,
+        teka_oven: false,
+        cecofry_airfryer: false,
+        grunkel_toaster: false,
+        coffee_maker: false,
+        digital_microwave: false,
+        superser_dryer: false,
+        telework_laptops: true,
+        wife_study_station: true,
+        user_study_overtime: true,
+        living_tv: false,
+        taurus_fan: true,
+        home_lights_wifi: true,
+        solar_thermal_acs: true,
+        omoda7_ev_charge: false
+      };
+    } else if (presetName === 'dinner_routine') {
+      // 20:30 - 21:00 Cena en familia
+      this.activeStates = {
+        daikin_salon: true,
+        daikin_bedroom: false,
+        midea_fridge: true,
+        beko_washer: false,
+        fagor_dishwasher: false,
+        teka_oven: false,
+        cecofry_airfryer: true,
+        grunkel_toaster: true,
+        coffee_maker: false,
+        digital_microwave: true,
+        superser_dryer: false,
+        telework_laptops: false,
+        wife_study_station: false,
+        user_study_overtime: true,
+        living_tv: true,
+        taurus_fan: true,
+        home_lights_wifi: true,
+        solar_thermal_acs: true,
+        omoda7_ev_charge: false
+      };
     }
     this.updateToggleCards();
     this.renderResults();
@@ -288,11 +357,13 @@ export class WhatIfSimulator {
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
           <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Presets:</span>
           <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;" id="preset-buttons-bar">
+            <button class="whatif-preset-btn" data-preset="breakfast_routine">🍞 Desayuno 08:00</button>
+            <button class="whatif-preset-btn" data-preset="max_solar_lunch">🍲 Almuerzo 14:00</button>
             <button class="whatif-preset-btn active" data-preset="summer_afternoon">☀️ Tarde Verano</button>
-            <button class="whatif-preset-btn" data-preset="max_solar_lunch">⚡ Almuerzo Solar</button>
-            <button class="whatif-preset-btn" data-preset="stress_test_all" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); font-weight: 800;">🔥 Encender TODO</button>
+            <button class="whatif-preset-btn" data-preset="dual_study_telework">💻 Teletrabajo + Estudio</button>
+            <button class="whatif-preset-btn" data-preset="dinner_routine">🍽️ Cena 20:30</button>
             <button class="whatif-preset-btn" data-preset="night_quiet">🌙 Noche</button>
-            <button class="whatif-preset-btn" data-preset="eco_minimum">🌱 Mínimo</button>
+            <button class="whatif-preset-btn" data-preset="stress_test_all" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); font-weight: 800;">🔥 TODO</button>
           </div>
         </div>
 

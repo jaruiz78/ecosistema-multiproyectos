@@ -276,7 +276,7 @@
           <div class="pill-content">
             <div class="pill-label">Batería Fox-ESS EP5 HV</div>
             <div class="pill-value">10.36 kWh</div>
-            <div class="pill-sub">2x EP5 (192V Alto Voltaje)</div>
+            <div class="pill-sub" id="live-bat-setup-sub">2x EP5 (192V Alto Voltaje)</div>
           </div>
         </div>
         <div class="setup-pill">
@@ -464,6 +464,11 @@
     <!-- ========================================== -->
     <div id="tab-home" class="master-tab-pane">
       
+      <!-- PROGRAMADOR Y AUTOMATIZACIÓN DE CARGA VALLE NOCTURNA FOX-ESS (P3) -->
+      <section id="valley-charge-scheduler-container" aria-label="Programador y Automatización Carga Valle Fox-ESS">
+        <!-- Renderizado dinámico desde valley-charge-scheduler-ui.js -->
+      </section>
+
       <!-- CUADRO DE DIÁLOGO / ASISTENTE CONSULTOR SOLAR IA -->
       <section id="solar-dialog-container" aria-label="Cuadro de Diálogo Consultor Solar IA">
         <!-- Renderizado dinámico desde solar-dialog-assistant.js -->
@@ -722,6 +727,11 @@
         </div>
       </section>
 
+      <!-- DIAGNÓSTICO DE SALUD SOH FOX-ESS & STRINGS -->
+      <section id="battery-soh-diagnostic-container" aria-label="Diagnóstico SOH Batería & Strings">
+        <!-- Renderizado dinámico desde battery-soh-diagnostic.js -->
+      </section>
+
       <!-- PASAPORTE DE ENERGÍA VERDE CRIPTOGRÁFICO -->
       <section id="green-passport-crypto-container" aria-label="Pasaporte Verde Criptográfico">
         <!-- Renderizado dinámico desde green-passport-crypto.js -->
@@ -733,6 +743,11 @@
     <!-- ========================================== -->
     <div id="tab-finance" class="master-tab-pane">
       
+      <!-- OPTIMIZADOR DE POTENCIA CONTRATADA E ICP -->
+      <section id="icp-power-optimizer-container" aria-label="Optimizador de Potencia e ICP">
+        <!-- Renderizado dinámico desde icp-power-optimizer-ui.js -->
+      </section>
+
       <!-- COMPARADOR DE CONTRATOS Y BATERÍA VIRTUAL -->
       <section id="tariff-comparator-container" aria-label="Comparador de Contratos de la Luz">
         <!-- Renderizado dinámico desde tariff-contract-comparator.js -->
@@ -843,9 +858,9 @@
               <div class="slider-item">
                 <div class="slider-label-row">
                   <span>Azimut orientación:</span>
-                  <span id="eastAzimuth-val">85° (Este)</span>
+                  <span id="eastAzimuth-val">89° (Este)</span>
                 </div>
-                <input type="range" id="eastAzimuth" min="0" max="359" step="1" value="85">
+                <input type="range" id="eastAzimuth" min="0" max="359" step="1" value="89">
               </div>
               <div class="slider-item">
                 <div class="slider-label-row">
@@ -860,7 +875,7 @@
             <div class="control-group">
               <div class="control-group-title">
                 <span>String 2 (Tejado Oeste)</span>
-                <span class="badge-tag west">Opuesto 265° W</span>
+                <span class="badge-tag west">Opuesto 269° W</span>
               </div>
               <div class="slider-item">
                 <div class="slider-label-row">
@@ -872,9 +887,9 @@
               <div class="slider-item">
                 <div class="slider-label-row">
                   <span>Azimut orientación:</span>
-                  <span id="westAzimuth-val">265° (Oeste)</span>
+                  <span id="westAzimuth-val">269° (Oeste)</span>
                 </div>
-                <input type="range" id="westAzimuth" min="0" max="359" step="1" value="265">
+                <input type="range" id="westAzimuth" min="0" max="359" step="1" value="269">
               </div>
               <div class="slider-item">
                 <div class="slider-label-row">
@@ -993,7 +1008,10 @@
   </div>
 
   <!-- App Scripts -->
-  <script src="./sankey-chart.js"></script>
-  <script type="module" src="./app.js"></script>
+  <script src="./sankey-chart.js?v=3.2"></script>
+  <script src="./battery-soh-diagnostic.js?v=3.2"></script>
+  <script src="./icp-power-optimizer-ui.js?v=3.2"></script>
+  <script src="./valley-charge-scheduler-ui.js?v=3.2"></script>
+  <script type="module" src="./app.js?v=3.2"></script>
 </body>
 </html>

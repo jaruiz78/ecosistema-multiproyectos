@@ -72,8 +72,10 @@ export class SolarDialogAssistant {
           <!-- Sugerencias Rápidas / Atajos -->
           <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
             <span style="font-size: 0.72rem; color: var(--text-muted);">Consultas e Instrucciones:</span>
-            <button class="quick-query-btn" data-query="La última hora estuvo consumiendo lavadora, frigorífico y portátiles">🧺 Etiquetar última hora</button>
-            <button class="quick-query-btn" data-query="En la próxima hora consumirá lavavajillas, frigorífico y Daikin">🍽️ Planificar próxima hora</button>
+            <button class="quick-query-btn" data-query="Desayuno entre 08:00 y 09:00 con tostador de pan y cafetera">🍞 Desayuno 08:00-09:00</button>
+            <button class="quick-query-btn" data-query="Almuerzo a las 14:00 con vitrocerámica, microondas y Daikin">🍲 Comida 14:00</button>
+            <button class="quick-query-btn" data-query="Cena a las 20:30 con vitrocerámica, freidora de aire y televisión">🍽️ Cena 20:30</button>
+            <button class="quick-query-btn" data-query="Teletrabajo y dos puestos de estudio en casa con ordenadores y ventilador">💻 Teletrabajo y Estudios</button>
             <button class="quick-query-btn" data-query="¿Cuándo cargo el coche mañana y qué más puedo encender?">🚗 Coche mañana + Cargas</button>
             <button class="quick-query-btn" data-query="¿A qué hora pongo la lavadora hoy sin pagar luz?">🧺 Lavadora hoy</button>
             <button class="quick-query-btn" data-query="¿Cuándo pre-refrigerar con Daikin?">❄️ Daikin Pre-cooling</button>

@@ -132,7 +132,7 @@ class TelemetryIngestorDaemon:
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 target_date_str, predicted_solar, actual_solar, predicted_home, actual_home,
-                solar_err, home_err, 0.965, datetime.utcnow().isoformat()
+                solar_err, home_err, 0.965, datetime.now().isoformat()
             ))
             conn.commit()
 
@@ -162,7 +162,7 @@ class TelemetryIngestorDaemon:
                         INSERT OR REPLACE INTO inverter_daily_reconciliation_nodes 
                         (date, actual_solar_kwh, actual_home_kwh, solar_error_pct, insights_json, created_at)
                         VALUES (?, ?, ?, ?, ?, ?)
-                    """, (target_date_str, actual_solar, actual_home, solar_err, json.dumps(insights), datetime.utcnow().isoformat()))
+                    """, (target_date_str, actual_solar, actual_home, solar_err, json.dumps(insights), datetime.now().isoformat()))
                     sim_conn.commit()
             except Exception as e:
                 print(f"[TelemetryIngestor] Warning in RAG sync: {e}")

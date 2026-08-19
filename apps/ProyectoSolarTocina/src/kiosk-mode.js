@@ -138,12 +138,14 @@ export class KioskModeManager {
 
     document.body.appendChild(this.overlay);
 
-    // Reloj
+    // Reloj y Adaptación Día/Noche
     setInterval(() => {
+      const now = new Date();
       const clk = document.getElementById('kiosk-clock');
       if (clk) {
-        clk.textContent = new Date().toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false });
+        clk.textContent = now.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false });
       }
+      this.updateAdaptiveNightTheme(now.getHours());
     }, 1000);
 
     // Botón Salir
@@ -160,10 +162,23 @@ export class KioskModeManager {
     });
   }
 
+  updateAdaptiveNightTheme(hour) {
+    if (!this.overlay) return;
+    const isNight = hour >= 22 || hour < 7;
+    if (isNight) {
+      this.overlay.style.background = '#020617';
+      this.overlay.style.filter = 'brightness(0.85)';
+    } else {
+      this.overlay.style.background = '#090d16';
+      this.overlay.style.filter = 'brightness(1.0)';
+    }
+  }
+
   enter() {
     this.isActive = true;
     if (this.overlay) {
       this.overlay.style.display = 'flex';
+      this.updateAdaptiveNightTheme(new Date().getHours());
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(() => {});
       }
@@ -204,7 +219,17 @@ export class KioskModeManager {
     if (bEl) bEl.textContent = `${batSoc}%`;
 
     const bSub = document.getElementById('kiosk-bat-sub');
-    if (bSub) bSub.textContent = `${batV.toFixed(1)} V (10.36 kWh)`;
+    if (bSub) {
+      if (telemetry.batEtaInfo && telemetry.batEtaInfo.isCharging) {
+        bSub.innerHTML = `${batV.toFixed(1)} V • <span style="color: #38bdf8; font-weight: 700;">100% a las ${telemetry.batEtaInfo.etaTimeStr} (${telemetry.batEtaInfo.timeRemainingStr})</span>`;
+      } else if (telemetry.batEtaInfo && telemetry.batEtaInfo.isFull) {
+        bSub.innerHTML = `${batV.toFixed(1)} V • <span style="color: #10b981; font-weight: 700;">100% Llena (Autonomía >48h)</span>`;
+      } else if (telemetry.batEtaInfo) {
+        bSub.innerHTML = `${batV.toFixed(1)} V • <span style="color: #c084fc; font-weight: 700;">Autonomía ~${telemetry.batEtaInfo.autonomyHours}</span>`;
+      } else {
+        bSub.textContent = `${batV.toFixed(1)} V (10.36 kWh)`;
+      }
+    }
 
     const bBar = document.getElementById('kiosk-bat-bar');
     if (bBar) bBar.style.width = `${batSoc}%`;

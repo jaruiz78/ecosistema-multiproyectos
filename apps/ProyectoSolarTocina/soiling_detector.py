@@ -4,8 +4,8 @@ Ecosistema Solar Tocina - Los Rosales
 Autor: Google Antigravity
 
 Compara en continuo el rendimiento relativo entre:
-- String 1 (Oeste 265°, 4x Jinko 500W = 2.0 kWp)
-- String 2 (Este 85°, 6x Jinko 500W = 3.0 kWp)
+- String 1 (Oeste 269°, 4x Jinko 500W = 2.0 kWp)
+- String 2 (Este 89°, 6x Jinko 500W = 3.0 kWp)
 Detecta acumulación de polvo, calima sahariana o suciedad asimétrica y calcula pérdidas económicas en €/mes.
 """
 

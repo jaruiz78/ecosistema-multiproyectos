@@ -83,14 +83,25 @@ export const APPLIANCE_CATALOG = [
   },
   {
     id: 'grunkel_toaster',
-    name: 'Tostador Plano Grunkel',
+    name: 'Tostador Plano Grunkel (Desayuno)',
     icon: '🍞',
     category: 'cocina',
+    durationHours: 0.15,
+    powerKw: 0.65,
+    totalEnergyKwh: 0.08,
+    realPowerW: 650,
+    description: 'Tostador horizontal plano Grunkel con barras de cuarzo para desayunos de 08:00 a 09:00 h.'
+  },
+  {
+    id: 'coffee_maker',
+    name: 'Cafetera Express (Desayuno / Sobremesa)',
+    icon: '☕',
+    category: 'cocina',
     durationHours: 0.1,
-    powerKw: 0.60,
+    powerKw: 1.20,
     totalEnergyKwh: 0.06,
-    realPowerW: 600,
-    description: 'Tostador horizontal plano Grunkel con barras de cuarzo para desayunos.'
+    realPowerW: 1200,
+    description: 'Cafetera eléctrica con calentamiento rápido de agua para desayuno matinal.'
   },
   {
     id: 'digital_microwave',
@@ -102,6 +113,28 @@ export const APPLIANCE_CATALOG = [
     totalEnergyKwh: 0.24,
     realPowerW: 1200,
     description: 'Microondas digital con display frontal y selector de potencia.'
+  },
+  {
+    id: 'wife_study_station',
+    name: 'Puesto de Estudio Mujer (Habitación Indep.)',
+    icon: '📚👩‍💻',
+    category: 'trabajo',
+    durationHours: 6.0,
+    powerKw: 0.11,
+    totalEnergyKwh: 0.66,
+    realPowerW: 110,
+    description: 'Ordenador propio + pantalla + iluminación en habitación independiente para estudios diurnos.'
+  },
+  {
+    id: 'user_study_overtime',
+    name: 'Estudios Usuario + Monitor + Ventilador',
+    icon: '💻📖',
+    category: 'trabajo',
+    durationHours: 4.0,
+    powerKw: 0.14,
+    totalEnergyKwh: 0.56,
+    realPowerW: 140,
+    description: 'Portátil secundario de estudios + monitor externo + ventilador en horario de tarde/noche.'
   },
   {
     id: 'superser_dryer',

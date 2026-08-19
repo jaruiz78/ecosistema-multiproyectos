@@ -14,6 +14,27 @@ export class MarketPricingService {
    */
   async fetchHourlyPrices() {
     try {
+      const resp = await fetch('/api/market/omie-today-tomorrow');
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.today_hourly && data.today_hourly.length === 24) {
+          this.cachedPrices = data.today_hourly.map(r => ({
+            hour: r.hour,
+            priceEurKwh: r.price_eur_kwh,
+            priceOmieMwh: r.price_omie_mwh,
+            isCheap: r.is_cheapest_valley,
+            isPeak: r.is_highest_peak,
+            tariffPeriod: r.tariff_period,
+            source: 'OMIE / ESIOS REE Broker Local'
+          }));
+          return this.cachedPrices;
+        }
+      }
+    } catch (e) {
+      console.warn('Endpoint local OMIE no disponible, intentando API externa:', e);
+    }
+
+    try {
       const resp = await fetch('https://api.preciodelaluz.online/v1/prices/all?zone=PCB');
       if (resp.ok) {
         const data = await resp.json();

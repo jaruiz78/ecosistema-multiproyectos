@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.db-journal
+*.db-wal
+*.db-shm
+.DS_Store
+.vscode/
+.idea/

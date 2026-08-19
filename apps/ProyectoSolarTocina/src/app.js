@@ -127,6 +127,10 @@ class SolarApp {
       this.loadThermalPrecooling()
     ]);
     
+    window.batterySohDiagnostic?.init();
+    window.icpPowerOptimizer?.init();
+    window.valleyChargeScheduler?.init();
+    
     this.runInitialTelemetryAssimilation();
     this.recalculate();
   }
@@ -300,21 +304,43 @@ class SolarApp {
 
     const batEl = document.getElementById('live-bat-val');
     const batSub = document.getElementById('live-bat-sub');
-    if (batEl && data.battery) {
-      batEl.textContent = `${data.battery.soc_percent}% SoC`;
-    }
-    if (batSub && data.battery) {
-      const pW = data.battery.power_w || 0;
-      const absW = Math.round(Math.abs(pW));
-      if (absW > 20) {
-        const isCharging = (data.solar_total_w || 0) > ((data.grid && data.grid.home_load_w) || 0);
-        if (isCharging) {
-          batSub.textContent = `${data.battery.voltage_v.toFixed(1)} V • Cargando +${absW} W`;
+    if (data.battery) {
+      const batInfo = this.calculateBatteryTimeToFull(
+        data.battery.soc_percent,
+        data.battery.power_w,
+        data.solar_total_w || 0,
+        (data.grid && data.grid.home_load_w) || 350,
+        data.battery.voltage_v || 196.0
+      );
+      data.batEtaInfo = batInfo;
+
+      if (batEl) {
+        batEl.innerHTML = `${data.battery.soc_percent}% <span style="font-size: 0.8rem; font-weight: 600; color: #cbd5e1;">SoC</span>`;
+      }
+      if (batSub) {
+        const pW = data.battery.power_w || 0;
+        const absW = Math.round(Math.abs(pW));
+        if (batInfo.isFull) {
+          batSub.innerHTML = `<span style="color: #10b981; font-weight: 700;">✅ 100% Llena</span> · <span style="color: var(--text-muted);">${data.battery.voltage_v.toFixed(1)} V</span><br/><span style="font-size: 0.65rem; color: var(--text-muted);">Autonomía nocturna >48h</span>`;
+        } else if (batInfo.isCharging) {
+          batSub.innerHTML = `<span style="color: #38bdf8; font-weight: 700;">⏱️ 100% a las ${batInfo.etaTimeStr}</span> <span style="font-size: 0.65rem; color: #93c5fd;">(${batInfo.timeRemainingStr})</span><br/><span style="font-size: 0.65rem; color: var(--text-muted);">${data.battery.voltage_v.toFixed(1)} V • +${(absW / 1000.0).toFixed(2)} kW solar</span>`;
+        } else if (absW > 20) {
+          batSub.innerHTML = `<span style="color: #c084fc; font-weight: 700;">🌙 Autonomía ~${batInfo.autonomyHours}</span><br/><span style="font-size: 0.65rem; color: var(--text-muted);">${data.battery.voltage_v.toFixed(1)} V • -${(absW / 1000.0).toFixed(2)} kW</span>`;
         } else {
-          batSub.textContent = `${data.battery.voltage_v.toFixed(1)} V • Descargando -${absW} W`;
+          batSub.innerHTML = `<span style="color: #c084fc; font-weight: 700;">🌙 Autonomía ~${batInfo.autonomyHours}</span><br/><span style="font-size: 0.65rem; color: var(--text-muted);">${data.battery.voltage_v.toFixed(1)} V (10.36 kWh)</span>`;
         }
-      } else {
-        batSub.textContent = `${data.battery.voltage_v.toFixed(1)} V (10.36 kWh)`;
+      }
+
+      // Actualizar también en el pill de configuración si existe
+      const pillBatSub = document.getElementById('live-bat-setup-sub');
+      if (pillBatSub) {
+        if (batInfo.isCharging) {
+          pillBatSub.innerHTML = `2x EP5 (192V) · <span style="color: #38bdf8; font-weight: 700;">100% a las ${batInfo.etaTimeStr} (${batInfo.timeRemainingStr})</span>`;
+        } else if (batInfo.isFull) {
+          pillBatSub.innerHTML = `2x EP5 (192V) · <span style="color: #10b981; font-weight: 700;">100% Llena (Autonomía >48h)</span>`;
+        } else {
+          pillBatSub.textContent = `2x EP5 (192V) · Autonomía ~${batInfo.autonomyHours}`;
+        }
       }
     }
 
@@ -829,10 +855,10 @@ class SolarApp {
     this.engine.updateConfig({
       panelWp,
       stringEastPanels: eastPanels,
-      stringEastAzimuth: getVal('eastAzimuth', 85),
+      stringEastAzimuth: getVal('eastAzimuth', 89),
       stringEastTilt: getVal('eastTilt', 20),
       stringWestPanels: westPanels,
-      stringWestAzimuth: getVal('westAzimuth', 265),
+      stringWestAzimuth: getVal('westAzimuth', 269),
       stringWestTilt: getVal('westTilt', 20),
       inverterMaxKw: getVal('inverterKw', 10),
       batteryCapacityKwh: getVal('batteryKwh', 10.36),
@@ -1024,7 +1050,9 @@ class SolarApp {
           solarKw = realHourlyMap[p.hour].avg_solar_kw;
           isMeasuredReal = true;
         } else if (isCurrentHour) {
-          if (this.latestTelemetry && this.latestTelemetry.solar && this.latestTelemetry.online) {
+          if (realHourlyMap[p.hour] !== undefined && realHourlyMap[p.hour].sample_count >= 2) {
+            solarKw = realHourlyMap[p.hour].avg_solar_kw;
+          } else if (this.latestTelemetry && this.latestTelemetry.solar && this.latestTelemetry.online) {
             solarKw = this.latestTelemetry.solar.total_kw;
           } else if (realHourlyMap[p.hour] !== undefined) {
             solarKw = realHourlyMap[p.hour].avg_solar_kw;
@@ -1041,7 +1069,9 @@ class SolarApp {
           homeKw = realHourlyMap[p.hour].avg_home_kw !== undefined ? realHourlyMap[p.hour].avg_home_kw : realHourlyMap[p.hour].avg_grid_kw;
           isMeasuredHome = true;
         } else if (isCurrentHour) {
-          if (this.latestTelemetry && this.latestTelemetry.grid && this.latestTelemetry.online) {
+          if (realHourlyMap[p.hour] !== undefined && realHourlyMap[p.hour].sample_count >= 2) {
+            homeKw = realHourlyMap[p.hour].avg_home_kw !== undefined ? realHourlyMap[p.hour].avg_home_kw : realHourlyMap[p.hour].avg_grid_kw;
+          } else if (this.latestTelemetry && this.latestTelemetry.grid && this.latestTelemetry.online) {
             homeKw = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (p.battery.homeLoadW / 1000.0);
           } else if (realHourlyMap[p.hour] !== undefined) {
             homeKw = realHourlyMap[p.hour].avg_home_kw !== undefined ? realHourlyMap[p.hour].avg_home_kw : realHourlyMap[p.hour].avg_grid_kw;
@@ -1481,12 +1511,24 @@ class SolarApp {
         });
       }
 
-      if (this.latestTelemetry && this.latestTelemetry.online) {
-        if (this.latestTelemetry.solar) realMeasuredSolar[currentHour] = this.latestTelemetry.solar.total_kw;
-        if (this.latestTelemetry.pv2_east) realMeasuredEast[currentHour] = (this.latestTelemetry.pv2_east.power_w / 1000.0);
-        if (this.latestTelemetry.pv1_west) realMeasuredWest[currentHour] = (this.latestTelemetry.pv1_west.power_w / 1000.0);
-        if (this.latestTelemetry.grid) {
-          realMeasuredHome[currentHour] = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (selectedDay.hourly[currentHour].battery.homeLoadW / 1000.0);
+      // Para la hora en curso (currentHour):
+      // Si la hora acaba de comenzar (sin muestras en BD), inicializamos con la telemetría actual.
+      // Si ya hay muestras consolidadas en BD, usamos el promedio acumulado real de la hora para evitar saltos bruscos.
+      const currentHourSummary = this.todayHourlyReal?.hourly?.find(h => h.hour === currentHour);
+      if (!currentHourSummary || currentHourSummary.sample_count < 2) {
+        if (this.latestTelemetry && this.latestTelemetry.online) {
+          if (this.latestTelemetry.solar && realMeasuredSolar[currentHour] === null) {
+            realMeasuredSolar[currentHour] = this.latestTelemetry.solar.total_kw;
+          }
+          if (this.latestTelemetry.pv2_east && realMeasuredEast[currentHour] === null) {
+            realMeasuredEast[currentHour] = (this.latestTelemetry.pv2_east.power_w / 1000.0);
+          }
+          if (this.latestTelemetry.pv1_west && realMeasuredWest[currentHour] === null) {
+            realMeasuredWest[currentHour] = (this.latestTelemetry.pv1_west.power_w / 1000.0);
+          }
+          if (this.latestTelemetry.grid && realMeasuredHome[currentHour] === null) {
+            realMeasuredHome[currentHour] = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (selectedDay.hourly[currentHour].battery.homeLoadW / 1000.0);
+          }
         }
       }
 
@@ -2159,6 +2201,113 @@ class SolarApp {
       }
     } catch (e) {
       console.warn('Error loading thermal precooling:', e);
+    }
+  }
+
+  calculateBatteryTimeToFull(soc, batPowerW, solarW, homeLoadW, voltageV) {
+    const CAPACITY_KWH = 10.36;
+    const socNum = typeof soc === 'number' ? soc : parseFloat(soc) || 0;
+    
+    if (socNum >= 99.0) {
+      return {
+        isFull: true,
+        isCharging: false,
+        soc: socNum,
+        textRemaining: 'Batería Llena (100%)',
+        etaTimeStr: 'Completada',
+        etaShort: '100% (Llena)',
+        timeRemainingStr: '0 min',
+        autonomyHours: '> 48h',
+        energyNeededKwh: '0.00',
+        badgeText: '✅ 100% Llena',
+        badgeColor: '#10b981'
+      };
+    }
+
+    const energyNeededKwh = Math.max(0, ((100.0 - socNum) / 100.0) * CAPACITY_KWH);
+    const pW = batPowerW || 0;
+    const absW = Math.round(Math.abs(pW));
+    const solarSurplus = Math.max(0, (solarW || 0) - (homeLoadW || 350));
+    // En inversores Fox-ESS/Sunworks, la carga puede registrarse con signo negativo o positivo según versión de firmware.
+    // Si hay excedente solar o flujo hacia batería, está cargando.
+    const isCharging = (solarW > (homeLoadW || 350) + 50) || (absW > 50 && (solarW || 0) > (homeLoadW || 350));
+    const currentChargeKw = isCharging ? Math.max(0.3, Math.min(5.0, Math.max(absW / 1000.0, solarSurplus / 1000.0))) : 0;
+
+    if (isCharging && currentChargeKw > 0.1) {
+      let minutesPassed = 0;
+      let accumulatedKwh = 0;
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+
+      const hourlyPoints = (this.daysData && this.daysData[0] && this.daysData[0].hourly) ? this.daysData[0].hourly : [];
+
+      if (hourlyPoints && hourlyPoints.length === 24) {
+        let simHour = currentHour;
+        let simMin = currentMinute;
+        
+        while (accumulatedKwh < energyNeededKwh && minutesPassed < 720) {
+          const hPoint = hourlyPoints[simHour] || hourlyPoints[23];
+          const pointSolarKw = (hPoint.clearSky ? hPoint.clearSky.pTotalAC_kW : null) || hPoint.solarKw || (solarW / 1000.0);
+          const pointHomeKw = hPoint.homeKw || (homeLoadW / 1000.0) || 0.35;
+          const pointSurplusKw = Math.max(0, pointSolarKw - pointHomeKw);
+          const effectiveChargeKw = Math.min(5.0, Math.max(0.2, pointSurplusKw * 0.95));
+
+          accumulatedKwh += effectiveChargeKw * (5.0 / 60.0);
+          minutesPassed += 5;
+          simMin += 5;
+          if (simMin >= 60) {
+            simHour = (simHour + 1) % 24;
+            simMin = 0;
+          }
+        }
+      } else {
+        const hoursNeeded = energyNeededKwh / currentChargeKw;
+        minutesPassed = Math.round(hoursNeeded * 60);
+      }
+
+      // Proyectar hora exacta de llegada al 100%
+      const targetDate = new Date(now.getTime() + minutesPassed * 60 * 1000);
+      const targetHourStr = String(targetDate.getHours()).padStart(2, '0');
+      const targetMinStr = String(targetDate.getMinutes()).padStart(2, '0');
+      const etaTimeStr = `${targetHourStr}:${targetMinStr} h`;
+
+      const remainingHours = Math.floor(minutesPassed / 60);
+      const remainingMins = minutesPassed % 60;
+      const timeRemainingStr = remainingHours > 0 ? `${remainingHours}h ${remainingMins}m` : `${remainingMins} min`;
+
+      return {
+        isFull: false,
+        isCharging: true,
+        soc: socNum,
+        textRemaining: `Quedan ${timeRemainingStr} para el 100%`,
+        etaTimeStr: etaTimeStr,
+        etaShort: `100% a las ${etaTimeStr} (en ${timeRemainingStr})`,
+        timeRemainingStr: timeRemainingStr,
+        minutesRemaining: minutesPassed,
+        energyNeededKwh: energyNeededKwh.toFixed(2),
+        badgeText: `⏱️ 100% a las ${etaTimeStr}`,
+        badgeColor: '#38bdf8'
+      };
+    } else {
+      const homeLoadKw = Math.max(0.1, homeLoadW / 1000.0);
+      const currentBatKwh = (socNum / 100.0) * CAPACITY_KWH;
+      const dischargeHours = currentBatKwh / homeLoadKw;
+      const autonomyStr = dischargeHours > 24 ? `> 24h (${dischargeHours.toFixed(0)}h)` : `${dischargeHours.toFixed(1)}h`;
+
+      return {
+        isFull: false,
+        isCharging: false,
+        soc: socNum,
+        textRemaining: `Autonomía con batería: ~${autonomyStr}`,
+        etaTimeStr: 'Mañana ~12:30 h',
+        etaShort: `Descargando · Autonomía ~${autonomyStr}`,
+        timeRemainingStr: autonomyStr,
+        autonomyHours: autonomyStr,
+        energyNeededKwh: energyNeededKwh.toFixed(2),
+        badgeText: `🌙 Autonomía ~${autonomyStr}`,
+        badgeColor: '#c084fc'
+      };
     }
   }
 

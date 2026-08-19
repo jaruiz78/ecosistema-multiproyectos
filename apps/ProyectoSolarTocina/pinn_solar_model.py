@@ -42,17 +42,52 @@ class PinnSolarModel:
         self.thermal_mass_c = 14.5 # Capacidad térmica del hogar (kWh/°C)
         self.heat_loss_u = 0.38    # Coeficiente de pérdidas térmicas globales (kW/°C)
         self.daikin_cop = 3.8      # Coeficiente de rendimiento Inverter Daikin
+        
+        self.east_optical_gain = 1.0
+        self.west_optical_gain = 1.0
+        self.load_calibrated_hyperparameters()
 
-    def calculate_sun_position(self, day_of_year, solar_hour):
-        """Calcula la elevación solar y el azimut del sol en Tocina"""
-        declination = 23.45 * math.sin(math.radians((360 / 365) * (day_of_year - 81)))
+    def load_calibrated_hyperparameters(self):
+        """Carga los hiperparámetros óptimos aprendidos del reentrenamiento en SQLite"""
+        try:
+            if os.path.exists(TELEMETRY_DB_PATH):
+                with sqlite3.connect(TELEMETRY_DB_PATH) as conn:
+                    cur = conn.cursor()
+                    cur.execute("SELECT param_key, param_value FROM ai_model_hyperparameters")
+                    for k, v in cur.fetchall():
+                        if k == "gamma_thermal_observed":
+                            self.gamma_temp = float(v)
+                        elif k == "inverter_efficiency":
+                            self.inverter_eff = float(v)
+                        elif k == "east_optical_gain":
+                            self.east_optical_gain = float(v)
+                        elif k == "west_optical_gain":
+                            self.west_optical_gain = float(v)
+        except Exception:
+            pass
+
+    def calculate_sun_position(self, day_of_year, legal_hour_cest):
+        """
+        Calcula la elevación solar y el azimut del sol en Tocina (37°35′39″ N, 5°44′23″ O).
+        Convierte la hora legal española (CEST UTC+2 o CET UTC+1) a Hora Solar Verdadera.
+        """
+        # Ecuación del tiempo astronómica (EOT)
+        b = math.radians((360.0 / 365.0) * (day_of_year - 81))
+        eot_min = 9.87 * math.sin(2 * b) - 7.53 * math.cos(b) - 1.5 * math.sin(b)
+        
+        # Determinar si estamos en horario de verano (abril a octubre aprox.)
+        utc_offset = 2.0 if (80 <= day_of_year <= 300) else 1.0
+        # Longitud Tocina: -5.7397° -> desfase de -22.96 minutos (-0.3826 h)
+        solar_hour = legal_hour_cest - utc_offset + (self.lon / 15.0) + (eot_min / 60.0)
+        
+        declination = 23.45 * math.sin(b)
         dec_rad = math.radians(declination)
-        hour_angle = math.radians(15 * (solar_hour - 12))
+        hour_angle = math.radians(15.0 * (solar_hour - 12.0))
         
         sin_elev = math.sin(self.lat_rad) * math.sin(dec_rad) + math.cos(self.lat_rad) * math.cos(dec_rad) * math.cos(hour_angle)
         elevation = math.degrees(math.asin(max(-1.0, min(1.0, sin_elev))))
         
-        if elevation <= 0:
+        if elevation <= 0.0:
             return 0.0, 180.0
             
         cos_az = (math.sin(dec_rad) - math.sin(self.lat_rad) * sin_elev) / (math.cos(self.lat_rad) * math.cos(math.radians(elevation)))
@@ -82,8 +117,8 @@ class PinnSolarModel:
         
         return poa_beam + poa_diffuse + poa_ground
 
-    def compute_string_power_ac(self, poa_w_m2, temp_amb_c, num_panels, soiling_factor=0.97):
-        """Calcula la potencia AC generada por un string considerando temperatura de célula y soiling"""
+    def compute_string_power_ac(self, poa_w_m2, temp_amb_c, num_panels, soiling_factor=0.97, optical_gain=1.0):
+        """Calcula la potencia AC generada por un string considerando temperatura de célula, soiling y ganancia óptica aprendida"""
         if poa_w_m2 <= 5.0:
             return 0.0
             
@@ -92,27 +127,26 @@ class PinnSolarModel:
         temp_factor = 1.0 + self.gamma_temp * (t_cell - 25.0)
         temp_factor = max(0.70, min(1.10, temp_factor))
         
-        dc_kw = (num_panels * self.panel_wp / 1000.0) * (poa_w_m2 / 1000.0) * temp_factor * soiling_factor
+        dc_kw = (num_panels * self.panel_wp / 1000.0) * (poa_w_m2 / 1000.0) * temp_factor * soiling_factor * optical_gain
         ac_kw = dc_kw * self.inverter_eff
         return max(0.0, ac_kw)
 
     def get_probabilistic_quantiles(self, base_power_ac, cloud_cover_pct, hour):
         """
         Calcula los cuantiles probabilísticos p10, p50, p90
-        - p10 (Escenario Pesimista): Nubosidad densa o calima intensa.
-        - p50 (Escenario Esperado): Media calibrada.
-        - p90 (Escenario Óptimo): Cielo perfectamente despejado con viento refrigerante.
+        - p50 (Escenario Esperado): Potencia calculada a partir de DNI/DHI previstos.
+        - p10 (Escenario Pesimista): Dispersión por nubosidad densa o calima.
+        - p90 (Escenario Óptimo): Dispersión por cielo óptimo o viento refrigerante.
         """
         if base_power_ac <= 0.01:
             return 0.0, 0.0, 0.0
             
-        cloud_factor = 1.0 - (cloud_cover_pct / 100.0) * 0.75
-        p50 = round(base_power_ac * max(0.20, cloud_factor), 3)
+        p50 = round(base_power_ac, 3)
         
         # Dispersión estocástica según nubosidad
-        uncertainty = 0.08 + (cloud_cover_pct / 100.0) * 0.35
+        uncertainty = 0.05 + (cloud_cover_pct / 100.0) * 0.20
         p10 = round(max(0.0, p50 * (1.0 - uncertainty)), 3)
-        p90 = round(min(self.nominal_kwp, p50 * (1.0 + uncertainty * 0.85)), 3)
+        p90 = round(min(self.nominal_kwp, p50 * (1.0 + uncertainty * 0.5)), 3)
         
         return p10, p50, p90
 
@@ -154,6 +188,7 @@ class PinnSolarModel:
 
     def generate_day_pinn_forecast(self, day_offset=0, soiling_factor=0.97):
         """Genera el pronóstico horario completo de 24 horas con cuantiles p10, p50, p90"""
+        self.load_calibrated_hyperparameters()
         target_date = date.today() + timedelta(days=day_offset)
         day_of_year = target_date.timetuple().tm_yday
         
@@ -193,8 +228,8 @@ class PinnSolarModel:
                         poa_east = self.compute_plane_of_array_irradiance(ghi, dni, dhi, elev, az, self.east_tilt, self.east_azimuth)
                         poa_west = self.compute_plane_of_array_irradiance(ghi, dni, dhi, elev, az, self.west_tilt, self.west_azimuth)
                         
-                        p_east = self.compute_string_power_ac(poa_east, temp, self.east_panels, soiling_factor)
-                        p_west = self.compute_string_power_ac(poa_west, temp, self.west_panels, soiling_factor)
+                        p_east = self.compute_string_power_ac(poa_east, temp, self.east_panels, soiling_factor, self.east_optical_gain)
+                        p_west = self.compute_string_power_ac(poa_west, temp, self.west_panels, soiling_factor, self.west_optical_gain)
                         p_total_clear = round(p_east + p_west, 3)
                         
                         p10, p50, p90 = self.get_probabilistic_quantiles(p_total_clear, cloud, h)
