@@ -3,15 +3,15 @@ import { WeatherApiClient } from './weather-api.js';
 import { SolarKalmanTwin } from './kalman-filter.js';
 import { MicrogridMpcOptimizer } from './mpc-optimizer.js';
 import { VirtualBatteryManager } from './virtual-battery.js';
-import { ApplianceRecommender } from './appliance-recommender.js';
+import { ApplianceRecommender } from './appliance-recommender.js?v=3.7';
 import { MarketPricingService } from './market-pricing.js';
 import { H3SpatialMicroclimate } from './h3-spatial-grid.js';
 import { GreenEnergyLedger } from './green-ledger.js';
 import { MobilityPlanner, PRESET_ROUTES } from './mobility-planner.js';
 import { PowerFlowCanvas } from './power-flow-canvas.js';
-import { WhatIfSimulator } from './what-if-simulator.js';
+import { WhatIfSimulator } from './what-if-simulator.js?v=3.7';
 import { SolarDialogAssistant } from './solar-dialog-assistant.js';
-import { ThermalPrecoolingEngine } from './thermal-precooling-engine.js';
+import { ThermalPrecoolingEngine } from './thermal-precooling-engine.js?v=3.7';
 import { TariffContractComparator } from './tariff-contract-comparator.js';
 import { MobilitySyncAppViajes } from './mobility-sync-appviajes.js';
 import { GreenPassportCrypto } from './green-passport-crypto.js';
@@ -354,9 +354,10 @@ class SolarApp {
     if (this.whatIf) {
       const solarW = data.solar_total_w !== undefined ? data.solar_total_w : (data.solar_total_kw ? data.solar_total_kw * 1000 : 0);
       const batSoc = data.battery ? data.battery.soc_percent : 100;
+      const homeLoadW = data.grid ? (data.grid.home_load_w || (data.grid.home_load_kw * 1000)) : 830;
       const curHour = getMadridTime().hour;
       const currentPriceEurKwh = (this.marketPrices && this.marketPrices[curHour]) ? this.marketPrices[curHour].priceEurKwh : 0.135;
-      this.whatIf.updateLiveTelemetry(solarW, batSoc, currentPriceEurKwh);
+      this.whatIf.updateLiveTelemetry(solarW, batSoc, currentPriceEurKwh, homeLoadW);
     }
 
     if (this.kioskMode) {

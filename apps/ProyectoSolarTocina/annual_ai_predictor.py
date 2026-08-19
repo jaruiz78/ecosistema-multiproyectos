@@ -53,6 +53,18 @@ def init_ai_prediction_schema():
             );
         """)
         conn.execute("""
+            CREATE TABLE IF NOT EXISTS whatif_live_calibrations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp TEXT,
+                measured_home_load_w REAL,
+                simulated_load_w REAL,
+                delta_w REAL,
+                accuracy_pct REAL,
+                active_appliances_json TEXT,
+                notes TEXT
+            );
+        """)
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS ai_model_hyperparameters (
                 param_key TEXT PRIMARY KEY,
                 param_value REAL,
@@ -320,6 +332,66 @@ class AnnualAiPredictor:
             "ai_accuracy_score_pct": round(100.0 - abs(solar_err_pct), 1)
         }
 
+    def save_whatif_calibration(self, active_states, measured_home_load_w, simulated_w, notes=""):
+        delta_w = round(measured_home_load_w - simulated_w, 1)
+        err_pct = abs(delta_w / max(1.0, measured_home_load_w)) * 100.0
+        accuracy_pct = round(max(0.0, 100.0 - err_pct), 1)
+        now_iso = datetime.now().isoformat()
+
+        # Ajuste adaptativo del standby basal si hay pequeña diferencia
+        if abs(delta_w) < 200:
+            current_standby = self.params.get("base_standby_w", 160.0)
+            new_standby = round(max(80.0, min(300.0, current_standby + delta_w * 0.1)), 1)
+            self.params["base_standby_w"] = new_standby
+            with get_telemetry_db() as conn:
+                conn.execute("""
+                    UPDATE ai_model_hyperparameters 
+                    SET param_value = ?, last_updated = ? 
+                    WHERE param_key = 'base_standby_w'
+                """, (new_standby, now_iso))
+                conn.commit()
+
+        with get_telemetry_db() as conn:
+            cur = conn.cursor()
+            cur.execute("""
+                INSERT INTO whatif_live_calibrations 
+                (timestamp, measured_home_load_w, simulated_load_w, delta_w, accuracy_pct, active_appliances_json, notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                now_iso,
+                measured_home_load_w,
+                simulated_w,
+                delta_w,
+                accuracy_pct,
+                json.dumps(active_states),
+                notes
+            ))
+            conn.commit()
+
+        return {
+            "success": True,
+            "timestamp": now_iso,
+            "measured_home_load_w": measured_home_load_w,
+            "simulated_load_w": simulated_w,
+            "delta_w": delta_w,
+            "accuracy_pct": accuracy_pct,
+            "calibrated_base_standby_w": self.params.get("base_standby_w", 160.0)
+        }
+
+    def get_latest_whatif_calibration(self):
+        with get_telemetry_db() as conn:
+            conn.row_factory = sqlite3.Row
+            cur = conn.cursor()
+            cur.execute("""
+                SELECT * FROM whatif_live_calibrations 
+                ORDER BY id DESC 
+                LIMIT 1
+            """)
+            row = cur.fetchone()
+            if row:
+                d = dict(row)
+                d["active_appliances"] = json.loads(d["active_appliances_json"]) if d.get("active_appliances_json") else {}
+                return d
     def get_accuracy_history(self, limit=30):
         """Devuelve el historial de conciliaciones pasadas (Predicho vs Real) para la UI"""
         with get_telemetry_db() as conn:
@@ -334,3 +406,4 @@ class AnnualAiPredictor:
             return rows
 
 annual_ai_engine = AnnualAiPredictor()
+

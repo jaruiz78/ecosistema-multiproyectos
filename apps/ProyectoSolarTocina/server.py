@@ -558,6 +558,21 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json({"error": str(e)}, status=500)
             return
 
+        elif self.path == '/api/whatif/state':
+            try:
+                latest = annual_ai_engine.get_latest_whatif_calibration()
+                telemetry = read_inverter_modbus_telemetry()
+                home_load_w = telemetry.get('grid', {}).get('home_load_w', 0.0)
+                self._send_json({
+                    "latest_calibration": latest,
+                    "live_measured_home_load_w": home_load_w,
+                    "live_solar_w": telemetry.get('solar_total_w', 0.0),
+                    "live_battery_soc": telemetry.get('battery', {}).get('soc_percent', 100.0)
+                })
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
         elif self.path == '/api/ai/thermal-precooling':
             try:
                 telemetry = read_inverter_modbus_telemetry()
@@ -807,6 +822,29 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json(res)
             except Exception as e:
                 self._send_json({ "status": "error", "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/whatif/calibrate-live':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                active_states = data.get('active_states', {})
+                simulated_w = float(data.get('simulated_load_w', 0.0))
+                notes = data.get('notes', 'Calibración manual de estado en vivo')
+
+                telemetry = read_inverter_modbus_telemetry()
+                measured_w = float(telemetry.get('grid', {}).get('home_load_w', simulated_w))
+
+                res = annual_ai_engine.save_whatif_calibration(
+                    active_states=active_states,
+                    measured_home_load_w=measured_w,
+                    simulated_w=simulated_w,
+                    notes=notes
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({ "success": False, "error": str(e) }, 500)
             return
 
         elif self.path == '/api/mobility/omoda7/set-soc':

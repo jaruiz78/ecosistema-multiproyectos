@@ -1,8 +1,9 @@
 /**
  * Simulador "What-If" Interactivo de Consumos de Verano Avanzado
  * Cruza datos teóricos con telemetría en vivo Modbus TCP (192.168.1.66),
- * evalúa la viabilidad técnica total (límite ICP 4.6 kW + Batería Fox-ESS + Sol)
- * y calcula el coste exacto de red por hora y ciclo.
+ * evalúa la viabilidad técnica total (límite ICP 4.6 kW + Batería Fox-ESS + Sol),
+ * calcula el coste exacto de red por hora y ciclo,
+ * y permite sincronizar y calibrar en caliente con el Smart Meter real para afinar la IA.
  */
 
 import { APPLIANCE_CATALOG } from './appliance-recommender.js';
@@ -33,29 +34,59 @@ export class WhatIfSimulator {
     };
 
     // Modos de simulación
-    this.currentMode = 'live'; // 'live', 'peak_solar', 'night_zero', 'custom_mid'
+    this.currentMode = 'live'; // 'live', 'peak_solar', 'night_zero', 'morning_early'
     this.liveSolarW = 2450;
-    this.liveBatSoc = 99;
-    this.liveGridPriceEurKwh = 0.135; // Precio PVPC / OMIE actual
+    this.liveBatSoc = 100;
+    this.liveGridPriceEurKwh = 0.135;
+    this.liveHomeLoadW = 831; // Medido real del Smart Meter
 
     this.simSolarW = 2450;
-    this.simBatterySoc = 99;
+    this.simBatterySoc = 100;
     this.batteryCapacityKwh = 10.36;
     this.batteryMaxDischargeKw = 5.00; // Máxima descarga continua Fox-ESS EP5 HV
     this.contractedPowerKw = 4.60;     // Potencia contratada en factura (4.6 kW)
+    this.lastCalibration = null;
 
     this.initUI();
+    this.fetchLatestCalibration();
   }
 
-  updateLiveTelemetry(solarW, batSoc, priceEurKwh = 0.135) {
+  async fetchLatestCalibration() {
+    try {
+      const res = await fetch('/api/whatif/state');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.latest_calibration) {
+          this.lastCalibration = data.latest_calibration;
+          if (data.latest_calibration.active_appliances) {
+            this.activeStates = { ...this.activeStates, ...data.latest_calibration.active_appliances };
+            this.updateToggleCards();
+          }
+        }
+        if (data.live_measured_home_load_w) {
+          this.liveHomeLoadW = data.live_measured_home_load_w;
+        }
+        this.renderCalibrationBanner();
+        this.renderResults();
+      }
+    } catch (e) {
+      console.warn('[WhatIf] Error fetching state:', e);
+    }
+  }
+
+  updateLiveTelemetry(solarW, batSoc, priceEurKwh = 0.135, homeLoadW = null) {
     this.liveSolarW = solarW;
     this.liveBatSoc = batSoc;
     if (priceEurKwh) this.liveGridPriceEurKwh = priceEurKwh;
+    if (homeLoadW !== null && homeLoadW !== undefined) {
+      this.liveHomeLoadW = homeLoadW;
+    }
 
     if (this.currentMode === 'live') {
       this.simSolarW = this.liveSolarW;
       this.simBatterySoc = this.liveBatSoc;
       this.renderResults();
+      this.renderCalibrationBanner();
     }
   }
 
@@ -93,58 +124,36 @@ export class WhatIfSimulator {
         superser_dryer: false,
         telework_laptops: true,
         living_tv: true,
-        taurus_fan: true,
+        taurus_fan: false,
         home_lights_wifi: true,
         solar_thermal_acs: true,
         omoda7_ev_charge: false
       };
     } else if (presetName === 'max_solar_lunch') {
+      // 14:00 - 15:00 Almuerzo con máximo sol
       this.activeStates = {
         daikin_salon: true,
         daikin_bedroom: false,
         midea_fridge: true,
         beko_washer: true,
-        fagor_dishwasher: true,
+        fagor_dishwasher: false,
         teka_oven: false,
         cecofry_airfryer: true,
         grunkel_toaster: false,
         digital_microwave: false,
         superser_dryer: false,
         telework_laptops: true,
-        living_tv: false,
+        living_tv: true,
         taurus_fan: false,
         home_lights_wifi: true,
         solar_thermal_acs: true,
         omoda7_ev_charge: true
       };
-    } else if (presetName === 'stress_test_all') {
-      // ENCENDER ABSOLUTAMENTE TODO SIMULTÁNEAMENTE
-      APPLIANCE_CATALOG.forEach(app => {
-        this.activeStates[app.id] = true;
-      });
     } else if (presetName === 'night_quiet') {
+      // 00:00 - 07:00 Noche en reposo
       this.activeStates = {
         daikin_salon: false,
         daikin_bedroom: true,
-        midea_fridge: true,
-        beko_washer: false,
-        fagor_dishwasher: false,
-        teka_oven: false,
-        cecofry_airfryer: false,
-        grunkel_toaster: false,
-        digital_microwave: false,
-        superser_dryer: false,
-        telework_laptops: false,
-        living_tv: false,
-        taurus_fan: true,
-        home_lights_wifi: true,
-        solar_thermal_acs: true,
-        omoda7_ev_charge: false
-      };
-    } else if (presetName === 'eco_minimum') {
-      this.activeStates = {
-        daikin_salon: false,
-        daikin_bedroom: false,
         midea_fridge: true,
         beko_washer: false,
         fagor_dishwasher: false,
@@ -229,6 +238,11 @@ export class WhatIfSimulator {
         solar_thermal_acs: true,
         omoda7_ev_charge: false
       };
+    } else if (presetName === 'stress_test_all') {
+      // Todo encendido
+      Object.keys(this.activeStates).forEach(k => {
+        this.activeStates[k] = true;
+      });
     }
     this.updateToggleCards();
     this.renderResults();
@@ -239,6 +253,7 @@ export class WhatIfSimulator {
     this.activeStates[applianceId] = !this.activeStates[applianceId];
     this.updateToggleCards();
     this.renderResults();
+    this.renderCalibrationBanner();
     if (this.onStateChange) this.onStateChange(this.getCalculatedResults());
   }
 
@@ -280,11 +295,10 @@ export class WhatIfSimulator {
     const surplusExportKw = Math.max(0, solarKw - totalLoadKw);
 
     // 4. Diagnóstico de Viabilidad Técnica & Seguridad ICP
-    // Capacidad técnica simultánea = Sol + Batería (5kW) + Red Contratada (4.6kW)
     const maxSystemCapacityKw = solarKw + this.batteryMaxDischargeKw + this.contractedPowerKw;
     const icpHeadroomKw = this.contractedPowerKw - gridImportKw;
 
-    let viabilityStatus = 'green'; // 'green', 'yellow', 'red'
+    let viabilityStatus = 'green';
     let viabilityTitle = '';
     let viabilityDesc = '';
 
@@ -309,7 +323,6 @@ export class WhatIfSimulator {
     const costPer2HoursEur = costPerHourEur * 2.0;
     const cleanPercent = totalLoadKw > 0 ? Math.round(((solarCoveredKw + batDischargeKw) / totalLoadKw) * 100) : 100;
 
-    // Autonomía estimada de batería si hay descarga
     let autonomyHours = 99;
     if (batDischargeKw > 0) {
       autonomyHours = currentBatKwh / batDischargeKw;
@@ -335,12 +348,103 @@ export class WhatIfSimulator {
     };
   }
 
+  async calibrateWithLiveMeter() {
+    const btn = this.container.querySelector('#btn-whatif-sync-live');
+    const msgEl = this.container.querySelector('#whatif-sync-msg');
+    
+    try {
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '🔄 Sincronizando con Smart Meter...';
+      }
+      
+      const currentRes = this.getCalculatedResults();
+      const payload = {
+        active_states: this.activeStates,
+        simulated_load_w: currentRes.totalLoadW,
+        notes: `Calibración interactiva usuario (${currentRes.activeCount} aparatos activos)`
+      };
+
+      const res = await fetch('/api/whatif/calibrate-live', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        this.lastCalibration = data;
+        this.liveHomeLoadW = data.measured_home_load_w;
+        this.renderCalibrationBanner();
+        if (msgEl) {
+          msgEl.innerHTML = `<span style="color: #10b981; font-weight: 700;">✅ ¡Calibración exitosa! Smart Meter: ${data.measured_home_load_w} W vs What-If: ${data.simulated_load_w} W (Precisión ${data.accuracy_pct}%). Datos asimilados en el Gemelo Digital.</span>`;
+          setTimeout(() => { if (msgEl) msgEl.innerHTML = ''; }, 6000);
+        }
+        if (this.onStateChange) this.onStateChange(this.getCalculatedResults());
+      } else {
+        if (msgEl) msgEl.innerHTML = `<span style="color: #f43f5e;">❌ Error: ${data.error || 'No se pudo calibrar'}</span>`;
+      }
+    } catch (e) {
+      if (msgEl) msgEl.innerHTML = `<span style="color: #f43f5e;">❌ Error de red: ${e.message}</span>`;
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `🎯 Sincronizar & Calibrar con Smart Meter`;
+      }
+    }
+  }
+
+  renderCalibrationBanner() {
+    const banner = this.container.querySelector('#whatif-live-calibration-banner');
+    if (!banner) return;
+
+    const calc = this.getCalculatedResults();
+    const simW = calc.totalLoadW;
+    const realW = this.liveHomeLoadW || 831;
+    const deltaW = Math.round(realW - simW);
+    const accuracy = Math.max(0, Math.min(100, Math.round((1 - Math.abs(deltaW) / Math.max(1, realW)) * 1000) / 10));
+
+    const timeStr = this.lastCalibration?.timestamp 
+      ? new Date(this.lastCalibration.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+      : 'En vivo';
+
+    banner.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <div style="font-size: 1.3rem;">🧠</div>
+        <div>
+          <div style="font-size: 0.88rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
+            <span>Conciliación What-If con Telemetría Real en Vivo</span>
+            <span class="badge-tag" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700; font-size: 0.7rem;">
+              Precisión: ${accuracy}%
+            </span>
+          </div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.15rem;">
+            • <strong>Smart Meter Real Medido:</strong> <strong style="color: #38bdf8;">${realW} W</strong> | 
+            • <strong>Simulado What-If:</strong> <strong style="color: #f59e0b;">${simW} W</strong> | 
+            • <strong>Delta Residual:</strong> <strong style="color: ${Math.abs(deltaW) < 50 ? '#10b981' : '#f43f5e'};">${deltaW > 0 ? `+${deltaW}` : deltaW} W</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button id="btn-whatif-sync-live" class="whatif-preset-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; border: 1px solid #38bdf8; font-weight: 800; padding: 0.45rem 0.9rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);">
+          🎯 Sincronizar & Calibrar con Smart Meter
+        </button>
+      </div>
+    `;
+
+    const btn = banner.querySelector('#btn-whatif-sync-live');
+    if (btn) {
+      btn.addEventListener('click', () => this.calibrateWithLiveMeter());
+    }
+  }
+
   initUI() {
     if (!this.container) return;
 
     this.container.innerHTML = `
       <!-- Barra Superior: Modos de Escenario Físico & Presets -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; background: rgba(0,0,0,0.25); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem; background: rgba(0,0,0,0.25); padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
         
         <!-- Modos Físicos de Radiación -->
         <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
@@ -369,6 +473,12 @@ export class WhatIfSimulator {
 
       </div>
 
+      <!-- Banner de Conciliación y Calibración en Vivo -->
+      <div id="whatif-live-calibration-banner" style="background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem;">
+        <!-- Se llena con renderCalibrationBanner() -->
+      </div>
+      <div id="whatif-sync-msg" style="font-size: 0.8rem; margin-bottom: 0.75rem; min-height: 1.2rem;"></div>
+
       <!-- Tarjeta de Diagnóstico de Viabilidad Técnica & Coste de Red -->
       <div id="whatif-viability-card" style="margin-bottom: 1.25rem; border-radius: var(--radius-md); padding: 1.15rem; transition: all 0.25s ease; border: 1px solid rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">
         <!-- Se llena con renderResults() -->
@@ -378,7 +488,7 @@ export class WhatIfSimulator {
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem;">
         <div style="background: var(--bg-elevated); padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
           <div style="font-size: 0.72rem; color: #f43f5e; font-weight: 700; text-transform: uppercase;">Consumo Demandado Total</div>
-          <div style="font-size: 1.25rem; font-weight: 800; color: #f43f5e;" id="whatif-total-load">0.90 kW</div>
+          <div style="font-size: 1.25rem; font-weight: 800; color: #f43f5e;" id="whatif-total-load">0.83 kW</div>
           <div style="font-size: 0.72rem; color: var(--text-muted);" id="whatif-active-sub">5 aparatos activos</div>
         </div>
 
@@ -391,7 +501,7 @@ export class WhatIfSimulator {
         <div style="background: var(--bg-elevated); padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
           <div style="font-size: 0.72rem; color: #c084fc; font-weight: 700; text-transform: uppercase;">Aporte Batería Fox-ESS</div>
           <div style="font-size: 1.25rem; font-weight: 800; color: #c084fc;" id="whatif-bat-val">0.00 kW</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);" id="whatif-bat-sub">99% SoC (10.36 kWh)</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);" id="whatif-bat-sub">100% SoC (10.36 kWh)</div>
         </div>
 
         <div style="background: var(--bg-elevated); padding: 0.8rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
@@ -413,7 +523,7 @@ export class WhatIfSimulator {
           <div id="bar-grid-part" style="background: #f43f5e; width: 0%; transition: width 0.3s;" title="Red Eléctrica"></div>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.35rem;">
-          <span>☀️ Sol Directo: <strong id="lbl-bar-solar" style="color: var(--color-solar-light);">0.90 kW</strong></span>
+          <span>☀️ Sol Directo: <strong id="lbl-bar-solar" style="color: var(--color-solar-light);">0.83 kW</strong></span>
           <span>🔋 Batería Fox-ESS: <strong id="lbl-bar-bat" style="color: #c084fc;">0.00 kW</strong></span>
           <span>🔌 Red Eléctrica: <strong id="lbl-bar-grid" style="color: #f43f5e;">0.00 kW</strong></span>
         </div>
@@ -427,11 +537,11 @@ export class WhatIfSimulator {
 
     this.setupEventListeners();
     this.renderCards();
+    this.renderCalibrationBanner();
     this.renderResults();
   }
 
   setupEventListeners() {
-    // Botones de entorno físico
     const envBtns = this.container.querySelectorAll('#whatif-env-modes .tab-btn');
     envBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -441,10 +551,10 @@ export class WhatIfSimulator {
       });
     });
 
-    // Botones de presets
     const presetBtns = this.container.querySelectorAll('.whatif-preset-btn');
     presetBtns.forEach(btn => {
       btn.addEventListener('click', () => {
+        if (btn.id === 'btn-whatif-sync-live') return;
         presetBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.setPreset(btn.dataset.preset);
@@ -522,128 +632,75 @@ export class WhatIfSimulator {
   renderResults() {
     const res = this.getCalculatedResults();
 
-    const loadEl = this.container.querySelector('#whatif-total-load');
-    const activeSubEl = this.container.querySelector('#whatif-active-sub');
-    const solarValEl = this.container.querySelector('#whatif-solar-val');
-    const solarSubEl = this.container.querySelector('#whatif-solar-sub');
-    const batValEl = this.container.querySelector('#whatif-bat-val');
-    const batSubEl = this.container.querySelector('#whatif-bat-sub');
-    const costValEl = this.container.querySelector('#whatif-cost-val');
-    const costSubEl = this.container.querySelector('#whatif-cost-sub');
     const viabilityCard = this.container.querySelector('#whatif-viability-card');
-
-    if (loadEl) loadEl.textContent = `${res.totalLoadKw} kW`;
-    if (activeSubEl) activeSubEl.textContent = `${res.activeCount} aparatos encendidos`;
-    
-    if (solarValEl) solarValEl.textContent = `${(this.simSolarW / 1000).toFixed(2)} kW`;
-    if (solarSubEl) {
-      solarSubEl.textContent = this.currentMode === 'live' ? 'En Vivo (Modbus TCP)' : 'Simulación Escenario';
-    }
-
-    if (batValEl) {
-      batValEl.textContent = res.batDischargeKw > 0 ? `-${res.batDischargeKw} kW` : `0.00 kW`;
-      batValEl.style.color = res.batDischargeKw > 0 ? '#c084fc' : 'var(--text-muted)';
-    }
-    if (batSubEl) {
-      batSubEl.textContent = `${this.simBatterySoc}% SoC • Autonomía: ${res.autonomyHours} h`;
-    }
-
-    if (costValEl) {
-      if (res.is100PercentClean) {
-        costValEl.textContent = `0.000 € / h`;
-        costValEl.style.color = 'var(--color-real)';
-        if (costSubEl) costSubEl.textContent = `100% Solar / Batería (GRATIS)`;
-      } else {
-        costValEl.textContent = `${res.costPerHourEur} € / h`;
-        costValEl.style.color = '#f43f5e';
-        if (costSubEl) costSubEl.textContent = `Importando ${res.gridImportKw} kW de red (${res.costPer2HoursEur} € por 2 horas)`;
-      }
-    }
-
-    // Actualizar Tarjeta de Diagnóstico de Viabilidad
     if (viabilityCard) {
-      let borderColor = 'rgba(16, 185, 129, 0.4)';
-      let bgColor = 'rgba(16, 185, 129, 0.08)';
+      let bg = 'rgba(16, 185, 129, 0.08)';
+      let border = 'rgba(16, 185, 129, 0.4)';
       let titleColor = '#10b981';
 
       if (res.viabilityStatus === 'yellow') {
-        borderColor = 'rgba(245, 158, 11, 0.4)';
-        bgColor = 'rgba(245, 158, 11, 0.08)';
-        titleColor = '#fbbf24';
+        bg = 'rgba(245, 158, 11, 0.08)';
+        border = 'rgba(245, 158, 11, 0.4)';
+        titleColor = '#f59e0b';
       } else if (res.viabilityStatus === 'red') {
-        borderColor = 'rgba(244, 63, 94, 0.5)';
-        bgColor = 'rgba(244, 63, 94, 0.12)';
+        bg = 'rgba(244, 63, 94, 0.08)';
+        border = 'rgba(244, 63, 94, 0.4)';
         titleColor = '#f43f5e';
       }
 
-      viabilityCard.style.borderColor = borderColor;
-      viabilityCard.style.background = bgColor;
-
+      viabilityCard.style.background = bg;
+      viabilityCard.style.borderColor = border;
       viabilityCard.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="font-size: 0.95rem; font-weight: 800; color: ${titleColor}; letter-spacing: 0.02em;">
-            ${res.viabilityTitle}
-          </div>
-          <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary);">
-            Límite ICP Contratado: <strong style="color: var(--text-primary);">${this.contractedPowerKw} kW</strong>
+          <div style="font-weight: 800; font-size: 0.95rem; color: ${titleColor};">${res.viabilityTitle}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+            Margen ICP (4.6 kW): <strong style="color: ${parseFloat(res.icpHeadroomKw) > 1.0 ? '#10b981' : '#f43f5e'};">+${res.icpHeadroomKw} kW libre</strong>
           </div>
         </div>
-
-        <div style="font-size: 0.82rem; color: var(--text-primary); margin-top: 0.45rem; line-height: 1.45;">
+        <div style="font-size: 0.83rem; color: var(--text-secondary); margin-top: 0.4rem; line-height: 1.45;">
           ${res.viabilityDesc}
-        </div>
-
-        <!-- Desglose numérico rápido -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.6rem;">
-          <div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Demanda Total</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: #f43f5e;">${res.totalLoadKw} kW</div>
-          </div>
-          <div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Cubierto por Sol</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: var(--color-solar-light);">${res.solarCoveredKw} kW</div>
-          </div>
-          <div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Cubierto por Batería</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: #c084fc;">${res.batDischargeKw} kW</div>
-          </div>
-          <div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Consumo de Red</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: ${res.gridImportKw > 0 ? '#f43f5e' : 'var(--color-real)'};">${res.gridImportKw} kW</div>
-          </div>
-          <div>
-            <div style="font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;">Coste por Hora</div>
-            <div style="font-size: 0.95rem; font-weight: 800; color: ${res.gridImportKw > 0 ? '#f43f5e' : 'var(--color-real)'};">${res.costPerHourEur} €/h</div>
-          </div>
         </div>
       `;
     }
 
-    // Actualizar Barra Proporcional
-    const total = parseFloat(res.totalLoadKw) || 0.001;
-    const solPct = Math.min(100, (parseFloat(res.solarCoveredKw) / total) * 100);
-    const batPct = Math.min(100 - solPct, (parseFloat(res.batDischargeKw) / total) * 100);
-    const gridPct = Math.max(0, 100 - solPct - batPct);
+    const setTxt = (id, val) => {
+      const el = this.container.querySelector(`#${id}`);
+      if (el) el.textContent = val;
+    };
 
-    const barSol = this.container.querySelector('#bar-solar-part');
+    setTxt('whatif-total-load', `${res.totalLoadKw} kW`);
+    setTxt('whatif-active-sub', `${res.activeCount} aparatos activos`);
+    setTxt('whatif-solar-val', `${(this.simSolarW / 1000).toFixed(2)} kW`);
+    setTxt('whatif-bat-val', `${res.batDischargeKw} kW`);
+    setTxt('whatif-bat-sub', `${this.simBatterySoc}% SoC (Autonomía: ${res.autonomyHours} h)`);
+    setTxt('whatif-cost-val', `${res.costPerHourEur} € / h`);
+    setTxt('whatif-cost-sub', res.is100PercentClean ? '100% Gratis (0.00 €)' : `2 horas: ${res.costPer2HoursEur} €`);
+
+    const cleanPctLabel = this.container.querySelector('#whatif-clean-pct-label');
+    if (cleanPctLabel) {
+      cleanPctLabel.textContent = `${res.cleanPercent}% Limpia (Sol + Batería)`;
+      cleanPctLabel.style.color = res.cleanPercent === 100 ? 'var(--color-real)' : '#f59e0b';
+    }
+
+    const totalW = parseFloat(res.totalLoadW);
+    const solarW = parseFloat(res.solarCoveredKw) * 1000;
+    const batW = parseFloat(res.batDischargeKw) * 1000;
+    const gridW = parseFloat(res.gridImportKw) * 1000;
+
+    const solarPct = totalW > 0 ? (solarW / totalW) * 100 : 100;
+    const batPct = totalW > 0 ? (batW / totalW) * 100 : 0;
+    const gridPct = totalW > 0 ? (gridW / totalW) * 100 : 0;
+
+    const barSolar = this.container.querySelector('#bar-solar-part');
     const barBat = this.container.querySelector('#bar-bat-part');
     const barGrid = this.container.querySelector('#bar-grid-part');
-    const lblClean = this.container.querySelector('#whatif-clean-pct-label');
-    const lblSol = this.container.querySelector('#lbl-bar-solar');
-    const lblBat = this.container.querySelector('#lbl-bar-bat');
-    const lblGrid = this.container.querySelector('#lbl-bar-grid');
 
-    if (barSol) barSol.style.width = `${solPct}%`;
+    if (barSolar) barSolar.style.width = `${solarPct}%`;
     if (barBat) barBat.style.width = `${batPct}%`;
     if (barGrid) barGrid.style.width = `${gridPct}%`;
 
-    if (lblClean) {
-      lblClean.textContent = `${res.cleanPercent}% Limpia (${res.is100PercentClean ? '100% Coste 0.00 €' : `Red: ${res.costPerHourEur} €/h`})`;
-      lblClean.style.color = res.is100PercentClean ? 'var(--color-real)' : '#fbbf24';
-    }
-
-    if (lblSol) lblSol.textContent = `${res.solarCoveredKw} kW (${Math.round(solPct)}%)`;
-    if (lblBat) lblBat.textContent = `${res.batDischargeKw} kW (${Math.round(batPct)}%)`;
-    if (lblGrid) lblGrid.textContent = `${res.gridImportKw} kW (${Math.round(gridPct)}%)`;
+    setTxt('lbl-bar-solar', `${res.solarCoveredKw} kW (${Math.round(solarPct)}%)`);
+    setTxt('lbl-bar-bat', `${res.batDischargeKw} kW (${Math.round(batPct)}%)`);
+    setTxt('lbl-bar-grid', `${res.gridImportKw} kW (${Math.round(gridPct)}%)`);
   }
 }

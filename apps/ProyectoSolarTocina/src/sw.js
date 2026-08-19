@@ -1,4 +1,4 @@
-const CACHE_NAME = 'solar-tocina-v3.6';
+const CACHE_NAME = 'solar-tocina-v3.7';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
