@@ -8,7 +8,7 @@ export class VirtualBatteryManager {
     this.config = {
       feedInPriceEurKwh: config.feedInPriceEurKwh || 0.072600, // Compensación excedentes Naturgy (0.06 €/kWh + IVA)
       gridImportPriceEurKwh: config.gridImportPriceEurKwh || 0.093991, // Compra Valle Naturgy Noche Luz (con imp)
-      fixedPowerCostMonthEur: config.fixedPowerCostMonthEur || 32.40, // Término potencia 4.6 kW (P1+P2) + bono social
+      fixedPowerCostMonthEur: config.fixedPowerCostMonthEur || 26.63, // Término potencia 4.6 kW (25.82 €) + contador (0.81 €) antes de impuestos (33.87 € con imp)
       ivaRate: 0.21,
       ieeRate: 0.051127
     };

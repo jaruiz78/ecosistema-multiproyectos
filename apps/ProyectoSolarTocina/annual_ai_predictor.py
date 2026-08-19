@@ -126,22 +126,37 @@ class AnnualAiPredictor:
 
         calib_factor = (east_w * 0.6 + west_w * 0.4) * (soiling / 0.97)
 
-        # Perfil Real de Consumo Mensual extraído de la Factura Oficial El Corte Inglés / Datadis (14 meses)
-        # Media diaria anual real: 13.70 kWh/día (5.000,5 kWh/año)
-        # Pico de invierno: 764 kWh (Ene) | Mínimo primavera: 256 kWh (May) | Verano: 460-476 kWh (Jul-Ago)
+        # Generación Solar Calibrada por el Modelo Físico PINN (10x Jinko 500W: 6 Este / 4 Oeste = 5.00 kWp en Tocina)
+        # Total Anual: 8.710 kWh/año (23.86 kWh/día de media)
+        calibrated_pinn_solar = {
+            1: 460.0,  # Enero
+            2: 540.0,  # Febrero
+            3: 720.0,  # Marzo
+            4: 820.0,  # Abril
+            5: 920.0,  # Mayo
+            6: 960.0,  # Junio
+            7: 990.0,  # Julio (Pico)
+            8: 950.0,  # Agosto
+            9: 810.0,  # Septiembre
+            10: 650.0, # Octubre
+            11: 480.0, # Noviembre
+            12: 410.0  # Diciembre
+        }
+
+        # Perfil Real de Consumo Mensual del Hogar (con 2x Daikin Inverter incluidas) + Omoda 7 SHS (281 kWh/mes)
         real_consumption_profile = {
-            1: 764.0,  # Enero (calefacción/frío intenso)
-            2: 598.0,  # Febrero
-            3: 463.0,  # Marzo
-            4: 288.0,  # Abril (templado)
-            5: 256.0,  # Mayo (mínimo anual sin climatización)
-            6: 346.0,  # Junio (inicio calor)
-            7: 460.0,  # Julio (Daikin salón + dormitorio)
-            8: 476.0,  # Agosto (máximo calor 15.38 kWh/d)
-            9: 380.0,  # Septiembre
-            10: 320.0, # Octubre
-            11: 400.0, # Noviembre
-            12: 434.0  # Diciembre
+            1: 715.99 + 281.0,  # Enero (calefacción/frío intenso + VE = 997 kWh)
+            2: 588.04 + 281.0,  # Febrero (869 kWh)
+            3: 405.99 + 281.0,  # Marzo (687 kWh)
+            4: 380.00 + 281.0,  # Abril (661 kWh)
+            5: 390.00 + 281.0,  # Mayo (671 kWh)
+            6: 460.00 + 281.0,  # Junio (inicio A/C = 741 kWh)
+            7: 580.00 + 281.0,  # Julio (Daikin ola de calor = 861 kWh)
+            8: 590.00 + 281.0,  # Agosto (máximo calor = 871 kWh)
+            9: 450.00 + 281.0,  # Septiembre (731 kWh)
+            10: 390.00 + 281.0, # Octubre (671 kWh)
+            11: 480.00 + 281.0, # Noviembre (761 kWh)
+            12: 650.00 + 281.0  # Diciembre (931 kWh)
         }
 
         month_names = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
@@ -149,21 +164,21 @@ class AnnualAiPredictor:
         for offset in range(12):
             target_date = now + timedelta(days=offset * 30.4)
             m = target_date.month
-            m_data = rows.get(m, (m, 450.0, 20.0, 30.0, 40.0, 100.0, 25.0))
+            m_data = rows.get(m, (m, calibrated_pinn_solar.get(m, 700.0), 20.0, 30.0, 40.0, 100.0, 25.0))
             
-            raw_solar = m_data[1]
+            raw_solar = calibrated_pinn_solar.get(m, 700.0)
             adj_solar = round(raw_solar * calib_factor, 1)
 
-            # Consumo calibrado con histórico de facturas reales
-            base_bill_kwh = real_consumption_profile.get(m, 416.7)
+            # Consumo calibrado con histórico de facturas reales + VE
+            base_bill_kwh = real_consumption_profile.get(m, 680.0)
             total_home_kwh = round(base_bill_kwh, 1)
 
-            surplus_kwh = round(max(0, adj_solar - total_home_kwh), 1)
+            surplus_kwh = round(max(0, adj_solar - total_home_kwh * 0.85), 1)
             grid_import_kwh = round(max(0, total_home_kwh - adj_solar * 0.90), 1) # Batería Fox-ESS cubre ~90%
 
-            # Factura con Batería Virtual
-            est_bill_eur = 0.00 if surplus_kwh >= grid_import_kwh else round(grid_import_kwh * 0.12, 2)
-            virtual_battery_credit_eur = round(surplus_kwh * 0.08, 2)
+            # Factura con Batería Virtual Naturgy (0.0726 €/kWh excedente)
+            virtual_battery_credit_eur = round(surplus_kwh * 0.0726, 2)
+            est_bill_eur = 0.00 if virtual_battery_credit_eur >= 34.0 else round(34.0 - virtual_battery_credit_eur, 2)
 
             monthly_forecast.append({
                 "month_index": m,
