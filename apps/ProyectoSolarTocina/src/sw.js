@@ -1,4 +1,4 @@
-const CACHE_NAME = 'solar-tocina-v3.7';
+const CACHE_NAME = 'solar-tocina-v3.8';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -7,6 +7,10 @@ const STATIC_ASSETS = [
   '/battery-soh-diagnostic.js',
   '/icp-power-optimizer-ui.js',
   '/valley-charge-scheduler-ui.js',
+  '/daikin-iot-ui.js',
+  '/smart-plugs-ui.js',
+  '/environmental-sensors-ui.js',
+  '/virtual-battery-naturgy-ui.js',
   '/manifest.json',
   '/vendor/marked.min.js',
   '/vendor/katex.min.css',

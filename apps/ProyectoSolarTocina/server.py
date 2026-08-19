@@ -31,6 +31,10 @@ from litert_solar_kernel import litert_engine
 from duckdb_analytics_engine import duckdb_engine
 from telegram_bot_service import TelegramBotService
 from daikin_controller import DaikinController
+from daikin_iot_automation import daikin_iot_engine
+from smart_plugs_manager import smart_plugs_engine
+from environmental_sensors_manager import environmental_sensors_engine
+from naturgy_virtual_battery_controller import naturgy_vb_engine
 from soiling_detector import SoilingDetector
 from backup_manager import BackupManager
 
@@ -573,6 +577,34 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json({"error": str(e)}, status=500)
             return
 
+        elif self.path == '/api/daikin/iot/status':
+            try:
+                self._send_json(daikin_iot_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/smart-plugs/status':
+            try:
+                self._send_json(smart_plugs_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/environmental-sensors/status':
+            try:
+                self._send_json(environmental_sensors_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/naturgy/virtual-battery/status':
+            try:
+                self._send_json(naturgy_vb_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
         elif self.path == '/api/ai/thermal-precooling':
             try:
                 telemetry = read_inverter_modbus_telemetry()
@@ -845,6 +877,152 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json(res)
             except Exception as e:
                 self._send_json({ "success": False, "error": str(e) }, 500)
+            return
+
+        elif self.path == '/api/daikin/iot/control':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                res = daikin_iot_engine.set_unit_state(
+                    unit_id=data.get('unit_id', 'daikin_salon'),
+                    power_on=bool(data.get('power_on', True)),
+                    target_temp_c=float(data.get('target_temp_c', 24.0)),
+                    mode=data.get('mode', 'cool'),
+                    fan_rate=data.get('fan_rate', 'auto'),
+                    fan_direction=data.get('fan_direction', 'swing')
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/daikin/iot/config':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                if 'unit_id' in data and 'ip' in data:
+                    daikin_iot_engine.update_unit_ip_and_type(data['unit_id'], data['ip'], data.get('hardware_type', 'faikin_esp32'))
+                if 'auto_automation_enabled' in data:
+                    daikin_iot_engine.config['auto_automation_enabled'] = bool(data['auto_automation_enabled'])
+                    daikin_iot_engine.save_config()
+                self._send_json(daikin_iot_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/daikin/iot/evaluate':
+            try:
+                telemetry = read_inverter_modbus_telemetry()
+                solar_kw = telemetry.get('solar_total_kw', 0.0)
+                home_kw = telemetry.get('grid', {}).get('home_load_kw', 1.0)
+                surplus_kw = max(0.0, solar_kw - home_kw)
+                bat_soc = telemetry.get('battery', {}).get('soc_percent', 100.0)
+                temp_amb = max(15.0, telemetry.get('inverter', {}).get('temperature_c', 35.0) - 8.0)
+                now = datetime.now()
+                res = daikin_iot_engine.evaluate_seasonal_automation(
+                    current_hour=now.hour,
+                    current_month=now.month,
+                    outdoor_temp_c=temp_amb,
+                    solar_surplus_kw=surplus_kw,
+                    battery_soc=bat_soc
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/smart-plugs/toggle':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                res = smart_plugs_engine.set_plug_state(
+                    plug_id=data.get('plug_id', 'omoda7_ev_schuko'),
+                    power_on=bool(data.get('power_on', True))
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/smart-plugs/config':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                if 'plug_id' in data and 'ip' in data:
+                    smart_plugs_engine.update_plug_network(data['plug_id'], data['ip'], data.get('hardware_type', 'shelly_plus_1pm'))
+                if 'auto_dispatch_enabled' in data:
+                    smart_plugs_engine.config['auto_dispatch_enabled'] = bool(data['auto_dispatch_enabled'])
+                    smart_plugs_engine.save_config()
+                self._send_json(smart_plugs_engine.get_full_system_status())
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/smart-plugs/evaluate':
+            try:
+                telemetry = read_inverter_modbus_telemetry()
+                solar_kw = telemetry.get('solar_total_kw', 0.0)
+                home_kw = telemetry.get('grid', {}).get('home_load_kw', 1.0)
+                surplus_kw = max(0.0, solar_kw - home_kw)
+                bat_soc = telemetry.get('battery', {}).get('soc_percent', 100.0)
+                now = datetime.now()
+                res = smart_plugs_engine.evaluate_surplus_dispatch(
+                    solar_surplus_kw=surplus_kw,
+                    battery_soc=bat_soc,
+                    current_hour=now.hour
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/environmental-sensors/record':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                res = environmental_sensors_engine.record_sensor_telemetry(
+                    sensor_id=data.get('sensor_id', 'sensor_salon'),
+                    temp_c=float(data.get('temperature_c', 25.0)),
+                    humidity_pct=float(data.get('humidity_pct', 50.0)),
+                    battery_pct=data.get('battery_pct')
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/naturgy/virtual-battery/toggle-active':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                res = naturgy_vb_engine.toggle_activation_status(
+                    is_active=bool(data.get('is_active', True)),
+                    activation_date=data.get('activation_date')
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/naturgy/virtual-battery/add-entry':
+            content_len = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_len).decode('utf-8')
+            try:
+                data = json.loads(body)
+                res = naturgy_vb_engine.add_monthly_surplus_entry(
+                    month_year=data.get('month_year', datetime.now().strftime('%Y-%m')),
+                    surplus_kwh=float(data.get('surplus_kwh', 0.0)),
+                    raw_bill_eur=float(data.get('raw_bill_eur', 33.87))
+                )
+                self._send_json(res)
+            except Exception as e:
+                self._send_json({"success": False, "error": str(e)}, status=500)
             return
 
         elif self.path == '/api/mobility/omoda7/set-soc':

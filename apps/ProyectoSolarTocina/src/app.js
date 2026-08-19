@@ -21,6 +21,10 @@ import { KioskModeManager } from './kiosk-mode.js';
 import { TelegramBotManager } from './telegram-manager.js';
 import { BackupUiManager } from './backup-ui.js';
 import { SoilingUiManager } from './soiling-ui.js';
+import { DaikinIoTUiManager } from './daikin-iot-ui.js?v=3.8';
+import { SmartPlugsUiManager } from './smart-plugs-ui.js?v=3.8';
+import { EnvironmentalSensorsUiManager } from './environmental-sensors-ui.js?v=3.8';
+import { NaturgyVirtualBatteryUiManager } from './virtual-battery-naturgy-ui.js?v=3.8';
 
 /**
  * Obtiene siempre la hora, minuto, fecha y hora fraccionaria exacta en horario de España (Europe/Madrid)
@@ -108,6 +112,12 @@ class SolarApp {
       // Callback opcional de What-If
     });
 
+    // Nuevos Centros de Control IoT & Batería Virtual Naturgy
+    this.daikinIoT = new DaikinIoTUiManager('daikin-iot-container');
+    this.smartPlugs = new SmartPlugsUiManager('smart-plugs-container');
+    this.environmentalSensors = new EnvironmentalSensorsUiManager('environmental-sensors-container');
+    this.naturgyVB = new NaturgyVirtualBatteryUiManager('naturgy-virtual-battery-container');
+
     this.init();
     this.setupSseStream();
     this.startBackgroundSync();
@@ -124,7 +134,11 @@ class SolarApp {
       this.fetchTodayHourlyTelemetry(),
       this.fetchModbusTelemetry(),
       this.loadAnnualForecast('12m'),
-      this.loadThermalPrecooling()
+      this.loadThermalPrecooling(),
+      this.daikinIoT.init(),
+      this.smartPlugs.init(),
+      this.environmentalSensors.init(),
+      this.naturgyVB.init()
     ]);
     
     window.batterySohDiagnostic?.init();

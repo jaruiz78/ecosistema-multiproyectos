@@ -1,0 +1,22 @@
+{
+  "status": "STANDBY_CONTRACTED",
+  "contract_info": {
+    "company": "Naturgy Clientes S.A.U.",
+    "tariff_name": "Tarifa Noche Luz ECO 2.0TD con Batería Virtual",
+    "cups": "ES0031104638423001VV0F",
+    "holder": "José Antonio Ruiz Arribas",
+    "contract_date": "2026-08-19",
+    "activation_date": null,
+    "surplus_rate_eur_kwh": 0.0726,
+    "grid_import_valley_eur_kwh": 0.093991,
+    "contracted_power_p1_kw": 4.6,
+    "contracted_power_p2_kw": 4.6,
+    "monthly_fixed_cost_eur": 33.87,
+    "wallet_validity_years": 5,
+    "applies_to_fixed_term": true
+  },
+  "current_wallet_balance_eur": 0.0,
+  "virtual_simulated_wallet_eur": 52.3,
+  "ledger_entries": [],
+  "last_updated": "2026-08-19T19:44:25.145097"
+}
