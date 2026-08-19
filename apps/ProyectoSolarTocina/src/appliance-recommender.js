@@ -10,10 +10,10 @@ export const APPLIANCE_CATALOG = [
     icon: '❄️',
     category: 'clima',
     durationHours: 6.0,
-    powerKw: 0.52,
-    totalEnergyKwh: 3.12,
-    realPowerW: 520,
-    description: 'Split Daikin Inverter en salón de 35 m². Confort continuo de día (13:00 - 20:00).'
+    powerKw: 0.48,
+    totalEnergyKwh: 2.88,
+    realPowerW: 480,
+    description: 'Split Daikin Inverter en salón de 35 m². Modulación real medida en crucero a 25°C.'
   },
   {
     id: 'daikin_bedroom',
@@ -21,9 +21,9 @@ export const APPLIANCE_CATALOG = [
     icon: '🌙',
     category: 'clima',
     durationHours: 4.0,
-    powerKw: 0.21,
-    totalEnergyKwh: 0.84,
-    realPowerW: 210,
+    powerKw: 0.20,
+    totalEnergyKwh: 0.80,
+    realPowerW: 200,
     description: 'Split Daikin Inverter en dormitorio de 16 m². Modo silencioso siesta/noche.'
   },
   {
@@ -32,9 +32,9 @@ export const APPLIANCE_CATALOG = [
     icon: '🧊',
     category: 'cocina',
     durationHours: 24.0,
-    powerKw: 0.09,
-    totalEnergyKwh: 1.15,
-    realPowerW: 90,
+    powerKw: 0.08,
+    totalEnergyKwh: 1.05,
+    realPowerW: 80,
     description: 'Frigorífico americano Inox Midea Smart Home de doble puerta. Compresor Inverter continuo.'
   },
   {
