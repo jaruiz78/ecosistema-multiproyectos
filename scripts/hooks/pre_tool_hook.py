@@ -57,6 +57,41 @@ RAW_PII_LOG_PATTERN = re.compile(
     re.IGNORECASE
 )
 
+UNAUTHORIZED_GCP_DEPLOY_PATTERNS = [
+    re.compile(r'\bgcloud\s+(run|app|functions|compute|container)\s+(deploy|create|apply)\b', re.IGNORECASE),
+    re.compile(r'\bfirebase\s+deploy\b', re.IGNORECASE),
+    re.compile(r'\bkubectl\s+(apply|create|replace)\b', re.IGNORECASE),
+    re.compile(r'\bhelm\s+(install|upgrade)\b', re.IGNORECASE),
+]
+
+def validate_gcp_deployment(command_or_tool_name: str) -> Optional[str]:
+    """Bloquea cualquier despliegue a la nube GCP salvo que esté explícitamente autorizado por variable de entorno."""
+    if os.getenv("ALLOW_GCP_DEPLOY", "false").lower() in ["true", "1", "yes"]:
+        return None
+
+    # Verificar comandos CLI
+    for pattern in UNAUTHORIZED_GCP_DEPLOY_PATTERNS:
+        if pattern.search(command_or_tool_name):
+            return (
+                "VIOLACIÓN DE POLÍTICA DE NO-DESPLIEGUE GCP (Lex Zero-Cost / BeyondCorp): "
+                f"Intento de despliegue bloqueado: '{command_or_tool_name}'. "
+                "Prohibido desplegar en GCP sin petición expresa del usuario. (Use ALLOW_GCP_DEPLOY=true para autorizar)."
+            )
+
+    # Verificar herramientas MCP de despliegue directo
+    deploy_mcp_tools = [
+        "deploy_container_image", "deploy_file_contents", "deploy_local_folder",
+        "firebase_deploy", "apply_k8s_manifest", "create_cluster", "create_node_pool"
+    ]
+    if command_or_tool_name in deploy_mcp_tools:
+        return (
+            "VIOLACIÓN DE POLÍTICA DE NO-DESPLIEGUE GCP (Lex Zero-Cost / BeyondCorp): "
+            f"Herramienta MCP de despliegue '{command_or_tool_name}' bloqueada. "
+            "Prohibido desplegar en GCP sin petición expresa del usuario."
+        )
+
+    return None
+
 def validate_pure_domain(file_path_str: str, content: str) -> Optional[str]:
     """Valida que los archivos bajo domain/ no contengan anotaciones ni dependencias de infraestructura."""
     normalized_path = file_path_str.replace("\\", "/")
@@ -143,16 +178,29 @@ def main():
         elif tool_name in ["run_command", "exec_command"]:
             cmd = args.get("CommandLine", "") or args.get("command", "")
             if cmd:
+                # Validar seguridad de comandos destructivos
                 cmd_err = validate_command_safety(cmd)
                 if cmd_err:
                     print(f"❌ [PRE-TOOL HOOK REJECTION] {cmd_err}", file=sys.stderr)
                     sys.exit(1)
 
-        # 3. Validación de llamadas a herramientas MCP (BigQuery, etc.)
+                # Validar política de no despliegue GCP no solicitado
+                deploy_err = validate_gcp_deployment(cmd)
+                if deploy_err:
+                    print(f"❌ [PRE-TOOL HOOK REJECTION] {deploy_err}", file=sys.stderr)
+                    sys.exit(1)
+
+        # 3. Validación de llamadas a herramientas MCP (BigQuery, CloudRun, etc.)
         elif tool_name in ["call_mcp_tool"]:
             server_name = args.get("ServerName", "")
             tool_call_name = args.get("ToolName", "")
             mcp_args = args.get("Arguments", {})
+
+            # Validar herramientas MCP de despliegue GCP
+            deploy_err = validate_gcp_deployment(tool_call_name)
+            if deploy_err:
+                print(f"❌ [PRE-TOOL HOOK REJECTION] {deploy_err}", file=sys.stderr)
+                sys.exit(1)
 
             if server_name == "bigquery" or "sql" in tool_call_name.lower():
                 query = mcp_args.get("query", "") or mcp_args.get("sql", "")

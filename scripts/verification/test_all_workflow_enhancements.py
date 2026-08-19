@@ -105,6 +105,14 @@ class WorkflowVerifier:
         code, out, err = self.run_hook_process(hook_script, pii_violation)
         self.log_result("Zero-PII Logging Blocked", code == 1, "Bloqueó logging de auth_token en claro")
 
+        # 1.6 Despliegue no autorizado en GCP (debe retornar 1)
+        gcp_deploy_violation = {
+            "tool_name": "run_command",
+            "args": {"CommandLine": "gcloud run deploy my-service --image gcr.io/test"}
+        }
+        code, out, err = self.run_hook_process(hook_script, gcp_deploy_violation)
+        self.log_result("Unauthorized GCP Deploy Blocked", code == 1, "Bloqueó despliegue en Cloud Run sin permiso expreso")
+
     def test_post_tool_and_lifecycle_hooks(self):
         print("\n🔍 --- 2. Verificando Post-Tool & Lifecycle Hooks ---")
         post_script = HOOKS_DIR / "post_tool_hook.py"
