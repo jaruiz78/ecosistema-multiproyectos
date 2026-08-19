@@ -19,11 +19,11 @@ BigQuery cobra por terabytes de datos escaneados. Ejecutar consultas no optimiza
 ```mermaid
 graph TD
     subgraph Flujo de Consulta Optimizado (bq-dry-run-optimizer)
-        Q_IN[SQL Query / GQL Query] --> DRY[Dry-Run Validation]
+        Q_IN["SQL Query / GQL Query] --> DRY[Dry-Run Validation"]
         DRY --> COST_CHECK{"¿Bytes escaneados < Limite (100MB)?"}
         
         COST_CHECK -->|Sí| EXEC[Ejecutar Query en BigQuery]
-        COST_CHECK -->|No| REJECT[Rechazar Query & Exigir Filtro por Partición/Clúster]
+        COST_CHECK -->|No| REJECT["Rechazar Query & Exigir Filtro por Partición/Clúster"]
     end
 ```
 

@@ -18,13 +18,13 @@ Un **ADR** es la bitácora o diario de a bordo del barco de software. Si dentro 
 ```mermaid
 graph TD
     subgraph Especificaciones y Decisiones (Single Source of Truth)
-        ADR[docs/adr/0001-virtual-threads.md]
-        PROTO[proto/order_service.proto]
+        ADR["docs/adr/0001-virtual-threads.md"]
+        PROTO["proto/order_service.proto"]
     end
 
     subgraph Generación de Código y Clientes
-        PROTOC[Compilador protoc / Protobuf Plugin]
-        DOC_GEN[OpenAPI UI / Swagger Docs]
+        PROTOC["Compilador protoc / Protobuf Plugin"]
+        DOC_GEN["OpenAPI UI / Swagger Docs"]
     end
 
     subgraph Código de Aplicación

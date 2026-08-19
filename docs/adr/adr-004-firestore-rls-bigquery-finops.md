@@ -4,7 +4,7 @@
 Aprobado (Consilium Romano)
 
 ## Contexto
-Garantizar el estricto aislamiento de datos entre inquilinos (*tenants*) en entornos multi-empresa manteniendo los costes de infraestructura por debajo de $0.015 USD/MAU/mes.
+Garantizar el estricto aislamiento de datos entre inquilinos (*tenants*) en entornos multi-empresa manteniendo los costes de infraestructura por debajo de `$0.015 USD`/MAU/mes.
 
 ## Decisión
 1. Implementar **Row-Level Security (RLS)** estricto en Firestore vinculado a los claims de autenticación del usuario (`request.auth.token.tenant_id`).

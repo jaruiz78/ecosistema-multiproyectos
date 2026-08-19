@@ -41,7 +41,7 @@ No todos los servidores mueren igual. Clasificamos los fallos del más fácil al
 2.  **Crash-Recovery**: El servidor A se apaga, y 10 minutos después se enciende. El problema es que ha perdido su memoria RAM y despierta con "amnesia", enviando mensajes contradictorios respecto al pasado si no guardó su estado en disco de forma transaccional.
 3.  **Omission (Omisión de Red)**: El servidor A está vivo y sano, pero el router le corta el cable. Envía mensajes pero nunca llegan al servidor B.
 4.  **Fallo Bizantino (Byzantine Fault)**: La peor pesadilla matemática. El servidor A no solo falla, sino que actúa con **malicia inteligente o corrupción cósmica**. Debido a un rayo cósmico en la RAM, un hackeo o un bug de memoria de C++, el servidor A envía mensajes perfectamente formateados pero con mentiras (ej. "El saldo es 1000€" al nodo B, y "El saldo es 0€" al nodo C).
-    *   *Solución BFT (Byzantine Fault Tolerance)*: Requiere que `$3`F + 1$ nodos existan para tolerar $F$ nodos traidores (ej. para tolerar 1 servidor hackeado, necesitas 4 servidores totales). Es la base del Blockchain (Bitcoin/Ethereum). En sistemas corporativos internos (Google/Amazon), solemos ignorar los fallos Bizantinos por ser demasiado caros de prevenir, asumiendo que el datacenter es seguro.
+    *   *Solución BFT (Byzantine Fault Tolerance)*: Requiere que $3F + 1$ nodos existan para tolerar $F$ nodos traidores (ej. para tolerar 1 servidor hackeado, necesitas 4 servidores totales). Es la base del Blockchain (Bitcoin/Ethereum). En sistemas corporativos internos (Google/Amazon), solemos ignorar los fallos Bizantinos por ser demasiado caros de prevenir, asumiendo que el datacenter es seguro.
 
 ---
 
@@ -63,7 +63,7 @@ Ahora tienes **Dos Maestros activos**. Los usuarios europeos escriben compras en
 
 Esta sección expande el conocimiento fundacional a nivel algorítmico y matemático, enfocado para arquitectos que diseñan motores de bases de datos desde cero.
 
-## 6. Demostración del Límite Bizantino (`$3`F + 1$)
+## 6. Demostración del Límite Bizantino ($3F + 1$)
 
 Para comprender por qué necesitamos 4 nodos para tolerar 1 nodo malicioso (Bizantino), analizamos la matemática de intersección de quórums formulada por Leslie Lamport, Robert Shostak y Marshall Pease (1982).
 
@@ -75,7 +75,7 @@ Para llegar a un consenso, un comandante leal necesita recolectar votos.
 3. Para que la mayoría de los votos recibidos provenga matemáticamente de nodos honestos y no de traidores, necesitamos que el número de nodos honestos en ese grupo ($N - 2F$) sea estrictamente mayor que el número de traidores ($F$):
    $N - 2F > F \implies N > 3F \implies N \ge 3F + 1$
 
-**Consecuencia arquitectónica:** Si implementamos PBFT (Practical Byzantine Fault Tolerance) en un consorcio privado de bancos corporativos, y queremos sobrevivir a que 2 bancos sean hackeados, la red *debe* tener al menos `$3`(2) + 1 = 7$ servidores.
+**Consecuencia arquitectónica:** Si implementamos PBFT (Practical Byzantine Fault Tolerance) en un consorcio privado de bancos corporativos, y queremos sobrevivir a que 2 bancos sean hackeados, la red *debe* tener al menos $3(2) + 1 = 7$ servidores.
 
 ## 7. Teorema FLP (Fischer, Lynch, Paterson - 1985)
 

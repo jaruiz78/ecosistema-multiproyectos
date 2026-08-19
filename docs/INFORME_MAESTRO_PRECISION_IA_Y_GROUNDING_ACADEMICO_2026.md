@@ -11,7 +11,7 @@
 | **Puntuación Media en 12 Facultades** | `6.92 / 10.0` (66.7% pass) | `9.22 / 10.0` (100.0% pass) | **+2.3 pts** |
 | **Pares de Entrenamiento DPO Contrastivos** | `0 pares` (Solo trivial) | `10000 pares` (DDD/Loom/FinOps) | **+100% Cobertura** |
 | **Papers Académicos Canónicos Enlazados** | `58 papers` (Aislados) | `100% integrados en GraphRAG` | **Trazabilidad 1:1** |
-| **Coste Operativo de Inferencia** | Dependiente de APIs | **$0.00 USD** (100% Local NPU/GPU) | **Ahorro 100% FinOps** |
+| **Coste Operativo de Inferencia** | Dependiente de APIs | **`$0.00 USD`** (100% Local NPU/GPU) | **Ahorro 100% FinOps** |
 
 ---
 

@@ -242,6 +242,7 @@ class SolarApp {
 
   processTelemetry(data) {
     if (!data) return;
+    this.latestTelemetry = data;
 
     if (!data.online) {
       const badge = document.getElementById('modbus-live-badge');
@@ -1449,7 +1450,6 @@ class SolarApp {
       this.chartToday._contextKey = chartContextKey;
     };
 
-    const selectedDay = this.daysData[this.selectedDayIndex] || this.daysData[0];
     const isToday = (this.selectedDayIndex === 0);
     const { hour: currentHour, minute: currentMin, fractionalHour: currentFractionalHour } = getMadridTime();
 

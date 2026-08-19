@@ -22,7 +22,7 @@ El **Consilium Romano** es el órgano deliberativo colegiado que gobierna la cal
 │    Pater Familias      │ │     Custos Fidei      │ │        Tribunus Plebis          │ │    Censor FinOps       │
 │   (@code-reviewer)     │ │ (@security-auditor)   │ │       (@test-engineer)          │ │ (@sre-finops-auditor)  │
 ├────────────────────────┤ ├───────────────────────┤ ├─────────────────────────────────┤ ├───────────────────────┤
-│ • Arquitectura Hex.    │ │ • Zero-Trust BeyondCorp│ │ • Zero-Mockito TDD             │ │ • Techo < $0.015/MAU  │
+│ • Arquitectura Hex.    │ │ • Zero-Trust BeyondCorp│ │ • Zero-Mockito TDD             │ │ • Techo < `$0.015/MAU`  │
 │ • Loom sin Pinning     │ │ • SLSA L3 / Cosign    │ │ • Stubs In-Memory               │ │ • BigQuery Partitions │
 │ • Dominio DDD Puro     │ │ • Sanitización PII    │ │ • Resiliencia & Fallbacks       │ │ • Cgroup Limits (1GB) │
 └────────────────────────┘ └───────────────────────┘ └─────────────────────────────────┘ └───────────────────────┘
@@ -68,24 +68,24 @@ Las skills no son agentes chaperones en segundo plano, sino **capacidades operat
 ```mermaid
 graph TD
     subgraph "Meta-Bucle 1: Compilación & Autocorrección"
-        M1_Code[Escritura de Código Java/Go] --> M1_Build[Compilación AOT & Leyden CDS]
+        M1_Code["Escritura de Código Java/Go] --> M1_Build[Compilación AOT & Leyden CDS"]
         M1_Build --> M1_Test[TDD Zero-Mockito Suite]
-        M1_Test -->|Fallo| M1_Healing[Self-Healing & Autocorrección]
+        M1_Test -->|Fallo| M1_Healing["Self-Healing & Autocorrección"]
         M1_Healing --> M1_Build
-        M1_Test -->|Verde| M1_SLSA[Firma Cosign & SBOM SLSA L3]
+        M1_Test -->|Verde| M1_SLSA["Firma Cosign & SBOM SLSA L3"]
     end
 
     subgraph "Meta-Bucle 2: FinOps & Integridad"
-        M2_BQ[Consultas BigQuery] --> M2_DryRun[Dry-Run Optimizer & Partition Check]
-        M2_Stripe[Lógica Transaccional] --> M2_Idem[Test de Idempotencia & Sagas]
-        M2_ADR[Decisión Arquitectónica] --> M2_Graph[Actualización Grafo en codebase-memory-mcp]
+        M2_BQ["Consultas BigQuery] --> M2_DryRun[Dry-Run Optimizer & Partition Check"]
+        M2_Stripe["Lógica Transaccional] --> M2_Idem[Test de Idempotencia & Sagas"]
+        M2_ADR["Decisión Arquitectónica] --> M2_Graph[Actualización Grafo en codebase-memory-mcp"]
     end
 
     subgraph "Meta-Bucle 3: Gemelo Digital Maestro"
-        M3_Input[Perturbación Física / Mercado] --> M3_Tensor[Inyección Tensorial PEPS]
+        M3_Input["Perturbación Física / Mercado] --> M3_Tensor[Inyección Tensorial PEPS"]
         M3_Tensor --> M3_EnKF[Filtro de Kalman EnKF en SQLite]
         M3_EnKF -->|Covarianza < 0.5| M3_Valid[Validación Teórica Aprobada]
-        M3_EnKF -->|Covarianza >= 0.5| M3_Reject[Rechazo & Reajuste Paramétrico]
+        M3_EnKF -->|Covarianza >= 0.5| M3_Reject["Rechazo & Reajuste Paramétrico"]
     end
 
     M1_SLSA --> M2_ADR

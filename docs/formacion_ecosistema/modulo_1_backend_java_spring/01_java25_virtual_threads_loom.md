@@ -57,11 +57,11 @@ El *Carrier Thread Pinning* ocurre cuando un Virtual Thread realiza una operaci�
 ```mermaid
 graph LR
     subgraph Anti-Patrón (Pinning)
-        SYNC[synchronized block / Native Method] -->|Bloquea| PINNED[Carrier Thread Pinning!]
+        SYNC["synchronized block / Native Method] -->|Bloquea| PINNED[Carrier Thread Pinning!"]
     end
 
     subgraph Patrón Correcto (Non-Pinning)
-        LOCK[ReentrantLock.lock()] -->|Desmonta VT durante I/O| FREE[Carrier Thread Libre para otros VTs]
+        LOCK["ReentrantLock.lock()] -->|Desmonta VT durante I/O| FREE[Carrier Thread Libre para otros VTs"]
     end
 ```
 

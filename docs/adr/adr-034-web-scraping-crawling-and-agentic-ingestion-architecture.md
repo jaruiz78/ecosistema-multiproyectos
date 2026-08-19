@@ -23,5 +23,5 @@ Adoptar de forma nativa e integrada el ecosistema de 10 herramientas especializa
 7. **Control y Telemetría Móvil**: `scrcpy` con ADB para automatización y recolección de métricas en dispositivos/emuladores Android locales.
 
 ## Consecuencias
-* **Positivas**: Coste por página $0 USD; bypass determinista de bloqueos anti-bot en fuentes públicas; ingesta RAG multiformato de alta fidelidad; pruebas E2E autónomas sin flakiness.
+* **Positivas**: Coste por página `$0 USD`; bypass determinista de bloqueos anti-bot en fuentes públicas; ingesta RAG multiformato de alta fidelidad; pruebas E2E autónomas sin flakiness.
 * **Negativas / Mitigaciones**: Requiere emulación controlada de cabeceras y respeto estricto de tasas de peticiones (rate limiting ético con jitter exponencial).

@@ -19,9 +19,9 @@ En **Java 25 (LTS)**, el lenguaje se ha modernizado drásticamente para permitir
 ```mermaid
 graph TD
     subgraph Evolución Sintáctica de Java
-        OLD[Java Antiguo: POJO Mutable con getters/setters/equals]
-        REC[Java 25: Record Inmutable en 1 sola línea]
-        PM[Java 25: Pattern Matching en Switch / Sealed Types]
+        OLD["Java Antiguo: POJO Mutable con getters/setters/equals"]
+        REC["Java 25: Record Inmutable en 1 sola línea"]
+        PM["Java 25: Pattern Matching en Switch / Sealed Types"]
     end
 
     OLD -->|Reemplazado por| REC

@@ -33,17 +33,17 @@ Para calcular el buffer de tolerancia a retrasos sin saturar la flota de vehícu
 ```mermaid
 graph LR
     subgraph Proceso de Llegada (Poisson λ)
-        ARR[Llegada de Pasajeros / Peticiones]
+        ARR["Llegada de Pasajeros / Peticiones"]
     end
 
     subgraph Cola FIFO de Espera (Buffer N)
-        Q1[Solicitud 1] --- Q2[Solicitud 2] --- Q3[Solicitud 3]
+        Q1["Solicitud 1] --- Q2[Solicitud 2"] --- Q3[Solicitud 3]
     end
 
     subgraph Servidores / Flota (Tasa de Servicio μ)
-        S1[Vehículo / Canal 1]
-        S2[Vehículo / Canal 2]
-        S3[Vehículo / Canal c]
+        S1["Vehículo / Canal 1"]
+        S2["Vehículo / Canal 2"]
+        S3["Vehículo / Canal c"]
     end
 
     ARR --> Q1

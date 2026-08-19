@@ -16,8 +16,8 @@ Imagina gestionar una red de tuberías de agua y bombas solares. Tienes bombas b
 ```mermaid
 graph LR
     subgraph Generadores / Fuentes
-        GEN1[Bomba Solar c1=10€/MWh]
-        GEN2[Red Eléctrica Grid c2=80€/MWh]
+        GEN1["Bomba Solar c1=10€/MWh"]
+        GEN2["Red Eléctrica Grid c2=80€/MWh"]
     end
 
     subgraph Nudos de Red & Almacenamiento

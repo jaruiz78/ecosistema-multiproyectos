@@ -45,14 +45,14 @@ graph TD
     end
 
     subgraph GCP Cloud Run Serverless Cluster (Region europe-west1)
-        GATEWAY[Api Gateway / Go BFF Worker]
+        GATEWAY["Api Gateway / Go BFF Worker"]
         SPRING[Spring Boot 4.1 Microservice - Virtual Threads]
     end
 
     subgraph Persistencia Multi-Tenant & Telemetría
-        FS[(Firestore Multi-Tenant NoSQL)]
-        BQ[(BigQuery Warehouse / BQML)]
-        TRACE[Cloud Trace / OpenTelemetry]
+        FS["(Firestore Multi-Tenant NoSQL)"]
+        BQ["(BigQuery Warehouse / BQML)"]
+        TRACE["Cloud Trace / OpenTelemetry"]
     end
 
     REACT -->|HTTPS / REST| GATEWAY

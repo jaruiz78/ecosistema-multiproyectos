@@ -18,7 +18,7 @@ Tradicionalmente los colores en CSS se definían en RGB (`rgb(255, 0, 0)`) o HSL
 graph TD
     subgraph Cliente Web (Navegador PWA)
         UI[React 19 Functional Component]
-        HOOKS[React State / Context]
+        HOOKS["React State / Context"]
         SW[Service Worker Cache IndexedDB]
     end
 

@@ -22,10 +22,10 @@ En desarrollos agénticos y equipos distribuidos, el **porqué** de una decisió
 
 ```mermaid
 graph LR
-    Propuesta[1. Propuesta de Decisión] --> Discusión[2. Evaluación Consilium / Adversarial]
-    Discusión -->|Aprobada| Aceptado[3. Estado: ACEPTADO / Accepted]
-    Discusión -->|Rechazada| Rechazado[Estado: RECHAZADO / Rejected]
-    Aceptado -->|Futuro cambio de contexto| Superado[Estado: SUPERADO / Superseded by ADR-XXX]
+    Propuesta["1. Propuesta de Decisión] --> Discusión[2. Evaluación Consilium / Adversarial"]
+    Discusión -->|Aprobada| Aceptado["3. Estado: ACEPTADO / Accepted"]
+    Discusión -->|Rechazada| Rechazado["Estado: RECHAZADO / Rejected"]
+    Aceptado -->|Futuro cambio de contexto| Superado["Estado: SUPERADO / Superseded by ADR-XXX"]
 ```
 
 ---

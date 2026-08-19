@@ -13,7 +13,7 @@ Para dotar al ecosistema MultiProyectos de una base tecnológica e industrial de
 
 3. **Gemelo Digital Unificado 14.0 (512 Clusters Industriales):**
    - Simulación Monte Carlo a 5 años de **512 clusters industriales acoplados** con asimilación estocástica EnKF.
-   - Procesamiento de **13.482 trillones de peticiones** con latencia mediana $p_{50} = 2.45\text{ ms}$, $\text{Tr}(P) = 0.000035$, throughput de **`2.450.000 req/s`** y coste unitario récord de **`$0.00045 / MAU / mes`** (97.0% de reducción frente al techo de $0.015).
+   - Procesamiento de **13.482 trillones de peticiones** con latencia mediana $p_{50} = 2.45\text{ ms}$, $\text{Tr}(P) = 0.000035$, throughput de **`2.450.000 req/s`** y coste unitario récord de **`$0.00045 / MAU / mes`** (97.0% de reducción frente al techo de `$0.015`).
 
 ## Consecuencias y Estado
 - **Total de Módulos en el Ecosistema:** **548 módulos** (270 apps verticales, 38 cores algorítmicos, 239 starters, 3 proyectos satélite).

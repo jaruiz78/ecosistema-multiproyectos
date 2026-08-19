@@ -17,17 +17,17 @@ Las sanciones por violar el Reglamento General de Protección de Datos (GDPR) o 
 ```mermaid
 graph TD
     subgraph Entrada de Datos no Confiable
-        RAW[Texto de Usuario / Logs HTTP]
+        RAW["Texto de Usuario / Logs HTTP"]
     end
 
     subgraph Middleware de Sanitización PII
-        REGEX[Detector Regex de Patrones NIF/Email/Phone]
+        REGEX["Detector Regex de Patrones NIF/Email/Phone"]
         HASH[Generador Hash Salteado SHA-256]
     end
 
     subgraph Destino Soberano (EU Region europe-west1)
-        LOGS[Cloud Logging / Structured JSON]
-        AI[Vertex AI / Gemini API EU Endpoint]
+        LOGS["Cloud Logging / Structured JSON"]
+        AI["Vertex AI / Gemini API EU Endpoint"]
     end
 
     RAW --> REGEX

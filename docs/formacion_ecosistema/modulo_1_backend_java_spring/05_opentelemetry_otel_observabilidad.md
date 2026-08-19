@@ -23,13 +23,13 @@ graph TD
     end
 
     subgraph Instrumentación OpenTelemetry (OTEL)
-        TRACER[Tracer / Generador de Spans]
+        TRACER["Tracer / Generador de Spans"]
         LOGS[JSON Structured Logger]
-        METRICS[Meter / Metrics Collector]
+        METRICS["Meter / Metrics Collector"]
     end
 
     subgraph Plataforma Observabilidad GCP / Cloud Trace
-        TRACE_SYS[Cloud Trace / Jaeger]
+        TRACE_SYS["Cloud Trace / Jaeger"]
         LOG_SYS[Cloud Logging]
     end
 

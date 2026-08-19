@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "timestamp": "2026-08-19T11:17:27Z",
+    "iterations": 1000000,
+    "historical_invoices_count": 139,
+    "climate_years_backtested": "2014-2026 (12 años)",
+    "hardware": "10x Jinko 500W (5.0 kWp) + Fox-ESS 10.36 kWh + Sunworks KP10",
+    "contract": "Naturgy Solar + Batería Virtual (0.06 €/kWh excedente, 0€ cuota)",
+    "ev": "Omoda 7 SHS PHEV (18.7 kWh / 17.0 kWh útil)"
+  },
+  "phase1_baseline_home": {
+    "annual_home_kwh": {
+      "mean": 5469.7001953125,
+      "p10": 5237.10009765625,
+      "p50": 5469.7998046875,
+      "p90": 5702.39990234375
+    },
+    "annual_solar_kwh": {
+      "mean": 8351.2998046875,
+      "p10": 8070.5,
+      "p50": 8351.0,
+      "p90": 8632.599609375
+    },
+    "annual_bill_without_solar_eur": {
+      "mean": 995.0900268554688,
+      "p50": 995.1099853515625
+    },
+    "annual_bill_with_solar_bv_eur": {
+      "mean": 62.36000061035156,
+      "p10": 53.77000045776367,
+      "p50": 61.439998626708984,
+      "p90": 71.88999938964844,
+      "prob_zero_bill_pct": 0.0
+    },
+    "annual_savings_home_eur": {
+      "mean": 932.739990234375,
+      "p50": 933.030029296875
+    }
+  },
+  "phase2_ev_profiles": {
+    "Perfil_1_Metropolitano": {
+      "descripcion": "Uso diario Tocina-Sevilla (45 km/día laborables)",
+      "km_anuales": 13500,
+      "kwh_ev_anual": 2775.0,
+      "gasoline_cost_avoided": 1360.12,
+      "ev_solar_fraction": {
+        "mean": 78.9000015258789,
+        "p10": 71.80000305175781,
+        "p50": 78.9000015258789,
+        "p90": 86.0
+      },
+      "ev_annual_electricity_cost": {
+        "mean": 191.69000244140625,
+        "p10": 183.24000549316406,
+        "p50": 191.69000244140625,
+        "p90": 200.16000366210938
+      },
+      "net_fuel_savings_eur": {
+        "mean": 1168.4300537109375,
+        "p10": 1159.9599609375,
+        "p50": 1168.43994140625,
+        "p90": 1176.8900146484375
+      },
+      "total_combined_bill_eur": {
+        "mean": 241.02000427246094,
+        "p10": 218.0500030517578,
+        "p50": 240.9499969482422,
+        "p90": 264.0199890136719,
+        "prob_zero_bill_pct": 0.0
+      },
+      "cost_per_100km_eur": {
+        "ev_solar": 1.4199999570846558,
+        "gasoline": 10.07
+      }
+    },
+    "Perfil_2_Intensivo": {
+      "descripcion": "Uso profesional / comercial intensivo (75 km/día)",
+      "km_anuales": 21000,
+      "kwh_ev_anual": 4433.3,
+      "gasoline_cost_avoided": 2180.85,
+      "ev_solar_fraction": {
+        "mean": 58.79999923706055,
+        "p10": 53.70000076293945,
+        "p50": 58.79999923706055,
+        "p90": 64.0
+      },
+      "ev_annual_electricity_cost": {
+        "mean": 344.5299987792969,
+        "p10": 334.69000244140625,
+        "p50": 344.54998779296875,
+        "p90": 354.3500061035156
+      },
+      "net_fuel_savings_eur": {
+        "mean": 1836.3199462890625,
+        "p10": 1826.5,
+        "p50": 1836.300048828125,
+        "p90": 1846.1600341796875
+      },
+      "total_combined_bill_eur": {
+        "mean": 393.8599853515625,
+        "p10": 363.0,
+        "p50": 393.92999267578125,
+        "p90": 424.57000732421875,
+        "prob_zero_bill_pct": 0.0
+      },
+      "cost_per_100km_eur": {
+        "ev_solar": 1.6399999856948853,
+        "gasoline": 10.38
+      }
+    },
+    "Perfil_3_Mixto": {
+      "descripcion": "Uso mixto urbano + escapadas fin de semana",
+      "km_anuales": 10000,
+      "kwh_ev_anual": 2000.0,
+      "gasoline_cost_avoided": 992.0,
+      "ev_solar_fraction": {
+        "mean": 79.0,
+        "p10": 71.80000305175781,
+        "p50": 79.0,
+        "p90": 86.19999694824219
+      },
+      "ev_annual_electricity_cost": {
+        "mean": 138.05999755859375,
+        "p10": 131.86000061035156,
+        "p50": 138.0500030517578,
+        "p90": 144.25
+      },
+      "net_fuel_savings_eur": {
+        "mean": 853.9400024414062,
+        "p10": 847.75,
+        "p50": 853.9500122070312,
+        "p90": 860.1400146484375
+      },
+      "total_combined_bill_eur": {
+        "mean": 187.3800048828125,
+        "p10": 165.25999450683594,
+        "p50": 187.42999267578125,
+        "p90": 209.42999267578125,
+        "prob_zero_bill_pct": 0.0
+      },
+      "cost_per_100km_eur": {
+        "ev_solar": 1.3799999952316284,
+        "gasoline": 9.92
+      }
+    },
+    "Perfil_4_Moderado": {
+      "descripcion": "Uso moderado / teletrabajo (25 km/día)",
+      "km_anuales": 7500,
+      "kwh_ev_anual": 1458.3,
+      "gasoline_cost_avoided": 720.75,
+      "ev_solar_fraction": {
+        "mean": 79.0,
+        "p10": 71.80000305175781,
+        "p50": 79.0,
+        "p90": 86.19999694824219
+      },
+      "ev_annual_electricity_cost": {
+        "mean": 100.66999816894531,
+        "p10": 96.1500015258789,
+        "p50": 100.66999816894531,
+        "p90": 105.18000030517578
+      },
+      "net_fuel_savings_eur": {
+        "mean": 620.0800170898438,
+        "p10": 615.5700073242188,
+        "p50": 620.0800170898438,
+        "p90": 624.5999755859375
+      },
+      "total_combined_bill_eur": {
+        "mean": 150.0,
+        "p10": 128.19000244140625,
+        "p50": 150.0500030517578,
+        "p90": 171.7100067138672,
+        "prob_zero_bill_pct": 0.0
+      },
+      "cost_per_100km_eur": {
+        "ev_solar": 1.340000033378601,
+        "gasoline": 9.61
+      }
+    }
+  },
+  "total_execution_time_sec": 1.12
+}

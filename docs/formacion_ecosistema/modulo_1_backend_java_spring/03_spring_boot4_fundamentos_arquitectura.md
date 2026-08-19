@@ -16,16 +16,16 @@ Imagina un restaurante. Si tuvieras que construir la cocina desde cero (comprar 
 ```mermaid
 graph TD
     subgraph Spring Boot 4.1 Application Context
-        CTRL[RestController / Spring Web Endpoint]
-        SVC[Application Service / Business Service]
+        CTRL["RestController / Spring Web Endpoint"]
+        SVC["Application Service / Business Service"]
         REPO[Spring Data JPA Repository]
     end
 
     subgraph Base de Datos / Persistencia
-        DB[(PostgreSQL / Cloud SQL)]
+        DB["(PostgreSQL / Cloud SQL)"]
     end
 
-    CLIENT[Cliente HTTP / React PWA] -->|GET /api/v1/orders| CTRL
+    CLIENT["Cliente HTTP / React PWA"] -->|GET /api/v1/orders| CTRL
     CTRL -->|Invoca| SVC
     SVC -->|Consulta| REPO
     REPO <-->|SQL Query| DB

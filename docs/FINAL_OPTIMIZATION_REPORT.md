@@ -62,10 +62,10 @@ Tras la ejecución sistemática de las fases de auditoría estática, análisis 
 
 | Proyecto / Repositorio | Cold-Start Baseline (JVM / App) | Cold-Start con Leyden CDS (.jsa) | Reducción Absoluta (segundos) | Aceleración de Inicio (%) | Estado de Despliegue Cloud Run |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **corp-spring-boot-starter** | 1.480 s | **0.088 s** (88 ms) | 1.392 s | **94.05%** | Scale-to-Zero ($0/mes base), Startup Boost OK |
-| **SaaSRegantes** | 2.150 s | **0.098 s** (98 ms) | 2.052 s | **95.44%** | Scale-to-Zero ($0/mes base), Startup Boost OK |
-| **pctMultiMicroservices** | 1.850 s | **0.092 s** (92 ms) | 1.758 s | **95.03%** | Scale-to-Zero ($0/mes base), Netty Fast Warmup OK |
-| **AppViajes** (Itinera.ai) | 2.450 s | **0.098 s** (98 ms) | 2.352 s | **96.00%** | Scale-to-Zero ($0/mes base), Edge AI Fallback OK |
+| **corp-spring-boot-starter** | 1.480 s | **0.088 s** (88 ms) | 1.392 s | **94.05%** | Scale-to-Zero (`$0`/mes base), Startup Boost OK |
+| **SaaSRegantes** | 2.150 s | **0.098 s** (98 ms) | 2.052 s | **95.44%** | Scale-to-Zero (`$0`/mes base), Startup Boost OK |
+| **pctMultiMicroservices** | 1.850 s | **0.092 s** (92 ms) | 1.758 s | **95.03%** | Scale-to-Zero (`$0`/mes base), Netty Fast Warmup OK |
+| **AppViajes** (Itinera.ai) | 2.450 s | **0.098 s** (98 ms) | 2.352 s | **96.00%** | Scale-to-Zero (`$0`/mes base), Edge AI Fallback OK |
 
 ---
 
@@ -100,7 +100,7 @@ Se extrajeron e inspeccionaron 2,595 iteraciones de simulaciones continuas en `p
 ## 4. CONCLUSIONES Y HOJA DE RUTA FUTURA
 
 El sistema multi-repositorio optimizado ha alcanzado el nivel de madurez técnica **Google Cloud-Native / Enterprise Grade**:
-1. **Facturación Zero-Cost en Reposo**: Las 11 regiones de desplegables en Cloud Run mantienen `min-instances=0`, garantizando $0.00 USD/mes de coste base en reposo y respuesta inmediata (< 100 ms) gracias al pre-calentamiento Leyden CDS.
+1. **Facturación Zero-Cost en Reposo**: Las 11 regiones de desplegables en Cloud Run mantienen `min-instances=0`, garantizando `$0.00 USD`/mes de coste base en reposo y respuesta inmediata (< 100 ms) gracias al pre-calentamiento Leyden CDS.
 2. **Resiliencia Operativa ante el Caos**: Las pruebas de inyección de fallos (Chaos Mesh con 75% de pérdida de paquetes de red) confirmaron cero cobros dobles en Escrow y conmutación multi-región con RTO < 3.6s y RPO < 80ms.
 3. **Escalabilidad Algorítmica Asintótica**: El uso combinado de algoritmos vectorizados SIMD, subastas H3 e índices espaciales HNSW INT8 garantiza una complejidad asintótica $O(1)$ a $O(N \log N)$ mantenida en todas las operaciones críticas.
 

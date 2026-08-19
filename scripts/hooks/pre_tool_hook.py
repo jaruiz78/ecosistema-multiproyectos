@@ -174,6 +174,19 @@ def main():
                     print(f"❌ [PRE-TOOL HOOK REJECTION] {pii_err}", file=sys.stderr)
                     sys.exit(1)
 
+                # Validar sintaxis Mermaid / KaTeX / Markdown en archivos de documentación
+                if target_file.endswith(".md") or target_file.endswith(".markdown"):
+                    try:
+                        from syntax_validator import validate_all
+                        syntax_errs = validate_all(content)
+                        if syntax_errs:
+                            print(f"❌ [PRE-TOOL HOOK REJECTION] Errores de sintaxis detectados en {target_file}:", file=sys.stderr)
+                            for s_err in syntax_errs:
+                                print(f"   • {s_err}", file=sys.stderr)
+                            sys.exit(1)
+                    except ImportError:
+                        pass
+
         # 2. Validación de ejecución de comandos shell
         elif tool_name in ["run_command", "exec_command"]:
             cmd = args.get("CommandLine", "") or args.get("command", "")

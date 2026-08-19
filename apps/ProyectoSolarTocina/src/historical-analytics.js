@@ -539,6 +539,7 @@ export class HistoricalAnalyticsManager {
       });
     }
   }
+}
 
   renderTable() {
     const tbody = document.getElementById('analytics-table-body');

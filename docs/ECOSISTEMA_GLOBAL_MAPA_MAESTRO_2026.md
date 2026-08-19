@@ -32,32 +32,32 @@ El ecosistema opera mediante una estructura jerárquica de 4 capas donde el fluj
 
 ```mermaid
 graph TD
-    subgraph CAPA_4 [Capa 4: Verticales de Negocio & Turismo - 64 Apps]
-        V_TUR[Verticales Turismo: DTI, Paradores, Cruceros, Playas, Enoturismo]
-        V_ENG[Verticales Energía & Industria: VPP, V2G, Hidrógeno, Redes Microgrid]
-        V_DEF[Verticales Defensa & GovTech: DualAirDefense, ZK Trials, B2G]
-        V_AGR[Verticales Agro & Logística: SmartAgri, ColdChain, SyntheticBio]
+    subgraph CAPA_4["Capa 4: Verticales de Negocio & Turismo - 64 Apps"]
+        V_TUR["Verticales Turismo: DTI, Paradores, Cruceros, Playas, Enoturismo"]
+        V_ENG["Verticales Energía & Industria: VPP, V2G, Hidrógeno, Redes Microgrid"]
+        V_DEF["Verticales Defensa & GovTech: DualAirDefense, ZK Trials, B2G"]
+        V_AGR["Verticales Agro & Logística: SmartAgri, ColdChain, SyntheticBio"]
     end
 
-    subgraph CAPA_3 [Capa 3: Plataformas Insignia & BFF]
+    subgraph CAPA_3["Capa 3: Plataformas Insignia & BFF"]
         SR[SaaSRegantes Platform]
         AV[AppViajes Mobility Engine]
         PCT[pctMultiMicroservices Go Workers]
     end
 
-    subgraph CAPA_2 [Capa 2: Núcleos de Cálculo & Gemelo Digital - 20 Cores]
+    subgraph CAPA_2["Capa 2: Núcleos de Cálculo & Gemelo Digital - 20 Cores"]
         CORE_PEPS[core-tensor-peps-network]
         CORE_ENKF[core-kalman-twin]
-        CORE_H3[core-geogrid-h3 & core-spatial-h3-3d]
-        CORE_PINN[core-pinn-solver & core-stochastic-pde]
-        CORE_MPC[core-nonlinear-mpc & core-game-theory]
-        CORE_SEC[core-govtech-ledger & core-quantum-mesh]
+        CORE_H3["core-geogrid-h3 & core-spatial-h3-3d"]
+        CORE_PINN["core-pinn-solver & core-stochastic-pde"]
+        CORE_MPC["core-nonlinear-mpc & core-game-theory"]
+        CORE_SEC["core-govtech-ledger & core-quantum-mesh"]
     end
 
-    subgraph CAPA_1 [Capa 1: Chasis Corporativo & Fundación]
-        STARTER[corp-spring-boot-starter: Java 25 / Loom / Leyden CDS / Zero-Mockito]
-        UNIV[Universidad Privada del Ecosistema: 12 Grandes Facultades / RAG Grounding]
-        CONSILIUM[Consilium Romano 3.0: Tribunal Neuro-Simbólico & Auto-Fix]
+    subgraph CAPA_1["Capa 1: Chasis Corporativo & Fundación"]
+        STARTER["corp-spring-boot-starter: Java 25 / Loom / Leyden CDS / Zero-Mockito"]
+        UNIV["Universidad Privada del Ecosistema: 12 Grandes Facultades / RAG Grounding"]
+        CONSILIUM["Consilium Romano 3.0: Tribunal Neuro-Simbólico & Auto-Fix"]
     end
 
     CAPA_4 --> CAPA_3
@@ -95,7 +95,7 @@ El ecosistema integra **18 proyectos verticales especializados en el sector tur�
 ```mermaid
 graph LR
     subgraph TURISMO_ESPANA [Turismo Administraciones Públicas Españolas]
-        DTI[ProyectoSegitturDtiStandard & SmartDestinationDTI]
+        DTI["ProyectoSegitturDtiStandard & SmartDestinationDTI"]
         RUR[ProyectoDiputacionTurismoRural]
         PLA[ProyectoPlayasInteligentesCostas]
         PAR[ProyectoRedParadoresTwin]
@@ -111,10 +111,10 @@ graph LR
     end
 
     subgraph TURISMO_GLOBAL [Turismo Internacional y Transporte]
-        CRU[ProyectoGlobalCruiseMRV: FuelEU Maritime]
-        AIR[ProyectoAirportTouristIntermodal & AirlineInterline]
-        HOT[ProyectoHotelTwinRevPAR & MiceConferenceTwin]
-        ECO[ProyectoEcoTourismPassport & RegenerativeExperience]
+        CRU["ProyectoGlobalCruiseMRV: FuelEU Maritime"]
+        AIR["ProyectoAirportTouristIntermodal & AirlineInterline"]
+        HOT["ProyectoHotelTwinRevPAR & MiceConferenceTwin"]
+        ECO["ProyectoEcoTourismPassport & RegenerativeExperience"]
     end
 
     TURISMO_ESPANA --> CORE_H3

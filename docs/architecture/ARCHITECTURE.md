@@ -19,14 +19,14 @@ Este documento especifica la arquitectura técnica, patrones de diseño y están
 ```mermaid
 graph TD
     subgraph Client_Call ["Cliente HTTP / gRPC"]
-        Req[Petición con W3C Header: traceparent]
+        Req["Petición con W3C Header: traceparent"]
     end
 
     subgraph Starter_Interceptors ["corp-spring-boot-starter Interceptores"]
         HTTP_Filter[W3cTraceContextFilter]
         gRPC_Client[W3cGrpcClientInterceptor]
         gRPC_Server[W3cGrpcServerInterceptor]
-        Context[GrpcTraceContext & TenantContext]
+        Context["GrpcTraceContext & TenantContext"]
     end
 
     subgraph Microservice_Beans ["Beans del Microservicio Cliente"]

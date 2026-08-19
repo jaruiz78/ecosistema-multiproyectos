@@ -20,7 +20,7 @@ Para maximizar el rendimiento global del ecosistema sin incurrir en costes adici
 
 3. **Gemelo Digital Unificado 15.0 (600 Clusters Industriales):**
    - Simulación Monte Carlo a 5 años de **600 clusters industriales acoplados** con asimilación estocástica EnKF.
-   - Procesamiento de **17.659 trillones de peticiones** con latencia mediana $p_{50} = 2.12\text{ ms}$, $\text{Tr}(P) = 0.000022$, throughput superior a **`3.150.000 req/s`** y coste unitario récord de **`$0.00038 / MAU / mes`** (97.5% de reducción frente al techo de $0.015).
+   - Procesamiento de **17.659 trillones de peticiones** con latencia mediana $p_{50} = 2.12\text{ ms}$, $\text{Tr}(P) = 0.000022$, throughput superior a **`3.150.000 req/s`** y coste unitario récord de **`$0.00038 / MAU / mes`** (97.5% de reducción frente al techo de `$0.015`).
 
 ## Consecuencias y Estado
 - **Total de Módulos en el Ecosistema:** **554 módulos** (273 apps verticales, 38 cores algorítmicos, 242 starters, 3 proyectos satélite).

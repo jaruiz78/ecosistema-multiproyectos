@@ -19,12 +19,12 @@ La arquitectura de la aplicación Flutter móvil se estructura en 3 capas bien d
 ```mermaid
 graph TD
     subgraph Capa de Interfaz de Usuario / UI (Flutter Widgets)
-        MAP[FlutterMap / Mapbox Widget]
+        MAP["FlutterMap / Mapbox Widget"]
         PANEL[RideRequestPanel Widget]
     end
 
     subgraph Capa de Lógica de Negocio / State Management
-        BLOC[RideNavigationBloc / State]
+        BLOC["RideNavigationBloc / State"]
         BATTERY[AdaptiveGPSManager]
     end
 

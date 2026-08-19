@@ -13,7 +13,7 @@ Para consolidar una infraestructura tecnológica omni-sistémica que abarque la 
 
 3. **Gemelo Digital Unificado 13.0 (256 Clusters Industriales):**
    - Simulación Monte Carlo a 5 años de **256 clusters industriales acoplados** con asimilación estocástica EnKF.
-   - Procesamiento de **7.959 trillones de peticiones** con latencia mediana $p_{50} = 3.18\text{ ms}$, $\text{Tr}(P) = 0.000070$, throughput superior a **1.150.000 req/s** y coste unitario récord de **`$0.00075 / MAU / mes`** (95.0% de reducción frente al techo de $0.015).
+   - Procesamiento de **7.959 trillones de peticiones** con latencia mediana $p_{50} = 3.18\text{ ms}$, $\text{Tr}(P) = 0.000070$, throughput superior a **1.150.000 req/s** y coste unitario récord de **`$0.00075 / MAU / mes`** (95.0% de reducción frente al techo de `$0.015`).
 
 ## Consecuencias y Estado
 - **Total de Módulos en el Ecosistema:** **348 módulos** (170 apps verticales, 38 cores algorítmicos, 139 starters, 3 proyectos satélite).

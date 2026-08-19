@@ -77,15 +77,15 @@ Bajo el estándar **RFC 9457 (Problem Details for HTTP APIs)**, toda respuesta d
 ```mermaid
 graph TD
     A[Petición Entrante] --> B{CPU > 85%?}
-    B -- Sí --> C[AdaptiveBulkhead: 429 Too Many Requests + Retry-After]
+    B -- Sí --> C["AdaptiveBulkhead: 429 Too Many Requests + Retry-After"]
     B -- No --> D{Covarianza EnKF > 0.5?}
-    D -- Sí --> E[Predictive Circuit Breaker: Fast Fallback L1 / Stub]
-    D -- No --> F[Ejecución Caso de Uso / Virtual Thread]
+    D -- Sí --> E["Predictive Circuit Breaker: Fast Fallback L1 / Stub"]
+    D -- No --> F["Ejecución Caso de Uso / Virtual Thread"]
     F --> G{¿Éxito?}
-    G -- Sí --> H[200 OK / 201 Created + Location]
-    G -- No --> I[CorpGlobalExceptionHandler: RFC 9457 JSON + traceId]
+    G -- Sí --> H["200 OK / 201 Created + Location"]
+    G -- No --> I["CorpGlobalExceptionHandler: RFC 9457 JSON + traceId"]
     I --> J[Métricas Micrometer + Telemetría simulations_telemetry.db]
-    J --> K[Detección de Deriva ADWIN & Auto-Ajuste de Umbrales]
+    J --> K["Detección de Deriva ADWIN & Auto-Ajuste de Umbrales"]
 ```
 
 ### Mecanismos de Auto-Remediación:

@@ -17,17 +17,17 @@ Imagina un parque de atracciones:
 ```mermaid
 graph TD
     subgraph Cliente Web / Dashboard
-        CLIENT[React PWA / Flutter App]
+        CLIENT["React PWA / Flutter App"]
     end
 
     subgraph GCP Serverless Compute
-        CR[Cloud Run Service Java/Go]
+        CR["Cloud Run Service Java/Go"]
         CT[Cloud Tasks Queue]
         WORKER[Cloud Run Worker Background]
     end
 
     subgraph Almacenamiento & IAM
-        FS[(Firestore Multi-Tenant DB)]
+        FS["(Firestore Multi-Tenant DB)"]
         IAM[GCP IAM Least Privilege]
     end
 

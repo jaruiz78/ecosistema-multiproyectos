@@ -16,14 +16,14 @@
 ```mermaid
 graph TD
     subgraph Capa de Almacenamiento Columnar BigQuery
-        DATA[Datos Masivos de Telemetría / Eventos]
+        DATA["Datos Masivos de Telemetría / Eventos"]
     end
 
     subgraph Motores de Análisis & IA Integrados
         SQL[SQL Standard Queries]
-        BQML[BQML: Regresión / XGBoost / ARIMA]
-        GQL[GQL: Property Graph Matching]
-        HLL[HLL: Conteo Aproximado HyperLogLog]
+        BQML["BQML: Regresión / XGBoost / ARIMA"]
+        GQL["GQL: Property Graph Matching"]
+        HLL["HLL: Conteo Aproximado HyperLogLog"]
     end
 
     SQL --> DATA

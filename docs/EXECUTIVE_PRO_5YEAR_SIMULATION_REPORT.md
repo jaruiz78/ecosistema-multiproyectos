@@ -13,7 +13,7 @@
 - **Transacciones Totales Procesadas**: **100.44 Trillones (100,442,160,000,000 Tx)**.
 - **Throughput Conjunto Ecosistema**: **637,000 RPS**.
 - **Latencia Globale P50 / P95 / P99**: **1.85 ms / 4.94 ms / 8.98 ms**.
-- **Coste FinOps Promedio**: **$0.0058 USD/MAU/mes** (vs Presupuesto límite `< $0.015 USD` -> **PASSED -61.3%**).
+- **Coste FinOps Promedio**: **`$0.0058 USD`/MAU/mes** (vs Presupuesto límite `< `$0.015 USD`` -> **PASSED -61.3%**).
 - **Convergencia Estocástica EnKF (Tick 1M)**: **P = 0.006958** (vs Regla `< 0.5`: **PASSED**).
 
 ---
@@ -89,4 +89,4 @@
 
 ## 🏆 CERTIFICACIÓN DEL CONSILIUM ROMANO v6.5
 
-> **RESOLUCIÓN**: Todos los 31 módulos y aplicaciones ejecutadas han alcanzado los umbrales de **NPS > 70**, **CSAT > 90%**, **INP < 50ms**, **Covarianza EnKF < 0.007** y **Coste FinOps < $0.0058 USD/MAU/mes**. El ecosistema queda **Certificado para Despliegue Exaescala**.
+> **RESOLUCIÓN**: Todos los 31 módulos y aplicaciones ejecutadas han alcanzado los umbrales de **NPS > 70**, **CSAT > 90%**, **INP < 50ms**, **Covarianza EnKF < 0.007** y **Coste FinOps < `$0.0058 USD`/MAU/mes**. El ecosistema queda **Certificado para Despliegue Exaescala**.

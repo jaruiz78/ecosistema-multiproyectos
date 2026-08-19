@@ -193,20 +193,27 @@ daikin_controller = DaikinController(telemetry_getter=read_inverter_modbus_telem
 soiling_detector = SoilingDetector()
 backup_manager = BackupManager()
 
-def get_forecast_summary_for_bot():
-    return {"kwh_day": 29.3, "kwh_clear": 32.08}
-
-telegram_bot = TelegramBotService(
-    telemetry_getter=read_inverter_modbus_telemetry,
-    forecast_getter=get_forecast_summary_for_bot
-)
-telegram_bot.start()
+def get_current_telemetry_with_ev():
+    telemetry = read_inverter_modbus_telemetry()
+    if telemetry and telemetry.get("online"):
+        try:
+            from ev_smart_charge_tracker import ev_tracker
+            home_w = telemetry.get("grid", {}).get("home_load_w", 0.0)
+            solar_w = telemetry.get("solar_total_w", 0.0)
+            bat_power_w = telemetry.get("battery", {}).get("power_w", 0.0)
+            grid_import_w = telemetry.get("grid", {}).get("grid_import_w", 0.0)
+            telemetry["ev_status"] = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
+        except Exception:
+            pass
+    return telemetry
 
 def background_telemetry_recorder():
     """
-    Hilo en segundo plano con Muestreo Adaptativo Eco-Throttling y Compactación Automática:
-    - Si la web está abierta (SSE activo): Muestrea cada 15s (configurable a 30s) con interpolación suave.
-    - Si la web está cerrada (modo background): Muestrea cada 30s de día y cada 60s de noche (0% CPU).
+    Worker en background que almacena periódicamente la telemetría en SQLite
+    y la transmite a los clientes SSE conectados.
+    Muestreo adaptativo:
+    - 15s si la web está abierta (ahorro extremo de CPU y ancho de banda).
+    - 30s/60s si no hay clientes visualizando.
     - Cero pérdida de información: Integración matemática continua de kWh.
     - Compactación Tiered Storage: Purga y agrega muestras > 7 días en resúmenes horarios.
     """
@@ -217,18 +224,8 @@ def background_telemetry_recorder():
     
     while True:
         try:
-            telemetry = read_inverter_modbus_telemetry()
+            telemetry = get_current_telemetry_with_ev()
             if telemetry and telemetry.get("online"):
-                # Inferencia automática de carga de vehículo
-                home_w = telemetry.get("grid", {}).get("home_load_w", 0.0)
-                solar_w = telemetry.get("solar_total_w", 0.0)
-                bat_power_w = telemetry.get("battery", {}).get("power_w", 0.0)
-                grid_import_w = telemetry.get("grid", {}).get("grid_import_w", 0.0)
-                
-                from ev_smart_charge_tracker import ev_tracker
-                ev_status = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
-                telemetry["ev_status"] = ev_status
-
                 save_telemetry_record(telemetry, source="modbus_local")
                 learning_engine.update_with_sample(telemetry)
                 CustomHandler.broadcast_sse("telemetry", telemetry)
@@ -305,8 +302,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
             
-            # Send initial telemetry payload immediately
-            initial_telemetry = read_inverter_modbus_telemetry()
+            # Send initial telemetry payload immediately with EV status
+            initial_telemetry = get_current_telemetry_with_ev()
             init_msg = f"event: telemetry\ndata: {json.dumps(initial_telemetry)}\n\n".encode('utf-8')
             try:
                 self.wfile.write(init_msg)
@@ -325,16 +322,7 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         elif self.path == '/api/telemetry':
-            telemetry = read_inverter_modbus_telemetry()
-            try:
-                from ev_smart_charge_tracker import ev_tracker
-                home_w = telemetry.get("grid", {}).get("home_load_w", 0.0)
-                solar_w = telemetry.get("solar_total_w", 0.0)
-                bat_power_w = telemetry.get("battery", {}).get("power_w", 0.0)
-                grid_import_w = telemetry.get("grid", {}).get("grid_import_w", 0.0)
-                telemetry["ev_status"] = ev_tracker.process_telemetry_sample(home_w, solar_w, bat_power_w, grid_import_w)
-            except Exception:
-                pass
+            telemetry = get_current_telemetry_with_ev()
             self._send_json(telemetry)
             return
 
@@ -373,13 +361,38 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
 
         elif self.path == '/api/history/climate-backtest':
             from historical_climate_backtest import fetch_and_compute_climate_backtest, DATA_PATH
-            import json, os
             if os.path.exists(DATA_PATH):
                 with open(DATA_PATH, 'r', encoding='utf-8') as f:
                     study = json.load(f)
             else:
                 study = fetch_and_compute_climate_backtest()
             self._send_json(study)
+            return
+
+        elif self.path == '/api/monte-carlo/1m':
+            mc_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "monte_carlo_1m_results.json")
+            if os.path.exists(mc_path):
+                with open(mc_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            else:
+                from massive_monte_carlo_engine import main as run_mc
+                run_mc()
+                with open(mc_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            self._send_json(data)
+            return
+
+        elif self.path == '/api/monte-carlo/100m':
+            mc_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "monte_carlo_100m_results.json")
+            if os.path.exists(mc_path):
+                with open(mc_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            else:
+                from massive_monte_carlo_100m import run_mega_simulation
+                run_mega_simulation(100_000_000, 10_000_000)
+                with open(mc_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            self._send_json(data)
             return
 
         elif self.path == '/api/nilm/live-breakdown':

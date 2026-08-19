@@ -19,19 +19,19 @@ Para cada cubo, el software calcula 3 leyes universales fundamentales:
 ```mermaid
 graph TD
     subgraph Dominio Físico Atmosférico (Malla 2D/3D)
-        GRID[Malla de Diferencias Finitas (nx, ny)]
+        GRID["Malla de Diferencias Finitas (nx, ny)"]
     end
 
     subgraph Ecuaciones Diferenciales en Derivadas Parciales (PDEs)
-        NS[Ecuación de Navier-Stokes: Campos de Velocidad u, v]
-        ADV[Ecuación de Advección-Difusión: Temperatura T y Humedad q]
-        POISS[Ecuación de Poisson: Corrección de Presión p]
+        NS["Ecuación de Navier-Stokes: Campos de Velocidad u, v"]
+        ADV["Ecuación de Advección-Difusión: Temperatura T y Humedad q"]
+        POISS["Ecuación de Poisson: Corrección de Presión p"]
     end
 
     subgraph Solver Numérico de Software (Python / NumPy)
-        STEP1[1. Advección de Velocidad] --> STEP2[2. Difusión Térmica & Viscosidad]
+        STEP1["1. Advección de Velocidad] --> STEP2[2. Difusión Térmica & Viscosidad"]
         STEP2 --> STEP3[3. Corrección de Presión en Poisson]
-        STEP3 --> STEP4[4. Actualización del Campo de Viento & Humedad]
+        STEP3 --> STEP4["4. Actualización del Campo de Viento & Humedad"]
     end
 
     GRID --> NS

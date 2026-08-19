@@ -21,13 +21,13 @@ graph TD
     end
 
     subgraph Arquitectura RAG (Vertex AI)
-        VEC_DB[Vector Search / Embeddings Database]
-        GEMINI[Modelo Gemini 3.6 / Vertex AI]
+        VEC_DB["Vector Search / Embeddings Database"]
+        GEMINI["Modelo Gemini 3.6 / Vertex AI"]
     end
 
     subgraph Validación de Respuesta
         JSON_SCHEMA[JSON Schema Strict Validator]
-        APP[Backend Java 25 / Go App]
+        APP["Backend Java 25 / Go App"]
     end
 
     USER -->|Búsqueda Semántica| VEC_DB

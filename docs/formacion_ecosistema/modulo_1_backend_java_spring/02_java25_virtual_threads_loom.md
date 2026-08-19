@@ -16,7 +16,7 @@ Los **Virtual Threads (Hilos Virtuales)** son como dar a los operadores una pant
 ```mermaid
 graph TD
     subgraph Espacio de Usuario / JVM Java 25
-        VT1[Virtual Thread 1 - I/O Blocked]
+        VT1["Virtual Thread 1 - I/O Blocked"]
         VT2[Virtual Thread 2 - Running]
         VT3[Virtual Thread 3 - Running]
         VT4[Virtual Thread 4 - Waiting DB]

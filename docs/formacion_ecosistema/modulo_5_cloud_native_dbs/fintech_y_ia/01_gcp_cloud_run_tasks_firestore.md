@@ -19,18 +19,18 @@ La arquitectura desacopla peticiones de entrada mediante **Cloud Run**, encola p
 ```mermaid
 graph TD
     subgraph Cliente / Dashboard React Multi-Tenant
-        CLIENT[React Web / PWA]
+        CLIENT["React Web / PWA"]
     end
 
     subgraph GCP Serverless Compute Layer
-        CR[Cloud Run Service / Java 25 - Go]
-        CT[Cloud Tasks Queue / Rate-Limited Retries]
+        CR["Cloud Run Service / Java 25 - Go"]
+        CT["Cloud Tasks Queue / Rate-Limited Retries"]
         WORKER[Cloud Run Background Worker]
     end
 
     subgraph Database & Security Layer
-        FS[(Cloud Firestore Multi-Tenant Collections)]
-        IAM[GCP IAM & Security Rules]
+        FS["(Cloud Firestore Multi-Tenant Collections)"]
+        IAM["GCP IAM & Security Rules"]
     end
 
     CLIENT -->|HTTPS / JWT Auth| CR

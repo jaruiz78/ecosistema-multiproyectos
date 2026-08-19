@@ -13,7 +13,7 @@
   - Ingesta binaria masiva con Google Cloud BigQuery Storage Write API en modo `COMMITTED` y `BUFFERED`.
   - Canales de extracción paralela `DirectByteBuffer` con Apache Arrow IPC zero-copy.
 - **[`BigQueryBiEngineOptimizer.java`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/corp-bigdata-ai-starter/src/main/java/com/corp/bigdata/BigQueryBiEngineOptimizer.java)**:
-  - Validador de elegibilidad para aceleración in-memory BI Engine ($0 de coste por query cacheada).
+  - Validador de elegibilidad para aceleración in-memory BI Engine (`$0` de coste por query cacheada).
   - Generador DDL de vistas materializadas con refresco incremental automático para celdas espaciales Uber H3 y métricas agregadas.
 - **[`DuckDbVectorizedAnalyticsEngine.java`](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/corp-bigdata-ai-starter/src/main/java/com/corp/bigdata/DuckDbVectorizedAnalyticsEngine.java)**:
   - Motor de ejecución columnar con desenrollado 4x apto para auto-vectorización SIMD (AVX-512 / NEON) a más de **1.170.000.000 de filas/segundo**.

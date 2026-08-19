@@ -16,7 +16,7 @@ No hay una sola respuesta perfecta, sino una **Frontera de Pareto**: una curva c
 ```mermaid
 graph TD
     subgraph Selección de Pareto NSGA-II
-        P0[Población P0 de Parámetros] --> CROSS[Cruzamiento / Crossover]
+        P0["Población P0 de Parámetros] --> CROSS[Cruzamiento / Crossover"]
         CROSS --> MUT[Mutación Estocástica]
         MUT --> EVAL[Evaluación de Fitness Multiobjetivo]
         EVAL --> SORT[Sorting No-Dominado F1, F2...]

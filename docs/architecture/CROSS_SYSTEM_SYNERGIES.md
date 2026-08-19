@@ -5,7 +5,7 @@
 ---
 
 ## 🏛️ Visión General
-Para maximizar el valor de la plataforma sin violar el presupuesto FinOps (**< $0.015 USD/MAU/mes**) ni degradar el SLA de latencia (**< 200 ms**), se han implementado 4 **Vectores de Amplificación Cruzada** entre las 4 verticales del sistema (`corp-spring-boot-starter`, `pctMultiMicroservices`, `SaaSRegantes`, `AppViajes`).
+Para maximizar el valor de la plataforma sin violar el presupuesto FinOps (**< `$0.015 USD`/MAU/mes**) ni degradar el SLA de latencia (**< 200 ms**), se han implementado 4 **Vectores de Amplificación Cruzada** entre las 4 verticales del sistema (`corp-spring-boot-starter`, `pctMultiMicroservices`, `SaaSRegantes`, `AppViajes`).
 
 ---
 

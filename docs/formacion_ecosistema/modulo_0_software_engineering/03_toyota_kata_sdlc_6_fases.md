@@ -19,7 +19,7 @@ Es la guía paso a paso que sigue todo desarrollador o agente de IA para entrega
 ```mermaid
 flowchart TD
     subgraph Toyota Kata Loop
-        DIR[1. Entender la Visión / Dirección] --> CURR[2. Comprender la Condición Actual]
+        DIR["1. Entender la Visión / Dirección] --> CURR[2. Comprender la Condición Actual"]
         CURR --> TARGET[3. Establecer la Próxima Condición Objetivo]
         TARGET --> EXP[4. Experimentar con Pequeños Pasos PDCA]
     end

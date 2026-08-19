@@ -8,7 +8,7 @@
 - **Throughput Sostenido**: `593,000 RPS`
 - **Latencia Media P50**: `1.33 ms` (Objetivo < 2.0 ms)
 - **Latencia Media P95**: `3.53 ms` (Objetivo < 5.0 ms)
-- **Coste FinOps Medio**: `$0.0046 USD/MAU/mes` (Límite < $0.0150)
+- **Coste FinOps Medio**: `$0.0046 USD/MAU/mes` (Límite < `$0.0150`)
 - **Convergencia EnKF**: `P = 0.025802` (Límite < 0.500)
 
 ## ✅ Certificación de Rendimiento

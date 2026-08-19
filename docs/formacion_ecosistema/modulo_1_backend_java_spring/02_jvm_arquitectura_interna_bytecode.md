@@ -33,15 +33,15 @@ graph TD
     end
 
     subgraph 2. Runtime Data Areas (Memoria)
-        HEAP[(Heap - Compartido: Objetos)]
-        META[(Metaspace - Compartido: Clases, Metadatos)]
-        STACK[JVM Stack - Por Hilo: Variables locales]
+        HEAP["(Heap - Compartido: Objetos)"]
+        META["(Metaspace - Compartido: Clases, Metadatos)"]
+        STACK["JVM Stack - Por Hilo: Variables locales"]
         PC[PC Register - Por Hilo]
     end
 
     subgraph 3. Execution Engine
         INT[Interpreter - Rápido inicio]
-        JIT[JIT Compiler C1/C2 - Optimización nativa]
+        JIT["JIT Compiler C1/C2 - Optimización nativa"]
         GC[Garbage Collector - Limpieza asíncrona]
     end
 

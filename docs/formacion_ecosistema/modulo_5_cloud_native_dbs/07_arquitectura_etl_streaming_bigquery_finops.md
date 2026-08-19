@@ -35,8 +35,8 @@ $$\text{Latency}_{\text{API}} = O(1) \quad (\text{Memoria local / Encolado no bl
 
 ```mermaid
 flowchart TD
-    subgraph Capa_OLTP [Capa OLTP: Cero Contención]
-        S1[pctMultiMicroservices] -->|Buffer O 1| P1[UnifiedStreamingEtlPipeline]
+    subgraph Capa_OLTP["Capa OLTP: Cero Contención"]
+        S1["pctMultiMicroservices] -->|Buffer O 1| P1[UnifiedStreamingEtlPipeline"]
         S2[SaaSRegantes] -->|Agro-IoT| P1
         S3[AppViajes] -->|Trazas H3 GPS| P1
     end
@@ -45,10 +45,10 @@ flowchart TD
         P1 -->|Batch Threshold 250-500| BQ_Client[Storage Write API Engine]
     end
 
-    subgraph Capa_OLAP [Capa OLAP BigQuery & FinOps]
-        BQ_Client --> BQ_Table[(Tablas con requirePartitionFilter=true)]
+    subgraph Capa_OLAP["Capa OLAP BigQuery & FinOps"]
+        BQ_Client --> BQ_Table["(Tablas con requirePartitionFilter=true)"]
         BQ_Table --> MV[Materialized Views con Refresco Automático]
-        BQ_Table --> Twin[tensor_gnn_core.py / EnKF Assimilation]
+        BQ_Table --> Twin["tensor_gnn_core.py / EnKF Assimilation"]
     end
 ```
 

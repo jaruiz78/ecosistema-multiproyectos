@@ -43,6 +43,15 @@ def run_ast_checks(staged_files):
         if pii_err:
             errors.append(f"❌ [ZERO-PII ERROR] {rel_path}: {pii_err}")
 
+        if rel_path.endswith(".md") or rel_path.endswith(".markdown"):
+            try:
+                from syntax_validator import validate_all
+                syntax_errs = validate_all(content)
+                for s_err in syntax_errs:
+                    errors.append(f"❌ [SYNTAX ERROR] {rel_path}: {s_err}")
+            except ImportError:
+                pass
+
     return errors
 
 def main():

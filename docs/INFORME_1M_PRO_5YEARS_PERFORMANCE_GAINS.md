@@ -99,4 +99,4 @@
 ---
 
 ### 🏆 DICTAMEN FINAL DEL CONSILIUM ROMANO & GOOGLE VENTURES
-> **VALIDACIÓN TOTAL Y CERTIFICACIÓN SUMMA CUM LAUDE**: Las 1.000.000 de trayectorias confirman que todas las optimizaciones han elevado la capacidad del sistema a **1.479.000 RPS** globales con un coste unitario inferior a **$0.0030 USD/MAU/mes**, estableciendo un estándar de rendimiento insuperable en la industria.
+> **VALIDACIÓN TOTAL Y CERTIFICACIÓN SUMMA CUM LAUDE**: Las 1.000.000 de trayectorias confirman que todas las optimizaciones han elevado la capacidad del sistema a **1.479.000 RPS** globales con un coste unitario inferior a **`$0.0030 USD`/MAU/mes**, estableciendo un estándar de rendimiento insuperable en la industria.

@@ -20,13 +20,13 @@ graph LR
     end
 
     subgraph Cola FIFO de Espera (Buffer N)
-        Q1[Solicitud 1] --- Q2[Solicitud 2] --- Q3[Solicitud 3]
+        Q1["Solicitud 1] --- Q2[Solicitud 2"] --- Q3[Solicitud 3]
     end
 
     subgraph Servidores Activos (Tasa de Servicio μ)
-        S1[Servidor / Vehículo 1]
-        S2[Servidor / Vehículo 2]
-        S3[Servidor / Vehículo c]
+        S1["Servidor / Vehículo 1"]
+        S2["Servidor / Vehículo 2"]
+        S3["Servidor / Vehículo c"]
     end
 
     ARR --> Q1

@@ -113,6 +113,17 @@ class WorkflowVerifier:
         code, out, err = self.run_hook_process(hook_script, gcp_deploy_violation)
         self.log_result("Unauthorized GCP Deploy Blocked", code == 1, "Bloqueó despliegue en Cloud Run sin permiso expreso")
 
+        # 1.7 Error de sintaxis Mermaid/KaTeX (debe retornar 1)
+        syntax_violation = {
+            "tool_name": "write_to_file",
+            "args": {
+                "TargetFile": "/home/jaruiz/Desarrollo/docs/test_doc.md",
+                "CodeContent": "```mermaid\nflowchart TD\n  nodeA[Etiqueta con (caracteres especiales sin comillas)] --> nodeB\n```"
+            }
+        }
+        code, out, err = self.run_hook_process(hook_script, syntax_violation)
+        self.log_result("Mermaid Syntax Error Blocked", code == 1, "Bloqueó etiquetas Mermaid no entrecomilladas con caracteres especiales")
+
     def test_post_tool_and_lifecycle_hooks(self):
         print("\n🔍 --- 2. Verificando Post-Tool & Lifecycle Hooks ---")
         post_script = HOOKS_DIR / "post_tool_hook.py"

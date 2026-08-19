@@ -5,7 +5,7 @@
 ---
 
 ## 1. Fundamentos Teóricos y Teoremas Centrales
-1. **FinOps Golden Rule: Coste por Usuario Activo < $0.015 USD/MAU/mes**
+1. **FinOps Golden Rule: Coste por Usuario Activo < `$0.015 USD`/MAU/mes**
 2. **BigQuery Partitioning & Clustering Forzoso (requirePartitionFilter=true)**
 3. **BigQuery Storage Write API para Streaming Micro-Batching O(1)**
 4. **Cloud Run gVisor Container Isolation & Concurrencia de Alta Densidad**

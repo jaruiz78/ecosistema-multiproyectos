@@ -16,14 +16,14 @@ En **Mesa ABM (Python)**, definimos agentes sintéticos con estados de ánimo, b
 ```mermaid
 graph TD
     subgraph Marco de Simulación Mesa
-        SCHED[Schedule / Planificador de Ticks]
+        SCHED["Schedule / Planificador de Ticks"]
         GRID[Grid Espacial 2D]
-        COLLECTOR[DataCollector / Métricas Macro]
+        COLLECTOR["DataCollector / Métricas Macro"]
     end
 
     subgraph Agentes Autónomos Sintéticos (DriverAgent)
-        A1[Agente 1: Batería, Humor, Fatiga, Ganancias]
-        A2[Agente 2: Batería, Humor, Fatiga, Ganancias]
+        A1["Agente 1: Batería, Humor, Fatiga, Ganancias"]
+        A2["Agente 2: Batería, Humor, Fatiga, Ganancias"]
     end
 
     SCHED -->|Step Activation| A1

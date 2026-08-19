@@ -21,18 +21,18 @@ Si soldaras el cable del mando directamente a la placa base del procesador, reem
 ```mermaid
 graph TD
     subgraph Adaptadores de Entrada / Primarios (Infraestructura)
-        REST[Controller REST / Spring Web]
+        REST["Controller REST / Spring Web"]
         gRPC[gRPC Handler]
         CLI[Comando CLI]
     end
 
     subgraph Puertos de Entrada / Inbound Ports
-        IPORT[UseCase Interface / EnviarPedidoPort]
+        IPORT["UseCase Interface / EnviarPedidoPort"]
     end
 
     subgraph Núcleo de Dominio Puro / Core Domain (Zero Framework)
-        DOM[Aggregates & Value Objects / Records Java 25]
-        DS[Domain Service / CalculoTotalesService]
+        DOM["Aggregates & Value Objects / Records Java 25"]
+        DS["Domain Service / CalculoTotalesService"]
     end
 
     subgraph Puertos de Salida / Outbound Ports
@@ -41,7 +41,7 @@ graph TD
     end
 
     subgraph Adaptadores de Salida / Secundarios (Infraestructura)
-        JPA[Adapter JPA / Hibernate Postgres]
+        JPA["Adapter JPA / Hibernate Postgres"]
         STRIPE[Adapter Client Stripe SDK]
     end
 

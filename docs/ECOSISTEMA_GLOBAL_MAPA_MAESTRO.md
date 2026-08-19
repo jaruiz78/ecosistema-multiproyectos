@@ -46,32 +46,32 @@ Todos los proyectos interactúan a través de un bus de datos desacoplado de baj
 graph TD
     subgraph "Terminales & Edge"
         AV[AppViajes - Flutter H3]
-        IoT[Sensores IoT, Balizas BLE/UWB & SCADA]
-        Web[Portales Web & SaaS Regantes React]
+        IoT["Sensores IoT, Balizas BLE/UWB & SCADA"]
+        Web["Portales Web & SaaS Regantes React"]
     end
 
     subgraph "Ingesta & BFF (Go & Cloud Run)"
         GoWorker[pctMultiMicroservices - Go Ring Buffer Worker]
-        BFF[BFF Gateway - Java 25 Virtual Threads & Zero-Copy IPC]
+        BFF["BFF Gateway - Java 25 Virtual Threads & Zero-Copy IPC"]
     end
 
     subgraph "Chasis Corporativo & Core Matemático"
         CorpChassis[corp-spring-boot-starter]
-        CoreMath[core-pinn-solver / core-nonlinear-mpc / core-tensor-peps / core-lie-group / core-wasserstein]
+        CoreMath["core-pinn-solver / core-nonlinear-mpc / core-tensor-peps / core-lie-group / core-wasserstein"]
         GeoGrid[core-geogrid-h3]
     end
 
     subgraph "Verticales Sectoriales (apps/)"
-        V_Turismo[Verticales Turísticos: Segittur, Paradores, Cruceros, Natura2000, Balnearios, Starlight, Senderos GR, 3D LiDAR, Baggage]
-        V_Energia[Verticales Energía: ProyectoEnergia, ProyectoVPP, ProyectoV2G, MicrogridMPC]
-        V_Agro[Verticales Agro & Agua: SaaSRegantes, ProyectoAgua, BioAgriTrace]
-        V_Industria[Verticales Industria & Defensa: ProyectoPortTwin, ProyectoDefensa, DPP]
+        V_Turismo["Verticales Turísticos: Segittur, Paradores, Cruceros, Natura2000, Balnearios, Starlight, Senderos GR, 3D LiDAR, Baggage"]
+        V_Energia["Verticales Energía: ProyectoEnergia, ProyectoVPP, ProyectoV2G, MicrogridMPC"]
+        V_Agro["Verticales Agro & Agua: SaaSRegantes, ProyectoAgua, BioAgriTrace"]
+        V_Industria["Verticales Industria & Defensa: ProyectoPortTwin, ProyectoDefensa, DPP"]
     end
 
     subgraph "Almacenamiento & Big Data"
-        BigQuery[(Google BigQuery - Particionado Obligatorio)]
-        Firestore[(Google Cloud Firestore - Aislamiento Tenant RLS)]
-        SQLiteLocal[(simulations_telemetry.db - SQLite Local Store-Forward)]
+        BigQuery["(Google BigQuery - Particionado Obligatorio)"]
+        Firestore["(Google Cloud Firestore - Aislamiento Tenant RLS)"]
+        SQLiteLocal["(simulations_telemetry.db - SQLite Local Store-Forward)"]
     end
 
     AV -->|Telemetría GPS H3| GoWorker
@@ -106,7 +106,7 @@ graph TD
  │    ├── [corp-tenant-spring-boot-starter] (Aislamiento Multi-Tenant Celular)
  │    ├── [corp-bigdata-spring-boot-starter] (Pipeline Streaming ETL BigQuery)
  │    ├── [corp-resilience-chassis-starter] (Circuit Breakers & Store-Forward)
- │    ├── [corp-finops-rate-limiter-starter] (Protección de Gasto $0.00 en Microservicios)
+ │    ├── [corp-finops-rate-limiter-starter] (Protección de Gasto `$0.00` en Microservicios)
  │    ├── [corp-edge-inference-starter] (Inferencia Ligera LiteRT en Edge)
  │    ├── [corp-decentralized-id-starter] (Identidad Autosoberana W3C DID & VC)
  │    ├── [corp-zero-copy-ipc-starter] (Shared Memory IPC Ring-Buffers)
