@@ -22,64 +22,94 @@ ENVIRONMENTAL_CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file_
 DEFAULT_ENVIRONMENTAL_CONFIG = {
     "sensors": [
         {
-            "id": "sensor_salon",
-            "name": "Salón Principal (35 m²)",
-            "location": "indoor_living",
-            "protocol": "ble_zigbee",
-            "battery_pct": 98,
+            "id": "sensor_dormitorio",
+            "name": "1. Dormitorio Principal (16 m²)",
+            "location": "indoor_bedroom",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
             "readings": {
-                "temperature_c": 26.2,
-                "humidity_pct": 46.5,
+                "temperature_c": 24.8,
+                "humidity_pct": 52.0,
+                "dew_point_c": 14.2,
+                "comfort_index": "Confort Óptimo",
+                "last_updated": ""
+            },
+            "thermal_mass_weight": 0.25
+        },
+        {
+            "id": "sensor_salon",
+            "name": "2. Salón Principal (35 m²)",
+            "location": "indoor_living",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
+            "readings": {
+                "temperature_c": 24.5,
+                "humidity_pct": 50.0,
+                "dew_point_c": 13.5,
+                "comfort_index": "Confort Óptimo",
+                "last_updated": ""
+            },
+            "thermal_mass_weight": 0.35
+        },
+        {
+            "id": "sensor_despacho",
+            "name": "3. Despacho de Trabajo",
+            "location": "indoor_office",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
+            "readings": {
+                "temperature_c": 25.1,
+                "humidity_pct": 49.0,
                 "dew_point_c": 13.8,
                 "comfort_index": "Confort Óptimo",
                 "last_updated": ""
             },
-            "thermal_mass_weight": 0.55
+            "thermal_mass_weight": 0.15
         },
         {
-            "id": "sensor_dormitorio",
-            "name": "Dormitorio Principal (16 m²)",
-            "location": "indoor_bedroom",
-            "protocol": "ble_zigbee",
-            "battery_pct": 95,
+            "id": "sensor_estudio_mujer",
+            "name": "4. Dormitorio Estudio Mujer",
+            "location": "indoor_study",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
             "readings": {
-                "temperature_c": 26.8,
-                "humidity_pct": 48.0,
-                "dew_point_c": 14.8,
+                "temperature_c": 24.7,
+                "humidity_pct": 51.0,
+                "dew_point_c": 14.0,
                 "comfort_index": "Confort Óptimo",
                 "last_updated": ""
             },
-            "thermal_mass_weight": 0.30
+            "thermal_mass_weight": 0.15
         },
         {
-            "id": "sensor_patio_oeste",
-            "name": "Patio Trasero Oeste (269° O)",
-            "location": "outdoor_patio",
-            "protocol": "ble_zigbee",
-            "battery_pct": 92,
+            "id": "sensor_cochera_baterias",
+            "name": "5. Cochera (Baterías Fox-ESS)",
+            "location": "garage_technical",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
             "readings": {
-                "temperature_c": 33.5,
-                "humidity_pct": 32.0,
-                "dew_point_c": 14.2,
-                "comfort_index": "Caluroso Exterior",
+                "temperature_c": 26.5,
+                "humidity_pct": 58.0,
+                "dew_point_c": 17.5,
+                "comfort_index": "Zona Técnica Segura",
+                "last_updated": ""
+            },
+            "thermal_mass_weight": 0.10
+        },
+        {
+            "id": "sensor_patio_exterior",
+            "name": "6. Patio Trasero (Exterior)",
+            "location": "outdoor_patio",
+            "protocol": "thermopro_digital",
+            "battery_pct": 100,
+            "readings": {
+                "temperature_c": 24.4,
+                "humidity_pct": 74.0,
+                "dew_point_c": 19.4,
+                "comfort_index": "Lluvia Exterior",
                 "last_updated": ""
             },
             "thermal_mass_weight": 0.0
-        },
-        {
-            "id": "sensor_bajo_cubierta",
-            "name": "Bajo Cubierta / Tejado Solar",
-            "location": "attic_roof",
-            "protocol": "ble_zigbee",
-            "battery_pct": 89,
-            "readings": {
-                "temperature_c": 38.0,
-                "humidity_pct": 28.0,
-                "dew_point_c": 15.5,
-                "comfort_index": "Radiación Solar Alta",
-                "last_updated": ""
-            },
-            "thermal_mass_weight": 0.15
         }
     ],
     "aggregated_indoor": {
