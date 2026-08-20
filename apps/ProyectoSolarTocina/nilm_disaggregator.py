@@ -53,10 +53,21 @@ def disaggregate_home_load(total_load_w, ambient_temp_c=28.0, hour=None):
         "confidence_pct": 92.0
     })
 
-    # 4. Coche Eléctrico Omoda 7 SHS (Firma Schuko / Wallbox: ~1.800W a ~3.680W continuos)
+    # 4. Comprobación del Vehículo Eléctrico Omoda 7 SHS (requiere confirmación por enchufe/cargador dedicado)
+    is_ev_active = False
+    plug_ev_w = 0.0
+    try:
+        from smart_plugs_manager import smart_plugs_manager
+        ev_plug = smart_plugs_manager.get_plug("omoda7_ev_schuko")
+        if ev_plug and ev_plug.get("state", {}).get("power_on", False):
+            is_ev_active = True
+            plug_ev_w = ev_plug.get("state", {}).get("current_power_w", 0.0)
+    except Exception:
+        pass
+
     ev_charging_w = 0.0
-    if remaining_w >= 1800.0:
-        ev_charging_w = min(remaining_w, 3680.0)
+    if is_ev_active and (plug_ev_w > 400.0 or remaining_w >= 1800.0):
+        ev_charging_w = min(remaining_w, max(1800.0, plug_ev_w))
         remaining_w -= ev_charging_w
         breakdown.append({
             "appliance": "Omoda 7 SHS (Recarga Batería 18.7 kWh)",
@@ -74,17 +85,17 @@ def disaggregate_home_load(total_load_w, ambient_temp_c=28.0, hour=None):
             "confidence_pct": 99.0
         })
 
-    # 5. Grandes Electrodomésticos Térmicos / Lavadora / Termo / Horno
+    # 5. Grandes Electrodomésticos Térmicos / Lavavajillas / Lavadora / Horno / Vitro
     heavy_appliances_w = 0.0
-    if remaining_w >= 1400:
-        heavy_appliances_w = min(remaining_w, 2000.0)
+    if remaining_w >= 1200:
+        heavy_appliances_w = min(remaining_w, 2400.0)
         remaining_w -= heavy_appliances_w
         breakdown.append({
-            "appliance": "Gran Electrodoméstico (Termo / Lavadora calentando / Horno / Vitro)",
+            "appliance": "Lavavajillas / Lavadora calentando / Horno / Vitro",
             "category": "heavy_thermal",
             "power_w": round(heavy_appliances_w, 1),
             "status": "🔥 En Funcionamiento",
-            "confidence_pct": 88.0
+            "confidence_pct": 95.0
         })
 
     # 6. Climatización Daikin Salón y Dormitorio
