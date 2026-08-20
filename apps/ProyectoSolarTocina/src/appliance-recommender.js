@@ -50,14 +50,14 @@ export const APPLIANCE_CATALOG = [
   },
   {
     id: 'fagor_dishwasher',
-    name: 'Lavavajillas Fagor Innova Inox',
+    name: 'Lavavajillas Fagor Innova AIS (Prog. 2 - 65°C Diario)',
     icon: '🍽️',
     category: 'lavado',
-    durationHours: 1.5,
-    powerKw: 1.90,
-    totalEnergyKwh: 1.10,
-    realPowerW: 1900,
-    description: 'Lavavajillas Fagor Innova Inox. Calentamiento de agua y ciclo de secado intensivo.'
+    durationHours: 1.85,
+    powerKw: 2.10,
+    totalEnergyKwh: 1.30,
+    realPowerW: 2100,
+    description: 'Lavavajillas Fagor Innova AIS en Programa 2 (65°C). Fase 1: Calentamiento 65°C (~2.1 kW). Fase 2: Lavado (~90 W). Fase 3: Aclarado caliente 65°C (~2.0 kW) + Secado.'
   },
   {
     id: 'teka_oven',

@@ -18,7 +18,7 @@ DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "tele
 
 APPLIANCE_SIGNATURES = {
     "lavadora": {"name": "Lavadora", "icon": "🧺", "pwr_w": 2000, "base_w": 150, "kwh_cycle": 0.85, "duration_min": 60},
-    "lavavajillas": {"name": "Lavavajillas", "icon": "🍽️", "pwr_w": 1900, "base_w": 100, "kwh_cycle": 1.05, "duration_min": 90},
+    "lavavajillas": {"name": "Lavavajillas Fagor Innova 65°C", "icon": "🍽️", "pwr_w": 2100, "base_w": 90, "kwh_cycle": 1.30, "duration_min: 110},
     "frigorifico": {"name": "Frigorífico Combi", "icon": "❄️", "pwr_w": 90, "base_w": 50, "kwh_cycle": 0.08, "duration_min": 60},
     "nevera": {"name": "Frigorífico Combi", "icon": "❄️", "pwr_w": 90, "base_w": 50, "kwh_cycle": 0.08, "duration_min": 60},
     "portatil": {"name": "Portátiles de Trabajo", "icon": "💻", "pwr_w": 45, "base_w": 40, "kwh_cycle": 0.045, "duration_min": 60},
