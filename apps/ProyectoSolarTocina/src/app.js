@@ -132,13 +132,15 @@ class SolarApp {
       this.loadWeatherData(),
       this.loadMarketPrices(),
       this.fetchTodayHourlyTelemetry(),
+      this.fetchTodayHighResTelemetry(),
       this.fetchModbusTelemetry(),
       this.loadAnnualForecast('12m'),
       this.loadThermalPrecooling(),
       this.daikinIoT.init(),
       this.smartPlugs.init(),
       this.environmentalSensors.init(),
-      this.naturgyVB.init()
+      this.naturgyVB.init(),
+      window.radarWeatherCenter?.init()
     ]);
     
     window.batterySohDiagnostic?.init();
@@ -600,7 +602,10 @@ class SolarApp {
           setTimeout(() => {
             if (this.chartToday) this.chartToday.resize();
             if (this.chartWeek) this.chartWeek.resize();
-          }, 50);
+            if (window.radarWeatherCenter && window.radarWeatherCenter.map) {
+              window.radarWeatherCenter.map.invalidateSize();
+            }
+          }, 100);
         }
         if (targetId === 'tab-annual-ai' && this.annualForecastChart) {
           setTimeout(() => this.annualForecastChart.resize(), 50);
@@ -971,6 +976,16 @@ class SolarApp {
       const rawDayName = new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(dayDate);
       const dayName = rawDayName.charAt(0).toUpperCase() + rawDayName.slice(1);
 
+      const wmoCode = items[12]?.weatherCode || items[0]?.weatherCode || 0;
+      const wmoIcons = {
+        0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+        51: '🌦️', 53: '🌦️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '🌧️',
+        71: '🌨️', 80: '🌦️', 81: '🌧️', 82: '⛈️', 95: '⛈️', 96: '⛈️'
+      };
+      const wmoIcon = wmoIcons[wmoCode] || '🌤️';
+      const maxPrecipProb = Math.max(...items.map(p => p.precipProb || 0));
+      const totalRainMm = items.reduce((acc, p) => acc + (p.precipitation || 0), 0);
+
       this.daysData.push({
         index: dayIdx++,
         dateStr: dayKey,
@@ -988,7 +1003,11 @@ class SolarApp {
         avgCloud: Math.round(avgCloud),
         maxTemp: Math.round(maxTemp),
         minTemp: Math.round(minTemp),
-        weatherDesc: this.weatherApi.getWeatherDescription(items[12].weatherCode),
+        wmoIcon,
+        wmoCode,
+        maxPrecipProb: Math.round(maxPrecipProb),
+        totalRainMm: Number(totalRainMm.toFixed(1)),
+        weatherDesc: this.weatherApi.getWeatherDescription(wmoCode),
         batteryCapKwh: this.engine.config.batteryCapacityKwh
       });
     }
@@ -1445,12 +1464,15 @@ class SolarApp {
       const monthNum = day.date.getMonth() + 1;
 
       card.innerHTML = `
-        <div class="day-header">${weekday}</div>
+        <div class="day-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 800;">${weekday}</span>
+          <span style="font-size: 1.15rem;">${day.wmoIcon || '🌤️'}</span>
+        </div>
         <div class="day-date">${dayNum}/${monthNum}</div>
-        <div class="day-kwh">${day.kwhReal.toFixed(1)} <small>kWh</small></div>
-        <div class="day-kwh-clear">Máx: ${day.kwhClear.toFixed(1)} kWh</div>
-        <div class="day-cloud-badge ${day.avgCloud < 20 ? 'sunny' : (day.avgCloud < 60 ? 'mixed' : 'cloudy')}">
-          ${day.avgCloud}% nubes
+        <div class="day-kwh" style="color: var(--color-solar); font-size: 1.15rem; font-weight: 800; margin: 0.15rem 0;">${day.kwhReal.toFixed(1)} <small>kWh</small></div>
+        <div style="font-size: 0.72rem; color: #38bdf8; margin-bottom: 0.35rem; font-weight: 600;">🌡️ ${day.minTemp}° / ${day.maxTemp}°C</div>
+        <div class="day-cloud-badge ${day.avgCloud < 25 ? 'sunny' : (day.avgCloud < 60 ? 'mixed' : 'cloudy')}">
+          ${day.avgCloud}% nubes ${day.maxPrecipProb > 15 ? `· 🌧️ ${day.maxPrecipProb}%` : ''}
         </div>
       `;
 

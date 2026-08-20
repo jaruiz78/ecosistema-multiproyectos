@@ -303,7 +303,7 @@ body {
 }
 
 .day-card {
-  flex: 0 0 130px;
+  flex: 0 0 150px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -324,6 +324,18 @@ body {
   background: rgba(16, 185, 129, 0.15);
   border-color: var(--color-real);
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+/* Radar & Weather Center */
+#radar-map-container .leaflet-container {
+  background: #090d16 !important;
+  font-family: inherit;
+}
+
+.radar-home-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .day-card .day-header {

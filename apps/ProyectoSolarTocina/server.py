@@ -21,7 +21,10 @@ from weather_broker import (
     get_weather_forecast,
     start_weather_broker_thread,
     get_climate_historical_5yr_summary,
-    get_monthly_climate_breakdown
+    get_monthly_climate_breakdown,
+    get_radar_layers,
+    get_current_weather_summary,
+    get_solar_nowcast_minutely
 )
 from online_learning_twin import learning_engine
 from annual_ai_predictor import annual_ai_engine
@@ -501,6 +504,30 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 data = get_weather_forecast(lat=lat, lon=lon, days=days, force_refresh=refresh)
                 self._send_json(data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/weather/current':
+            try:
+                current_weather = get_current_weather_summary()
+                self._send_json(current_weather)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/weather/radar-layers':
+            try:
+                radar_data = get_radar_layers()
+                self._send_json(radar_data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/weather/nowcast-minutely':
+            try:
+                nowcast = get_solar_nowcast_minutely()
+                self._send_json(nowcast)
             except Exception as e:
                 self._send_json({"error": str(e)}, status=500)
             return
