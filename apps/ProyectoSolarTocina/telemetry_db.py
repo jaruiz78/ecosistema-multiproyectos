@@ -53,10 +53,26 @@ def init_db():
             grid_freq_hz REAL,
             battery_voltage_v REAL,
             battery_soc_percent REAL,
+            battery_power_w REAL DEFAULT 0,
+            home_load_w REAL DEFAULT 0,
+            grid_import_w REAL DEFAULT 0,
+            grid_export_w REAL DEFAULT 0,
             inverter_temp_c REAL,
             source TEXT DEFAULT 'modbus_local'
         );
         """)
+        
+        # Migración automática si la tabla ya existía
+        cur = conn.cursor()
+        cur.execute("PRAGMA table_info(inverter_telemetry_history)")
+        cols = [c[1] for c in cur.fetchall()]
+        for new_col in [("battery_power_w", "REAL DEFAULT 0"), 
+                        ("home_load_w", "REAL DEFAULT 0"), 
+                        ("grid_import_w", "REAL DEFAULT 0"), 
+                        ("grid_export_w", "REAL DEFAULT 0")]:
+            if new_col[0] not in cols:
+                conn.execute(f"ALTER TABLE inverter_telemetry_history ADD COLUMN {new_col[0]} {new_col[1]}")
+
         conn.execute("""
         CREATE TABLE IF NOT EXISTS inverter_telemetry_hourly_rollup (
             date_hour TEXT PRIMARY KEY,
@@ -64,6 +80,7 @@ def init_db():
             max_solar_w REAL,
             avg_grid_export_w REAL,
             avg_home_load_w REAL,
+            avg_grid_import_w REAL,
             avg_battery_soc REAL,
             avg_inverter_temp REAL,
             sample_count INTEGER,
@@ -81,16 +98,16 @@ def compact_and_prune_history(retention_days=7):
     """
     cutoff_epoch = int(time.time()) - (retention_days * 86400)
     with get_db() as conn:
-        # 1. Resumir a nivel horario
         conn.execute("""
             INSERT OR REPLACE INTO inverter_telemetry_hourly_rollup
-            (date_hour, avg_solar_w, max_solar_w, avg_grid_export_w, avg_home_load_w, avg_battery_soc, avg_inverter_temp, sample_count, created_at)
+            (date_hour, avg_solar_w, max_solar_w, avg_grid_export_w, avg_home_load_w, avg_grid_import_w, avg_battery_soc, avg_inverter_temp, sample_count, created_at)
             SELECT 
                 SUBSTR(timestamp, 1, 13) || ':00' as d_hour,
                 ROUND(AVG(solar_total_w), 1),
                 ROUND(MAX(solar_total_w), 1),
-                ROUND(AVG(solar_total_w - grid_ac_power_w), 1),
-                ROUND(AVG(grid_ac_power_w), 1),
+                ROUND(AVG(grid_export_w), 1),
+                ROUND(AVG(home_load_w), 1),
+                ROUND(AVG(grid_import_w), 1),
                 ROUND(AVG(battery_soc_percent), 1),
                 ROUND(AVG(inverter_temp_c), 1),
                 COUNT(*),
@@ -100,7 +117,6 @@ def compact_and_prune_history(retention_days=7):
             GROUP BY SUBSTR(timestamp, 1, 13)
         """, (cutoff_epoch,))
         
-        # 2. Purgar muestras antiguas ya consolidadas
         conn.execute("DELETE FROM inverter_telemetry_history WHERE epoch_seconds < ?", (cutoff_epoch,))
         conn.commit()
 
@@ -122,6 +138,11 @@ def save_telemetry_record(data, source='modbus_local'):
     pv2_w = pv2.get('power_w', 0)
     solar_w = pv1_w + pv2_w
 
+    home_load_w = grid.get('home_load_w', 0)
+    grid_import_w = grid.get('grid_import_w', 0)
+    grid_export_w = grid.get('grid_export_w', 0)
+    bat_power_w = bat.get('power_w', 0)
+
     try:
         with get_db() as conn:
             conn.execute("""
@@ -131,15 +152,19 @@ def save_telemetry_record(data, source='modbus_local'):
                 pv2_voltage_v, pv2_current_a, pv2_power_w,
                 solar_total_w, solar_total_kw,
                 grid_voltage_v, grid_current_a, grid_ac_power_w, grid_ac_power_kw, grid_freq_hz,
-                battery_voltage_v, battery_soc_percent, inverter_temp_c, source
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                battery_voltage_v, battery_soc_percent, battery_power_w,
+                home_load_w, grid_import_w, grid_export_w,
+                inverter_temp_c, source
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 ts, epoch,
                 pv1.get('voltage_v', 0), pv1.get('current_a', 0), pv1_w,
                 pv2.get('voltage_v', 0), pv2.get('current_a', 0), pv2_w,
                 solar_w, round(solar_w / 1000.0, 3),
                 grid.get('voltage_v', 0), grid.get('current_a', 0), grid.get('ac_power_w', 0), grid.get('ac_power_kw', 0), grid.get('freq_hz', 50.0),
-                bat.get('voltage_v', 0), bat.get('soc_percent', 100), inv.get('temperature_c', 0),
+                bat.get('voltage_v', 0), bat.get('soc_percent', 100), bat_power_w,
+                home_load_w, grid_import_w, grid_export_w,
+                inv.get('temperature_c', 0),
                 source
             ))
             conn.commit()
@@ -176,8 +201,11 @@ def get_today_hourly_telemetry(date_str=None):
                 ROUND(AVG(pv1_power_w) / 1000.0, 3) as avg_pv1_kw,
                 ROUND(AVG(pv2_power_w) / 1000.0, 3) as avg_pv2_kw,
                 ROUND(AVG(grid_ac_power_kw), 3) as avg_grid_kw,
-                ROUND(AVG(grid_ac_power_kw), 3) as avg_home_kw,
+                ROUND(AVG(CASE WHEN home_load_w > 0 THEN home_load_w / 1000.0 ELSE grid_ac_power_kw END), 3) as avg_home_kw,
+                ROUND(AVG(grid_import_w) / 1000.0, 3) as avg_grid_import_kw,
+                ROUND(AVG(grid_export_w) / 1000.0, 3) as avg_grid_export_kw,
                 ROUND(AVG(battery_soc_percent), 1) as avg_battery_soc,
+                ROUND(AVG(battery_power_w), 1) as avg_battery_power_w,
                 ROUND(AVG(inverter_temp_c), 1) as avg_inverter_temp,
                 COUNT(*) as sample_count
             FROM inverter_telemetry_history

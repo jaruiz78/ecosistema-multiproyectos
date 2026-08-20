@@ -393,6 +393,11 @@ class SolarApp {
       const kResult = this.kalmanTwin.assimilate(data.grid.ac_power_kw, theoKw);
       this.renderKalmanMetrics(kResult);
     }
+
+    // Refresco en vivo sin parpadeos de la gráfica horaria de Hoy y marcador temporal
+    if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings')) {
+      this.renderHourlyChart();
+    }
   }
 
   updateOmodaTrafficLight(telemetry) {
@@ -1509,10 +1514,10 @@ class SolarApp {
     let realMeasuredEast = new Array(24).fill(null);
     let realMeasuredWest = new Array(24).fill(null);
     let realMeasuredHome = new Array(24).fill(null);
-    let forecastRemainingSolar = new Array(24).fill(null);
+    let realMeasuredGrid = new Array(24).fill(null);
+
     let eastForecastRemaining = new Array(24).fill(null);
     let westForecastRemaining = new Array(24).fill(null);
-    let forecastRemainingHome = new Array(24).fill(null);
 
     if (isToday) {
       if (this.todayHourlyReal && this.todayHourlyReal.hourly) {
@@ -1522,6 +1527,7 @@ class SolarApp {
             realMeasuredEast[h.hour] = h.avg_pv2_kw;
             realMeasuredWest[h.hour] = h.avg_pv1_kw;
             realMeasuredHome[h.hour] = (h.avg_home_kw !== undefined ? h.avg_home_kw : h.avg_grid_kw);
+            realMeasuredGrid[h.hour] = (h.avg_grid_import_kw !== undefined ? h.avg_grid_import_kw : 0.0);
           }
         });
       }
@@ -1541,32 +1547,83 @@ class SolarApp {
           if (this.latestTelemetry.pv1_west && realMeasuredWest[currentHour] === null) {
             realMeasuredWest[currentHour] = (this.latestTelemetry.pv1_west.power_w / 1000.0);
           }
-          if (this.latestTelemetry.grid && realMeasuredHome[currentHour] === null) {
-            realMeasuredHome[currentHour] = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (selectedDay.hourly[currentHour].battery.homeLoadW / 1000.0);
+          if (this.latestTelemetry.grid) {
+            if (realMeasuredHome[currentHour] === null) {
+              realMeasuredHome[currentHour] = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (selectedDay.hourly[currentHour].battery.homeLoadW / 1000.0);
+            }
+            if (realMeasuredGrid[currentHour] === null) {
+              realMeasuredGrid[currentHour] = this.latestTelemetry.grid.grid_import_kw || (this.latestTelemetry.grid.grid_import_w ? this.latestTelemetry.grid.grid_import_w / 1000.0 : 0.0);
+            }
           }
         }
       }
 
       for (let h = currentHour; h < 24; h++) {
-        forecastRemainingSolar[h] = realForecastData[h];
         eastForecastRemaining[h] = eastRealData[h];
         westForecastRemaining[h] = westRealData[h];
-        forecastRemainingHome[h] = homeLoadData[h];
       }
+
+      // Actualizar Live HUD Banner instantáneo
+      const hudEl = document.getElementById('chart-today-live-hud');
+      if (hudEl) {
+        hudEl.style.display = 'flex';
+        const timeStr = `${currentHour.toString().padStart(2, '0')}:${currentMin.toString().padStart(2, '0')} h`;
+        const timeLbl = document.getElementById('hud-current-time-lbl');
+        if (timeLbl) timeLbl.textContent = `⏰ AHORA: ${timeStr}`;
+
+        const solarRealVal = this.latestTelemetry?.solar_total_kw ?? (realMeasuredSolar[currentHour] ?? 0.0);
+        const solarTeoVal = realForecastData[currentHour] ?? 0.0;
+        const homeRealVal = this.latestTelemetry?.grid?.home_load_kw ?? (realMeasuredHome[currentHour] ?? 0.42);
+        const homeTeoVal = homeLoadData[currentHour] ?? 0.45;
+        const gridImpVal = this.latestTelemetry?.grid?.grid_import_kw ?? (realMeasuredGrid[currentHour] ?? 0.0);
+        const batSocVal = this.latestTelemetry?.battery?.soc_percent ?? 71;
+        const batPwrVal = this.latestTelemetry?.battery?.power_w ?? 416;
+
+        const solRealEl = document.getElementById('hud-solar-real');
+        if (solRealEl) solRealEl.textContent = `${solarRealVal.toFixed(2)} kW`;
+        const solTeoEl = document.getElementById('hud-solar-teo');
+        if (solTeoEl) solTeoEl.textContent = `${solarTeoVal.toFixed(2)} kW`;
+
+        const homeRealEl = document.getElementById('hud-home-real');
+        if (homeRealEl) homeRealEl.textContent = `${homeRealVal.toFixed(2)} kW`;
+        const homeTeoEl = document.getElementById('hud-home-teo');
+        if (homeTeoEl) homeTeoEl.textContent = `${homeTeoVal.toFixed(2)} kW`;
+
+        const gridImpEl = document.getElementById('hud-grid-import');
+        if (gridImpEl) gridImpEl.textContent = `${gridImpVal.toFixed(2)} kW`;
+
+        const batSocEl = document.getElementById('hud-battery-soc');
+        if (batSocEl) batSocEl.textContent = `${batSocVal}%`;
+        const batPwrEl = document.getElementById('hud-battery-power');
+        if (batPwrEl) batPwrEl.textContent = `${batPwrVal > 0 ? '+' : ''}${batPwrVal} W`;
+      }
+    } else {
+      const hudEl = document.getElementById('chart-today-live-hud');
+      if (hudEl) hudEl.style.display = 'none';
     }
 
     const self = this;
     const currentTimeMarkerPlugin = {
       id: 'currentTimeMarker',
       afterDraw(chart) {
-        if (self.selectedDayIndex !== 0) return;
-        const { hour: h, minute: m, fractionalHour } = getMadridTime();
+        if (self.selectedDayIndex !== 0 || self.activeChartTab !== 'overview') return;
+        const { hour: h, minute: m } = getMadridTime();
         const xScale = chart.scales.x;
         if (!xScale) return;
-        const xPixel = xScale.getPixelForValue(fractionalHour);
+        
+        // Interpolación lineal precisa en escala categórica (00:00 a 23:00)
+        const p1 = xScale.getPixelForValue(h);
+        const p2 = xScale.getPixelForValue(Math.min(23, h + 1));
+        const frac = m / 60.0;
+        const xPixel = (p2 !== undefined && !isNaN(p2) && p2 !== p1) ? (p1 + (p2 - p1) * frac) : p1;
+
         if (isNaN(xPixel) || xPixel < chart.chartArea.left || xPixel > chart.chartArea.right) return;
         const c = chart.ctx;
         c.save();
+        
+        // 1. Línea vertical cian con brillo y guiones
+        c.shadowColor = '#38bdf8';
+        c.shadowBlur = 10;
         c.beginPath();
         c.setLineDash([5, 4]);
         c.lineWidth = 2.5;
@@ -1574,9 +1631,40 @@ class SolarApp {
         c.moveTo(xPixel, chart.chartArea.top);
         c.lineTo(xPixel, chart.chartArea.bottom);
         c.stroke();
+        c.shadowBlur = 0;
+
+        // 2. Marcador / Badge en la parte superior
+        const timeStr = `⏰ ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} h AHORA`;
+        c.font = 'bold 11px sans-serif';
+        const textWidth = c.measureText(timeStr).width;
+        const badgeWidth = textWidth + 16;
+        const badgeHeight = 22;
+        const badgeX = Math.max(chart.chartArea.left + 4, Math.min(xPixel - (badgeWidth / 2), chart.chartArea.right - badgeWidth - 4));
+        const badgeY = chart.chartArea.top + 8;
+
+        // Fondo del badge con borde cian
+        c.fillStyle = 'rgba(15, 23, 42, 0.95)';
+        c.strokeStyle = '#38bdf8';
+        c.lineWidth = 1.5;
+        c.beginPath();
+        c.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 6);
+        c.fill();
+        c.stroke();
+
+        // Texto
+        c.fillStyle = '#38bdf8';
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText(timeStr, badgeX + (badgeWidth / 2), badgeY + (badgeHeight / 2));
+
         c.restore();
       }
     };
+
+    if (window.Chart && !window._currentTimeMarkerRegistered) {
+      window.Chart.register(currentTimeMarkerPlugin);
+      window._currentTimeMarkerRegistered = true;
+    }
 
     let datasets = [];
 
@@ -1584,41 +1672,62 @@ class SolarApp {
       if (isToday) {
         datasets = [
           {
-            label: '⚡ Producción Real Medida (Inversor)',
-            data: realMeasuredSolar,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.28)',
-            borderWidth: 2.5,
-            fill: true,
-            tension: 0.35,
-            pointRadius: 3,
-            pointBackgroundColor: '#10b981'
-          },
-          {
-            label: '☀️ Pronóstico Restante (EnKF/Meteo)',
-            data: forecastRemainingSolar,
+            label: '☀️ Producción Solar Teórica (Predicción)',
+            data: realForecastData,
             borderColor: '#f59e0b',
-            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+            backgroundColor: 'rgba(245, 158, 11, 0.12)',
             borderWidth: 2,
-            borderDash: [5, 4],
             fill: true,
             tension: 0.35,
             pointRadius: 0
           },
           {
-            label: '🏠 Consumo Hogar (Real + Est)',
-            data: realMeasuredHome.map((val, idx) => val !== null ? val : forecastRemainingHome[idx]),
-            borderColor: '#ec4899',
-            borderWidth: 2,
+            label: '⚡ Producción Solar Real (Inversor)',
+            data: realMeasuredSolar,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.28)',
+            borderWidth: 3,
             fill: false,
-            tension: 0.2,
-            pointRadius: 2,
-            pointBackgroundColor: '#ec4899'
+            tension: 0.35,
+            pointRadius: 4,
+            pointBackgroundColor: '#10b981'
+          },
+          {
+            label: '📐 Consumo Hogar Teórico (Modelo 24h)',
+            data: homeLoadData,
+            borderColor: '#c084fc',
+            borderWidth: 1.8,
+            borderDash: [5, 4],
+            fill: false,
+            tension: 0.25,
+            pointRadius: 0
+          },
+          {
+            label: '🏠 Consumo Hogar Real (Smart Meter)',
+            data: realMeasuredHome,
+            borderColor: '#f43f5e',
+            backgroundColor: 'rgba(244, 63, 94, 0.12)',
+            borderWidth: 2.8,
+            fill: false,
+            tension: 0.25,
+            pointRadius: 4,
+            pointBackgroundColor: '#f43f5e'
+          },
+          {
+            label: '🔌 Consumo Red Eléctrica (Importación)',
+            data: realMeasuredGrid,
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.2)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.25,
+            pointRadius: 3,
+            pointBackgroundColor: '#38bdf8'
           },
           {
             label: '☀️ Máximo Teórico Clear-Sky',
             data: clearSkyData,
-            borderColor: 'rgba(255, 255, 255, 0.2)',
+            borderColor: 'rgba(255, 255, 255, 0.18)',
             borderWidth: 1.5,
             borderDash: [3, 3],
             fill: false,
@@ -1964,8 +2073,15 @@ class SolarApp {
           }
         }
       },
-      plugins: [currentTimeMarkerPlugin]
-    });
+      scales: {
+        x: { ticks: { color: '#94a3b8' } },
+        y: { 
+          title: { display: true, text: 'Potencia (kW)', color: '#94a3b8' },
+          min: 0,
+          ticks: { color: '#94a3b8' }
+        }
+      }
+    }, isToday ? [currentTimeMarkerPlugin] : []);
   }
 
   async render5YrClimateChart(ctx) {
