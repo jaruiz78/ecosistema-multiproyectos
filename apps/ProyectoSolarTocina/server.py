@@ -14,7 +14,7 @@ import time
 import threading
 from datetime import datetime
 
-from telemetry_db import save_telemetry_record, get_recent_history, get_history_stats, get_today_hourly_telemetry
+from telemetry_db import save_telemetry_record, get_recent_history, get_history_stats, get_today_hourly_telemetry, get_today_high_res_telemetry
 from historical_analytics_service import get_multidimensional_history
 from foxcloud_sync import save_foxcloud_credentials, get_foxcloud_credentials, sync_historical_gaps
 from weather_broker import (
@@ -355,6 +355,11 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
         elif self.path == '/api/history/today-hourly':
             today_hourly = get_today_hourly_telemetry()
             self._send_json(today_hourly)
+            return
+
+        elif self.path == '/api/history/today-high-res':
+            today_high_res = get_today_high_res_telemetry()
+            self._send_json(today_high_res)
             return
 
         elif self.path.startswith('/api/history/analytics'):

@@ -177,6 +177,7 @@ class SolarApp {
     this.fetchModbusTelemetry();
     this.fetchSqliteHistory();
     this.fetchTodayHourlyTelemetry();
+    this.fetchTodayHighResTelemetry();
     this.fetchLearningInsights();
     setInterval(() => {
       if (!this.sseEventSource || this.sseEventSource.readyState !== EventSource.OPEN) {
@@ -184,6 +185,7 @@ class SolarApp {
       }
       this.fetchSqliteHistory();
       this.fetchTodayHourlyTelemetry();
+      this.fetchTodayHighResTelemetry();
       this.fetchLearningInsights();
     }, 4000);
   }
@@ -198,6 +200,18 @@ class SolarApp {
             this.renderHourlyChart();
           }
           this.renderDailyEnergyBalance();
+        }
+      }
+    } catch (e) {}
+  }
+
+  async fetchTodayHighResTelemetry() {
+    try {
+      const resp = await fetch('/api/history/today-high-res');
+      if (resp.ok) {
+        this.todayHighRes = await resp.json();
+        if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings')) {
+          this.renderHourlyChart();
         }
       }
     } catch (e) {}
@@ -1503,64 +1517,74 @@ class SolarApp {
     const isToday = (this.selectedDayIndex === 0);
     const { hour: currentHour, minute: currentMin, fractionalHour: currentFractionalHour } = getMadridTime();
 
-    const labels = selectedDay.hourly.map(p => `${p.hour.toString().padStart(2, '0')}:00`);
-    const clearSkyData = selectedDay.hourly.map(p => p.clearSky.pTotalAC_kW);
-    const realForecastData = selectedDay.hourly.map(p => p.forecast.pTotalAC_kW);
-    const eastRealData = selectedDay.hourly.map(p => p.forecast.pEast_kW);
-    const westRealData = selectedDay.hourly.map(p => p.forecast.pWest_kW);
-    const homeLoadData = selectedDay.hourly.map(p => (p.battery.homeLoadW / 1000));
+    let labels = [];
+    let clearSkyData = [];
+    let realForecastData = [];
+    let eastRealData = [];
+    let westRealData = [];
+    let homeLoadData = [];
 
-    let realMeasuredSolar = new Array(24).fill(null);
-    let realMeasuredEast = new Array(24).fill(null);
-    let realMeasuredWest = new Array(24).fill(null);
-    let realMeasuredHome = new Array(24).fill(null);
-    let realMeasuredGrid = new Array(24).fill(null);
+    let realMeasuredSolar = [];
+    let realMeasuredEast = [];
+    let realMeasuredWest = [];
+    let realMeasuredHome = [];
+    let realMeasuredGrid = [];
 
-    let eastForecastRemaining = new Array(24).fill(null);
-    let westForecastRemaining = new Array(24).fill(null);
+    let eastForecastRemaining = [];
+    let westForecastRemaining = [];
 
-    if (isToday) {
-      if (this.todayHourlyReal && this.todayHourlyReal.hourly) {
-        this.todayHourlyReal.hourly.forEach(h => {
-          if (h.hour <= currentHour) {
-            realMeasuredSolar[h.hour] = h.avg_solar_kw;
-            realMeasuredEast[h.hour] = h.avg_pv2_kw;
-            realMeasuredWest[h.hour] = h.avg_pv1_kw;
-            realMeasuredHome[h.hour] = (h.avg_home_kw !== undefined ? h.avg_home_kw : h.avg_grid_kw);
-            realMeasuredGrid[h.hour] = (h.avg_grid_import_kw !== undefined ? h.avg_grid_import_kw : 0.0);
-          }
-        });
-      }
+    if (isToday && this.activeChartTab === 'overview') {
+      const TOTAL_SLOTS = 96; // Resolución de 15 minutos para ver picos y valles en detalle continuo
+      const currentSlot = Math.min(TOTAL_SLOTS - 1, currentHour * 4 + Math.floor(currentMin / 15));
 
-      // Para la hora en curso (currentHour):
-      // Si la hora acaba de comenzar (sin muestras en BD), inicializamos con la telemetría actual.
-      // Si ya hay muestras consolidadas en BD, usamos el promedio acumulado real de la hora para evitar saltos bruscos.
-      const currentHourSummary = this.todayHourlyReal?.hourly?.find(h => h.hour === currentHour);
-      if (!currentHourSummary || currentHourSummary.sample_count < 2) {
-        if (this.latestTelemetry && this.latestTelemetry.online) {
-          if (this.latestTelemetry.solar && realMeasuredSolar[currentHour] === null) {
-            realMeasuredSolar[currentHour] = this.latestTelemetry.solar.total_kw;
+      for (let i = 0; i < TOTAL_SLOTS; i++) {
+        const slotH = Math.floor(i / 4);
+        const slotM = (i % 4) * 15;
+        labels.push(`${slotH.toString().padStart(2, '0')}:${slotM.toString().padStart(2, '0')}`);
+
+        const nextH = Math.min(23, slotH + 1);
+        const frac = (i % 4) / 4.0;
+        
+        const fcVal = selectedDay.hourly[slotH].forecast.pTotalAC_kW * (1 - frac) + (selectedDay.hourly[nextH]?.forecast.pTotalAC_kW ?? 0) * frac;
+        realForecastData.push(Number(fcVal.toFixed(3)));
+
+        const hmVal = (selectedDay.hourly[slotH].battery.homeLoadW / 1000.0) * (1 - frac) + ((selectedDay.hourly[nextH]?.battery.homeLoadW ?? 400) / 1000.0) * frac;
+        homeLoadData.push(Number(hmVal.toFixed(3)));
+
+        const csVal = selectedDay.hourly[slotH].clearSky.pTotalAC_kW * (1 - frac) + (selectedDay.hourly[nextH]?.clearSky.pTotalAC_kW ?? 0) * frac;
+        clearSkyData.push(Number(csVal.toFixed(3)));
+
+        if (i < currentSlot) {
+          const slotTimeline = this.todayHighRes?.timeline?.filter(t => {
+            const tSlot = t.hour * 4 + Math.floor(t.minute / 15);
+            return tSlot === i;
+          }) || [];
+
+          if (slotTimeline.length > 0) {
+            const avgSol = slotTimeline.reduce((acc, cur) => acc + cur.avg_solar_kw, 0) / slotTimeline.length;
+            const avgHm = slotTimeline.reduce((acc, cur) => acc + cur.avg_home_kw, 0) / slotTimeline.length;
+            const avgGrd = slotTimeline.reduce((acc, cur) => acc + cur.avg_grid_import_kw, 0) / slotTimeline.length;
+            realMeasuredSolar.push(Number(avgSol.toFixed(3)));
+            realMeasuredHome.push(Number(avgHm.toFixed(3)));
+            realMeasuredGrid.push(Number(avgGrd.toFixed(3)));
+          } else {
+            const hrData = this.todayHourlyReal?.hourly?.find(h => h.hour === slotH);
+            realMeasuredSolar.push(hrData ? hrData.avg_solar_kw : 0.0);
+            realMeasuredHome.push(hrData ? (hrData.avg_home_kw ?? hrData.avg_grid_kw) : 0.25);
+            realMeasuredGrid.push(hrData ? (hrData.avg_grid_import_kw ?? 0.0) : 0.0);
           }
-          if (this.latestTelemetry.pv2_east && realMeasuredEast[currentHour] === null) {
-            realMeasuredEast[currentHour] = (this.latestTelemetry.pv2_east.power_w / 1000.0);
-          }
-          if (this.latestTelemetry.pv1_west && realMeasuredWest[currentHour] === null) {
-            realMeasuredWest[currentHour] = (this.latestTelemetry.pv1_west.power_w / 1000.0);
-          }
-          if (this.latestTelemetry.grid) {
-            if (realMeasuredHome[currentHour] === null) {
-              realMeasuredHome[currentHour] = this.latestTelemetry.grid.home_load_kw || this.latestTelemetry.grid.ac_power_kw || (selectedDay.hourly[currentHour].battery.homeLoadW / 1000.0);
-            }
-            if (realMeasuredGrid[currentHour] === null) {
-              realMeasuredGrid[currentHour] = this.latestTelemetry.grid.grid_import_kw || (this.latestTelemetry.grid.grid_import_w ? this.latestTelemetry.grid.grid_import_w / 1000.0 : 0.0);
-            }
-          }
+        } else if (i === currentSlot) {
+          const liveSolar = this.latestTelemetry?.solar_total_kw ?? (realMeasuredSolar[i-1] ?? 0.0);
+          const liveHome = this.latestTelemetry?.grid?.home_load_kw ?? (realMeasuredHome[i-1] ?? 0.25);
+          const liveGrid = this.latestTelemetry?.grid?.grid_import_kw ?? (realMeasuredGrid[i-1] ?? 0.0);
+          realMeasuredSolar.push(Number(liveSolar.toFixed(3)));
+          realMeasuredHome.push(Number(liveHome.toFixed(3)));
+          realMeasuredGrid.push(Number(liveGrid.toFixed(3)));
+        } else {
+          realMeasuredSolar.push(null);
+          realMeasuredHome.push(null);
+          realMeasuredGrid.push(null);
         }
-      }
-
-      for (let h = currentHour; h < 24; h++) {
-        eastForecastRemaining[h] = eastRealData[h];
-        westForecastRemaining[h] = westRealData[h];
       }
 
       // Actualizar Live HUD Banner instantáneo
@@ -1571,13 +1595,13 @@ class SolarApp {
         const timeLbl = document.getElementById('hud-current-time-lbl');
         if (timeLbl) timeLbl.textContent = `⏰ AHORA: ${timeStr}`;
 
-        const solarRealVal = this.latestTelemetry?.solar_total_kw ?? (realMeasuredSolar[currentHour] ?? 0.0);
-        const solarTeoVal = realForecastData[currentHour] ?? 0.0;
-        const homeRealVal = this.latestTelemetry?.grid?.home_load_kw ?? (realMeasuredHome[currentHour] ?? 0.42);
-        const homeTeoVal = homeLoadData[currentHour] ?? 0.45;
-        const gridImpVal = this.latestTelemetry?.grid?.grid_import_kw ?? (realMeasuredGrid[currentHour] ?? 0.0);
-        const batSocVal = this.latestTelemetry?.battery?.soc_percent ?? 71;
-        const batPwrVal = this.latestTelemetry?.battery?.power_w ?? 416;
+        const solarRealVal = this.latestTelemetry?.solar_total_kw ?? (realMeasuredSolar[currentSlot] ?? 0.0);
+        const solarTeoVal = realForecastData[currentSlot] ?? 0.0;
+        const homeRealVal = this.latestTelemetry?.grid?.home_load_kw ?? (realMeasuredHome[currentSlot] ?? 0.25);
+        const homeTeoVal = homeLoadData[currentSlot] ?? 0.45;
+        const gridImpVal = this.latestTelemetry?.grid?.grid_import_kw ?? (realMeasuredGrid[currentSlot] ?? 0.0);
+        const batSocVal = this.latestTelemetry?.battery?.soc_percent ?? 67;
+        const batPwrVal = this.latestTelemetry?.battery?.power_w ?? 71;
 
         const solRealEl = document.getElementById('hud-solar-real');
         if (solRealEl) solRealEl.textContent = `${solarRealVal.toFixed(2)} kW`;
@@ -1598,8 +1622,42 @@ class SolarApp {
         if (batPwrEl) batPwrEl.textContent = `${batPwrVal > 0 ? '+' : ''}${batPwrVal} W`;
       }
     } else {
+      labels = selectedDay.hourly.map(p => `${p.hour.toString().padStart(2, '0')}:00`);
+      clearSkyData = selectedDay.hourly.map(p => p.clearSky.pTotalAC_kW);
+      realForecastData = selectedDay.hourly.map(p => p.forecast.pTotalAC_kW);
+      eastRealData = selectedDay.hourly.map(p => p.forecast.pEast_kW);
+      westRealData = selectedDay.hourly.map(p => p.forecast.pWest_kW);
+      homeLoadData = selectedDay.hourly.map(p => (p.battery.homeLoadW / 1000));
+
+      realMeasuredSolar = new Array(24).fill(null);
+      realMeasuredEast = new Array(24).fill(null);
+      realMeasuredWest = new Array(24).fill(null);
+      realMeasuredHome = new Array(24).fill(null);
+      realMeasuredGrid = new Array(24).fill(null);
+
+      eastForecastRemaining = new Array(24).fill(null);
+      westForecastRemaining = new Array(24).fill(null);
+
+      if (isToday) {
+        if (this.todayHourlyReal && this.todayHourlyReal.hourly) {
+          this.todayHourlyReal.hourly.forEach(h => {
+            if (h.hour <= currentHour) {
+              realMeasuredSolar[h.hour] = h.avg_solar_kw;
+              realMeasuredEast[h.hour] = h.avg_pv2_kw;
+              realMeasuredWest[h.hour] = h.avg_pv1_kw;
+              realMeasuredHome[h.hour] = (h.avg_home_kw !== undefined ? h.avg_home_kw : h.avg_grid_kw);
+              realMeasuredGrid[h.hour] = (h.avg_grid_import_kw !== undefined ? h.avg_grid_import_kw : 0.0);
+            }
+          });
+        }
+        for (let h = currentHour; h < 24; h++) {
+          eastForecastRemaining[h] = eastRealData[h];
+          westForecastRemaining[h] = westRealData[h];
+        }
+      }
+
       const hudEl = document.getElementById('chart-today-live-hud');
-      if (hudEl) hudEl.style.display = 'none';
+      if (hudEl) hudEl.style.display = isToday ? 'flex' : 'none';
     }
 
     const self = this;
@@ -1611,11 +1669,21 @@ class SolarApp {
         const xScale = chart.scales.x;
         if (!xScale) return;
         
-        // Interpolación lineal precisa en escala categórica (00:00 a 23:00)
-        const p1 = xScale.getPixelForValue(h);
-        const p2 = xScale.getPixelForValue(Math.min(23, h + 1));
-        const frac = m / 60.0;
-        const xPixel = (p2 !== undefined && !isNaN(p2) && p2 !== p1) ? (p1 + (p2 - p1) * frac) : p1;
+        let xPixel;
+        if (chart.data.labels.length === 96) {
+          const currentSlotFraction = h * 4 + (m / 15.0);
+          const s1 = Math.floor(currentSlotFraction);
+          const s2 = Math.min(95, s1 + 1);
+          const p1 = xScale.getPixelForValue(s1);
+          const p2 = xScale.getPixelForValue(s2);
+          const frac = currentSlotFraction - s1;
+          xPixel = (p2 !== undefined && !isNaN(p2) && p2 !== p1) ? (p1 + (p2 - p1) * frac) : p1;
+        } else {
+          const p1 = xScale.getPixelForValue(h);
+          const p2 = xScale.getPixelForValue(Math.min(23, h + 1));
+          const frac = m / 60.0;
+          xPixel = (p2 !== undefined && !isNaN(p2) && p2 !== p1) ? (p1 + (p2 - p1) * frac) : p1;
+        }
 
         if (isNaN(xPixel) || xPixel < chart.chartArea.left || xPixel > chart.chartArea.right) return;
         const c = chart.ctx;
@@ -2074,7 +2142,19 @@ class SolarApp {
         }
       },
       scales: {
-        x: { ticks: { color: '#94a3b8' } },
+        x: { 
+          ticks: { 
+            color: '#94a3b8',
+            callback: function(val, index) {
+              const label = this.getLabelForValue(val);
+              if (labels.length === 96) {
+                return (index % 4 === 0) ? label : '';
+              }
+              return label;
+            },
+            maxRotation: 0
+          }
+        },
         y: { 
           title: { display: true, text: 'Potencia (kW)', color: '#94a3b8' },
           min: 0,

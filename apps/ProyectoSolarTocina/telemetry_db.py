@@ -221,6 +221,40 @@ def get_today_hourly_telemetry(date_str=None):
             "hourly": rows
         }
 
+def get_today_high_res_telemetry(date_str=None):
+    """Devuelve la serie temporal minuto a minuto de alta resolución para el día en curso"""
+    now = datetime.now()
+    if not date_str:
+        date_str = now.strftime('%Y-%m-%d')
+    current_hour = now.hour
+    current_minute = now.minute
+
+    with get_db() as conn:
+        cursor = conn.execute("""
+            SELECT 
+                SUBSTR(timestamp, 12, 5) as time_min,
+                CAST(SUBSTR(timestamp, 12, 2) AS INTEGER) as hour,
+                CAST(SUBSTR(timestamp, 15, 2) AS INTEGER) as minute,
+                ROUND(AVG(solar_total_kw), 3) as avg_solar_kw,
+                ROUND(AVG(CASE WHEN home_load_w > 0 THEN home_load_w / 1000.0 ELSE grid_ac_power_kw END), 3) as avg_home_kw,
+                ROUND(AVG(grid_import_w) / 1000.0, 3) as avg_grid_import_kw,
+                ROUND(AVG(grid_export_w) / 1000.0, 3) as avg_grid_export_kw,
+                ROUND(AVG(battery_soc_percent), 1) as avg_battery_soc,
+                ROUND(AVG(battery_power_w), 1) as avg_battery_power_w,
+                COUNT(*) as sample_count
+            FROM inverter_telemetry_history
+            WHERE timestamp LIKE ?
+            GROUP BY SUBSTR(timestamp, 12, 5)
+            ORDER BY time_min ASC
+        """, (f"{date_str}%",))
+        rows = [dict(r) for r in cursor.fetchall()]
+        return {
+            "date": date_str,
+            "current_hour": current_hour,
+            "current_minute": current_minute,
+            "timeline": rows
+        }
+
 def get_history_stats():
     """Devuelve estadísticas de la base de datos local"""
     with get_db() as conn:
