@@ -116,10 +116,11 @@ class ValleyChargeSchedulerUI {
             <div>
               <label style="display: block; margin-bottom: 4px; font-weight: 600; color: #cbd5e1;">Hora Inicio Carga (P3):</label>
               <select id="valley-start-select" class="form-select" style="width: 100%; padding: 6px 10px; background: #1e293b; color: #f8fafc; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px;">
+                <option value="0" ${cfg.start_hour === 0 ? 'selected' : ''}>00:00 h (Inicio Tarifa Valle P3 - Recomendado)</option>
                 <option value="1" ${cfg.start_hour === 1 ? 'selected' : ''}>01:00 h</option>
-                <option value="2" ${cfg.start_hour === 2 ? 'selected' : ''}>02:00 h (Recomendado)</option>
+                <option value="2" ${cfg.start_hour === 2 ? 'selected' : ''}>02:00 h</option>
                 <option value="3" ${cfg.start_hour === 3 ? 'selected' : ''}>03:00 h</option>
-                <option value="4" ${cfg.start_hour === 4 ? 'selected' : ''}>04:00 h (Hora más barata)</option>
+                <option value="4" ${cfg.start_hour === 4 ? 'selected' : ''}>04:00 h</option>
               </select>
             </div>
 
@@ -127,7 +128,7 @@ class ValleyChargeSchedulerUI {
               <label style="display: block; margin-bottom: 4px; font-weight: 600; color: #cbd5e1;">Hora Fin Carga (P3):</label>
               <select id="valley-end-select" class="form-select" style="width: 100%; padding: 6px 10px; background: #1e293b; color: #f8fafc; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px;">
                 <option value="5" ${cfg.end_hour === 5 ? 'selected' : ''}>05:00 h</option>
-                <option value="6" ${cfg.end_hour === 6 ? 'selected' : ''}>06:00 h (Recomendado)</option>
+                <option value="6" ${cfg.end_hour === 6 ? 'selected' : ''}>06:30 h (Tope Matinal Estricto - Recomendado)</option>
                 <option value="7" ${cfg.end_hour === 7 ? 'selected' : ''}>07:00 h</option>
                 <option value="8" ${cfg.end_hour === 8 ? 'selected' : ''}>08:00 h (Fin Periodo P3)</option>
               </select>
