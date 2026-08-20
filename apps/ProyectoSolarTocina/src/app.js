@@ -198,7 +198,7 @@ class SolarApp {
       if (resp.ok) {
         this.todayHourlyReal = await resp.json();
         if (this.selectedDayIndex === 0) {
-          if (this.activeChartTab === 'overview' || this.activeChartTab === 'strings') {
+          if (this.activeChartTab === 'overview' || this.activeChartTab === 'strings' || this.activeChartTab === 'battery_curve') {
             this.renderHourlyChart();
           }
           this.renderDailyEnergyBalance();
@@ -212,7 +212,7 @@ class SolarApp {
       const resp = await fetch('/api/history/today-high-res');
       if (resp.ok) {
         this.todayHighRes = await resp.json();
-        if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings')) {
+        if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings' || this.activeChartTab === 'battery_curve')) {
           this.renderHourlyChart();
         }
       }
@@ -411,7 +411,7 @@ class SolarApp {
     }
 
     // Refresco en vivo sin parpadeos de la gráfica horaria de Hoy y marcador temporal
-    if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings')) {
+    if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings' || this.activeChartTab === 'battery_curve')) {
       this.renderHourlyChart();
     }
   }
@@ -2082,6 +2082,129 @@ class SolarApp {
           yAxisID: 'y1'
         }
       ];
+    } else if (this.activeChartTab === 'battery_curve') {
+      let batSocReal = [];
+      let batSocForecast = [];
+      let batPowerKwReal = [];
+      let batPowerKwForecast = [];
+      let evSocForecast = [];
+
+      if (isToday) {
+        const TOTAL_SLOTS = 96;
+        const currentSlot = Math.min(TOTAL_SLOTS - 1, currentHour * 4 + Math.floor(currentMin / 15));
+        labels = [];
+
+        for (let i = 0; i < TOTAL_SLOTS; i++) {
+          const slotH = Math.floor(i / 4);
+          const slotM = (i % 4) * 15;
+          labels.push(`${slotH.toString().padStart(2, '0')}:${slotM.toString().padStart(2, '0')}`);
+
+          const nextH = Math.min(23, slotH + 1);
+          const frac = (i % 4) / 4.0;
+          
+          const fcSoc = selectedDay.hourly[slotH].battery.socPercent * (1 - frac) + (selectedDay.hourly[nextH]?.battery.socPercent ?? 50) * frac;
+          batSocForecast.push(Number(fcSoc.toFixed(1)));
+
+          const fcPwr = (selectedDay.hourly[slotH].battery.powerW / 1000.0) * (1 - frac) + ((selectedDay.hourly[nextH]?.battery.powerW ?? 0) / 1000.0) * frac;
+          batPowerKwForecast.push(Number(fcPwr.toFixed(3)));
+
+          const evSoc = selectedDay.hourly[slotH].ev.socPercent * (1 - frac) + (selectedDay.hourly[nextH]?.ev.socPercent ?? 20) * frac;
+          evSocForecast.push(Number(evSoc.toFixed(1)));
+
+          if (i < currentSlot) {
+            const slotTimeline = this.todayHighRes?.timeline?.filter(t => {
+              const tSlot = t.hour * 4 + Math.floor(t.minute / 15);
+              return tSlot === i;
+            }) || [];
+
+            if (slotTimeline.length > 0) {
+              const avgSoc = slotTimeline.reduce((acc, cur) => acc + (cur.avg_battery_soc || 0), 0) / slotTimeline.length;
+              const avgPwr = slotTimeline.reduce((acc, cur) => acc + (cur.avg_battery_power_w || 0), 0) / (slotTimeline.length * 1000.0);
+              batSocReal.push(Number(avgSoc.toFixed(1)));
+              batPowerKwReal.push(Number(avgPwr.toFixed(3)));
+            } else {
+              const hrData = this.todayHourlyReal?.hourly?.find(h => h.hour === slotH);
+              batSocReal.push(hrData && hrData.avg_battery_soc ? hrData.avg_battery_soc : null);
+              batPowerKwReal.push(hrData && hrData.avg_battery_power_w ? (hrData.avg_battery_power_w / 1000.0) : null);
+            }
+          } else if (i === currentSlot) {
+            const liveSoc = this.latestTelemetry?.battery?.soc_percent ?? (batSocReal[i-1] ?? 85);
+            const livePwr = (this.latestTelemetry?.battery?.power_w ?? 0) / 1000.0;
+            batSocReal.push(Number(liveSoc.toFixed(1)));
+            batPowerKwReal.push(Number(livePwr.toFixed(3)));
+          } else {
+            batSocReal.push(null);
+            batPowerKwReal.push(null);
+          }
+        }
+      } else {
+        labels = selectedDay.hourly.map(p => `${p.hour.toString().padStart(2, '0')}:00`);
+        batSocForecast = selectedDay.hourly.map(p => Number(p.battery.socPercent.toFixed(1)));
+        batPowerKwForecast = selectedDay.hourly.map(p => Number((p.battery.powerW / 1000.0).toFixed(3)));
+        evSocForecast = selectedDay.hourly.map(p => Number(p.ev.socPercent.toFixed(1)));
+        batSocReal = new Array(24).fill(null);
+        batPowerKwReal = new Array(24).fill(null);
+      }
+
+      datasets = [
+        {
+          label: '🔋 SoC Batería Real Medido (%)',
+          data: batSocReal,
+          borderColor: '#38bdf8',
+          backgroundColor: 'rgba(56, 189, 248, 0.25)',
+          borderWidth: 3,
+          fill: false,
+          tension: 0.25,
+          pointRadius: 4,
+          pointBackgroundColor: '#38bdf8',
+          yAxisID: 'y1'
+        },
+        {
+          label: '📈 SoC Batería Previsto (%)',
+          data: batSocForecast,
+          borderColor: 'rgba(56, 189, 248, 0.55)',
+          borderWidth: 2,
+          borderDash: [5, 4],
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+          yAxisID: 'y1'
+        },
+        {
+          label: '⚡ Potencia Batería Real (+Carga / -Descarga kW)',
+          data: batPowerKwReal,
+          borderColor: '#8b5cf6',
+          backgroundColor: 'rgba(139, 92, 246, 0.25)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.25,
+          pointRadius: 3,
+          pointBackgroundColor: '#8b5cf6',
+          yAxisID: 'y'
+        },
+        {
+          label: '⚡ Potencia Batería Prevista (kW)',
+          data: batPowerKwForecast,
+          borderColor: '#c084fc',
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+          yAxisID: 'y'
+        },
+        {
+          label: '🚗 SoC Batería Omoda 7 VE (%)',
+          data: evSocForecast,
+          borderColor: '#10b981',
+          borderWidth: 2,
+          borderDash: [4, 4],
+          fill: false,
+          tension: 0.2,
+          pointRadius: 0,
+          yAxisID: 'y1'
+        }
+      ];
     } else if (this.activeChartTab === 'kalman') {
       const history = this.kalmanTwin.history;
       const kalmanLabels = history.map((h, i) => `Medición ${i+1}`);
@@ -2136,6 +2259,8 @@ class SolarApp {
       return;
     }
 
+    const hasDualAxis = (this.activeChartTab === 'mpc' || this.activeChartTab === 'battery_curve');
+
     updateOrCreateChart('line', { labels, datasets }, {
       responsive: true,
       maintainAspectRatio: false,
@@ -2165,6 +2290,7 @@ class SolarApp {
       },
       scales: {
         x: { 
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
           ticks: { 
             color: '#94a3b8',
             callback: function(val, index) {
@@ -2179,9 +2305,19 @@ class SolarApp {
         },
         y: { 
           title: { display: true, text: 'Potencia (kW)', color: '#94a3b8' },
-          min: 0,
+          grid: { color: 'rgba(255, 255, 255, 0.05)' },
           ticks: { color: '#94a3b8' }
-        }
+        },
+        ...(hasDualAxis ? {
+          y1: {
+            position: 'right',
+            min: 0,
+            max: 100,
+            title: { display: true, text: 'Estado de Carga SoC (%)', color: '#38bdf8' },
+            ticks: { color: '#38bdf8', callback: v => `${v}%` },
+            grid: { drawOnChartArea: false }
+          }
+        } : {})
       }
     }, isToday ? [currentTimeMarkerPlugin] : []);
   }
