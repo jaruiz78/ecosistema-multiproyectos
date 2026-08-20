@@ -78,26 +78,35 @@ class OnlineLearningTwin:
         # Factor de aprendizaje adaptativo (Exponential Moving Average / Kalman Gain)
         alpha = 0.02
 
-        # 1. Calibración Óptica de Strings si hay sol significativo (>500W)
-        if total_solar_w > 500:
+        # 1. Calibración Óptica de Strings si hay sol significativo (>300W)
+        if total_solar_w > 300:
             ratio_observed = pv1_w / (pv2_w + 1e-6)
-            # En horario de tarde (15:30h), el Oeste debe aportar más que el Este
-            now_hour = datetime.now().hour
-            if now_hour >= 14:
-                expected_ratio = 0.88 # 6x500W Este vs 4x500W Oeste por ángulo solar de tarde
+            now_dt = datetime.now()
+            now_hour_frac = now_dt.hour + now_dt.minute / 60.0
+
+            # En horario de mañana el Este (6 paneles) domina; por la tarde domina el Oeste (4 paneles)
+            if now_hour_frac >= 14.5:
+                expected_ratio = 0.82 # Ángulo favorable a los 4 paneles Oeste
+            elif now_hour_frac <= 12.0:
+                expected_ratio = 1.65 # Ángulo favorable a los 6 paneles Este
             else:
-                expected_ratio = 1.45 # Por la mañana el Este domina
+                expected_ratio = 1.15 # Transición mediodía solar
 
-            deviation = (ratio_observed - expected_ratio) / expected_ratio
-            self.east_optical_yield = max(0.85, min(1.02, self.east_optical_yield - alpha * deviation * 0.1))
-            self.west_optical_yield = max(0.85, min(1.02, self.west_optical_yield + alpha * deviation * 0.1))
+            deviation = (ratio_observed - expected_ratio) / (expected_ratio + 1e-6)
+            self.east_optical_yield = max(0.88, min(1.02, self.east_optical_yield - alpha * deviation * 0.05))
+            self.west_optical_yield = max(0.88, min(1.02, self.west_optical_yield + alpha * deviation * 0.05))
 
-            # 2. Estimación de Suciedad / Calima (Soiling Factor)
-            # Si a pleno sol y cielo limpio la potencia total ronda los 3.7 kW para 5.0 kWp teóricos
-            # con células a ~55°C, el rendimiento esperado es ~76-78%.
-            measured_yield = total_solar_w / 5000.0
-            expected_yield = 0.76 # Teórico con pérdidas térmicas de verano en Sevilla
-            soiling_inst = min(1.0, measured_yield / expected_yield)
+            # 2. Estimación de Suciedad / Calima (Soiling Factor) referenciado a la elevación solar en Tocina
+            # Fotoperiodo agosto en Tocina: orto 07:43 h, cenit 14:26 h, ocaso 21:09 h
+            solar_noon = 14.43
+            day_len = 13.43
+            hour_diff = now_hour_frac - solar_noon
+            solar_sin = max(0.0, math.cos(hour_diff * math.pi / day_len))
+            expected_solar_w = max(400.0, 4200.0 * (solar_sin ** 1.15))
+
+            measured_ratio = total_solar_w / expected_solar_w
+            # Factor de limpieza esperado entre 0.90 y 1.0 (si hay nubes, la atenuación se filtra con EMA suave)
+            soiling_inst = max(0.80, min(1.0, measured_ratio))
             self.soiling_factor = (1 - alpha) * self.soiling_factor + alpha * soiling_inst
 
         # 3. Aprendizaje de Sensibilidad de Climatización (Daikin A/C)
