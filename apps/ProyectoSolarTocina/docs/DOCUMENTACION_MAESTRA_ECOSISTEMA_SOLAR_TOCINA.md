@@ -20,6 +20,8 @@
 11. [Guía de Integración de Hardware (Daikin WiFi, Wallbox y Sensores)](#11-guía-de-integración-de-hardware-daikin-wifi-wallbox-y-sensores)
 12. [Catálogo Completo de Endpoints REST, SSE y Telemetría](#12-catálogo-completo-de-endpoints-rest-sse-y-telemetría)
 13. [Manual de Operación, Reentrenamiento y Mantenimiento](#13-manual-de-operación-reentrenamiento-y-mantenimiento)
+14. [Manual Bioclimático de Eficiencia Estacional y Gestión Pasiva](#14-manual-bioclimático-de-eficiencia-estacional-gestión-pasiva-de-persianas-y-climatización-daikin)
+15. [Centro Meteorológico, Radar Satelital EUMETSAT y Visualización de 96 Slots](#15-centro-meteorológico-radar-satelital-eumetsat-y-visualización-de-96-slots)
 
 ---
 
@@ -349,8 +351,13 @@ El servidor HTTP en el puerto `:8526` expone la siguiente interfaz:
 
 | Método | Endpoint | Parámetros / Body | Descripción |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/stream` | — | Stream continuo SSE con telemetría Modbus en tiempo real cada 3 segundos. |
+| `GET` | `/api/stream` | — | Stream continuo SSE con telemetría Modbus en tiempo real cada 3 a 15 segundos. |
 | `GET` | `/api/telemetry/inverter` | — | Lectura instantánea de voltajes, corrientes, potencias y SoC del inversor. |
+| `GET` | `/api/history/today-high-res` | — | Histórico sub-horario (96 slots minuto a minuto) para la gráfica continua de "Hoy". |
+| `GET` | `/api/weather/current` | — | Estación meteorológica en vivo: temperatura, sensación, rocío, viento cardinal, presión MSL, UV y nubes por capas. |
+| `GET` | `/api/weather/radar-layers` | — | Frames Doppler de precipitación y satélite infrarrojo EUMETSAT/NASA con timestamps para animación temporal. |
+| `GET` | `/api/weather/nowcast-minutely` | — | Nowcasting solar a 15 minutos (96 intervalos) con desglose DNI/DHI y potencia fotovoltaica AC. |
+| `GET` | `/api/weather/forecast` | `?lat=37.5942&lon=-5.7397&days=7` | Previsión meteorológica de 15 minutos con altitud fija a 31 m. |
 | `GET` | `/api/battery/valley-charge-status` | — | Dictamen meteorológico para carga valle nocturna, ahorro neto y estado de automatismo. |
 | `POST` | `/api/battery/valley-charge-config` | `{"auto_enabled": bool, "target_soc_pct": int, "start_hour": int, "end_hour": int, "charge_power_w": int}` | Guarda la configuración de automatización en SQLite. |
 | `POST` | `/api/battery/valley-charge-execute` | `{"mode": "force_time_use" | "self_use", "target_soc_pct": int}` | Envía la orden directa Modbus TCP al inversor Sunworks. |
@@ -359,7 +366,6 @@ El servidor HTTP en el puerto `:8526` expone la siguiente interfaz:
 | `GET` | `/api/finance/icp-optimizer` | `?contracted_kw=4.60` | Auditoría de picos cuarto-horarios y análisis de costes de potencia. |
 | `GET` | `/api/market/omie-today-tomorrow` | — | Precios horarios del pool eléctrico español (OMIE / PVPC / ESIOS REE). |
 | `GET` | `/api/ai/retrain-twin` | — | Ejecuta el reentrenamiento y calibración de hiperparámetros del gemelo digital. |
-| `GET` | `/api/weather/forecast` | `?lat=37.5942&lon=-5.7397&days=7` | Previsión meteorológica de 15 minutos con altitud fija a 31 m. |
 
 ---
 
@@ -437,4 +443,51 @@ flowchart TD
 1. **Lavadora / Lavavajillas**: Programar siempre entre las **11:30 y las 14:30 h** para que el calentamiento del agua por resistencia (\(2.000\text{ W}\)) se cubra íntegramente con el pico de producción de los paneles solares.
 2. **Frigorífico**: Separar \(5\text{ cm}\) de la pared y ajustar consignas a **\(+4\text{ °C}\) en refrigerador y \(-18\text{ °C}\) en congelador** (ahorro del \(12\%\) en compresor).
 3. **Standby Basal**: Apagar zonas de teletrabajo de **23:00 a 07:30 h** mediante regletas con corte automático, reduciendo el consumo nocturno de \(200\text{ W}\) a \(85\text{ W}\) (**\(-1.000\text{ kWh/año}\)**).
+
+---
+
+## 15. Centro Meteorológico, Radar Satelital EUMETSAT y Visualización de 96 Slots
+
+### 15.1. Arquitectura de Ingesta Atmosférica y Nowcasting
+El módulo `weather_broker.py` asimila en ciclos de 15 minutos (TTL 900s) los datos de satélites meteorológicos (EUMETSAT Meteosat MSG-MTG y NASA Terra/Aqua) junto con modelos DNI/DHI de Open-Meteo y reflectividad Doppler de RainViewer / AEMET:
+
+```mermaid
+flowchart LR
+    subgraph Fuentes["🛰️ Fuentes Satelitales y Radar"]
+        sat["EUMETSAT / NASA VIIRS<br/>Feed Infrarrojo y Óptico HD"]
+        rad["Radar Doppler AEMET / RainViewer<br/>Reflectividad de Precipitación"]
+        om["Open-Meteo Solar API<br/>Radiación DNI/DHI + Capas Nubosas"]
+    end
+
+    subgraph Broker["🧠 weather_broker.py (SQLite Cache)"]
+        proc["Descomposición Radiativa POA<br/>6 Paneles Este (89°) + 4 Oeste (269°)"]
+        card["Conversión Rosa de los Vientos (16 Rumbos)"]
+    end
+
+    subgraph UI["💻 Visualización Frontend"]
+        hud["HUD Estación en Vivo (8 KPIs)"]
+        map["Leaflet Map (Esri Dark + Reproductor Temporal)"]
+        chart["Gráfica 96 Slots (Crecimiento Dinámico en Vivo)"]
+    end
+
+    Fuentes --> Broker --> UI
+```
+
+### 15.2. Especificaciones de los Parámetros Meteorológicos Asimilados
+* **Estación Meteorológica en Vivo (HUD)**:
+  1. **Temperatura y Sensación Térmica**: Registro en superficie y cálculo bioclimático según humedad y viento.
+  2. **Estado del Cielo & Iconografía WMO**: Clasificación visual y probabilidad porcentual de precipitación.
+  3. **Humedad Relativa y Punto de Rocío**: Monitoreo psicrométrico para evaluar riesgo de condensación y rendimiento térmico.
+  4. **Viento a 10m y Rachas**: Velocidad media y rumbos cardinales (`N`, `NNE`, `NE`, `ENE`, `E`, `ESE`, `SE`, `SSE`, `S`, `SSO`, `SO`, `OSO`, `O`, `ONO`, `NO`, `NNO`).
+  5. **Presión Atmosférica Barométrica (MSL)**: Detección de frentes y gradientes báricos.
+  6. **Índice UV Solar**: Monitorización instantánea y proyección del valor pico diario.
+  7. **Estructura Nubosa por Capas**: Desglose porcentual de nubosidad baja, media y alta.
+  8. **Fotoperiodo Oficial Tocina**: Orto y ocaso astronómico con duración neta de horas de luz.
+* **Visor Geoespacial de Radar y Satélite (Leaflet.js)**:
+  * Capa base oscura ultra-limpia (Esri Dark Gray Canvas).
+  * Conmutación en 1 clic entre **🌧️ Radar Doppler de Precipitación** y **🛰️ Satélite Infrarrojo / Óptico EUMETSAT**.
+  * Reproductor dinámico con control `Play / Pause` a 600 ms por frame, slider temporal y etiqueta `🔴 EN VIVO / NOWCAST`.
+* **Resolución Sub-Horaria Continua (96 Intervalos de 15 Minutos)**:
+  * Agregación continua minuto a minuto en `/api/history/today-high-res`.
+  * La gráfica de "Hoy" crece dinámicamente con cada evento SSE (cada 15s), mostrando con máxima nitidez picos de cocción, electrodomésticos y paso de nubes.
 

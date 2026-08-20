@@ -2,7 +2,7 @@
 
 **Ecosistema Solar Inteligente Tocina - Los Rosales (Sevilla)**  
 **Ubicación**: Calle Amadeo Vives 31 | Inversor Sunworks KP10 SW + Batería Fox-ESS 10.36 kWh  
-**Versión del Sistema**: `v3.8` | **Fecha**: Agosto 2026
+**Versión del Sistema**: `v4.0` | **Fecha**: Agosto 2026
 
 ---
 

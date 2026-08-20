@@ -26,17 +26,21 @@ Acceder en el navegador: **[http://localhost:8526](http://localhost:8526)**
 
 ---
 
-## ⚡ Capacidades Principales
+## ⚡ Capacidades Principales (Versión 4.0)
 
 1. **Telemetría Modbus TCP en Vivo (192.168.1.66:502)**:
    * Lectura en tiempo real cada 3 segundos de voltajes, corrientes, potencia solar total, estado de carga de baterías Fox-ESS y Smart Meter.
-2. **Diagrama Unifilar Interactivo & Modo Kiosko**:
-   * Visualización gráfica de flujos de potencia, minutero dinámico de carga al 100% de batería (ETA) y modo adaptativo Día/Noche.
-3. **Gemelo Digital PINN & Filtro de Kalman EnKF**:
+2. **Resolución Continua de 96 Slots Sub-Horarios (15 Minutos) & Crecimiento en Vivo**:
+   * Gráfica de "Hoy" con recrecimiento dinámico continuo minuto a minuto vía SSE (`/api/history/today-high-res`) y marcador de tiempo real interpolado.
+3. **Centro Meteorológico en Tiempo Real & Estación HUD (8 Variables Atmosféricas)**:
+   * Temperatura, sensación térmica, humedad, punto de rocío, viento con rosa de los vientos cardinal, presión barométrica MSL, índice UV y nubes por capas.
+4. **Visor de Radar Doppler y Satélite Infrarrojo EUMETSAT / NASA (Leaflet Maps)**:
+   * Mapeo interactivo centrado en Tocina con reproductor de animación temporal (últimas 2 horas + Nowcasting) y conmutación entre capas de lluvia y satélite.
+5. **Gemelo Digital PINN & Filtro de Kalman EnKF**:
    * Desglose bifásico de tejados Este (89°) vs Oeste (269°) calibrado con \(R^2 = 0{,}998\) y error \(\text{MAPE} = 0{,}50\%\).
-4. **Guardián de Seguridad Anti-Cortes ICP**:
+6. **Guardián de Seguridad Anti-Cortes ICP**:
    * Prioridad absoluta al suministro doméstico: modulación de carga en \(<500\text{ ms}\) para garantizar que nunca se dispare el contador contratado (4.60 kW).
-5. **Programador de Carga Valle Nocturna (P3)**:
+7. **Programador de Carga Valle Nocturna Adaptativa (P3)**:
    * Evaluación diaria de días deficitarios y conmutación automática o manual de modos de trabajo en el inversor.
-6. **Precios de Mercado OMIE / ESIOS REE & Diagnóstico SOH**:
+8. **Precios de Mercado OMIE / ESIOS REE & Diagnóstico SOH**:
    * Ingesta a las 20:15 h de los precios horarios del día siguiente y monitorización de salud (\(\text{SOH} = 99{,}99\%\), \(R_i = 34{,}5\text{ m}\Omega\)).
