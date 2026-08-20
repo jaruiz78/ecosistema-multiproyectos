@@ -78,6 +78,7 @@ class EvSmartChargeTracker:
         self.current_ev_power_w = 0.0
 
         # Cargar sesión activa si existe
+        self.manual_override_charging = None
         self._load_active_session()
 
     def _load_active_session(self):
@@ -101,6 +102,27 @@ class EvSmartChargeTracker:
                 self.fox_bat_energy_kwh = row["fox_bat_energy_kwh"]
                 self.grid_energy_kwh = row["grid_energy_kwh"]
 
+    def set_charging_override(self, enabled: bool):
+        """Permite al usuario activar/desactivar forzosamente la detección de carga del vehículo"""
+        self.manual_override_charging = bool(enabled)
+        if not enabled and self.is_charging:
+            self.force_stop_session()
+
+    def force_stop_session(self):
+        """Finaliza inmediatamente cualquier sesión activa de carga"""
+        now = datetime.now()
+        self.is_charging = False
+        self.current_ev_power_w = 0.0
+        if self.session_id:
+            with get_db() as conn:
+                conn.execute("""
+                    UPDATE ev_charging_sessions
+                    SET end_time = ?, status = 'completed'
+                    WHERE id = ?
+                """, (now.isoformat(), self.session_id))
+                conn.commit()
+        self.session_id = None
+
     def set_start_soc(self, soc_pct: float):
         """Permite al usuario calibrar el SoC inicial manualmente si lo desea"""
         self.start_soc_pct = max(0.0, min(100.0, float(soc_pct)))
@@ -117,21 +139,39 @@ class EvSmartChargeTracker:
     def process_telemetry_sample(self, home_load_w: float, solar_w: float, battery_power_w: float, grid_import_w: float) -> dict:
         """
         Infiere en O(1) si el vehículo está cargando y actualiza la sesión en tiempo real.
-        Firma: El Omoda 7 en enchufe/cargador demanda entre 1.800 W y 3.600 W continuos.
+        Verifica el enchufe inteligente dedicado o el control explícito para no confundir
+        electrodomésticos pesados (lavavajillas, lavadora, horno) con el Omoda 7.
         """
         now = datetime.now()
-        
-        # Estimar la potencia base de la casa sin el coche (~250-450 W si no hay horno/vitro)
-        # Si home_load_w >= 1.800 W sostenido
-        is_ev_signature = (home_load_w >= 1800.0)
+
+        # 1. Comprobar estado del enchufe inteligente dedicado del Omoda 7
+        is_plug_on = False
+        plug_power_w = 0.0
+        try:
+            from smart_plugs_manager import smart_plugs_manager
+            ev_plug = smart_plugs_manager.get_plug("omoda7_ev_schuko")
+            if ev_plug:
+                is_plug_on = ev_plug.get("state", {}).get("power_on", False)
+                plug_power_w = ev_plug.get("state", {}).get("current_power_w", 0.0)
+        except Exception:
+            pass
+
+        # 2. Determinar si hay carga real de VE
+        if self.manual_override_charging is not None:
+            is_ev_signature = self.manual_override_charging
+        elif is_plug_on and (plug_power_w > 400.0 or home_load_w >= 1800.0):
+            is_ev_signature = True
+        else:
+            # Si el enchufe inteligente está apagado o no hay confirmación explícita,
+            # el consumo corresponde a electrodomésticos del hogar (lavavajillas, horno, etc.)
+            is_ev_signature = False
         
         if is_ev_signature:
-            # La potencia del VE es la carga total menos la base típica (~320W)
-            inferred_ev_w = max(1800.0, min(3680.0, home_load_w - 320.0))
+            inferred_ev_w = plug_power_w if plug_power_w > 500.0 else max(1800.0, min(3680.0, home_load_w - 320.0))
             self.current_ev_power_w = inferred_ev_w
             
             if not self.is_charging:
-                # Inicio de nueva sesión de carga detectada automáticamente
+                # Inicio de nueva sesión de carga detectada
                 self.is_charging = True
                 self.start_time = now
                 self.last_tick_time = now
