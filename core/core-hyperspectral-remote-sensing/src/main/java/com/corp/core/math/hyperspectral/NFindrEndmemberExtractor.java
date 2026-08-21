@@ -8,6 +8,10 @@ import java.util.List;
  * Algoritmo N-FINDR para extracción de miembros puros (endmembers) en imágenes hiperespectrales satelitales.
  * Busca el símplex de volumen máximo inscrito en el conjunto de píxeles espectrales.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record NFindrEndmemberExtractor() implements Serializable {
 
     public static List<double[]> extractEndmembers(double[][] pixelSpectra, int numEndmembers) {

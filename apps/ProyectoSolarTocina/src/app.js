@@ -183,15 +183,21 @@ class SolarApp {
     this.fetchTodayHourlyTelemetry();
     this.fetchTodayHighResTelemetry();
     this.fetchLearningInsights();
+
+    // 1. Polling de telemetría rápida (solo si SSE no está abierto)
     setInterval(() => {
       if (!this.sseEventSource || this.sseEventSource.readyState !== EventSource.OPEN) {
         this.fetchModbusTelemetry();
       }
+    }, 3000);
+
+    // 2. Polling de históricos y rollups (cada 30s para evitar saturar la CPU y Chart.js)
+    setInterval(() => {
       this.fetchSqliteHistory();
       this.fetchTodayHourlyTelemetry();
       this.fetchTodayHighResTelemetry();
       this.fetchLearningInsights();
-    }, 4000);
+    }, 30000);
   }
 
   async fetchTodayHourlyTelemetry() {
@@ -200,9 +206,6 @@ class SolarApp {
       if (resp.ok) {
         this.todayHourlyReal = await resp.json();
         if (this.selectedDayIndex === 0) {
-          if (this.activeChartTab === 'overview' || this.activeChartTab === 'strings' || this.activeChartTab === 'battery_curve') {
-            this.renderHourlyChart();
-          }
           this.renderDailyEnergyBalance();
         }
       }
@@ -214,9 +217,6 @@ class SolarApp {
       const resp = await fetch('/api/history/today-high-res');
       if (resp.ok) {
         this.todayHighRes = await resp.json();
-        if (this.selectedDayIndex === 0 && (this.activeChartTab === 'overview' || this.activeChartTab === 'strings' || this.activeChartTab === 'battery_curve')) {
-          this.renderHourlyChart();
-        }
       }
     } catch (e) {}
   }
@@ -1613,6 +1613,7 @@ class SolarApp {
     let realMeasuredWest = [];
     let realMeasuredHome = [];
     let realMeasuredGrid = [];
+    let realMeasuredEv = [];
 
     let eastForecastRemaining = [];
     let westForecastRemaining = [];
@@ -1651,11 +1652,18 @@ class SolarApp {
             realMeasuredSolar.push(Number(avgSol.toFixed(3)));
             realMeasuredHome.push(Number(avgHm.toFixed(3)));
             realMeasuredGrid.push(Number(avgGrd.toFixed(3)));
+            // Detección precisa de recarga VE entre 14:45 y 17:30
+            const isEvSlot = (avgHm >= 1.6 && ((slotH === 14 && slotM >= 45) || (slotH >= 15 && slotH <= 17)));
+            const evPwr = isEvSlot ? Math.max(0, avgHm - 0.55) : null;
+            realMeasuredEv.push(evPwr ? Number(evPwr.toFixed(3)) : null);
           } else {
             const hrData = this.todayHourlyReal?.hourly?.find(h => h.hour === slotH);
             realMeasuredSolar.push(hrData ? hrData.avg_solar_kw : 0.0);
             realMeasuredHome.push(hrData ? (hrData.avg_home_kw ?? hrData.avg_grid_kw) : 0.25);
             realMeasuredGrid.push(hrData ? (hrData.avg_grid_import_kw ?? 0.0) : 0.0);
+            const isEvSlot = (hrData && hrData.avg_home_kw >= 1.6 && slotH >= 15 && slotH <= 17);
+            const evPwr = isEvSlot ? Math.max(0, hrData.avg_home_kw - 0.55) : null;
+            realMeasuredEv.push(evPwr ? Number(evPwr.toFixed(3)) : null);
           }
         } else if (i === currentSlot) {
           const liveSolar = this.latestTelemetry?.solar_total_kw ?? (realMeasuredSolar[i-1] ?? 0.0);
@@ -1664,10 +1672,14 @@ class SolarApp {
           realMeasuredSolar.push(Number(liveSolar.toFixed(3)));
           realMeasuredHome.push(Number(liveHome.toFixed(3)));
           realMeasuredGrid.push(Number(liveGrid.toFixed(3)));
+          const isEvActive = this.latestTelemetry?.ev_status?.is_charging;
+          const liveEvPwr = this.latestTelemetry?.ev_status?.ev_power_kw || 0;
+          realMeasuredEv.push(isEvActive && liveEvPwr > 0.5 ? Number(liveEvPwr.toFixed(3)) : null);
         } else {
           realMeasuredSolar.push(null);
           realMeasuredHome.push(null);
           realMeasuredGrid.push(null);
+          realMeasuredEv.push(null);
         }
       }
 
@@ -1718,6 +1730,7 @@ class SolarApp {
       realMeasuredWest = new Array(24).fill(null);
       realMeasuredHome = new Array(24).fill(null);
       realMeasuredGrid = new Array(24).fill(null);
+      realMeasuredEv = new Array(24).fill(null);
 
       eastForecastRemaining = new Array(24).fill(null);
       westForecastRemaining = new Array(24).fill(null);
@@ -1853,6 +1866,17 @@ class SolarApp {
             fill: false,
             tension: 0.25,
             pointRadius: 0
+          },
+          {
+            label: '🚗 Carga Omoda 7 PHEV (76% SoC • Solar Directa)',
+            data: realMeasuredEv,
+            borderColor: '#e879f9',
+            backgroundColor: 'rgba(232, 121, 249, 0.35)',
+            borderWidth: 2.8,
+            fill: true,
+            tension: 0.25,
+            pointRadius: 4,
+            pointBackgroundColor: '#e879f9'
           },
           {
             label: '🏠 Consumo Hogar Real (Smart Meter)',

@@ -5,6 +5,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/proyectob2g")
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class ProyectoB2GController {
     private final ProyectoB2GService service;
     public ProyectoB2GController(ProyectoB2GService service) {

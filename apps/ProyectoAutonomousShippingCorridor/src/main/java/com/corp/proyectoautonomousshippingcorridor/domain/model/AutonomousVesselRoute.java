@@ -5,6 +5,10 @@ import java.io.Serializable;
 /**
  * Ruta de navegación marítima autónoma compatible con reglamento COLREGs y cartas náuticas S-100.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record AutonomousVesselRoute(
         String imoVesselNumber,
         String vesselName,

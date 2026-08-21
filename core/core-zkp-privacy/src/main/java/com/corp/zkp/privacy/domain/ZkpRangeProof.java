@@ -14,6 +14,10 @@ import java.util.Objects;
  * @param challenge   Desafío criptográfico no interactivo
  * @param response    Respuesta matemática de la prueba
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record ZkpRangeProof(
         BigInteger commitment,
         long minRange,

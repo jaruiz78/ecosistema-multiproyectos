@@ -6,6 +6,10 @@ import java.io.Serializable;
  * Trayectoria orbital en el problema circular restringido de 3 cuerpos (CR3BP)
  * entre la órbita baja terrestre (LEO) y los puntos de Lagrange Tierra-Luna (L1/L2).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record LagrangeTransferTrajectory(
         String missionId,
         String destinationLagrangePoint, // L1, L2, L4, L5

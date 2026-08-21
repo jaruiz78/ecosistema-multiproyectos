@@ -7,6 +7,10 @@ import java.util.List;
 /**
  * Compresor Tensor-Train (TT-SVD) para convertir tensores densos a Matrix Product States con truncamiento de bond dimension.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record TensorTrainCompressor() implements Serializable {
 
     public static MatrixProductState compressUniformState(int numSites, int physicalDim, int targetChi) {

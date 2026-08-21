@@ -1204,3 +1204,22 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
   }
 }
+
+/* ========================================================================== */
+/* HARDWARE ACCELERATION (GPU COMPOSITING & ZERO JANK)                        */
+/* ========================================================================== */
+
+#powerFlowCanvas {
+  will-change: transform;
+  transform: translateZ(0);
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.power-flow-wrapper {
+  contain: layout paint;
+  will-change: transform;
+}
+
+.master-tab-pane.active {
+  contain: content;
+}

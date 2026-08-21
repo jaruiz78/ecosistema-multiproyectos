@@ -10,11 +10,19 @@ import java.io.Serializable;
  * Servicio de orquestación sinérgica que integra la navegación marítima autónoma COLREGs
  * con la malla distribuida de actores virtuales espaciales H3.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class AutonomousMaritimeActorMeshService implements Serializable {
 
     private final SpatialVirtualActorMesh actorMesh = new SpatialVirtualActorMesh();
 
-    public record VesselMeshState(
+    /**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
+public record VesselMeshState(
             String imoVesselNumber,
             String h3SpatialCellKey,
             AutonomousVesselRoute.NavigationMode navigationMode,

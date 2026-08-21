@@ -10,6 +10,10 @@ import java.util.function.Predicate;
  * - Eventually (\u25c7 P): La propiedad se cumple en al menos un estado de la traza.
  * - Response (\u25a1(P -> \u25c7 Q)): Siempre que ocurra P, eventualmente ocurrirá Q.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record LtlFormulaVerifier() implements Serializable {
 
     public static <T> boolean verifyAlways(List<T> trace, Predicate<T> predicate) {

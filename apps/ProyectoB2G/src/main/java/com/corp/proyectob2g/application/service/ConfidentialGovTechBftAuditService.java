@@ -12,12 +12,20 @@ import java.util.List;
  * Servicio de orquestación sinérgica GovTech que ejecuta la evaluación de licitaciones públicas
  * dentro de enclaves confidenciales de hardware SGX/SEV y ratifica el resultado mediante consenso bizantino asíncrono aBFT.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class ConfidentialGovTechBftAuditService implements Serializable {
 
     private final ConfidentialEnclaveHost enclaveHost = new ConfidentialEnclaveHost();
     private final AsynchronousBftExecutionUseCase bftUseCase = new AsynchronousBftExecutionUseCase();
 
-    public record ConfidentialTenderAuditResult(
+    /**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
+public record ConfidentialTenderAuditResult(
             String tenderId,
             String enclaveQuoteMeasurement,
             String committedConsensusDigest,

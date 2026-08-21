@@ -40,24 +40,24 @@ flowchart TD
 
 | ID Proyecto / Notion Wiki | Dominio / Propósito | Estado Kanban | Coste PRO Mensual | Dossier Completo |
 | :--- | :--- | :---: | :---: | :--- |
-| **`pctMultiMicroservices`** | Cruceros, Tours y Transfers (PA + DO) | `PRO / OPTIMIZADO` | **``$2,00 a $47,32 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/PCT/PCT_TASKS/pctMultiMicroservices/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`SaaSRegantes`** | Gestión Agro-IoT y Comunidades de Regantes | `PRO / OPTIMIZADO` | **``$202,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/SaaSRegantes/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`AppViajes`** | Movilidad Urbana H3 y Dynamic Surge | `PRO / OPTIMIZADO` | **``$402,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/AppViajes/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`corp-spring-boot-starter`**| Chasis Hexagonal Java 25 & 36 Starters | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`core-kalman-twin`** | Gemelo Digital y Asimilación EnKF Adaptativa| `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-kalman-twin/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`core-geogrid-h3`** | Indexación Jerárquica Uber H3 | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-geogrid-h3/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`core-govtech-ledger`** | Ledger Inmutable Merkle & Criptografía | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-govtech-ledger/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`core-mpc-control`** | Control Óptimo Predictivo Basado en Modelos | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-mpc-control/README.md) |
-| **`core-zkp-privacy`** | Pruebas de Conocimiento Cero & Pedersen | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-zkp-privacy/README.md) |
-| **`core-formal-verification`**| Verificación Formal & Lógica de Hoare | `PRO / OPTIMIZADO` | **``$0,00 USD``** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-formal-verification/README.md) |
-| **`ProyectoEnergia`** | Comunidades Solares y Autoconsumo | `PRO / OPTIMIZADO` | **``$28,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoEnergia/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoVPP`** | Virtual Power Plant y Regulación Eléctrica | `PRO / OPTIMIZADO` | **``$28,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoVPP/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoLogistica`** | Enrutamiento VRP Estocástico Última Milla | `PRO / OPTIMIZADO` | **``$32,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoLogistica/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoCircular`** | Trazabilidad de Cadenas de Reciclaje | `PRO / OPTIMIZADO` | **``$18,50 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoCircular/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoB2G`** | GovTech y Ventanilla Ciudadana | `PRO / OPTIMIZADO` | **``$22,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoB2G/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoTokenRWA`** | Tokenización de Activos Reales y Yield APY | `PRO / OPTIMIZADO` | **``$15,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoTokenRWA/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoDefensa`** | Ciberdefensa Zero-Trust y Detección Intrusión | `PRO / OPTIMIZADO` | **``$35,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoDefensa/docs/NOTION_PROJECT_DOSSIER.md) |
-| **`ProyectoDroneAirspace`**| Espacio Aéreo U-Space y Movilidad Aérea | `PRO / OPTIMIZADO` | **``$38,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoDroneAirspace/README.md) |
+| **`pctMultiMicroservices`** | Cruceros, Tours y Transfers (PA + DO) | `PRO / GEN 4 SINKHORN` | **`$0.292 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/PCT/PCT_TASKS/pctMultiMicroservices/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`SaaSRegantes`** | Gestión Agro-IoT, FHE y Comunidades de Regantes | `PRO / GEN 4 FHE` | **`$3.56 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/SaaSRegantes/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`AppViajes`** | Movilidad Urbana H3 y Dynamic Surge | `PRO / GEN 4 DELTA-P` | **`$4.35 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/AppViajes/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`corp-spring-boot-starter`**| Chasis Hexagonal Java 25 & 36 Starters | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/corp-spring-boot-starter/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`core-kalman-twin`** | Gemelo Digital y Asimilación EnKF Adaptativa| `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-kalman-twin/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`core-geogrid-h3`** | Indexación Jerárquica Uber H3 | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-geogrid-h3/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`core-govtech-ledger`** | Ledger Inmutable Merkle & Criptografía PQC | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-govtech-ledger/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`core-mpc-control`** | Control Óptimo Predictivo Basado en Modelos | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-mpc-control/README.md) |
+| **`core-zkp-privacy`** | Pruebas de Conocimiento Cero & Pedersen | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-zkp-privacy/README.md) |
+| **`core-formal-verification`**| Verificación Formal & Lógica de Hoare | `PRO / OPTIMIZADO` | **`$0.00 USD`** (Embebido) | [Ver Dossier](file:///home/jaruiz/Desarrollo/core/core-formal-verification/README.md) |
+| **`ProyectoEnergia`** | Comunidades Solares y Autoconsumo | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoEnergia/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoVPP`** | Virtual Power Plant y Regulación Eléctrica | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoVPP/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoLogistica`** | Enrutamiento VRP Estocástico Última Milla | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoLogistica/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoCircular`** | Trazabilidad de Cadenas de Reciclaje | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoCircular/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoB2G`** | GovTech y Ventanilla Ciudadana | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoB2G/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoTokenRWA`** | Tokenización de Activos Reales y Yield APY | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoTokenRWA/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoDefensa`** | Ciberdefensa Zero-Trust y Detección Intrusión | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoDefensa/docs/NOTION_PROJECT_DOSSIER.md) |
+| **`ProyectoDroneAirspace`**| Espacio Aéreo U-Space y Movilidad Aérea | `PRO / OPTIMIZADO` | **`$0.27 USD`** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoDroneAirspace/README.md) |
 | **`ProyectoSalud`** | Ensayos Clínicos Descentralizados & Zero-PII| `PRO / OPTIMIZADO` | **``$25,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoSalud/README.md) |
 | **`ProyectoHidrogeno`** | Nexo Agro-Voltaico e Hidrógeno Verde | `PRO / OPTIMIZADO` | **``$30,00 USD``** | [Ver Dossier](file:///home/jaruiz/Desarrollo/apps/ProyectoHidrogeno/README.md) |
 

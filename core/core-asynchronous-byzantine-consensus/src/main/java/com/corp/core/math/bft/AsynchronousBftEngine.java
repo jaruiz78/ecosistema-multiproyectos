@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
  * Motor de consenso bizantino asíncrono (aBFT) tolerante a \(f < n/3\) nodos maliciosos
  * basado en intercambio de umbral de votos (Threshold Byzantine Agreement).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record AsynchronousBftEngine() implements Serializable {
 
     public record NodeVote(

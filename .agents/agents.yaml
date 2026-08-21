@@ -31,7 +31,7 @@ agents:
   - id: "go-gopher-expert"
     name: "Go High-Throughput & Spatial Worker Specialist"
     model: "gemini-3.7-flash"
-    description: "Especialista en Go 1.26, goroutines, sync.Pool para 0 allocs/op, microservicios de transporte de ultra-baja latencia y ruteo geoespacial H3/OSRM."
+    description: "Especialista en Go 1.26, WebTransport/QUIC datagrams sin Head-of-Line Blocking, goroutines, sync.Pool para 0 allocs/op, microservicios de transporte de ultra-baja latencia y ruteo geoespacial H3/OSRM."
     system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/go_gopher_expert.md"
     tools:
       - "view_file"
@@ -69,7 +69,7 @@ agents:
   - id: "mobile-mobility-expert"
     name: "Flutter Mobility & H3 Spatial Architect"
     model: "gemini-3.7-flash"
-    description: "Especialista en Flutter/Dart para movilidad, mallas hexagonales Uber H3, renderizado Impeller, GPS adaptativo y sincronización offline."
+    description: "Especialista en Flutter/Dart para movilidad, sincronización espacial Delta-P, mallas hexagonales Uber H3, renderizado Impeller, GPS adaptativo y persistencia offline."
     system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/mobile_mobility_expert.md"
     tools:
       - "view_file"
@@ -88,7 +88,7 @@ agents:
   - id: "unified-twin-architect"
     name: "Unified Digital Twin (PEPS & EnKF) Architect"
     model: "gemini-3.7-pro"
-    description: "Especialista en Redes Tensoriales (PEPS), Asimilación EnKF con convergencia de covarianza (<0.50), cuantización LiteRT INT8 e inyección en tensor_gnn_core.py."
+    description: "Especialista en Redes Tensoriales (PEPS), Asimilación EnKF con convergencia de covarianza (<0.50), cuantización LiteRT INT8, cómputo homomórfico FHE e inyección en tensor_gnn_core.py."
     system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/unified_twin_architect.md"
     tools:
       - "view_file"
@@ -108,7 +108,7 @@ agents:
   - id: "zero-trust-security-auditor"
     name: "Zero-Trust & SLSA Supply Chain Sentinel"
     model: "gemini-3.7-flash"
-    description: "Especialista en Zero-Trust Architecture (BeyondCorp), JWT RS256/EdDSA, reglas Firestore RLS, firmas Cosign/Sigstore y proveniencia SLSA L3."
+    description: "Especialista en Zero-Trust Architecture (BeyondCorp), Criptografía Post-Cuántica (NIST FIPS 203/204 ML-KEM / ML-DSA), Atestación AMD SEV-SNP, JWT RS256/EdDSA, reglas Firestore RLS, firmas Cosign/Sigstore y proveniencia SLSA L3."
     system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/zero_trust_security_auditor.md"
     tools:
       - "view_file"

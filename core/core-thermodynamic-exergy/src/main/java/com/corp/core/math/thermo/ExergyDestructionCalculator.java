@@ -8,6 +8,10 @@ import java.io.Serializable;
  * \dot{E}x_{\text{dest}} = T_0 \dot{S}_{\text{gen}} = T_0 \left( \dot{m} (s_{\text{out}} - s_{\text{in}}) - \sum \frac{\dot{Q}_k}{T_k} \right)
  * \]
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record ExergyDestructionCalculator() implements Serializable {
 
     public static double computeExergyDestructionKw(

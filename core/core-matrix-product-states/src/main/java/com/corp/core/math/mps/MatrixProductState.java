@@ -10,6 +10,10 @@ import java.util.List;
  * \]
  * Reduce la dimensionalidad exponencial \(d^N\) a polinomial \(O(N \cdot d \cdot \chi^2)\), donde \(\chi\) es la dimensión de enlace (bond dimension).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record MatrixProductState(
         int numSites,
         int physicalDimension, // d (ej. 2 para qubits/espines)

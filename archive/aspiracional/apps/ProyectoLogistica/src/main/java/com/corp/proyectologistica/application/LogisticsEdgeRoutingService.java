@@ -11,6 +11,10 @@ import java.nio.ByteBuffer;
  * Servicio de optimización logística de última milla y despacho vehicular off-heap.
  * Ejecuta cálculos de estiba, peso y ventana de entrega en O(1).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class LogisticsEdgeRoutingService {
 
     private final EdgeLiteRTBufferPool bufferPool;

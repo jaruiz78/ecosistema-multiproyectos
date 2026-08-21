@@ -13,12 +13,20 @@ import java.io.Serializable;
  * 2. Generación de pruebas criptográficas de conocimiento cero (ZK-STARK) para elegibilidad médica Zero-PII.
  * 3. Modelado de circuitos genéticos sintéticos para terapias celulares personalizadas (CAR-T / Biosensores).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class PersonalizedGeneTherapyZkOrchestratorService implements Serializable {
 
     private final ConfidentialZkAttestationEngine zkEngine = new ConfidentialZkAttestationEngine();
     private final SyntheticGeneCircuitSimulationUseCase synBioUseCase = new SyntheticGeneCircuitSimulationUseCase();
 
-    public record PrecisionTherapyPlan(
+    /**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
+public record PrecisionTherapyPlan(
             String variantId,
             String tenantHospitalId,
             String zkAttestationCommitment,

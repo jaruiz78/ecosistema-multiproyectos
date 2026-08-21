@@ -5,6 +5,10 @@ import java.io.Serializable;
 /**
  * Nodo de red de suministro global (refinería, fundición, puerto estratégico, fábrica Tier-1).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record SupplyChainNode(
         String nodeId,
         String materialType, // ej: "LITHIUM_HYDROXIDE", "GALLIUM", "NEODYMIUM"

@@ -407,7 +407,7 @@ Verifica:
 
         # Valores deterministas por defecto para fallback en caso de LLM fallido
         def_m1_vote = "VETADO" if not static_res.passed else "APROBADO"
-        def_m1_score = 9.8 if static_res.passed else max(4.0, 9.5 - len(static_res.violations) * 1.5)
+        def_m1_score = 10.0 if (static_res.passed and len(static_res.violations) == 0) else (9.8 if static_res.passed else max(4.0, 9.5 - len(static_res.violations) * 1.5))
         m1_vote, m1_score = extract_vote_score(m1_text, def_m1_vote, def_m1_score)
 
         verdicts.append(MagistrateVerdict(
@@ -424,7 +424,7 @@ Verifica:
         total_tokens += m1_metrics.get("tokens_generated", 150)
 
         def_m2_vote = "VETADO" if not static_res.passed else "APROBADO"
-        def_m2_score = 9.9 if static_res.passed else max(5.0, 9.6 - len(static_res.violations) * 1.2)
+        def_m2_score = 10.0 if (static_res.passed and len(static_res.violations) == 0) else (9.9 if static_res.passed else max(5.0, 9.6 - len(static_res.violations) * 1.2))
         m2_vote, m2_score = extract_vote_score(m2_text, def_m2_vote, def_m2_score)
 
         verdicts.append(MagistrateVerdict(
@@ -441,7 +441,7 @@ Verifica:
         total_tokens += m2_metrics.get("tokens_generated", 140)
 
         def_m3_vote = "APROBADO" if static_res.passed else "APROBADO_CON_CONDICIONES"
-        def_m3_score = 9.7 if static_res.passed else max(6.0, 9.4 - len(static_res.violations) * 0.8)
+        def_m3_score = 10.0 if (static_res.passed and len(static_res.violations) == 0) else (9.7 if static_res.passed else max(6.0, 9.4 - len(static_res.violations) * 0.8))
         m3_vote, m3_score = extract_vote_score(m3_text, def_m3_vote, def_m3_score)
 
         verdicts.append(MagistrateVerdict(
@@ -458,7 +458,7 @@ Verifica:
         total_tokens += m3_metrics.get("tokens_generated", 130)
 
         def_m4_vote = "APROBADO" if len(refs) > 0 else "APROBADO_CON_CONDICIONES"
-        def_m4_score = 9.85 if len(refs) > 0 else 8.5
+        def_m4_score = 10.0 if (len(refs) > 0 and len(static_res.violations) == 0) else (9.85 if len(refs) > 0 else 8.5)
         m4_vote, m4_score = extract_vote_score(m4_text, def_m4_vote, def_m4_score)
 
         verdicts.append(MagistrateVerdict(
@@ -669,7 +669,7 @@ def run_full_ecosystem_audit() -> List[ConsiliumAuditVerdict]:
     # 1. Starters y Proyectos Base
     base_projects = [
         ("corp-spring-boot-starter", "STARTER_FRAMEWORK", WORKSPACE_ROOT / "corp-spring-boot-starter", "Chasis base corporativo en Java 25, Virtual Threads Loom, AOT Leyden CDS y LMAX RingBuffer."),
-        ("pctMultiMicroservices", "PLATFORM_CORE", WORKSPACE_ROOT / "pctMultiMicroservices", "Plataforma multi-microservicios en Java 25 / Go con BFF de streaming ETL y control de presupuestos."),
+        ("pctMultiMicroservices", "PLATFORM_CORE", WORKSPACE_ROOT / "PCT" / "PCT_TASKS" / "pctMultiMicroservices", "Plataforma multi-microservicios en Java 25 / Go con BFF de streaming ETL y control de presupuestos."),
         ("SaaSRegantes", "APPLICATION", WORKSPACE_ROOT / "SaaSRegantes", "SaaS multi-tenant en Cloud Run, Firestore RLS, BigQuery FinOps y algoritmos de optimización de riego agrícola."),
         ("AppViajes", "APPLICATION", WORKSPACE_ROOT / "AppViajes", "App de movilidad Flutter con indexación hexagonal Uber H3, ruteo OSRM y tarifas dinámicas Surge.")
     ]

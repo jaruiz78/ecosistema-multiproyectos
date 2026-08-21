@@ -8,6 +8,10 @@ import java.io.Serializable;
  * H_C = \sum_{(i,j) \in E} J_{ij} Z_i Z_j + \sum_{i \in V} h_i Z_i
  * \]
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record IsingSpinHamiltonian(
         int numSpins,
         double[][] couplingMatrixJ,

@@ -11,6 +11,10 @@ import java.nio.ByteBuffer;
  * Servicio de inferencia edge AI y balance de red energética off-heap.
  * Garantiza complejidad O(1) y coste 0.00 USD/mes de tokens.
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public class EnergyEdgeInferenceService {
 
     private final EdgeLiteRTBufferPool bufferPool;

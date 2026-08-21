@@ -5,6 +5,10 @@ import java.io.Serializable;
 /**
  * Modelo hiperboloide de Lorentz-Minkowski con producto interno \(\langle x, y \rangle_L = -x_0 y_0 + \sum_{i=1}^n x_i y_i\).
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record LorentzMinkowskiSpace() implements Serializable {
 
     public static double lorentzianInnerProduct(double[] x, double[] y) {

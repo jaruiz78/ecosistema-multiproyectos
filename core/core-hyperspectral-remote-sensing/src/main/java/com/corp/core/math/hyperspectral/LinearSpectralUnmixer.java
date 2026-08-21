@@ -8,6 +8,10 @@ import java.io.Serializable;
  * y = \sum_{i=1}^M \alpha_i e_i + n, \quad \text{con } \alpha_i \ge 0, \sum \alpha_i = 1
  * \]
  */
+/**
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/formacion_ecosistema/UNIVERSIDAD_PRIVADA_ECOSISTEMA_CURRICULUM.md">Universidad Privada del Ecosistema</a>
+ * @see <a href="file:///home/jaruiz/Desarrollo/docs/adr/adr-001-java25-virtual-threads-anti-pinning.md">ADR 001 Loom</a>
+ */
 public record LinearSpectralUnmixer() implements Serializable {
 
     public static double[] estimateAbundances(double[] mixedPixel, double[][] endmembers) {
