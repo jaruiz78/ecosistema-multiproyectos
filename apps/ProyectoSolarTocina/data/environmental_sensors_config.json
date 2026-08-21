@@ -1,0 +1,122 @@
+{
+  "sensors": [
+    {
+      "id": "sensor_dormitorio",
+      "name": "1. Dormitorio Principal (16 m²)",
+      "location": "indoor_bedroom",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 24.8,
+        "humidity_pct": 52.0,
+        "dew_point_c": 14.2,
+        "comfort_index": "Confort Óptimo",
+        "last_updated": ""
+      },
+      "thermal_mass_weight": 0.25
+    },
+    {
+      "id": "sensor_salon",
+      "name": "2. Salón Principal (Esquina Fondo Der • Ventana Este / Medianera)",
+      "location": "indoor_living_boundary_east",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 27.1,
+        "humidity_pct": 61.0,
+        "dew_point_c": 19.0,
+        "comfort_index": "Fondo térmico alcanzado (-1.5°C total). ¡CERRAR PERSIANAS!",
+        "last_updated": "2026-08-21T08:32:00.000000"
+      },
+      "placement": {
+        "dist_ext_wall_cm": 50,
+        "dist_party_wall_cm": 30,
+        "height_cm": 80,
+        "facade_azimuth": 89.0,
+        "notes": "Esquina derecha fondo, opuesto al split Daikin. Captura temperatura de recirculación perimetral."
+      },
+      "thermal_mass_weight": 0.40
+    },
+    {
+      "id": "sensor_despacho",
+      "name": "3. Despacho de Trabajo (Peana Monitor HP • Zona de Trabajo)",
+      "location": "indoor_office_desk_workstation",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 29.1,
+        "humidity_pct": 55.0,
+        "dew_point_c": 19.1,
+        "comfort_index": "Estancamiento Térmico (Carga Interna ~300W anula la ventilación)",
+        "last_updated": "2026-08-21T08:32:00.000000"
+      },
+      "placement": {
+        "location_type": "rear_desk_free_air",
+        "height_cm": 75,
+        "facade_azimuth": 359.0,
+        "internal_heat_load_w": 300.0,
+        "notes": "Mesa trasera. Registra calentamiento por disipación interna continua de PC, monitor y ocupante en estancia cerrada/semicerrada."
+      },
+      "thermal_mass_weight": 0.15
+    },
+    {
+      "id": "sensor_estudio_mujer",
+      "name": "4. Dormitorio Estudio Mujer",
+      "location": "indoor_study",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 24.7,
+        "humidity_pct": 51.0,
+        "dew_point_c": 14.0,
+        "comfort_index": "Confort Óptimo",
+        "last_updated": ""
+      },
+      "thermal_mass_weight": 0.15
+    },
+    {
+      "id": "sensor_cochera_baterias",
+      "name": "5. Cochera (Inversor & Baterías Fox-ESS • Pared Salón)",
+      "location": "garage_technical_solar",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 26.6,
+        "humidity_pct": 58.0,
+        "dew_point_c": 17.7,
+        "comfort_index": "Excelente Enfriamiento Nocturno • Baterías a 25°C",
+        "last_updated": "2026-08-21T07:20:00.000000"
+      },
+      "placement": {
+        "wall": "pared_interior_medianera_salon",
+        "height_m": 2.0,
+        "dist_garage_door_m": 1.0,
+        "dist_patio_open_m": 3.0,
+        "stratification_lower_stratum_temp_c": 25.0,
+        "battery_cell_operating_state": "Excelente (<35°C)"
+      },
+      "thermal_mass_weight": 0.10
+    },
+    {
+      "id": "sensor_patio_exterior",
+      "name": "6. Patio Trasero (Exterior)",
+      "location": "outdoor_patio",
+      "protocol": "thermopro_digital",
+      "battery_pct": 100,
+      "readings": {
+        "temperature_c": 24.4,
+        "humidity_pct": 74.0,
+        "dew_point_c": 19.4,
+        "comfort_index": "Lluvia Exterior",
+        "last_updated": ""
+      },
+      "thermal_mass_weight": 0.0
+    }
+  ],
+  "aggregated_indoor": {
+    "mean_temp_c": 25.6,
+    "mean_humidity_pct": 52.2,
+    "calculated_rc_thermal_inertia_hours": 4.8,
+    "last_sync": "2026-08-20T12:17:33.808613"
+  }
+}

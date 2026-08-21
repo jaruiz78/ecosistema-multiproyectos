@@ -220,9 +220,10 @@ class DaikinIoTController:
             "hardware_message": hw_msg
         }
 
-    def evaluate_seasonal_automation(self, current_hour: int, current_month: int, outdoor_temp_c: float, solar_surplus_kw: float, battery_soc: float) -> Dict[str, Any]:
+    def evaluate_seasonal_automation(self, current_hour: int, current_month: int, outdoor_temp_c: float, solar_surplus_kw: float, battery_soc: float, indoor_office_temp_c: Optional[float] = None, indoor_living_temp_c: Optional[float] = None) -> Dict[str, Any]:
         """
         Bucle de decisión termodinámica que evalúa si activar Pre-Cooling o Pre-Heating
+        incorporando la telemetría de sensores ambientales en tiempo real (Despacho / Salón).
         """
         if not self.config.get("auto_automation_enabled", True):
             return {"action": "disabled", "reason": "Automatización Daikin desactivada por usuario"}
@@ -233,8 +234,9 @@ class DaikinIoTController:
 
         actions_taken = []
         now_str = datetime.now().strftime("%H:%M:%S")
+        office_hot = indoor_office_temp_c is not None and indoor_office_temp_c >= 27.5 and 8 <= current_hour <= 20
 
-        # 1. EVALUACIÓN DE VERANO (Pre-Cooling Solar)
+        # 1. EVALUACIÓN DE VERANO (Pre-Cooling Solar & Climatización Despacho)
         if is_summer:
             s_rules = self.config.get("summer_rules", {})
             start_h = s_rules.get("start_hour", 12)
@@ -242,7 +244,13 @@ class DaikinIoTController:
             min_surplus = s_rules.get("min_solar_surplus_kw", 1.5)
             min_soc = s_rules.get("min_battery_soc", 75)
 
-            if start_h <= current_hour <= end_h and solar_surplus_kw >= min_surplus and battery_soc >= min_soc and outdoor_temp_c >= 30.0:
+            if office_hot and (solar_surplus_kw >= 0.5 or battery_soc >= 60):
+                # Alerta en despacho: Prioridad de refrigeración laboral y ventilación de pasillo
+                t_target = 22.5
+                res = self.set_unit_state("daikin_salon", power_on=True, target_temp_c=t_target, mode="cool", fan_rate="auto", fan_direction="swing")
+                action_desc = f"🚨 [{now_str}] Climatización asistida Despacho ({indoor_office_temp_c:.1f} °C). Daikin Salón activado a {t_target} °C para flujo por pasillo."
+                actions_taken.append(action_desc)
+            elif start_h <= current_hour <= end_h and solar_surplus_kw >= min_surplus and battery_soc >= min_soc and outdoor_temp_c >= 30.0:
                 t_target = s_rules.get("precool_target_temp_c", 22.5)
                 res = self.set_unit_state("daikin_salon", power_on=True, target_temp_c=t_target, mode="cool", fan_rate="auto", fan_direction="swing")
                 action_desc = f"☀️ [{now_str}] Pre-Cooling Solar Verano activado a {t_target} °C (Surplus: +{solar_surplus_kw:.2f} kW, Batería: {battery_soc}% SoC)"

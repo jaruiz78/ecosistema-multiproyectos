@@ -22,6 +22,8 @@
 13. [Manual de Operación, Reentrenamiento y Mantenimiento](#13-manual-de-operación-reentrenamiento-y-mantenimiento)
 14. [Manual Bioclimático de Eficiencia Estacional y Gestión Pasiva](#14-manual-bioclimático-de-eficiencia-estacional-gestión-pasiva-de-persianas-y-climatización-daikin)
 15. [Centro Meteorológico, Radar Satelital EUMETSAT y Visualización de 96 Slots](#15-centro-meteorológico-radar-satelital-eumetsat-y-visualización-de-96-slots)
+16. [Difusión Térmica de Fourier 1D/2D y Desfase de Forjados](#16-difusión-térmica-de-fourier-1d2d-y-desfase-de-forjados)
+17. [Control Predictivo MPC 48h, Nowcasting Solar Satelital y Domótica Local](#17-control-predictivo-mpc-48h-nowcasting-solar-satelital-y-domótica-local)
 
 ---
 
@@ -366,6 +368,12 @@ El servidor HTTP en el puerto `:8526` expone la siguiente interfaz:
 | `GET` | `/api/finance/icp-optimizer` | `?contracted_kw=4.60` | Auditoría de picos cuarto-horarios y análisis de costes de potencia. |
 | `GET` | `/api/market/omie-today-tomorrow` | — | Precios horarios del pool eléctrico español (OMIE / PVPC / ESIOS REE). |
 | `GET` | `/api/ai/retrain-twin` | — | Ejecuta el reentrenamiento y calibración de hiperparámetros del gemelo digital. |
+| `GET` | `/api/ai/fourier-wall-diffusion` | — | Perfiles térmicos 1D/2D de Fourier y desfase térmico en forjado y muros. |
+| `GET` | `/api/ai/mpc-schedule` | — | Matriz de despacho óptimo MPC 48h (Batería, Daikin, EV, Batería Virtual). |
+| `GET` | `/api/ai/solar-nowcast` | — | Nowcasting solar a 15–60 min con vector satelital de nubes y riesgo de caída. |
+| `GET` | `/api/ai/kalman-state` | — | Estado asimilado y traza de covarianza en 6 zonas térmicas. |
+| `GET` | `/api/ai/proactive-alerts` | — | Lista de avisos y recomendaciones proactivas accionables en vivo. |
+| `GET` | `/api/export/homeassistant-discovery` | — | Esquemas de autodescubrimiento MQTT para Home Assistant. |
 
 ---
 
@@ -491,3 +499,120 @@ flowchart LR
   * Agregación continua minuto a minuto en `/api/history/today-high-res`.
   * La gráfica de "Hoy" crece dinámicamente con cada evento SSE (cada 15s), mostrando con máxima nitidez picos de cocción, electrodomésticos y paso de nubes.
 
+---
+
+## 16. Difusión Térmica de Fourier 1D/2D y Desfase de Forjados
+
+El módulo `fourier_pinn_wall_diffusion.py` implementa el solver por diferencias finitas (FDM) de la ecuación diferencial de conducción térmica transitoria:
+
+\[
+\rho \cdot c_p \cdot \frac{\partial T}{\partial t} = k \cdot \frac{\partial^2 T}{\partial x^2} + q_{\text{gen}}(x, t)
+\]
+
+### 16.1. Cerramientos Multicapa Calibrados
+1. **Forjado de Cubierta / Terraza Superior**:
+   - Solería cerámica (\(2\text{ cm}\)) + Mortero de pendiente (\(4\text{ cm}\)) + Aislamiento XPS (\(5\text{ cm}\)) + Forjado de bovedilla/hormigón (\(25\text{ cm}\)) + Guarnecido de yeso (\(1{,}5\text{ cm}\)).
+   - Espesor total: \(37{,}5\text{ cm}\). Coeficiente global: \(U = 0{,}520\text{ W/m}^2\text{K}\).
+   - **Desfase Térmico (\(\phi_{\text{lag}}\))**: **\(11{,}0\text{ horas}\)** (el pico solar de las 13:30 h penetra en el techo de planta alta a las 00:30 h).
+2. **Muro Fachada Norte (`359° N`)**:
+   - Ladrillo visto exterior (\(11{,}5\text{ cm}\)) + Aislamiento XPS (\(4\text{ cm}\)) + Tabique interior (\(7\text{ cm}\)) + Yeso (\(1{,}5\text{ cm}\)).
+   - Espesor total: \(24{,}0\text{ cm}\). Coeficiente global: \(U = 0{,}603\text{ W/m}^2\text{K}\).
+   - **Desfase Térmico**: **\(10{,}0\text{ horas}\)**.
+
+---
+
+## 17. Control Predictivo MPC 48h, Nowcasting Solar Satelital y Domótica Local
+
+### 17.1. Optimizador MPC en Horizonte Rodante (`mpc_rolling_horizon_optimizer.py`)
+Resuelve en tiempo real la optimización multivariable conjunta a 48 pasos horarios:
+* **Función de Coste**: Minimiza la compra a la red en horas caras (Punta P1 / Llano P2), maximiza la acumulación en Batería Virtual y penaliza la desviación de confort térmico PMV (ISO 7730).
+* **Control de Celdas Fox-ESS**: Preserva la ventana de operación segura del 10% al 100% de SoC con rendimiento de ida y vuelta \(\eta = 94\%\).
+* **Carga Inteligente VE (Omoda 7)**: Despacho automático de excedentes entre las 12:00 y las 17:00 h a \(2{,}3\text{ kW}\) monofásicos.
+
+### 17.2. Nowcasting Satelital a 60 Minutos (`aemet_radar_satellite_service.py`)
+* Descompone la radiación solar en componentes Directa (DNI), Difusa (DHI) y Global Horizontal (GHI).
+* Modela el vector de desplazamiento de nubosidad según viento atmosférico a 10m, proyectando la generación esperada a +15, +30, +45 y +60 minutos.
+
+### 17.3. Asistente Proactivo de Hogar & Home Assistant MQTT
+* **`proactive_notification_assistant.py`**: Genera avisos inteligentes en lenguaje natural (excedente solar disponible, ventilación *free-cooling*, deshumidificación del despacho y orientación de persianas).
+* **`homeassistant_mqtt_exporter.py`**: Exporta 7 entidades nativas de autodescubrimiento MQTT bajo el tópico `homeassistant/sensor/tocina_solar_twin/.../config` para integración local inmediata en Home Assistant.
+
+
+
+---
+
+## 18. Arquitectura y Flujo de Datos (Diagramas Mermaid)
+
+El ecosistema opera mediante una arquitectura de componentes orquestados alrededor de un servidor maestro, optimizado para ejecución asíncrona local y Edge AI.
+
+```mermaid
+flowchart TD
+    subgraph Hardware ["Capa de Hardware (Local)"]
+        inv["Inversor Fox-ESS (10 kW)"]
+        bat["Batería LiFePO4 (10.36 kWh)"]
+        daikin["Climatizadores Daikin"]
+        ev["Wallbox Omoda 7 SHS"]
+        sensors["Sensores ThermoPro (BLE)"]
+    end
+
+    subgraph Server ["Servidor Edge (Raspberry/MiniPC)"]
+        modbus["Modbus TCP Daemon (Circuit Breaker)"]
+        telemetry["Telemetry DB (SQLite Micro-Batching)"]
+        kalman["Kalman Multizone Twin (NumPy)"]
+        mpc["MPC Rolling Horizon (48h)"]
+        fourier["Fourier PINN Diffusion (NumPy)"]
+        api["API REST HTTP (:8526)"]
+    end
+
+    subgraph Cloud ["Servicios Externos"]
+        aemet["AEMET Radar/Satélite"]
+        omie["OMIE PVPC Precios"]
+        naturgy["Naturgy Solar Cloud"]
+    end
+
+    inv -- "Modbus TCP" --> modbus
+    bat -- "SoC/Voltaje" --> modbus
+    sensors -- "Bluetooth Low Energy" --> telemetry
+    
+    modbus -- "1 Lectura / 3s" --> telemetry
+    telemetry -- "Datos Históricos" --> kalman
+    aemet -- "Nowcasting/Previsión" --> kalman
+    omie -- "Precios/Tarifas" --> mpc
+    
+    kalman -- "Estado Térmico Asimilado" --> mpc
+    fourier -- "Inercia Cerramientos" --> mpc
+    
+    mpc -- "Comandos HVAC" --> daikin
+    mpc -- "Comandos Carga EV" --> ev
+    mpc -- "Estrategia Batería Virtual" --> naturgy
+    
+    api -- "Datos" --> Frontend["Dashboard Web"]
+```
+
+---
+
+## 19. Runbook: Recuperación ante Desastres (Disaster Recovery)
+
+Al operar con almacenamiento local (`telemetry_history.db`) y con una tasa de escritura de 1 lectura cada 3 segundos, existe riesgo remoto de corrupción en caso de pérdida abrupta de energía.
+
+### 19.1. Prevención: Micro-batching y WAL
+Desde la versión 5.1, la base de datos SQLite opera en modo `PRAGMA journal_mode=WAL` con *Micro-batching* (agrupación en memoria RAM y volcado a disco cada 20 lecturas o 60 segundos). Esto minimiza el desgaste del SSD/SD-Card en un 95%.
+
+### 19.2. Pasos de Restauración en caso de Corrupción de DB
+Si el servidor no arranca por error `database disk image is malformed`:
+
+1. Detener el servicio:
+   ```bash
+   systemctl --user stop solar-tocina.service
+   ```
+2. Mover la base de datos corrupta:
+   ```bash
+   cd ~/Desarrollo/apps/ProyectoSolarTocina/
+   mv telemetry_history.db telemetry_history.db.corrupt
+   ```
+3. Iniciar el servicio (el sistema creará una base de datos limpia automáticamente):
+   ```bash
+   systemctl --user start solar-tocina.service
+   ```
+4. Sincronización Diferida (Automática):
+   El demonio `foxcloud_sync.py` detectará los huecos en el historial local e iniciará una descarga de las últimas 72 horas desde la nube de Fox-ESS, rellenando la nueva base de datos de forma asíncrona.

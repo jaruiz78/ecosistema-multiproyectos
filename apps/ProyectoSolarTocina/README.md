@@ -26,21 +26,24 @@ Acceder en el navegador: **[http://localhost:8526](http://localhost:8526)**
 
 ---
 
-## ⚡ Capacidades Principales (Versión 4.0)
+## ⚡ Capacidades Principales (Versión 5.0)
 
 1. **Telemetría Modbus TCP en Vivo (192.168.1.66:502)**:
    * Lectura en tiempo real cada 3 segundos de voltajes, corrientes, potencia solar total, estado de carga de baterías Fox-ESS y Smart Meter.
-2. **Resolución Continua de 96 Slots Sub-Horarios (15 Minutos) & Crecimiento en Vivo**:
-   * Gráfica de "Hoy" con recrecimiento dinámico continuo minuto a minuto vía SSE (`/api/history/today-high-res`) y marcador de tiempo real interpolado.
-3. **Centro Meteorológico en Tiempo Real & Estación HUD (8 Variables Atmosféricas)**:
-   * Temperatura, sensación térmica, humedad, punto de rocío, viento con rosa de los vientos cardinal, presión barométrica MSL, índice UV y nubes por capas.
-4. **Visor de Radar Doppler y Satélite Infrarrojo EUMETSAT / NASA (Leaflet Maps)**:
-   * Mapeo interactivo centrado en Tocina con reproductor de animación temporal (últimas 2 horas + Nowcasting) y conmutación entre capas de lluvia y satélite.
-5. **Gemelo Digital PINN & Filtro de Kalman EnKF**:
-   * Desglose bifásico de tejados Este (89°) vs Oeste (269°) calibrado con \(R^2 = 0{,}998\) y error \(\text{MAPE} = 0{,}50\%\).
-6. **Guardián de Seguridad Anti-Cortes ICP**:
-   * Prioridad absoluta al suministro doméstico: modulación de carga en \(<500\text{ ms}\) para garantizar que nunca se dispare el contador contratado (4.60 kW).
-7. **Programador de Carga Valle Nocturna Adaptativa (P3)**:
-   * Evaluación diaria de días deficitarios y conmutación automática o manual de modos de trabajo en el inversor.
-8. **Precios de Mercado OMIE / ESIOS REE & Diagnóstico SOH**:
-   * Ingesta a las 20:15 h de los precios horarios del día siguiente y monitorización de salud (\(\text{SOH} = 99{,}99\%\), \(R_i = 34{,}5\text{ m}\Omega\)).
+2. **Optimizador Predictivo MPC en Horizonte Rodante (48 Horas)** (`mpc_rolling_horizon_optimizer.py`):
+   * Despacho conjunto óptimo: Carga de batería Fox-ESS, pre-cooling Daikin, carga solar del Omoda 7 y depósito en Batería Virtual Naturgy.
+3. **Difusión Térmica de Fourier 1D/2D & Desfase de Forjados** (`fourier_pinn_wall_diffusion.py`):
+   * Modelado numérico transitorio de cerramientos multicapa: calcula el desfase térmico de \(11{,}0\text{ h}\) en la cubierta/terraza superior y \(10{,}0\text{ h}\) en fachada Norte (`359° N`).
+4. **Nowcasting Solar Satelital a Muy Corto Plazo (15–60 min)** (`aemet_radar_satellite_service.py`):
+   * Vector de movimiento de masas nubosas y estimación de riesgo de oclusión solar a +15m, +30m, +45m y +60m.
+5. **Asistente Proactivo de Hogar & Notificaciones** (`proactive_notification_assistant.py`):
+   * Generación en tiempo real de recomendaciones accionables (excedente solar, deshumidificación, *free-cooling* y persianas).
+6. **Autodescubrimiento MQTT para Home Assistant** (`homeassistant_mqtt_exporter.py`):
+   * 7 entidades nativas de telemetría y sensores ambientales para integración local sin configuración YAML.
+7. **Gemelo Digital PINN & Filtro de Kalman EnKF Multizona** (`kalman_multizone_twin.py`):
+   * Asimilación estocástica continua en 6 zonas térmicas con reducción de covarianza (\(\text{Trace}(P) < 0{,}50\)).
+8. **Guardián de Seguridad Anti-Cortes ICP & Carga Valle Nocturna**:
+   * Protección activa del término de potencia contratada (\(4{,}60\text{ kW}\)) y programación de carga en horas valle P3.
+9. **Suite Completa de Testing**:
+   * **31 tests unitarios e integrados (100% en verde)** ejecutables vía `PYTHONPATH=. python3 -m pytest tests/`.
+

@@ -1,0 +1,80 @@
+{
+  "auto_season_mode": "auto",
+  "auto_automation_enabled": true,
+  "units": [
+    {
+      "id": "daikin_salon",
+      "name": "Daikin Salón (35 m²)",
+      "ip": "",
+      "port": 80,
+      "mac": "",
+      "hardware_type": "faikin_esp32",
+      "status": {
+        "online": false,
+        "power_on": true,
+        "target_temp_c": 22.5,
+        "indoor_temp_c": 30.0,
+        "outdoor_temp_c": 36.0,
+        "mode": "cool",
+        "fan_rate": "auto",
+        "fan_direction": "swing",
+        "power_consumption_w": 420,
+        "last_seen": "2026-08-21T08:12:36.961230"
+      },
+      "automation_overrides": {
+        "allowed": true,
+        "max_temp_cool": 26.0,
+        "min_temp_cool": 22.0,
+        "target_temp_heat": 22.5,
+        "night_target_heat": 20.0,
+        "night_target_cool": 25.5
+      }
+    },
+    {
+      "id": "daikin_dormitorio",
+      "name": "Daikin Dormitorio Principal (16 m²)",
+      "ip": "",
+      "port": 80,
+      "mac": "",
+      "hardware_type": "faikin_esp32",
+      "status": {
+        "online": false,
+        "power_on": false,
+        "target_temp_c": 24.5,
+        "indoor_temp_c": 27.0,
+        "outdoor_temp_c": 34.0,
+        "mode": "cool",
+        "fan_rate": "silent",
+        "fan_direction": "horizontal",
+        "power_consumption_w": 0,
+        "last_seen": ""
+      },
+      "automation_overrides": {
+        "allowed": true,
+        "max_temp_cool": 26.5,
+        "min_temp_cool": 23.0,
+        "target_temp_heat": 22.0,
+        "night_target_heat": 19.5,
+        "night_target_cool": 26.0
+      }
+    }
+  ],
+  "summer_rules": {
+    "min_solar_surplus_kw": 1.5,
+    "min_battery_soc": 75,
+    "start_hour": 12,
+    "end_hour": 17,
+    "precool_target_temp_c": 22.5,
+    "cruise_target_temp_c": 25.0
+  },
+  "winter_rules": {
+    "min_solar_surplus_kw": 1.2,
+    "start_hour": 11,
+    "end_hour": 16,
+    "preheat_target_temp_c": 22.5,
+    "cruise_target_temp_c": 20.0,
+    "force_floor_vane_angle": 60
+  },
+  "last_evaluation_timestamp": "2026-08-21T08:12:36.961402",
+  "last_action_taken": "🚨 [08:12:36] Climatización asistida Despacho (30.4 °C). Daikin Salón activado a 22.5 °C para flujo por pasillo."
+}

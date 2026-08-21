@@ -17,20 +17,21 @@ DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "weat
 TELEMETRY_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "telemetry_history.db")
 
 class PinnSolarModel:
-    def __init__(self, lat=37.5942, lon=-5.7397):
+    def __init__(self, lat=37.59418, lon=-5.73972):
         self.lat = lat
         self.lon = lon
         self.lat_rad = math.radians(lat)
         
-        # Parámetros físicos de la instalación
+        # Parámetros físicos de la instalación (Tocina - Los Rosales)
         self.east_panels = 6
         self.west_panels = 4
         self.panel_wp = 500.0
         self.nominal_kwp = 5.00
         
-        self.east_azimuth = 85.0   # 85° Este
+        # Azimuts reales comprobados mediante brújula (89° Este fachada / 269° Oeste patio)
+        self.east_azimuth = 89.0   # 89° Este (Salón / Fachada frontal / Portón cochera)
         self.east_tilt = 25.0      # 25° Inclinación
-        self.west_azimuth = 265.0  # 265° Oeste
+        self.west_azimuth = 269.0  # 269° Oeste (Patio trasero / Porche baterías Fox-ESS)
         self.west_tilt = 25.0      # 25° Inclinación
         
         # Coeficientes térmicos y de inversor
@@ -38,10 +39,20 @@ class PinnSolarModel:
         self.gamma_temp = -0.0035  # -0.35% por cada °C por encima de 25°C
         self.inverter_eff = 0.975  # 97.5% eficiencia Sunworks/Fox-ESS
         
-        # Parámetros térmicos de la vivienda (Tocina)
-        self.thermal_mass_c = 14.5 # Capacidad térmica del hogar (kWh/°C)
+        # Parámetros térmicos globales e inercia RC de la vivienda (Tocina)
+        self.thermal_mass_c = 14.8 # Capacidad térmica global (kWh/°C)
         self.heat_loss_u = 0.38    # Coeficiente de pérdidas térmicas globales (kW/°C)
         self.daikin_cop = 3.8      # Coeficiente de rendimiento Inverter Daikin
+        
+        # Modelo Multizona de la vivienda (6 Zonas Calibradas)
+        self.zones = {
+            "salon": {"area_m2": 35.0, "c_th": 10.5, "u_loss": 0.22, "azimuth": 89.0, "q_int": 0.15, "has_daikin": True, "cop": 3.8, "daikin_p_th_kw": 3.5},
+            "despacho": {"area_m2": 12.0, "c_th": 3.2, "u_loss": 0.10, "azimuth": 359.0, "q_int": 0.30, "has_daikin": False, "k_corridor_flow": 0.18},
+            "dormitorio": {"area_m2": 16.0, "c_th": 4.5, "u_loss": 0.14, "azimuth": 359.0, "q_int": 0.10, "has_daikin": True, "cop": 4.0, "daikin_p_th_kw": 2.5},
+            "estudio_mujer": {"area_m2": 14.0, "c_th": 3.8, "u_loss": 0.12, "azimuth": 89.0, "q_int": 0.15, "has_daikin": False, "k_corridor_flow": 0.12, "k_terrace_wall": 0.15},
+            "cochera_baterias": {"area_m2": 22.0, "c_th": 5.0, "u_loss": 0.35, "azimuth": 359.0, "q_int": 0.08, "has_daikin": False, "is_technical_zone": True},
+            "patio_exterior": {"area_m2": 45.0, "c_th": 0.0, "u_loss": 1.00, "azimuth": 359.0, "q_int": 0.00, "is_outdoor": True}
+        }
         
         self.east_optical_gain = 1.0
         self.west_optical_gain = 1.0
@@ -150,12 +161,15 @@ class PinnSolarModel:
         
         return p10, p50, p90
 
-    def compute_thermal_precooling_recommendation(self, outdoor_temp_c, current_hour, solar_surplus_kw, target_indoor_temp=25.0):
+    def compute_thermal_precooling_recommendation(self, outdoor_temp_c, current_hour, solar_surplus_kw, target_indoor_temp=25.0, office_temp_c=None):
         """
         Calcula si es óptimo realizar Pre-Refrigeración (Pre-Cooling) con los Daikin a coste 0.00€
-        aprovechando la inercia térmica de la vivienda antes de que caiga el sol.
+        aprovechando la inercia térmica de la vivienda antes de que caiga el sol y la ventilación por pasillo.
         """
-        if outdoor_temp_c < 28.0 or current_hour < 12 or current_hour > 18:
+        # Si el despacho supera el umbral de disconfort térmico (> 27.5°C) en horario laboral (08:00 - 20:00)
+        office_overheating = office_temp_c is not None and office_temp_c >= 27.5 and 8 <= current_hour <= 20
+        
+        if (outdoor_temp_c < 28.0 and not office_overheating) or current_hour < 8 or current_hour > 20:
             return {
                 "recommend_precooling": False,
                 "optimal_setpoint_c": target_indoor_temp,
@@ -163,12 +177,18 @@ class PinnSolarModel:
                 "estimated_night_savings_eur": 0.0
             }
             
-        if solar_surplus_kw >= 1.5:
-            # Hay excedente abundante: enfriar la casa a 23°C gratis acumula frío en los muros
-            optimal_setpoint = 23.0
+        if solar_surplus_kw >= 0.8 or office_overheating:
+            # Hay excedente abundante o necesidad en despacho: enfriar a 22.5°C o 23°C gratis
+            optimal_setpoint = 22.5 if office_overheating else 23.0
             accumulated_cold_kwh = (target_indoor_temp - optimal_setpoint) * self.thermal_mass_c
             avoided_grid_kwh = accumulated_cold_kwh / self.daikin_cop
             savings_eur = round(avoided_grid_kwh * 0.16, 2)
+            
+            reason = (
+                f"Alerta térmica en despacho ({office_temp_c:.1f} °C). Pre-enfriar salón a {optimal_setpoint} °C para inducir flujo refrigerante por pasillo."
+                if office_overheating and outdoor_temp_c < 30.0
+                else f"Excedente solar de {solar_surplus_kw:.1f} kW. Enfriar a {optimal_setpoint} °C ahora acumula frío en muros y evita consumir {avoided_grid_kwh:.1f} kWh de red por la noche."
+            )
             
             return {
                 "recommend_precooling": True,
@@ -176,7 +196,8 @@ class PinnSolarModel:
                 "solar_surplus_available_kw": round(solar_surplus_kw, 2),
                 "accumulated_thermal_energy_kwh": round(accumulated_cold_kwh, 2),
                 "estimated_night_savings_eur": savings_eur,
-                "reason": f"Excedente solar de {solar_surplus_kw:.1f} kW. Enfriar a 23°C ahora evita consumir {avoided_grid_kwh:.1f} kWh de red por la noche."
+                "office_assisted_cooling": office_overheating,
+                "reason": reason
             }
         else:
             return {
@@ -185,6 +206,59 @@ class PinnSolarModel:
                 "reason": "Excedente solar insuficiente para absorción térmica",
                 "estimated_night_savings_eur": 0.0
             }
+
+    def simulate_multizone_temperatures(self, current_temps: dict, outdoor_temp_c: float, daikin_salon_on: bool, daikin_setpoint: float = 24.0, dt_hours: float = 1.0) -> dict:
+        """
+        Simula la evolución térmica multizona acoplada para 1 paso de tiempo dt_hours
+        utilizando las ecuaciones diferenciales del circuito térmico RC:
+        C_i * dT_i/dt = sum( (T_j - T_i) / R_ij ) + Q_int_i + Q_solar_i - Q_hvac_i
+        """
+        next_temps = {}
+        t_salon = current_temps.get("salon", 25.0)
+        t_despacho = current_temps.get("despacho", 28.0)
+        
+        for z_id, z in self.zones.items():
+            if z.get("is_outdoor"):
+                next_temps[z_id] = outdoor_temp_c
+                continue
+                
+            t_curr = current_temps.get(z_id, 25.0)
+            c_th = z["c_th"]
+            u_loss = z["u_loss"]
+            q_int = z["q_int"]
+            
+            # Flujo con el exterior
+            q_ext = u_loss * (outdoor_temp_c - t_curr)
+            
+            # Aporte HVAC Daikin
+            q_hvac = 0.0
+            if z.get("has_daikin") and daikin_salon_on and z_id == "salon":
+                if t_curr > daikin_setpoint:
+                    q_hvac = min(z.get("daikin_p_th_kw", 3.5), (t_curr - daikin_setpoint) * 2.0)
+            
+            # Acoplamiento convectivo pasillo y muros colindantes
+            q_conv = 0.0
+            if z_id == "despacho":
+                k_flow = z.get("k_corridor_flow", 0.18)
+                q_conv = k_flow * (t_salon - t_curr)
+            elif z_id == "salon":
+                k_flow_d = self.zones["despacho"].get("k_corridor_flow", 0.18)
+                q_conv = k_flow_d * (t_despacho - t_curr)
+            elif z_id == "estudio_mujer":
+                t_dorm = current_temps.get("dormitorio", 25.0)
+                k_hall = z.get("k_corridor_flow", 0.12)
+                k_terr = z.get("k_terrace_wall", 0.15)
+                # Conducción desde la pared de la terraza superior (calentada por el poniente)
+                q_terrace = k_terr * (outdoor_temp_c - t_curr)
+                # Flujo convectivo con el distribuidor superior / zona climatizada
+                q_hallway = k_hall * (t_dorm - t_curr)
+                q_conv = q_terrace + q_hallway
+                
+            # Derivada térmica
+            dt_dt = (q_ext + q_int + q_conv - q_hvac) / max(0.1, c_th)
+            next_temps[z_id] = round(t_curr + dt_dt * dt_hours, 2)
+            
+        return next_temps
 
     def generate_day_pinn_forecast(self, day_offset=0, soiling_factor=0.97):
         """Genera el pronóstico horario completo de 24 horas con cuantiles p10, p50, p90"""

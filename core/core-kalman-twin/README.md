@@ -1,6 +1,6 @@
 # core-kalman-twin — Motor de Asimilación Estocástica de Datos (Ensemble Kalman Filter)
 
-Módulo algorítmico híbrido (**Python 3.11+ / NumPy / SciPy** y puente **Java 25 LTS**) para la asimilación secuencial de datos estocásticos y estimación óptima del estado del Gemelo Digital Unificado (Unified Twin PEPS).
+Módulo algorítmico híbrido (**Python 3.13+ / 3.14 [Free-Threaded / No-GIL] / NumPy / SciPy** y puente **Java 25 LTS**) para la asimilación secuencial de datos estocásticos y estimación óptima del estado del Gemelo Digital Unificado (Unified Twin PEPS).
 
 ---
 

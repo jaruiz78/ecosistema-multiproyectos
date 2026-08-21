@@ -49,20 +49,33 @@ INVERTER_UNIT_ID = 247
 
 _modbus_socket = None
 _modbus_socket_lock = threading.Lock()
+_modbus_consecutive_failures = 0
+_modbus_circuit_open_until = 0.0
 
 def get_or_create_modbus_socket():
-    global _modbus_socket
+    global _modbus_socket, _modbus_consecutive_failures, _modbus_circuit_open_until
+    
+    if time.time() < _modbus_circuit_open_until:
+        return None  # Circuit is OPEN (cooling down)
+        
     if _modbus_socket is not None:
         return _modbus_socket
+        
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(2.0)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         s.connect((INVERTER_IP, INVERTER_PORT))
         _modbus_socket = s
+        _modbus_consecutive_failures = 0  # Reset on success
         return s
     except Exception:
         _modbus_socket = None
+        _modbus_consecutive_failures += 1
+        if _modbus_consecutive_failures >= 3:
+            # Trip the circuit breaker for 30 seconds to protect the WiFi dongle
+            _modbus_circuit_open_until = time.time() + 30.0
+            print(f"⚠️ Circuit Breaker Modbus ACTIVADO (Fallo {_modbus_consecutive_failures}). Esperando 30s...")
         return None
 
 def close_modbus_socket():
@@ -582,6 +595,75 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json({"error": str(e)}, status=500)
             return
 
+        elif self.path == '/api/ai/fourier-wall-diffusion':
+            try:
+                from fourier_pinn_wall_diffusion import get_default_roof_and_facade_profiles
+                data = get_default_roof_and_facade_profiles()
+                self._send_json(data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/ai/mpc-schedule':
+            try:
+                from mpc_rolling_horizon_optimizer import get_sample_48h_mpc_plan
+                data = get_sample_48h_mpc_plan()
+                self._send_json(data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/ai/solar-nowcast':
+            try:
+                from aemet_radar_satellite_service import SolarNowcastingService
+                service = SolarNowcastingService()
+                data = service.fetch_satellite_and_solar_nowcast()
+                self._send_json(data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/ai/kalman-state':
+            try:
+                from kalman_multizone_twin import KalmanMultizoneTwin
+                twin = KalmanMultizoneTwin()
+                twin.predict_step(t_ext=27.0, q_hvac_salon=1.5)
+                obs = {"salon": 28.9, "despacho": 30.5, "cochera": 29.2, "patio": 27.0}
+                data = twin.update_observation(obs)
+                self._send_json(data)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/ai/proactive-alerts':
+            try:
+                from proactive_notification_assistant import ProactiveNotificationAssistant
+                assistant = ProactiveNotificationAssistant()
+                state = {
+                    "pv_generation_kw": 4.15,
+                    "home_load_kw": 0.81,
+                    "battery_soc_pct": 82.0,
+                    "temp_exterior_c": 27.0,
+                    "temp_salon_c": 28.9,
+                    "temp_despacho_c": 30.5,
+                    "humidity_despacho_pct": 47.0
+                }
+                alerts = assistant.evaluate_live_triggers(state)
+                self._send_json({"alerts": alerts, "count": len(alerts)})
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
+        elif self.path == '/api/export/homeassistant-discovery':
+            try:
+                from homeassistant_mqtt_exporter import HomeAssistantMQTTExporter
+                exporter = HomeAssistantMQTTExporter()
+                entities = exporter.generate_all_discovery_entities()
+                self._send_json({"entities": entities, "count": len(entities), "base_topic": exporter.base_topic})
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=500)
+            return
+
         elif self.path.startswith('/api/ai/pinn-forecast'):
             import urllib.parse
             parsed = urllib.parse.urlparse(self.path)
@@ -646,10 +728,15 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
                 
                 now = datetime.now()
                 temp_amb = telemetry.get('inverter', {}).get('temperature_c', 35.0) - 8.0 # Temp ambiente estimada
+                env_status = environmental_sensors_engine.get_full_system_status()
+                sensors_list = env_status.get('sensors', [])
+                office_temp = next((s['readings']['temperature_c'] for s in sensors_list if s.get('id') == 'sensor_despacho'), None)
+
                 rec = pinn_solar_engine.compute_thermal_precooling_recommendation(
                     outdoor_temp_c=max(28.0, temp_amb),
                     current_hour=now.hour,
-                    solar_surplus_kw=surplus_kw
+                    solar_surplus_kw=surplus_kw,
+                    office_temp_c=office_temp
                 )
                 self._send_json(rec)
             except Exception as e:

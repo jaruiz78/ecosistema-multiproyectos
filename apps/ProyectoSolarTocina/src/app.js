@@ -146,6 +146,8 @@ class SolarApp {
     window.batterySohDiagnostic?.init();
     window.icpPowerOptimizer?.init();
     window.valleyChargeScheduler?.init();
+    if (window.ProactiveAdvisorUI) new window.ProactiveAdvisorUI('proactive-advisor-container');
+    if (window.AdvancedMPCDashboard) new window.AdvancedMPCDashboard('mpc-dashboard-container');
     
     this.runInitialTelemetryAssimilation();
     this.recalculate();

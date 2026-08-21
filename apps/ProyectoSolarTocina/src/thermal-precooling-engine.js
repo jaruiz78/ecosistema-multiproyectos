@@ -138,9 +138,9 @@ export class ThermalPrecoolingEngine {
           badgeBg: "rgba(16, 185, 129, 0.2)",
           badgeColor: "#10b981",
           title: "Pico Solar en Tejado • Enfriamiento Estructural Gratuito",
-          action: "Fachada Este ya en sombra propia. El sol pasa a la Fachada Oeste (269° O). Ventanas cerradas.",
-          shading: "Bajar persianas del patio Oeste al 90%. Fachada de la calle fresca en sombra.",
-          climaTip: "Enfriar salón a 21–23 °C con Daikin a Coste 0.00 € (100% solar). Si estás en reposo, ventilador de techo (35W) para sensación de 20 °C."
+          action: "Fachada Este en sombra propia. Fachada Norte (359° N) en sombra permanente sin sol directo.",
+          shading: "Persianas Norte pueden permanecer al 50% para iluminación difusa óptima sin ganancia solar directa.",
+          climaTip: "Enfriar salón a 22–24 °C con Daikin a Coste 0.00 € (100% solar). Ventilador pasillo -> despacho activo."
         };
       } else if (hour >= 18 && hour < 22) {
         return {
@@ -311,7 +311,7 @@ export class ThermalPrecoolingEngine {
             <div style="font-size: 1.4rem; background: rgba(56, 189, 248, 0.15); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md);">🏛️</div>
             <div>
               <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">Centro Bioclimático: Horarios de Persianas, Ventilación & Climatización Inteligente</h3>
-              <div style="font-size: 0.75rem; color: var(--text-muted);">Fachada Este 89° E (Calle) · Fachada Oeste 269° O (Patio) · Daikin Inverter · Pre-cooling / Pre-heating Solar</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Fachada Este 89° E (Calle) · Fachada Norte 359° N (Patio/Despacho) · Daikin Inverter · Pre-cooling / Pre-heating Solar</div>
             </div>
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -427,7 +427,7 @@ export class ThermalPrecoolingEngine {
                   </div>
 
                   <div style="background: rgba(0,0,0,0.2); padding: 0.45rem; border-radius: 4px; border-left: 3px solid #c084fc;">
-                    <strong style="color: #c084fc;">🪟 Persianas Fachada Oeste (269° O - Patio):</strong><br>
+                    <strong style="color: #c084fc;">🪟 Persianas Fachada Norte (359° N - Patio/Despacho):</strong><br>
                     ${d.persianasOeste}
                   </div>
 
@@ -525,6 +525,15 @@ export class ThermalPrecoolingEngine {
             <div style="background: rgba(0,0,0,0.25); padding: 0.85rem; border-radius: var(--radius-sm); border-left: 3px solid #c084fc;">
               <strong style="color: #c084fc;">4. Free-Cooling Nocturno Chimenea (22:30 – 07:30 h)</strong>
               <p style="color: var(--text-muted); margin-top: 0.35rem;">Abrir balcones superiores (Este) y puerta del patio trasero (Oeste). El aire fresco nocturno asciende por tiro térmico natural, disipando el calor sin consumir electricidad.</p>
+            </div>
+
+            <div style="background: rgba(245,158,11,0.08); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.3); grid-column: 1 / -1;">
+              <strong style="color: #f59e0b;">📚 Zona de Estudio (Planta Alta Izq • Balcón Este 89° E + Muro Lateral Terraza Norte 359° N):</strong>
+              <p style="color: var(--text-secondary); margin-top: 0.35rem; line-height: 1.45;">
+                • <strong>Mañanas (08:30 – 13:30 h):</strong> Bajar persiana del balcón al 85% para bloquear la radiación matinal directa.<br>
+                • <strong>Tardes (15:00 – 20:30 h):</strong> El muro de la terraza Norte permanece en sombra permanente. Mantener puerta al distribuidor abierta para recibir el flujo del Daikin o apoyar con ventilador.<br>
+                • <strong>Noches (23:00 – 07:30 h):</strong> Abrir balcón de estudio y puerta de terraza para generar un tiro cruzado inmediato que disipa el calor acumulado a coste 0.00 €.
+              </p>
             </div>
           </div>
         </div>

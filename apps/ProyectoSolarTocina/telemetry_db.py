@@ -1,36 +1,36 @@
-"""
-Gestor de Base de Datos Local SQLite y Conector FoxCloud 2.0
-Almacena telemetría en local y sincroniza huecos históricos desde la API oficial de Fox-ESS.
-"""
 import sqlite3
 import os
-import json
 import time
 from datetime import datetime
+import threading
+
+DB_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(DB_DIR, "data", "foxcloud_config.json")
+DB_FILE = os.path.join(DB_DIR, "data", "telemetry_history.db")
+
+# Micro-batching state
+_batch_lock = threading.Lock()
+_telemetry_batch = []
+BATCH_SIZE_LIMIT = 20  # Save every 20 records (roughly 60 seconds if polled every 3s)
+LAST_FLUSH_TIME = time.time()
+FLUSH_INTERVAL_SEC = 60
+
 from contextlib import contextmanager
-
-DB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-DB_PATH = os.path.join(DB_DIR, "telemetry_history.db")
-CONFIG_PATH = os.path.join(DB_DIR, "foxcloud_config.json")
-
-os.makedirs(DB_DIR, exist_ok=True)
 
 @contextmanager
 def get_db():
-    conn = sqlite3.connect(DB_PATH, timeout=15.0)
-    conn.execute("PRAGMA journal_mode = WAL;")
-    conn.execute("PRAGMA synchronous = NORMAL;")
-    conn.execute("PRAGMA cache_size = -2000;")
-    conn.execute("PRAGMA temp_store = MEMORY;")
-    conn.execute("PRAGMA mmap_size = 30000000;")
+    conn = sqlite3.connect(DB_FILE, check_same_thread=False)
     conn.row_factory = sqlite3.Row
+    # Optimizations for TSDB insertion
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA synchronous=NORMAL;")
+    conn.execute("PRAGMA temp_store=MEMORY;")
     try:
-        yield conn
+        with conn:
+            yield conn
     finally:
-        try:
-            conn.close()
-        except Exception:
-            pass
+        conn.close()
+
 
 def init_db():
     with get_db() as conn:
@@ -38,41 +38,15 @@ def init_db():
         CREATE TABLE IF NOT EXISTS inverter_telemetry_history (
             timestamp TEXT PRIMARY KEY,
             epoch_seconds INTEGER,
-            pv1_voltage_v REAL,
-            pv1_current_a REAL,
-            pv1_power_w REAL,
-            pv2_voltage_v REAL,
-            pv2_current_a REAL,
-            pv2_power_w REAL,
-            solar_total_w REAL,
-            solar_total_kw REAL,
-            grid_voltage_v REAL,
-            grid_current_a REAL,
-            grid_ac_power_w REAL,
-            grid_ac_power_kw REAL,
-            grid_freq_hz REAL,
-            battery_voltage_v REAL,
-            battery_soc_percent REAL,
-            battery_power_w REAL DEFAULT 0,
-            home_load_w REAL DEFAULT 0,
-            grid_import_w REAL DEFAULT 0,
-            grid_export_w REAL DEFAULT 0,
-            inverter_temp_c REAL,
-            source TEXT DEFAULT 'modbus_local'
+            pv1_voltage_v REAL, pv1_current_a REAL, pv1_power_w REAL,
+            pv2_voltage_v REAL, pv2_current_a REAL, pv2_power_w REAL,
+            solar_total_w REAL, solar_total_kw REAL,
+            grid_voltage_v REAL, grid_current_a REAL, grid_ac_power_w REAL, grid_ac_power_kw REAL, grid_freq_hz REAL,
+            battery_voltage_v REAL, battery_soc_percent REAL, battery_power_w REAL,
+            home_load_w REAL, grid_import_w REAL, grid_export_w REAL,
+            inverter_temp_c REAL, source TEXT
         );
         """)
-        
-        # Migración automática si la tabla ya existía
-        cur = conn.cursor()
-        cur.execute("PRAGMA table_info(inverter_telemetry_history)")
-        cols = [c[1] for c in cur.fetchall()]
-        for new_col in [("battery_power_w", "REAL DEFAULT 0"), 
-                        ("home_load_w", "REAL DEFAULT 0"), 
-                        ("grid_import_w", "REAL DEFAULT 0"), 
-                        ("grid_export_w", "REAL DEFAULT 0")]:
-            if new_col[0] not in cols:
-                conn.execute(f"ALTER TABLE inverter_telemetry_history ADD COLUMN {new_col[0]} {new_col[1]}")
-
         conn.execute("""
         CREATE TABLE IF NOT EXISTS inverter_telemetry_hourly_rollup (
             date_hour TEXT PRIMARY KEY,
@@ -91,11 +65,6 @@ def init_db():
         conn.commit()
 
 def compact_and_prune_history(retention_days=7):
-    """
-    Tiered Storage Compaction:
-    - Agrega muestras de más de 7 días en resúmenes horarios (inverter_telemetry_hourly_rollup).
-    - Purga las lecturas sub-minuto antiguas para mantener el archivo SQLite < 15MB de forma indefinida.
-    """
     cutoff_epoch = int(time.time()) - (retention_days * 86400)
     with get_db() as conn:
         conn.execute("""
@@ -120,8 +89,39 @@ def compact_and_prune_history(retention_days=7):
         conn.execute("DELETE FROM inverter_telemetry_history WHERE epoch_seconds < ?", (cutoff_epoch,))
         conn.commit()
 
+def _flush_telemetry_batch():
+    global _telemetry_batch, LAST_FLUSH_TIME
+    with _batch_lock:
+        if not _telemetry_batch:
+            return
+        
+        batch_copy = _telemetry_batch[:]
+        _telemetry_batch = []
+        LAST_FLUSH_TIME = time.time()
+        
+    if not batch_copy:
+        return
+        
+    try:
+        with get_db() as conn:
+            conn.executemany("""
+            INSERT OR REPLACE INTO inverter_telemetry_history (
+                timestamp, epoch_seconds,
+                pv1_voltage_v, pv1_current_a, pv1_power_w,
+                pv2_voltage_v, pv2_current_a, pv2_power_w,
+                solar_total_w, solar_total_kw,
+                grid_voltage_v, grid_current_a, grid_ac_power_w, grid_ac_power_kw, grid_freq_hz,
+                battery_voltage_v, battery_soc_percent, battery_power_w,
+                home_load_w, grid_import_w, grid_export_w,
+                inverter_temp_c, source
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, batch_copy)
+            conn.commit()
+    except Exception as e:
+        print(f"Error guardando lote de telemetría en SQLite: {e}")
+
 def save_telemetry_record(data, source='modbus_local'):
-    """Guarda un registro de telemetría en SQLite de forma idempotente"""
+    """Guarda un registro de telemetría en SQLite usando Micro-batching O(1) disk writes"""
     if not data or not data.get('online'):
         return False
 
@@ -137,44 +137,36 @@ def save_telemetry_record(data, source='modbus_local'):
     pv1_w = pv1.get('power_w', 0)
     pv2_w = pv2.get('power_w', 0)
     solar_w = pv1_w + pv2_w
-
     home_load_w = grid.get('home_load_w', 0)
     grid_import_w = grid.get('grid_import_w', 0)
     grid_export_w = grid.get('grid_export_w', 0)
     bat_power_w = bat.get('power_w', 0)
 
-    try:
-        with get_db() as conn:
-            conn.execute("""
-            INSERT OR REPLACE INTO inverter_telemetry_history (
-                timestamp, epoch_seconds,
-                pv1_voltage_v, pv1_current_a, pv1_power_w,
-                pv2_voltage_v, pv2_current_a, pv2_power_w,
-                solar_total_w, solar_total_kw,
-                grid_voltage_v, grid_current_a, grid_ac_power_w, grid_ac_power_kw, grid_freq_hz,
-                battery_voltage_v, battery_soc_percent, battery_power_w,
-                home_load_w, grid_import_w, grid_export_w,
-                inverter_temp_c, source
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                ts, epoch,
-                pv1.get('voltage_v', 0), pv1.get('current_a', 0), pv1_w,
-                pv2.get('voltage_v', 0), pv2.get('current_a', 0), pv2_w,
-                solar_w, round(solar_w / 1000.0, 3),
-                grid.get('voltage_v', 0), grid.get('current_a', 0), grid.get('ac_power_w', 0), grid.get('ac_power_kw', 0), grid.get('freq_hz', 50.0),
-                bat.get('voltage_v', 0), bat.get('soc_percent', 100), bat_power_w,
-                home_load_w, grid_import_w, grid_export_w,
-                inv.get('temperature_c', 0),
-                source
-            ))
-            conn.commit()
-        return True
-    except Exception as e:
-        print(f"Error guardando telemetría en SQLite: {e}")
-        return False
+    record_tuple = (
+        ts, epoch,
+        pv1.get('voltage_v', 0), pv1.get('current_a', 0), pv1_w,
+        pv2.get('voltage_v', 0), pv2.get('current_a', 0), pv2_w,
+        solar_w, round(solar_w / 1000.0, 3),
+        grid.get('voltage_v', 0), grid.get('current_a', 0), grid.get('ac_power_w', 0), grid.get('ac_power_kw', 0), grid.get('freq_hz', 50.0),
+        bat.get('voltage_v', 0), bat.get('soc_percent', 100), bat_power_w,
+        home_load_w, grid_import_w, grid_export_w,
+        inv.get('temperature_c', 0),
+        source
+    )
+    
+    global LAST_FLUSH_TIME
+    with _batch_lock:
+        _telemetry_batch.append(record_tuple)
+        batch_len = len(_telemetry_batch)
+        time_since_flush = time.time() - LAST_FLUSH_TIME
+    
+    if batch_len >= BATCH_SIZE_LIMIT or time_since_flush >= FLUSH_INTERVAL_SEC:
+        _flush_telemetry_batch()
+        
+    return True
 
 def get_recent_history(limit=500):
-    """Devuelve los últimos N registros históricos de telemetría"""
+    _flush_telemetry_batch()  # Ensure pending are written before query
     with get_db() as conn:
         cursor = conn.execute("""
         SELECT * FROM inverter_telemetry_history 
@@ -185,7 +177,7 @@ def get_recent_history(limit=500):
         return rows
 
 def get_today_hourly_telemetry(date_str=None):
-    """Devuelve la producción y consumos reales medidos agrupados por hora para el día en curso (0..23)"""
+    _flush_telemetry_batch()
     now = datetime.now()
     if not date_str:
         date_str = now.strftime('%Y-%m-%d')
@@ -222,7 +214,7 @@ def get_today_hourly_telemetry(date_str=None):
         }
 
 def get_today_high_res_telemetry(date_str=None):
-    """Devuelve la serie temporal minuto a minuto de alta resolución para el día en curso"""
+    _flush_telemetry_batch()
     now = datetime.now()
     if not date_str:
         date_str = now.strftime('%Y-%m-%d')
@@ -256,7 +248,7 @@ def get_today_high_res_telemetry(date_str=None):
         }
 
 def get_history_stats():
-    """Devuelve estadísticas de la base de datos local"""
+    _flush_telemetry_batch()
     with get_db() as conn:
         cursor = conn.execute("""
         SELECT 
@@ -269,5 +261,4 @@ def get_history_stats():
         row = dict(cursor.fetchone())
         return row
 
-# Inicializar BD al importar
 init_db()
