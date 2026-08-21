@@ -15,6 +15,7 @@ y micro-decisiones a la NPU (Lemonade) mientras reserva la GPU (Ollama)
 exclusivamente para la generación de código y razonamiento complejo.
 -------------------------------------------------------------------------
 """
+import os
 import requests
 import json
 import time
@@ -22,7 +23,7 @@ from typing import Dict, List, Any, Tuple
 from concurrent.futures import ThreadPoolExecutor
 from lemonade_npu_bridge import LemonadeNPUBridge
 
-OLLAMA_HOST = "http://localhost:11434"
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
 
 class OllamaLocalBridge:
     def __init__(self, host: str = OLLAMA_HOST):

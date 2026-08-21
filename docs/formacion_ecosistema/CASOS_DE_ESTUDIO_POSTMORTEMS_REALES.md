@@ -53,3 +53,44 @@ Aprender de las catástrofes de ingeniería de software más costosas de la hist
   1. Erradicar despliegues manuales; adopción estricta de **GitOps (ArgoCD)** con reconciliación declarativa.
   2. Despliegues inmutables *Blue/Green* o *Canary* con reversión (*rollback*) automática basada en métricas SLI de error.
 * **Regla en Ecosistema:** Cero cambios manuales en entornos de producción; toda configuración debe residir en Git.
+
+---
+
+### 6. 🔄 Fuga de Descriptores de Archivo por Recreación de ReverseProxy en Reintentos (Go BFF)
+* **Causa Raíz:** En bucles de reintento con backoff exponencial, instanciar `httputil.NewSingleHostReverseProxy` con un nuevo `&http.Transport{}` por cada intento. Cada transporte abre conexiones TCP/TLS efímeras sin pool compartido, consumiendo rápidamente los límites de *File Descriptors* del sistema operativo (`ulimit -n`).
+* **Impacto:** Agotamiento de sockets, latencias elevadas por handshakes TLS repetidos y caída de throughput de 24,000 QPS a < 200 QPS.
+* **Lección & Solución:**
+  1. Reutilizar un `http.Transport` compartido empaquetado en un singleton `ReverseProxy`.
+  2. Proteger la inicialización mediante caché de lectura/escritura (`sync.RWMutex`).
+* **Regla en Ecosistema:** Prohibido instanciar `http.Transport` o `ReverseProxy` dentro de handlers de peticiones o closures de reintento.
+
+---
+
+### 7. 🐢 Cuello de Botella \(N+1\) y Saturación de Quota en Bases Documentales (Firestore / Datastore)
+* **Causa Raíz:** En operaciones de seguimiento o reconciliación en tiempo real, iterar sobre \(N\) identificadores realizando llamadas secuenciales `findById(id)` contra la base de datos documental.
+* **Impacto:** Aumento lineal de la latencia de \(O(1)\) a \(O(N)\), saturación de cuotas de lectura de Firestore y coste de facturación multiplicado por el número de entidades.
+* **Lección & Solución:**
+  1. Exponer métodos de consulta por lotes (`findAllById(Collection<String> ids)`) en los puertos de salida del dominio.
+  2. Realizar búsquedas masivas mediante consultas `whereIn` o mapeo asociativo en memoria.
+* **Regla en Ecosistema:** Todo puerto de repositorio que consulte múltiples entidades debe implementar una firma batch \(O(1)\).
+
+---
+
+### 8. 🌊 Efecto Avalancha (*Cache Stampede*) por Purga Destructiva al 100% de la Caché
+* **Causa Raíz:** Al alcanzar el umbral de capacidad máxima de una caché concurrente en memoria (`len > 5000`), ejecutar `make(map[...])` vaciando el 100% de las entradas.
+* **Impacto:** Pérdida inmediata de toda la telemetría viva, 0% de aciertos en caché (*cache miss* masivo) y sobrecarga repentina de las bases de datos subyacentes.
+* **Lección & Solución:**
+  1. Implementar poda incremental gobernada por TTL (`now.Sub(timestamp) > TTL`), eliminando únicamente las entradas obsoletas.
+  2. Mantener intactas las entidades vivas y activas durante la limpieza.
+* **Regla en Ecosistema:** Las cachés en memoria concurrentes deben utilizar políticas de desalojo graduales (TTL / LRU) y nunca borrado total síncrono.
+
+---
+
+### 9. 🎯 Divergencia Estocástica del Filtro de Kalman por Matrices Estáticas (Myers-Tapley, 1976)
+* **Causa Raíz:** Asumir que la matriz de ruido de proceso \(Q\) y de medición \(R\) son constantes e invariantes en el tiempo frente a perturbaciones del mundo real (tormentas, accidentes de tráfico o picos de demanda).
+* **Impacto:** El Filtro de Kalman sobrepondera predicciones desfasadas, la covarianza estocástica diverge (\(P > 0.50\)) y el sistema rechaza incorrectamente estados válidos del Gemelo Digital.
+* **Lección & Solución:**
+  1. Aplicar el algoritmo adaptativo de **Myers & Tapley (1976)** estimando en tiempo real las covarianzas de las innovaciones muestrales en una ventana deslizante.
+  2. Auto-calibrar la ganancia de Kalman dinámicamente sin intervención humana.
+* **Regla en Ecosistema:** Todos los filtros de asimilación estocástica del Gemelo Digital deben incorporar auto-tuning Myers-Tapley.
+

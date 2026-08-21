@@ -491,8 +491,9 @@ Verifica:
             elif "budget" in model_name.lower() or "praetor" in fallback_role.lower() or "pct-budget" in model_name.lower():
                 local_model = "pct-budget-governor:latest"
 
+            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
             req = urllib.request.Request(
-                "http://localhost:11434/api/generate",
+                f"{ollama_host}/api/generate",
                 data=json.dumps({
                     "model": local_model, 
                     "prompt": prompt,

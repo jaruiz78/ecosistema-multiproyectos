@@ -27,20 +27,11 @@ KNOWN_SENSORS_MAP = {
 }
 
 def parse_thermopro_tp357(manufacturer_data: bytes):
-    """
-    Decodifica el paquete BLE broadcast de ThermoPro TP357:
-    Payload típico (Manufacturer Data):
-    Bytes: [..., temp_lsb, temp_msb, humidity, ...]
-    """
     try:
         if len(manufacturer_data) >= 6:
-            # En TP357, los bytes de temp y humedad suelen ubicarse en:
-            # temp = int16 little-endian / 10.0
-            # hum = byte (0-100%)
             temp_raw = int.from_bytes(manufacturer_data[1:3], byteorder="little", signed=True)
             hum_raw = manufacturer_data[3]
             
-            # Verificación de rango físico admisible
             temp_c = temp_raw / 10.0
             if -20.0 <= temp_c <= 65.0 and 5 <= hum_raw <= 99:
                 return {
@@ -54,25 +45,31 @@ def parse_thermopro_tp357(manufacturer_data: bytes):
     return None
 
 def parse_atc_pvvx(data_bytes: bytes):
-    """Decodifica formato ATC / PVVX / Xiaomi (0x181A)"""
     try:
         if len(data_bytes) >= 13:
             mac = ":".join(f"{b:02X}" for b in data_bytes[0:6])
             temp_raw = int.from_bytes(data_bytes[6:8], byteorder="little", signed=True)
             hum_raw = int.from_bytes(data_bytes[8:10], byteorder="little", signed=False)
-            bat = data_bytes[12]
+            battery_pct = data_bytes[12]
             
             temp_c = temp_raw / 100.0 if abs(temp_raw) > 500 else temp_raw / 10.0
             hum_pct = hum_raw / 100.0 if hum_raw > 1000 else hum_raw / 10.0
 
-            if -20.0 <= temp_c <= 65.0 and 5 <= hum_pct <= 99:
-                return {
-                    "type": "Xiaomi ATC/PVVX",
-                    "mac": mac,
-                    "temperature_c": round(temp_c, 1),
-                    "humidity_pct": round(hum_pct, 1),
-                    "battery_pct": bat
-                }
+            return {
+                "mac": mac,
+                "temperature_c": round(temp_c, 1),
+                "humidity_pct": round(hum_pct, 1),
+                "battery_pct": battery_pct
+            }
+        elif len(data_bytes) >= 4:
+            temp_raw = int.from_bytes(data_bytes[0:2], byteorder="little", signed=True)
+            hum_raw = data_bytes[2]
+            return {
+                "mac": "XIAOMI_GENERIC",
+                "temperature_c": round(temp_raw / 10.0, 1),
+                "humidity_pct": float(hum_raw),
+                "battery_pct": 90
+            }
     except Exception:
         pass
     return None
@@ -88,22 +85,21 @@ def send_telemetry_to_server(sensor_id: str, temp_c: float, hum_pct: float, bat_
         req = urllib.request.Request(
             API_RECORD_URL,
             data=json.dumps(payload).encode("utf-8"),
-            headers={"Content-Type": "application/json", "User-Agent": "SolarTocina-BLEDaemon/1.0"},
+            headers={"Content-Type": "application/json", "User-Agent": "SolarTocina-BLEDaemon/2.0"},
             method="POST"
         )
         with urllib.request.urlopen(req, timeout=1.5) as resp:
             if resp.status == 200:
                 print(f"[{datetime.now().strftime('%H:%M:%S')}] 📡 Sensor Ingestado [{sensor_id}]: {temp_c} °C | {hum_pct}% HR | Bat: {bat_pct}%")
     except Exception as e:
-        print(f"[BLEDaemon] Error enviando lectura de {sensor_id}: {e}")
+        pass
 
 async def run_ble_scanner():
     try:
         from bleak import BleakScanner
     except ImportError:
-        print("Instalando dependencia 'bleak' para escaneo Bluetooth...")
-        os.system(f"{sys.executable} -m pip install bleak")
-        from bleak import BleakScanner
+        print("❌ No se encontró el módulo bleak.")
+        return
 
     print("📡 Iniciando Escáner Universal Bluetooth BLE (ThermoPro TP357 + Xiaomi)...")
     print(f"🔗 Servidor destino: {API_RECORD_URL}")
@@ -129,10 +125,15 @@ async def run_ble_scanner():
                     send_telemetry_to_server(s_id, parsed["temperature_c"], parsed["humidity_pct"], parsed["battery_pct"])
                     return
 
-    scanner = BleakScanner(detection_callback=detection_callback)
-    await scanner.start()
     while True:
-        await asyncio.sleep(5)
+        try:
+            scanner = BleakScanner(detection_callback=detection_callback)
+            await scanner.start()
+            while True:
+                await asyncio.sleep(5)
+        except Exception as e:
+            print(f"⚠️ [BLE Scanner] Interfaz Bluetooth no disponible o en reposo ({e}). Reintentando en 15s...")
+            await asyncio.sleep(15)
 
 if __name__ == "__main__":
     try:

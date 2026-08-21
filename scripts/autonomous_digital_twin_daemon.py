@@ -14,14 +14,25 @@ Emite diagnósticos estructurados ante anomalías o divergencia matemática.
 import os
 import sys
 import time
+import signal
 import sqlite3
+import argparse
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 
 WORKSPACE_ROOT = Path("/home/jaruiz/Desarrollo")
-DB_PATH = WORKSPACE_ROOT / "simulations_telemetry.db"
+DB_PATH = WORKSPACE_ROOT / "data" / "simulations_telemetry.db"
+if not DB_PATH.exists():
+    DB_PATH = WORKSPACE_ROOT / "simulations_telemetry.db"
+
 COVARIANCE_CONVERGENCE_THRESHOLD = 0.50
+_running = True
+
+def handle_signal(sig, frame):
+    global _running
+    print(f"\n🛑 [EnKF Supervisor] Señal recibida ({sig}). Finalizando supervisor...")
+    _running = False
 
 @dataclass
 class EnKFHealthReport:
@@ -37,9 +48,8 @@ def check_enkf_health() -> Optional[EnKFHealthReport]:
         return None
 
     try:
-        with sqlite3.connect(str(DB_PATH)) as conn:
+        with sqlite3.connect(str(DB_PATH), timeout=15.0) as conn:
             cursor = conn.cursor()
-            # Verificar si existe tabla de estado EnKF o telemetría general
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='unified_twin_enkf_state';")
             if not cursor.fetchone():
                 return EnKFHealthReport(
@@ -62,7 +72,7 @@ def check_enkf_health() -> Optional[EnKFHealthReport]:
                     covariance_trace=cov,
                     is_convergent=is_conv,
                     status="HEALTHY" if is_conv else "DIVERGENCE_ALERT",
-                    diagnosis="Filtro EnKF convergente y estable." if is_conv else f"⚠️ Covarianza ({cov}) supera el umbral de estabilidad ({COVARIANCE_CONVERGENCE_THRESHOLD})."
+                    diagnosis="Filtro EnKF convergente y estable." if is_conv else f"⚠️ Covarianza ({cov}) supera umbral ({COVARIANCE_CONVERGENCE_THRESHOLD})."
                 )
     except Exception as e:
         return EnKFHealthReport(
@@ -76,13 +86,48 @@ def check_enkf_health() -> Optional[EnKFHealthReport]:
 
     return None
 
-def run_daemon_cycle():
+try:
+    from scheduled_mlops_drift_monitor import run_mlops_drift_cycle
+except ImportError:
+    sys.path.insert(0, str(WORKSPACE_ROOT / "scripts"))
+    from scheduled_mlops_drift_monitor import run_mlops_drift_cycle
+
+def run_daemon_cycle(verbose: bool = True):
     report = check_enkf_health()
-    if report:
+    if report and verbose:
         print(f"[{report.timestamp}] [EnKF DAEMON] Estado: {report.status} | Covarianza: {report.covariance_trace} | {report.diagnosis}")
-        return report.is_convergent
-    return False
+    
+    drift_results = run_mlops_drift_cycle(verbose=False)
+    drift_count = sum(1 for r in drift_results if r.get("drift_detected"))
+    if verbose:
+        print(f"[{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}] [MLOps SENTINEL] Supervisados {len(drift_results)} tenants | Derivas detectadas: {drift_count}")
+    
+    return report.is_convergent if report else True
+
+def main():
+    parser = argparse.ArgumentParser(description="Autonomous Digital Twin Daemon & EnKF Supervisor")
+    parser.add_argument("--daemon", action="store_true", help="Ejecutar en modo bucle continuo")
+    parser.add_argument("--interval-sec", type=int, default=45, help="Intervalo de sondeo en segundos (def: 45)")
+    parser.add_argument("--once", action="store_true", help="Ejecutar un único ciclo")
+    
+    args = parser.parse_args()
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+    
+    if args.once or not args.daemon:
+        success = run_daemon_cycle(verbose=True)
+        return 0 if success else 1
+        
+    print(f"🚀 [EnKF Supervisor] Demonio del Gemelo Digital activo (Intervalo: {args.interval_sec}s)...")
+    while _running:
+        run_daemon_cycle(verbose=True)
+        for _ in range(args.interval_sec):
+            if not _running:
+                break
+            time.sleep(1.0)
+            
+    print("👋 [EnKF Supervisor] Demonio finalizado.")
+    return 0
 
 if __name__ == "__main__":
-    success = run_daemon_cycle()
-    sys.exit(0 if success else 1)
+    sys.exit(main())

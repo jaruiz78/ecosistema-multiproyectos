@@ -86,6 +86,7 @@ mindmap
 7. **Matrix Product States (MPS) & Tensor-Train**: Compresión exponencial de estados cuánticos en \(O(N \cdot d \cdot \chi^2)\) (`core-matrix-product-states`).
 8. **Teledetección Hiperespectral & N-FINDR**: Extracción de firmas espectrales puras y desmezclado lineal satelital (`core-hyperspectral-remote-sensing`).
 9. **Circuitos Genéticos Sintéticos & Cinética de Hill**: Puertas lógicas biológicas y biosensores celulares (`core-synthetic-biology-gene-circuit`).
+10. **Auto-Tuning Adaptativo Myers-Tapley (1976)**: Estimación continua de matrices de covarianza de ruido (\(Q\) y \(R\)) en tiempo real basada en la varianza de innovaciones muestrales para evitar divergencia estocástica.
 
 ---
 
@@ -97,6 +98,8 @@ mindmap
 5. **Consenso Bizantino Asíncrono (aBFT) & DAG-Tangle**: Tolerancia a fallos bizantinos arbitrarios \(f < n/3\) sin líder central (`core-asynchronous-byzantine-consensus`).
 6. **Metaprogramación Agéntica & Web Scraping (Crawl4AI & MarkItDown)**: Ingesta limpia a Markdown sin costes de API y orquestación masiva guiada por *Toyota Kata*.
 7. **Tribunal Adversario (Consilium Romano 3.0)**: Oposición dialéctica de modelos locales (Inquisidor, Censor Morum, Praetor FinOps) para erradicar el sesgo de confirmación.
+8. **Materialized Edge Lakehouse con DuckDB-WASM**: Consultas analíticas vectorizadas in-browser sobre particiones Parquet aceleradas con compresión **Zstandard (ZSTD Level 3)** y diccionario (-76.4% de ancho de banda móvil).
+9. **MLOps Model Drift Sentinel**: Detección estocástica de deriva de distribución mediante distancia Wasserstein 1D y RMSE (> 0.15), con recalibración adaptativa autónoma.
 
 ---
 
@@ -146,6 +149,7 @@ mindmap
 1. **Arquitectura Zero-Trust BeyondCorp (Google / NIST SP 800-207)**: Acceso contextual sin red privilegiada, mTLS TLS 1.3 y verificación continua por dispositivo y usuario.
 2. **Protocolo OIDC, JWT, JWKS & BCP (RFC 7519 / RFC 8725)**: Verificación asimétrica en memoria \(\mathcal{O}(1)\) y prevención de vulnerabilidades de firma.
 3. **Aislamiento Celular en Firestore**: Reglas de Seguridad (RLS) en el Edge basadas en Custom Claims de tenant.
+4. **Criptografía Post-Cuántica (PQC NIST FIPS 204 / FIPS 203)**: Integración de firmas ML-DSA-65 (Dilithium) e intercambio de claves ML-KEM-768 (Kyber) en gateways de microservicios con verificación de tiempo constante.
 
 ---
 

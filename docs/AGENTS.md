@@ -16,6 +16,8 @@ Cada vez que se reciba un requerimiento u objetivo, el agente invocará incondic
 - **Ciberseguridad Zero-Trust & SLSA L3** → Custom Agent: `zero-trust-security-auditor` (`firebase-security-rules-auditor`, `slsa-sigstore-release-sentinel`)
 - **FinOps & Cloud SRE (< 0.015 USD/MAU)** → Custom Agent: `finops-sre-sentinel` (`sre-finops-auditor`, `bq-dry-run-optimizer`)
 - **Tribunal Arquitectónico Pre-Merge (`/ship`)** → Custom Agent: `consilium-romano-tribunal` (`scripts/consilium_romano_tribunal.py`)
+- **MLOps Model Drift & Recalibración Adaptativa** → Script: `scripts/scheduled_mlops_drift_monitor.py` & Custom Agent: `mlops-drift-sentinel`
+- **Criptografía Post-Cuántica (PQC NIST FIPS 204)** → Custom Agent: `pqc-cryptography-auditor` (`services/bff-go/pqc_security.go`)
 - **Grounding Académico & NotebookLM** → Script: `scripts/auto_university_rag_sync.py` & `scripts/generate_notebook_dossiers.py`
 
 ---
@@ -34,6 +36,8 @@ Ubicación: [`.agents/agents.yaml`](file:///home/jaruiz/Desarrollo/.agents/agent
 | `zero-trust-security-auditor` | Gemini 3.7 Flash | 100,000 | Filesystem, `firebase-mcp-server`, `codebase-memory-mcp` |
 | `consilium-romano-tribunal` | Gemini 3.7 Pro | 120,000 | Filesystem, `sqlite-mcp-server`, `codebase-memory-mcp` |
 | `finops-sre-sentinel` | Gemini 3.7 Flash | 90,000 | Filesystem, `bigquery`, `google-cloud-monitoring`, `cloudrun` |
+| `mlops-drift-sentinel` | Gemini 3.7 Flash | 80,000 | Filesystem, `sqlite-mcp-server`, Cloud Scheduler |
+| `pqc-cryptography-auditor`| Gemini 3.7 Flash | 90,000 | Filesystem, `codebase-memory-mcp`, NIST FIPS 204 |
 
 ---
 

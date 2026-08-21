@@ -138,8 +138,9 @@ class UniversityKnowledgeEngine:
 
     def get_embedding(self, text: str) -> List[float]:
         try:
+            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
             req = urllib.request.Request(
-                "http://localhost:11434/api/embeddings",
+                f"{ollama_host}/api/embeddings",
                 data=json.dumps({"model": "nomic-embed-text", "prompt": text[:2000]}).encode("utf-8"),
                 headers={"Content-Type": "application/json"},
                 method="POST"

@@ -13,10 +13,11 @@ Benchmark empírico de rendimiento y análisis FinOps de ahorro de tokens
 comparando Ollama GPU local (RTX 5060) frente a APIs Cloud.
 -------------------------------------------------------------------------
 """
+import os
 import time
 import requests
 
-OLLAMA_HOST = "http://localhost:11434"
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
 
 def run_benchmark():
     print("========================================================")

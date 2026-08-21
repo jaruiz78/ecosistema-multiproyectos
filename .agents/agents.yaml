@@ -157,3 +157,35 @@ agents:
     token_budget:
       max_total_tokens: 90000
       max_iterations: 6
+
+  - id: "mlops-drift-sentinel"
+    name: "MLOps Model Drift & Adaptive Recalibrator Sentinel"
+    model: "gemini-3.7-flash"
+    description: "Auditor continuo de deriva estocástica (RMSE > 0.15, MAPE > 15%), distancia Wasserstein 1D y recalibración de hiperparámetros de surge pricing."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/mlops_drift_sentinel.md"
+    tools:
+      - "view_file"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "sqlite-mcp-server"
+      - "codebase-memory-mcp"
+    token_budget:
+      max_total_tokens: 80000
+      max_iterations: 6
+
+  - id: "pqc-cryptography-auditor"
+    name: "Post-Quantum Cryptography & Zero-Trust Auditor"
+    model: "gemini-3.7-flash"
+    description: "Auditor de esquemas criptográficos post-cuánticos NIST FIPS 204 (ML-DSA-65) y NIST FIPS 203 (ML-KEM-768), firmas HMAC seguras y mTLS Zero-Trust."
+    system_instruction_file: "/home/jaruiz/Desarrollo/.agents/definitions/pqc_cryptography_auditor.md"
+    tools:
+      - "view_file"
+      - "run_command"
+      - "grep_search"
+    mcps:
+      - "codebase-memory-mcp"
+      - "firebase-mcp-server"
+    token_budget:
+      max_total_tokens: 90000
+      max_iterations: 6
