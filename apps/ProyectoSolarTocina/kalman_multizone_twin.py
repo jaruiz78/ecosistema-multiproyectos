@@ -15,8 +15,10 @@ OPTIMIZACIÓN: Migrado a NumPy (JIT/Vectorización) para un coste computacional 
 """
 
 import math
+from typing import Any
+
 import numpy as np
-from typing import Dict, List, Any, Optional
+
 
 class KalmanMultizoneTwin:
     def __init__(self):
@@ -46,7 +48,7 @@ class KalmanMultizoneTwin:
             [0.00, 0.00, 0.00, 0.00, 0.00, 1.00]  # patio exterior (entorno forzante)
         ], dtype=np.float64)
 
-    def predict_step(self, t_ext: float, q_hvac_salon: float = 0.0) -> List[float]:
+    def predict_step(self, t_ext: float, q_hvac_salon: float = 0.0) -> list[float]:
         """Paso de predicción (Prior State & Covariance) usando NumPy"""
         
         # Forzante exterior en patio
@@ -64,7 +66,7 @@ class KalmanMultizoneTwin:
 
         return self.state.tolist()
 
-    def update_observation(self, obs_dict: Dict[str, float]) -> Dict[str, Any]:
+    def update_observation(self, obs_dict: dict[str, float]) -> dict[str, Any]:
         """
         Paso de asimilación/actualización con telemetría de sensores observados (Filtro Secuencial).
         obs_dict: {"salon": 28.9, "despacho": 30.5, "cochera": 29.2, "patio": 27.0}

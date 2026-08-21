@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Sistema Inteligente Fotovoltaico | Tocina - MultiProyectos AI</title>
   <meta name="description" content="Gemelo Digital Fotovoltaico con Asimilación Kalman EnKF, Optimizador MPC 24h, Arbitraje OMIE/PVPC, Indexación H3, Pasaporte Verde y Ruteo VE en Tocina (Sevilla).">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Solar Tocina">
   <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="stylesheet" href="./styles.css">
   <!-- Leaflet Maps Local -->
@@ -246,6 +247,11 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- CUADRO DE DIÁLOGO / ASISTENTE CONSULTOR SOLAR IA (PROMINENTE EN MÓVIL Y ESCRITORIO) -->
+      <section id="solar-dialog-container" aria-label="Cuadro de Diálogo Consultor Solar IA" style="margin-top: 0.85rem;">
+        <!-- Renderizado dinámico desde solar-dialog-assistant.js -->
       </section>
 
       <!-- Setup Hardware Pill Bar -->
@@ -613,11 +619,6 @@
       <!-- PROGRAMADOR Y AUTOMATIZACIÓN DE CARGA VALLE NOCTURNA FOX-ESS (P3) -->
       <section id="valley-charge-scheduler-container" aria-label="Programador y Automatización Carga Valle Fox-ESS">
         <!-- Renderizado dinámico desde valley-charge-scheduler-ui.js -->
-      </section>
-
-      <!-- CUADRO DE DIÁLOGO / ASISTENTE CONSULTOR SOLAR IA -->
-      <section id="solar-dialog-container" aria-label="Cuadro de Diálogo Consultor Solar IA">
-        <!-- Renderizado dinámico desde solar-dialog-assistant.js -->
       </section>
 
       <!-- SIMULADOR "WHAT-IF" INTERACTIVO DE CONSUMOS DE VERANO -->
@@ -1157,6 +1158,34 @@
     </footer>
 
   </div>
+
+  <!-- Mobile Bottom Navigation Bar (WCAG 2.2 AA / Thumb Zone Optimized) -->
+  <nav class="mobile-bottom-nav" aria-label="Navegación Móvil Principal">
+    <button class="mobile-nav-btn active" data-target="tab-live" aria-label="En Vivo">
+      <span class="mobile-nav-icon">⚡</span>
+      <span class="mobile-nav-label">En Vivo</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="tab-finance" aria-label="Batería y Facturas">
+      <span class="mobile-nav-icon">🔋</span>
+      <span class="mobile-nav-label">Batería</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="tab-home" aria-label="Hogar y Clima">
+      <span class="mobile-nav-icon">❄️</span>
+      <span class="mobile-nav-label">Hogar</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="tab-annual-ai" aria-label="Predicción IA">
+      <span class="mobile-nav-icon">🔮</span>
+      <span class="mobile-nav-label">IA Solar</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="tab-analytics" aria-label="Histórico">
+      <span class="mobile-nav-icon">📊</span>
+      <span class="mobile-nav-label">Histórico</span>
+    </button>
+    <button class="mobile-nav-btn" data-target="tab-settings" aria-label="Ajustes">
+      <span class="mobile-nav-icon">⚙️</span>
+      <span class="mobile-nav-label">Ajustes</span>
+    </button>
+  </nav>
 
   <!-- App Scripts -->
   <script src="./sankey-chart.js?v=5.0"></script>

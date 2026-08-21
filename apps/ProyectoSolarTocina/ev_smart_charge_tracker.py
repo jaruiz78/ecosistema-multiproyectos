@@ -156,14 +156,12 @@ class EvSmartChargeTracker:
         except Exception:
             pass
 
-        # 2. Determinar si hay carga real de VE
+        # 2. Determinar si hay carga real de VE (Firma de potencia > 2000W o Smart Plug)
         if self.manual_override_charging is not None:
             is_ev_signature = self.manual_override_charging
-        elif is_plug_on and (plug_power_w > 400.0 or home_load_w >= 1800.0):
+        elif (is_plug_on and (plug_power_w > 400.0 or home_load_w >= 1800.0)) or (home_load_w >= 2200.0):
             is_ev_signature = True
         else:
-            # Si el enchufe inteligente está apagado o no hay confirmación explícita,
-            # el consumo corresponde a electrodomésticos del hogar (lavavajillas, horno, etc.)
             is_ev_signature = False
         
         if is_ev_signature:

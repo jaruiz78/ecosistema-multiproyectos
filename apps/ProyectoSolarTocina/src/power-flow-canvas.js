@@ -30,6 +30,8 @@ export class PowerFlowCanvas {
     this.lastTime = performance.now();
     this.animationId = null;
     this.hoveredNode = null;
+    this.isPaused = false;
+    this.isMobile = window.innerWidth <= 768;
 
     this.initCanvas();
     this.setupListeners();
@@ -38,15 +40,27 @@ export class PowerFlowCanvas {
 
   initCanvas() {
     this.resize();
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 768;
+      this.resize();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.pauseAnimation();
+      } else {
+        this.resumeAnimation();
+      }
+    });
   }
 
   resize() {
     if (!this.canvas) return;
     const rect = this.canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    // Cap DPR at 2.0x (iPhone 14 has 3.0x, capping saves 55% GPU overhead with identical visual clarity)
+    const rawDpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(rawDpr, 2.0);
     this.width = rect.width || 800;
-    this.height = 320;
+    this.height = this.isMobile ? 220 : 320;
     
     this.canvas.width = this.width * dpr;
     this.canvas.height = this.height * dpr;
@@ -67,7 +81,7 @@ export class PowerFlowCanvas {
         sub: '10x 500W (5.0 kWp)',
         x: w * 0.16,
         y: h * 0.26,
-        radius: 38,
+        radius: this.isMobile ? 26 : 38,
         color: '#f59e0b',
         glow: 'rgba(245, 158, 11, 0.4)'
       },
@@ -87,7 +101,7 @@ export class PowerFlowCanvas {
         sub: 'EP5 HV (10.36 kWh)',
         x: w * 0.16,
         y: h * 0.74,
-        radius: 38,
+        radius: this.isMobile ? 26 : 38,
         color: '#c084fc',
         glow: 'rgba(192, 132, 252, 0.4)'
       },
@@ -97,7 +111,7 @@ export class PowerFlowCanvas {
         sub: 'Daikin, Frigo, PCs',
         x: w * 0.84,
         y: h * 0.26,
-        radius: 38,
+        radius: this.isMobile ? 26 : 38,
         color: '#10b981',
         glow: 'rgba(16, 185, 129, 0.4)'
       },
@@ -107,7 +121,7 @@ export class PowerFlowCanvas {
         sub: 'Batería Virtual',
         x: w * 0.84,
         y: h * 0.74,
-        radius: 38,
+        radius: this.isMobile ? 26 : 38,
         color: '#06b6d4',
         glow: 'rgba(6, 182, 212, 0.4)'
       },
@@ -186,8 +200,24 @@ export class PowerFlowCanvas {
     }
   }
 
+  pauseAnimation() {
+    this.isPaused = true;
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
+  }
+
+  resumeAnimation() {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+    this.lastTime = performance.now();
+    this.startAnimation();
+  }
+
   startAnimation() {
     const loop = (now) => {
+      if (this.isPaused) return;
       const dt = Math.min((now - this.lastTime) / 1000, 0.1);
       this.lastTime = now;
 
@@ -204,7 +234,9 @@ export class PowerFlowCanvas {
     if (this.state.solarW > 20) {
       const speed = 0.4 + (this.state.solarW / 5000) * 1.5;
       if (Math.random() < Math.min(0.85, (this.state.solarW / 3000))) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: this.nodes.solar,
           to: this.nodes.inverter,
           progress: 0,
@@ -219,7 +251,9 @@ export class PowerFlowCanvas {
     if (this.state.homeLoadW > 20) {
       const speed = 0.4 + (this.state.homeLoadW / 3000) * 1.5;
       if (Math.random() < Math.min(0.8, (this.state.homeLoadW / 2000))) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: this.nodes.inverter,
           to: this.nodes.home,
           progress: 0,
@@ -236,7 +270,9 @@ export class PowerFlowCanvas {
       const flowW = Math.abs(this.state.batPowerW) || Math.abs(this.state.homeLoadW - this.state.solarW);
       const speed = 0.4 + (flowW / 3000) * 1.2;
       if (Math.random() < 0.4) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: isCharging ? this.nodes.inverter : this.nodes.battery,
           to: isCharging ? this.nodes.battery : this.nodes.inverter,
           progress: 0,
@@ -251,7 +287,9 @@ export class PowerFlowCanvas {
     if (this.state.gridExportW > 50) {
       const speed = 0.4 + (this.state.gridExportW / 4000) * 1.4;
       if (Math.random() < Math.min(0.7, this.state.gridExportW / 2500)) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: this.nodes.inverter,
           to: this.nodes.grid,
           progress: 0,
@@ -262,7 +300,9 @@ export class PowerFlowCanvas {
       }
     } else if (this.state.gridImportW > 50) {
       if (Math.random() < 0.3) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: this.nodes.grid,
           to: this.nodes.inverter,
           progress: 0,
@@ -276,7 +316,9 @@ export class PowerFlowCanvas {
     // 5. Flujo Inversor -> Omoda 7 SHS (si está cargando)
     if (this.state.evChargeW > 100) {
       if (Math.random() < 0.5) {
-        this.particles.push({
+        const maxParticles = this.isMobile ? 16 : 45;
+      if (this.particles.length >= maxParticles) return;
+      this.particles.push({
           from: this.nodes.inverter,
           to: this.nodes.ev,
           progress: 0,

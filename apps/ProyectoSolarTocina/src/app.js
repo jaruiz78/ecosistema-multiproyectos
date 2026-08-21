@@ -426,6 +426,11 @@ class SolarApp {
     const surplusW = Math.max(0, solarW - homeLoadW);
     const surplusKw = surplusW / 1000.0;
 
+    // Estimación de potencial solar latente cuando el inversor hace MPPT Derating (Anti-Vertido + Batería 100%)
+    const curHour = typeof getMadridTime === 'function' ? getMadridTime().hour : new Date().getHours();
+    const isSunPeakHours = (curHour >= 11 && curHour <= 17);
+    const isCurtailmentActive = (batSoc >= 95 && Math.abs(solarW - homeLoadW) < 300 && isSunPeakHours);
+
     const badge = document.getElementById('omoda-traffic-badge');
     const lightRed = document.getElementById('light-red');
     const lightAmber = document.getElementById('light-amber');
@@ -439,7 +444,13 @@ class SolarApp {
 
     if (!badge || !lightRed || !lightAmber || !lightGreen) return;
 
-    if (surplusEl) surplusEl.textContent = `${surplusKw >= 0.05 ? '+' : ''}${surplusKw.toFixed(2)} kW`;
+    if (surplusEl) {
+      if (isCurtailmentActive) {
+        surplusEl.textContent = `~3.50 kW (Latente)`;
+      } else {
+        surplusEl.textContent = `${surplusKw >= 0.05 ? '+' : ''}${surplusKw.toFixed(2)} kW`;
+      }
+    }
 
     // 0. Si el Omoda 7 está cargando activamente (detectado por inferencia o telemetría)
     const evStatus = telemetry.ev_status;
@@ -469,8 +480,8 @@ class SolarApp {
       return;
     }
 
-    // 1. Estado VERDE: Excedente >= 2.0 kW o Solar >= 3.0 kW con Batería >= 80%
-    if (surplusKw >= 2.0 || (solarW >= 3000 && batSoc >= 80)) {
+    // 1. Estado VERDE: Excedente >= 2.0 kW O Modo Estrangulamiento Anti-Vertido con Batería >= 95% en horas de sol
+    if (surplusKw >= 2.0 || (solarW >= 3000 && batSoc >= 80) || isCurtailmentActive) {
       badge.textContent = '🟢 ÓPTIMO • CARGA 100% SOLAR';
       badge.style.background = 'rgba(16, 185, 129, 0.2)';
       badge.style.color = '#10b981';
@@ -488,12 +499,17 @@ class SolarApp {
       lightGreen.style.boxShadow = '0 0 16px #10b981';
       lightGreen.style.opacity = '1.0';
 
-      if (titleEl) titleEl.textContent = '¡Momento ideal para recargar el Omoda 7 SHS!';
-      if (descEl) descEl.textContent = `Dispones de ${surplusKw.toFixed(2)} kW de excedente solar directo. Enchufando el coche a 2.3 kW (10A Schuko), la recarga será 100% solar y gratuita sin recurrir a la red eléctrica.`;
+      if (isCurtailmentActive) {
+        if (titleEl) titleEl.textContent = '¡Batería al 100% y sol disponible! Momento perfecto para enchufar el Omoda 7';
+        if (descEl) descEl.textContent = `El inversor está frenando los paneles a ${(solarW/1000).toFixed(2)} kW porque la batería está llena y no viertes a red. Al enchufar el coche a 2.3 kW (10A), el inversor desatará toda la energía solar latente a coste 0.00 €.`;
+      } else {
+        if (titleEl) titleEl.textContent = '¡Momento ideal para recargar el Omoda 7 SHS!';
+        if (descEl) descEl.textContent = `Dispones de ${surplusKw.toFixed(2)} kW de excedente solar directo. Enchufando el coche a 2.3 kW (10A Schuko), la recarga será 100% solar y gratuita sin recurrir a la red eléctrica.`;
+      }
       if (pctEl) pctEl.textContent = '100% Solar';
       if (pwrEl) pwrEl.textContent = '2.3 kW (10A)';
       if (windowEl) windowEl.textContent = 'Ahora mismo (Pico Solar)';
-    } 
+    }
     // 2. Estado NARANJA: Excedente entre 0.8 kW y 2.0 kW o Batería >= 60% con Solar >= 1.5 kW
     else if (surplusKw >= 0.8 || (solarW >= 1500 && batSoc >= 60)) {
       badge.textContent = '🟡 CARGA MAYORMENTE SOLAR (VIABLE)';
@@ -577,16 +593,53 @@ class SolarApp {
   }
 
   bindEvents() {
-    // Navegación Maestra por Pestañas Compartimentadas
-    const masterTabBtns = document.querySelectorAll('.master-tab-btn');
-    masterTabBtns.forEach(btn => {
+    // Navegación Maestra Unificada (Desktop & Mobile Bottom Nav)
+    const allNavBtns = document.querySelectorAll('.master-tab-btn, .mobile-nav-btn');
+    
+    // Audio Context compartido para micro-feedback háptico en iOS Safari
+    let audioCtx = null;
+    const triggerHaptic = () => {
+      // 1. Intento con Taptic Engine estándar (Android / iOS con soporte)
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        try { navigator.vibrate(12); } catch (e) {}
+      }
+      // 2. Fallback de micro-impulso acústico/háptico para iOS Safari
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          if (!audioCtx) audioCtx = new AudioContext();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.03);
+        }
+      } catch (e) {}
+    };
+
+    allNavBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const targetId = btn.getAttribute('data-target');
         if (!targetId) return;
 
-        masterTabBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        triggerHaptic();
 
+        // Sincronizar estado activo en botones desktop y mobile
+        allNavBtns.forEach(b => {
+          if (b.getAttribute('data-target') === targetId) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+
+        // Conmutar paneles
         document.querySelectorAll('.master-tab-pane').forEach(pane => {
           pane.classList.remove('active');
         });
@@ -595,11 +648,18 @@ class SolarApp {
           activePane.classList.add('active');
         }
 
-        // Redimensionar gráficos y canvas según la pestaña activa
-        window.dispatchEvent(new Event('resize'));
-        if (targetId === 'tab-live' && this.powerFlow) {
-          setTimeout(() => this.powerFlow.resize(), 50);
+        // Control de ciclo de vida del Canvas (Praetor SRE: Ahorro de CPU y batería)
+        if (this.powerFlow) {
+          if (targetId === 'tab-live') {
+            this.powerFlow.resumeAnimation();
+            setTimeout(() => this.powerFlow.resize(), 50);
+          } else {
+            this.powerFlow.pauseAnimation();
+          }
         }
+
+        // Redimensionar gráficos según la pestaña activa
+        window.dispatchEvent(new Event('resize'));
         if (targetId === 'tab-forecast') {
           setTimeout(() => {
             if (this.chartToday) this.chartToday.resize();

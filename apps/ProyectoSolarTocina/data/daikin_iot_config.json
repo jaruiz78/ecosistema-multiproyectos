@@ -19,7 +19,7 @@
         "fan_rate": "auto",
         "fan_direction": "swing",
         "power_consumption_w": 420,
-        "last_seen": "2026-08-21T08:12:36.961230"
+        "last_seen": "2026-08-21T14:44:16.423833"
       },
       "automation_overrides": {
         "allowed": true,
@@ -75,6 +75,6 @@
     "cruise_target_temp_c": 20.0,
     "force_floor_vane_angle": 60
   },
-  "last_evaluation_timestamp": "2026-08-21T08:12:36.961402",
-  "last_action_taken": "🚨 [08:12:36] Climatización asistida Despacho (30.4 °C). Daikin Salón activado a 22.5 °C para flujo por pasillo."
+  "last_evaluation_timestamp": "2026-08-21T14:44:16.423982",
+  "last_action_taken": "🚨 [14:44:16] Climatización asistida Despacho (30.4 °C). Daikin Salón activado a 22.5 °C para flujo por pasillo."
 }
